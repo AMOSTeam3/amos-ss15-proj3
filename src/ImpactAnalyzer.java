@@ -19,7 +19,7 @@ public class ImpactAnalyzer {
 	 */
 	public static void main(String[] args) {
 		Connector connector = new GitConnector();
-		Parser parser = new GitCommitMessageParser();
+		CommitMessageParser parser = new GitCommitMessageParser();
 		List<Integer> CommitToReqListOfPairs = parser.parse(connector.getLatestCommitMessage());
 		
 		System.out.println("For the CommitMessage " + connector.getLatestCommitId());
