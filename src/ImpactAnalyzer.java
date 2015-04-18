@@ -28,7 +28,7 @@ public class ImpactAnalyzer {
 	public static void getLatestCommitReq(){
 		//intialisation
 		Connector connector = new GitConnector();
-		Parser parser = new GitCommitMessageParser();
+		CommitMessageParser parser = new GitCommitMessageParser();
 		
 		//extracting latest commit message and parsing it
 		List<Integer> ReqIdsInCommitMessage = null;
