@@ -1,9 +1,10 @@
 package connection;
 
+
 public interface Connector {
 
-	String getLatestCommitMessage();
+	String getLatestCommitMessage(String repositoryUrl) throws Exception;
 
-	Integer getLatestCommitId();
+	String getLatestCommitId(String repositoryUrl) throws Exception;
 
 }
