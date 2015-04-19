@@ -1,4 +1,4 @@
-package main.java.de.fau.osr.core.vcs.impl;
+package de.fau.osr.core.vcs.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import main.java.de.fau.osr.core.vcs.base.CommitFile;
-import main.java.de.fau.osr.core.vcs.base.CommitState;
-import main.java.de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;

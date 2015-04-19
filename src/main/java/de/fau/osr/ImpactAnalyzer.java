@@ -1,7 +1,9 @@
+package de.fau.osr;
+
 import java.io.IOException;
 import java.util.List;
-import parser.*;
-import connection.*;
+import de.fau.osr.parser.*;
+import de.fau.osr.connection.*;
 
 
 /**

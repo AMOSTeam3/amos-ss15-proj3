@@ -1,4 +1,4 @@
-package connection;
+package de.fau.osr.connection;
 
 
 public interface Connector {

@@ -1,4 +1,4 @@
-package main.java.de.fau.osr.core.vcs.base;
+package de.fau.osr.core.vcs.base;
 
 import java.io.File;
 

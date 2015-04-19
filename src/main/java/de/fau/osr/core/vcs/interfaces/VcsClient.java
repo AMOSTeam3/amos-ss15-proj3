@@ -1,8 +1,8 @@
-package main.java.de.fau.osr.core.vcs.interfaces;
+package de.fau.osr.core.vcs.interfaces;
 
 import java.util.Iterator;
 
-import main.java.de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitFile;
 
 /**
  * @author Gayathery

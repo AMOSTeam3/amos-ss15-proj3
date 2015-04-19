@@ -1,4 +1,4 @@
-package parser;
+package de.fau.osr.parser;
 
 import java.util.List;
 

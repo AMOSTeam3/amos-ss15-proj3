@@ -1,10 +1,10 @@
-package main.java.de.fau.osr.core.vcs.base;
+package de.fau.osr.core.vcs.base;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import main.java.de.fau.osr.core.vcs.impl.GitVcsClient;
-import main.java.de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.core.vcs.impl.GitVcsClient;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 /**
  * @author Gayathery

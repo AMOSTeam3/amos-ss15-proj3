@@ -1,15 +1,15 @@
 /**
  * 
  */
-package test.java.de.fau.osr.core.vcs.base;
+package de.fau.osr.core.vcs.base;
 
 import static org.junit.Assert.*;
 
 import java.util.Iterator;
 
-import main.java.de.fau.osr.core.vcs.base.CommitFile;
-import main.java.de.fau.osr.core.vcs.base.VcsController;
-import main.java.de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.VcsController;
+import de.fau.osr.core.vcs.base.VcsEnvironment;
 import org.junit.Test;
 
 /**

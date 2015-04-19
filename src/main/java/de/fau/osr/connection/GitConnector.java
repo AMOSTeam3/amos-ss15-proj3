@@ -1,4 +1,4 @@
-package connection;
+package de.fau.osr.connection;
 
 import java.io.File;
 import java.io.IOException;
