@@ -7,9 +7,11 @@ import static org.junit.Assert.*;
 
 import java.util.Iterator;
 
+import de.fau.osr.PrivateTestData;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+
 import org.junit.Test;
 
 /**
@@ -19,7 +21,7 @@ import org.junit.Test;
 public class VcsControllerTest {
 	
     VcsController controller = new VcsController(VcsEnvironment.GIT);
-    String uri = "C:\\Users\\Gayathery\\git\\amos\\.git";
+    String uri = PrivateTestData.getGitRepo();
 	boolean isConnected = false;
     
 	/**
