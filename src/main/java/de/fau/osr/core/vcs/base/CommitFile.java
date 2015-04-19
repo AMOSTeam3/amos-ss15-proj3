@@ -1,6 +1,7 @@
 package de.fau.osr.core.vcs.base;
 
 import java.io.File;
+import java.util.Objects;
 
 
 /**
@@ -26,5 +27,17 @@ public class CommitFile {
 		this.commitState = commitState;
 		this.oldPath = oldPath;
 		this.newPath = newPath;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(!(o instanceof CommitFile)) return false;
+		CommitFile ocf = (CommitFile) o;
+		return commitState.equals(ocf.commitState) && oldPath.equals(ocf.oldPath) && newPath.equals(ocf.newPath);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(commitState, oldPath, newPath);
 	}
 }
