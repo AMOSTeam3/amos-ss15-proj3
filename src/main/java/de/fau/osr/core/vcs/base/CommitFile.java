@@ -15,17 +15,6 @@ public class CommitFile {
 	public File oldPath;
 	public File newPath;
 	
-	
-	/**
-	 * @author Gayathery
-	 */
-	public CommitFile()
-	{
-		commitState = CommitState.NOTSET;
-		oldPath = null;
-		newPath = null;
-	}
-	
 	/**
 	 * @author Gayathery
 	 * @param oldPath

@@ -136,7 +136,6 @@ public class GitVcsClient implements VcsClient{
 				
 	        	for (DiffEntry diff : diffs) {
 	        		CommitState commitState;
-	        		commitState = CommitState.NOTSET;
 	        		switch(diff.getChangeType())
 	        		{
 	        		case ADD:
@@ -151,8 +150,11 @@ public class GitVcsClient implements VcsClient{
 	        		case DELETE:
 	        			commitState = CommitState.DELETED;
 	        			break;
-	        			default:
-	        				break;
+	        		case COPY:
+	        			commitState = CommitState.COPIED;
+	        			break;
+	        		default:
+	        			throw new RuntimeException("Encountered an unknown DiffEntry.ChangeType " + diff.getChangeType() + ". Please report a bug.");
 	        		}
 	        		CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState);
 	        	    commitFilesList.add(commitFile);

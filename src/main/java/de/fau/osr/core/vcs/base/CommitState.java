@@ -12,5 +12,5 @@ public enum CommitState {
 	MODIFIED,
 	DELETED,
 	RENAMED,
-	NOTSET
+	COPIED
 }
