@@ -9,14 +9,18 @@ import java.util.List;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 
@@ -117,65 +121,57 @@ public class GitVcsClient implements VcsClient{
 	 */
 	@Override
 	public Iterator<CommitFile> getCommitFiles(String commitID) {
-		
+
 		ArrayList<CommitFile> commitFilesList = new ArrayList<CommitFile>();
-		
+
 		try {
-			Iterable<RevCommit> commits = git.log().all().call();
-			for (RevCommit commit : commits) {
-	        	if(!commit.getId().getName().equals(commitID))
-	        		continue;
-	        	
-	        	RevCommit parent = commit.getParent(0);
-				
-	        	DiffFormatter dif = new DiffFormatter(DisabledOutputStream.INSTANCE);
-	        	dif.setRepository(repo);
-	        	dif.setDiffComparator(RawTextComparator.DEFAULT);
-	        	dif.setDetectRenames(true);
-	        	List<DiffEntry> diffs =  dif.scan(parent.getTree(), commit.getTree());
-				
-	        	for (DiffEntry diff : diffs) {
-	        		CommitState commitState;
-	        		switch(diff.getChangeType())
-	        		{
-	        		case ADD:
-	        			commitState = CommitState.ADDED;
-	        			break;
-	        		case MODIFY:
-	        			commitState = CommitState.MODIFIED;
-	        			break;
-	        		case RENAME:
-	        			commitState = CommitState.RENAMED;
-	        			break;
-	        		case DELETE:
-	        			commitState = CommitState.DELETED;
-	        			break;
-	        		case COPY:
-	        			commitState = CommitState.COPIED;
-	        			break;
-	        		default:
-	        			throw new RuntimeException("Encountered an unknown DiffEntry.ChangeType " + diff.getChangeType() + ". Please report a bug.");
-	        		}
-	        		CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState);
-	        	    commitFilesList.add(commitFile);
-	        		//System.out.println(MessageFormat.format("({0} {1} {2}", diff.getChangeType().name(), diff.getNewMode().getBits(), diff.getNewPath()));
-	        }
-	        
-			
-		}
+			Repository repo = git.getRepository();
+			ObjectId obj = repo.resolve(commitID);
+			RevCommit commit = (new RevWalk(repo)).parseCommit(obj);
+			RevCommit parent = commit.getParent(0);
+
+			DiffFormatter dif = new DiffFormatter(DisabledOutputStream.INSTANCE);
+			dif.setRepository(repo);
+			dif.setDiffComparator(RawTextComparator.DEFAULT);
+			dif.setDetectRenames(true);
+			List<DiffEntry> diffs =  dif.scan(parent.getTree(), commit.getTree());
+
+			for (DiffEntry diff : diffs) {
+				CommitState commitState;
+				switch(diff.getChangeType())
+				{
+				case ADD:
+					commitState = CommitState.ADDED;
+					break;
+				case MODIFY:
+					commitState = CommitState.MODIFIED;
+					break;
+				case RENAME:
+					commitState = CommitState.RENAMED;
+					break;
+				case DELETE:
+					commitState = CommitState.DELETED;
+					break;
+				case COPY:
+					commitState = CommitState.COPIED;
+					break;
+				default:
+					throw new RuntimeException("Encountered an unknown DiffEntry.ChangeType " + diff.getChangeType() + ". Please report a bug.");
+				}
+				CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState);
+				commitFilesList.add(commitFile);
+				//System.out.println(MessageFormat.format("({0} {1} {2}", diff.getChangeType().name(), diff.getNewMode().getBits(), diff.getNewPath()));
+			}
+
+
 		} catch (IOException e1) {
-			
+
+			e1.printStackTrace();
+		} catch (ArrayIndexOutOfBoundsException e1) {
+
 			e1.printStackTrace();
 		}
-		catch (GitAPIException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			
-		}catch (ArrayIndexOutOfBoundsException e1) {
-			
-			e1.printStackTrace();
-		}
-		
+
 		return commitFilesList.iterator();
-}
+	}
 }
