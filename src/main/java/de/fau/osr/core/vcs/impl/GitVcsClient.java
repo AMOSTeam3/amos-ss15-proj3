@@ -44,9 +44,6 @@ public class GitVcsClient implements VcsClient{
 		git = null;
 	}
 	
-	private GitVcsClient()
-	{}
-	
 	
 	/* (non-Javadoc)
 	 * @see org.amos.core.vcs.interfaces.VcsClient#connect()
