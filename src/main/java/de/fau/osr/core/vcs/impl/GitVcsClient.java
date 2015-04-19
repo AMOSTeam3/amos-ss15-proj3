@@ -100,13 +100,26 @@ public class GitVcsClient implements VcsClient{
 	 */
 	@Override
 	public Iterator<String> getCommitList() {
-		ArrayList<String> commitList = new ArrayList<String>();
-		
 		try {
-			Iterable<RevCommit> commits = git.log().all().call();
-			for (RevCommit commit : commits) {
-	        	commitList.add(commit.getId().getName());
-	        }
+			final Iterator<RevCommit> commits = git.log().all().call().iterator();
+			return new Iterator<String>() {
+				@Override
+				public boolean hasNext() {
+					return commits.hasNext();
+				}
+
+				@Override
+				public String next() {
+					return commits.next().getName();
+				}
+
+				@Override
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+
+			};
+
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -114,8 +127,7 @@ public class GitVcsClient implements VcsClient{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return commitList.iterator();
+		return null;
 	}
 
 	
