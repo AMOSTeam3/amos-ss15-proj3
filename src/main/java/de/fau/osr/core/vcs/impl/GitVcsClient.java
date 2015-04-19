@@ -2,6 +2,7 @@ package de.fau.osr.core.vcs.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Gayathery
@@ -160,7 +162,11 @@ public class GitVcsClient implements VcsClient{
 				}
 				CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState);
 				commitFilesList.add(commitFile);
-				//System.out.println(MessageFormat.format("({0} {1} {2}", diff.getChangeType().name(), diff.getNewMode().getBits(), diff.getNewPath()));
+				LoggerFactory.getLogger(getClass()).debug(
+						MessageFormat.format("({0} {1} {2})",
+								diff.getChangeType().name(),
+								diff.getNewMode().getBits(),
+								diff.getNewPath()));
 			}
 
 
