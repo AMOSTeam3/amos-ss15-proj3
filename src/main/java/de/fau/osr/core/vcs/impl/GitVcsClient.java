@@ -102,7 +102,10 @@ public class GitVcsClient implements VcsClient{
 			for (RevCommit commit : commits) {
 	        	commitList.add(commit.getId().getName());
 	        }
-		} catch (GitAPIException | IOException e) {
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -161,7 +164,11 @@ public class GitVcsClient implements VcsClient{
 	        
 			
 		}
-		} catch (GitAPIException | IOException e1) {
+		} catch (IOException e1) {
+			
+			e1.printStackTrace();
+		}
+		catch (GitAPIException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			
