@@ -36,11 +36,6 @@ public class GitCommitMessageParser implements CommitMessageParser {
 		}
 
 		return found_reqids;
-		Properties properties = new Properties();
-		try {
-		  properties.load(new FileInputStream("path/filename"));
-		} catch (IOException e) {
-		  
-		}
+
 	}
 }
