@@ -86,4 +86,8 @@ public class VcsController {
 		return isConnected ? vcsClient.getCommitFiles(commitID) : new ArrayList<CommitFile>().iterator();
 
 	}
+
+	public String getCommitMessage(String commitID) {
+		return isConnected ? vcsClient.getCommitMessage(commitID) : null;
+	}
 }

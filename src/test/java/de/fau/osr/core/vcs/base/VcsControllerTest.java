@@ -80,5 +80,24 @@ public class VcsControllerTest {
 		assertNotNull(commitFileList);
 		assertTrue(commitFileList.hasNext());
 	}
+	
+	/**
+	 * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitMessage(java.lang.String)}.
+	 */
+	@Test
+	public void testGetCommitMessage() {
+		isConnected = controller.Connect(uri);
+		String commitMessage = null;
+		Iterator<String> commitList = null;
+		if(isConnected){
+			commitList = controller.getCommitList();
+			if(commitList.hasNext()){
+				commitMessage = controller.getCommitMessage(commitList.next());
+			}
+			  
+			
+		}
+		assertNotNull(commitMessage);
+	}
 
 }

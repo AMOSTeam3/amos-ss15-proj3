@@ -200,4 +200,25 @@ public class GitVcsClient implements VcsClient{
 
 		return commitFilesList.iterator();
 	}
+
+	/* (non-Javadoc)
+	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitMessage(java.lang.String)
+	 * @author Florian Gerdes
+	 */
+	@Override
+	public String getCommitMessage(String commitID) {
+		RevCommit commit = null;
+		try {
+			Repository repo = git.getRepository();
+			ObjectId obj = repo.resolve(commitID);
+			commit = (new RevWalk(repo)).parseCommit(obj);
+		} catch (IOException e1) {
+
+			e1.printStackTrace();
+		} catch (ArrayIndexOutOfBoundsException e1) {
+
+			e1.printStackTrace();
+		}
+		return commit.getFullMessage();
+	}
 }
