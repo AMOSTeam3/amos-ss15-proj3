@@ -13,7 +13,7 @@ public class AppProperties {
 		  properties.load(new FileInputStream("prop.properties"));
 		  return properties.getProperty(key);
 		} catch (IOException e)  {
-		  
+		  e.printStackTrace();
 		}
 		 return null;
 	}
