@@ -31,7 +31,7 @@ public class GitCommitMessageParser implements CommitMessageParser {
 		Matcher m = REQUIREMENT_PATTERN.matcher(latestCommitMessage);
 		List<Integer> found_reqids = new ArrayList<Integer>();
 
-		while(m.find()) {
+		while(m.find())  {
 			found_reqids.add(Integer.valueOf(m.group(1)));
 		}
 
