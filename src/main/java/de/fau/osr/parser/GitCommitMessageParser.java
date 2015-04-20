@@ -3,10 +3,17 @@
  */
 package de.fau.osr.parser;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import de.fau.osr.util.AppProperties;
+
 
 /**
  * @author Captain Sparrow, Taleh Didover
@@ -17,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public class GitCommitMessageParser implements CommitMessageParser {
 
-	private static final Pattern REQUIREMENT_PATTERN = Pattern.compile("Req-(\\d+)");
+	private static final Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
 
 	@Override
 	public List<Integer> parse(String latestCommitMessage) {
@@ -29,5 +36,11 @@ public class GitCommitMessageParser implements CommitMessageParser {
 		}
 
 		return found_reqids;
+		Properties properties = new Properties();
+		try {
+		  properties.load(new FileInputStream("path/filename"));
+		} catch (IOException e) {
+		  
+		}
 	}
 }
