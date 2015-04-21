@@ -19,7 +19,7 @@ public class AppProperties {
 	{
 		Properties properties = new Properties();
 		try {
-		  properties.load(new FileInputStream("prop.properties"));
+		  properties.load(AppProperties.class.getResourceAsStream("/prop.properties"));
 		  return properties.getProperty(key);
 		} catch (IOException e)  {
 		  e.printStackTrace();
