@@ -182,15 +182,14 @@ public class GitVcsClient implements VcsClient{
 		try {
 			Repository repo = git.getRepository();
 			ObjectId obj = repo.resolve(commitID);
-			RevCommit commit = (new RevWalk(repo)).parseCommit(obj);
+			RevWalk revWalk = new RevWalk(repo);
+			RevCommit commit = revWalk.parseCommit(obj);
 			RevCommit[] parents = commit.getParents();
-			LoggerFactory.getLogger(getClass()).debug(commit + " has " + parents.length + " parents");
-			LoggerFactory.getLogger(getClass()).debug(commit + " has " + commit.getTree());
 			if(parents.length == 0) {
 				getTreeDiffFiles(commit.getTree(), null, commitFilesList);
 			}
 			for(RevCommit parent : parents) {
-				LoggerFactory.getLogger(getClass()).debug(parent + " has " + parent.getTree());
+				revWalk.parseBody(parent);
 				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList);
 			}
 		} catch (IOException e1) {
