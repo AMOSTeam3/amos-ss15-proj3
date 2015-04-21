@@ -1,11 +1,9 @@
-package de.fau.osr;
-
-import junit.framework.TestCase;
+package de.fau.osr.parser;
 
 import java.util.Arrays;
 import java.util.List;
 
-import de.fau.osr.parser.*;
+import junit.framework.TestCase;
 
 /**
  * Created by Taleh Didover on 17.04.15.

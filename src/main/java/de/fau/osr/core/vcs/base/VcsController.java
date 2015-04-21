@@ -87,6 +87,10 @@ public class VcsController {
 
 	}
 
+	/**
+	 * @return String Message of the requested Commit
+	 * @author Florian Gerdes
+	 */
 	public String getCommitMessage(String commitID) {
 		return isConnected ? vcsClient.getCommitMessage(commitID) : null;
 	}

@@ -3,16 +3,14 @@
  */
 package de.fau.osr.core.vcs.base;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
-import de.fau.osr.PrivateTestData;
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
-import de.fau.osr.core.vcs.base.VcsEnvironment;
-
 import org.junit.Test;
+
+import de.fau.osr.PrivateTestData;
 
 /**
  * @author Gayathery
@@ -23,6 +21,7 @@ public class VcsControllerTest {
     VcsController controller = new VcsController(VcsEnvironment.GIT);
     String uri = PrivateTestData.getGitRepo();
 	boolean isConnected = false;
+	
     
 	/**
 	 * Test method for {@link org.amos.core.vcs.base.VcsController#Connect(java.lang.String)}.
