@@ -1,6 +1,7 @@
 package de.fau.osr.bl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
@@ -9,16 +10,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import de.fau.osr.PublicTestData;
-import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 
 /**
  * @author Gayathery
  *
  */
-@RunWith(Parameterized.class)
 public class VcsInterpreterTest {
 	private static PublicTestData testData = new PublicTestData();    
     String uri = PublicTestData.getGitTestRepo();
