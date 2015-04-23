@@ -47,6 +47,9 @@ public class PublicTestData {
 		return CSV_FILE_PATH;
 	}
 	
+	public static String getSampleReqID(){
+		return "4";
+	}
 	
 	/*
 	 * @category Repository Data
@@ -61,6 +64,8 @@ public class PublicTestData {
 	public List<Commit> getCommits(){
 		return commits;
 	}
+	
+	
 	
 	/*
 	 * @return All Commits containing in the CSVFile, which at least have one requirements linked in the message

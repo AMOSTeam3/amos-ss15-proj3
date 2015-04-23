@@ -115,7 +115,7 @@ public class VcsControllerTest {
 		isConnected = controller.Connect(uri);
 		Iterator<CommitFile> commitFileList = null;
 		if(isConnected){
-			commitFileList = controller.getCommitFilesForRequirementID(PrivateTestData.getSampleReqID());			  
+			commitFileList = controller.getCommitFilesForRequirementID(PublicTestData.getSampleReqID());			  
 			
 		}
 		assertNotNull(commitFileList);
