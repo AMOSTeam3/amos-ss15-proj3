@@ -9,10 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -27,6 +23,12 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.slf4j.LoggerFactory;
+
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.parser.CommitMessageParser;
+import de.fau.osr.parser.GitCommitMessageParser;
 
 /**
  * @author Gayathery
@@ -131,7 +133,7 @@ public class GitVcsClient implements VcsClient{
 	}
 
 	
-	private void getTreeDiffFiles(RevTree a, RevTree b, Set<CommitFile> s) throws IOException {
+	private void getTreeDiffFiles(RevTree a, RevTree b, Set<CommitFile> s, String commitID) throws IOException {
 		DiffFormatter dif = new DiffFormatter(DisabledOutputStream.INSTANCE);
 		dif.setRepository(repo);
 		dif.setDiffComparator(RawTextComparator.DEFAULT);
@@ -160,7 +162,7 @@ public class GitVcsClient implements VcsClient{
 			default:
 				throw new RuntimeException("Encountered an unknown DiffEntry.ChangeType " + diff.getChangeType() + ". Please report a bug.");
 			}
-			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState);
+			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState,commitID);
 			s.add(commitFile);
 			LoggerFactory.getLogger(getClass()).debug(
 					MessageFormat.format("({0} {1} {2})",
@@ -176,6 +178,13 @@ public class GitVcsClient implements VcsClient{
 	 */
 	@Override
 	public Iterator<CommitFile> getCommitFiles(String commitID) {
+		return getCommitFilesInternal(commitID).iterator();
+	}
+	/* (non-Javadoc)
+	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitFilesInternal(java.lang.String)
+	 * @author Gayathery
+	 */
+	private Set<CommitFile> getCommitFilesInternal(String commitID) {
 
 		HashSet<CommitFile> commitFilesList = new HashSet<>();
 
@@ -186,11 +195,11 @@ public class GitVcsClient implements VcsClient{
 			RevCommit commit = revWalk.parseCommit(obj);
 			RevCommit[] parents = commit.getParents();
 			if(parents.length == 0) {
-				getTreeDiffFiles(commit.getTree(), null, commitFilesList);
+				getTreeDiffFiles(commit.getTree(), null, commitFilesList,commit.getName());
 			}
 			for(RevCommit parent : parents) {
 				revWalk.parseBody(parent);
-				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList);
+				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList,commit.getName());
 			}
 		} catch (IOException e1) {
 
@@ -200,7 +209,7 @@ public class GitVcsClient implements VcsClient{
 			e1.printStackTrace();
 		}
 
-		return commitFilesList.iterator();
+		return commitFilesList;
 	}
 
 	/* (non-Javadoc)
@@ -222,5 +231,37 @@ public class GitVcsClient implements VcsClient{
 			e1.printStackTrace();
 		}
 		return commit.getFullMessage();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitFilesForRequirementID(java.lang.String)
+	 * @author Gayathery
+	 */
+	public Iterator<CommitFile> getCommitFilesForRequirementID(String requirementID)
+	{
+		HashSet<CommitFile> commitFilesList = new HashSet<CommitFile>();
+		
+		try {
+			Iterator<RevCommit> commits = git.log().all().call().iterator();
+			CommitMessageParser commitMessageparser = new GitCommitMessageParser();
+			while(commits.hasNext())
+			{
+				RevCommit currentCommit = commits.next();
+				if(commitMessageparser.parse(getCommitMessage(currentCommit.getName())).contains(Integer.valueOf(requirementID)))
+				{
+					commitFilesList.addAll(((getCommitFilesInternal(currentCommit.getName()))));
+					
+				}
+			}
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return commitFilesList.iterator();
 	}
 }

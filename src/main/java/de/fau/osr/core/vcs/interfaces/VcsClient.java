@@ -1,6 +1,8 @@
 package de.fau.osr.core.vcs.interfaces;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import de.fau.osr.core.vcs.base.CommitFile;
 
@@ -15,4 +17,5 @@ public interface VcsClient {
 	public Iterator<String> getCommitList();
 	public Iterator<CommitFile> getCommitFiles(String commitID);
 	public String getCommitMessage(String commitID);
+	public Iterator<CommitFile> getCommitFilesForRequirementID(String requirementID);
 }

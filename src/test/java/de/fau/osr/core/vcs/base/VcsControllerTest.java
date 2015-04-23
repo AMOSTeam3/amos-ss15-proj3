@@ -108,6 +108,21 @@ public class VcsControllerTest {
 	}
 	
 	/**
+	 * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitFilesForRequirementID(java.lang.String)}.
+	 */
+	@Test
+	public void testGetCommitFilesForRequirementID() {
+		isConnected = controller.Connect(uri);
+		Iterator<CommitFile> commitFileList = null;
+		if(isConnected){
+			commitFileList = controller.getCommitFilesForRequirementID(PrivateTestData.getSampleReqID());			  
+			
+		}
+		assertNotNull(commitFileList);
+		assertTrue(commitFileList.hasNext());
+	}
+	
+	/**
 	 * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitMessage(java.lang.String)}.
 	 */
 	@Test
