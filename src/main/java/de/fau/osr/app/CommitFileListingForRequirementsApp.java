@@ -5,8 +5,8 @@ import java.util.Iterator;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
+import de.fau.osr.bl.VcsInterpreter;
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 
 /**
@@ -25,14 +25,13 @@ public class CommitFileListingForRequirementsApp {
 	public static void main(String[] args) {
 		CliOptions cli = new CliOptions();
 		new JCommander(cli, args);
-		final VcsController controller = new VcsController(VcsEnvironment.GIT);
-		controller.Connect(cli.repoURL);
+		final VcsInterpreter interpreter = new VcsInterpreter(VcsEnvironment.GIT,cli.repoURL);
 		final String reqId = cli.reqId;
 		for(CommitFile file : new Iterable<CommitFile>() {
 
 			@Override
 			public Iterator<CommitFile> iterator() {
-				return controller.getCommitFilesForRequirementID(reqId);
+				return interpreter.getCommitFilesForRequirementID(reqId);
 			}}) {
 			System.out.println(file.oldPath + " " + file.commitState + " " + file.newPath +  " " + file.commitID);
 		}

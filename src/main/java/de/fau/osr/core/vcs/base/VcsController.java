@@ -2,7 +2,6 @@ package de.fau.osr.core.vcs.base;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
@@ -88,14 +87,6 @@ public class VcsController {
 
 	}
 	
-	/**
-	 * @return List of committed files for a Requirement
-	 * @author Gayathery
-	 */
-	public Iterator<CommitFile> getCommitFilesForRequirementID(String requirementID) {
-		return isConnected ? vcsClient.getCommitFilesForRequirementID(requirementID) : new ArrayList<CommitFile>().iterator();
-
-	}
 
 	/**
 	 * @return String Message of the requested Commit

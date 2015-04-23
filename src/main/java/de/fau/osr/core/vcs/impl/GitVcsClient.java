@@ -233,35 +233,4 @@ public class GitVcsClient implements VcsClient{
 		return commit.getFullMessage();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitFilesForRequirementID(java.lang.String)
-	 * @author Gayathery
-	 */
-	public Iterator<CommitFile> getCommitFilesForRequirementID(String requirementID)
-	{
-		HashSet<CommitFile> commitFilesList = new HashSet<CommitFile>();
-		
-		try {
-			Iterator<RevCommit> commits = git.log().all().call().iterator();
-			CommitMessageParser commitMessageparser = new GitCommitMessageParser();
-			while(commits.hasNext())
-			{
-				RevCommit currentCommit = commits.next();
-				if(commitMessageparser.parse(getCommitMessage(currentCommit.getName())).contains(Integer.valueOf(requirementID)))
-				{
-					commitFilesList.addAll(((getCommitFilesInternal(currentCommit.getName()))));
-					
-				}
-			}
-		} catch (GitAPIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return commitFilesList.iterator();
-	}
 }
