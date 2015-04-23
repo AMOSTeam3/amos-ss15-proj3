@@ -1,16 +1,47 @@
 package de.fau.osr.parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+import de.fau.osr.PublicTestData;
+import de.fau.osr.core.vcs.base.Commit;
+
 /**
  * Created by Taleh Didover on 17.04.15.
  */
+@RunWith(Parameterized.class)
 public class GitCommitMessageParserTest extends TestCase {
+	private static PublicTestData testData = new PublicTestData();
+	private Commit expectedCommit;
 
-    public void testParse() throws Exception {
+	/*
+	 * @return Collection<Object[]> Each Collection Element represents one set of test data required by one test class execution.
+	 * Each Element itself is an array containing the different parameters. In this paticular case the array contains one Entry:
+	 * the expected Commit
+	 */
+	@Parameters
+    public static Collection<Object[]> data() {
+    	List<Object[]> parameters = new ArrayList<Object[]>();
+    	for(Commit commit: testData.getCommits()){
+    		parameters.add(new Object[] {commit});
+    	}
+    	return parameters;
+    }
+    
+    public GitCommitMessageParserTest(Commit commit) {
+		expectedCommit = commit;
+	}
+	
+    public void parseSimpleTest() throws Exception {
 
         String test_commit = "major bug-fix Req-10 Req-15.";
         CommitMessageParser parser = new GitCommitMessageParser();
@@ -20,4 +51,11 @@ public class GitCommitMessageParserTest extends TestCase {
         assertEquals(expected, got);
 
     }
+    
+    @Test
+	public void parseAdvancedTest() {
+		CommitMessageParser parser = new GitCommitMessageParser();
+		List<Integer> actual = parser.parse(expectedCommit.message);
+		assertTrue(actual.containsAll(expectedCommit.requirements) && expectedCommit.requirements.containsAll(actual));
+	}
 }

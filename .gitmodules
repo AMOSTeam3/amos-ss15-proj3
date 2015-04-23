@@ -1,0 +1,3 @@
+[submodule "src/test/resources/TestRepository"]
+	path = src/test/resources/TestRepository
+	url = https://github.com/uv48uson/Test_Repository.git
