@@ -131,7 +131,7 @@ public class GitVcsClient implements VcsClient{
 	}
 
 	
-	private void getTreeDiffFiles(RevTree a, RevTree b, Set<CommitFile> s) throws IOException {
+	private void getTreeDiffFiles(RevTree a, RevTree b, Set<CommitFile> s, String commitID) throws IOException {
 		DiffFormatter dif = new DiffFormatter(DisabledOutputStream.INSTANCE);
 		dif.setRepository(repo);
 		dif.setDiffComparator(RawTextComparator.DEFAULT);
@@ -160,7 +160,7 @@ public class GitVcsClient implements VcsClient{
 			default:
 				throw new RuntimeException("Encountered an unknown DiffEntry.ChangeType " + diff.getChangeType() + ". Please report a bug.");
 			}
-			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState);
+			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState,commitID);
 			s.add(commitFile);
 			LoggerFactory.getLogger(getClass()).debug(
 					MessageFormat.format("({0} {1} {2})",
@@ -186,11 +186,11 @@ public class GitVcsClient implements VcsClient{
 			RevCommit commit = revWalk.parseCommit(obj);
 			RevCommit[] parents = commit.getParents();
 			if(parents.length == 0) {
-				getTreeDiffFiles(commit.getTree(), null, commitFilesList);
+				getTreeDiffFiles(commit.getTree(), null, commitFilesList,commit.getName());
 			}
 			for(RevCommit parent : parents) {
 				revWalk.parseBody(parent);
-				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList);
+				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList,commit.getName());
 			}
 		} catch (IOException e1) {
 
