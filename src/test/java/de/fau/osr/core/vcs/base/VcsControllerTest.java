@@ -125,12 +125,5 @@ public class VcsControllerTest {
 		}
 		assertNotNull(commitMessage);
 	}
-	
-	@Test
-	public void getCommitMessageAdvancedTest(){
-		isConnected = controller.Connect(uri);
-		String actual = controller.getCommitMessage(expectedCommit.id);
-		assertEquals(expectedCommit.message, actual);
-	}
 
 }
