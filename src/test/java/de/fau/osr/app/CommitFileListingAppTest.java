@@ -9,7 +9,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -65,22 +67,19 @@ public class CommitFileListingAppTest {
 	@Test
 	public void mainTest(){
 		CommitFileListingApp.main(new String [] {"-repo", PublicTestData.getGitTestRepo(), "-commit", expectedCommit.id});
-		List<Commit> commits = testData.getCommits();
-		String expected = buildOutputString(commits);
-		assertEquals(outContent.toString(), expected);
+		String expected = buildOutputString(expectedCommit.id);
+		assertEquals(expected, outContent.toString());
 	}
 	
-	private String buildOutputString(List<Commit> commits){
-		ByteArrayOutputStream result = new ByteArrayOutputStream();
-		PrintStream stream = new PrintStream(result);
-		for(Commit commit: commits){
-			if(commit.id.equals(expectedCommit.id)){
-				for(CommitFile file: commit.files){
-					stream.println(file.oldPath + " " + file.commitState + " " + file.newPath);
-				}
-			}
-		}
-		return result.toString();
+	private String buildOutputString(String commitId){
+		Map<String,String> lookupTable = new HashMap<String,String>();
+		lookupTable.put("dee896c8d52af6bc0b00982ad2fcfca2d9d003dc","TestFile3 MODIFIED TestFile3\n");
+		lookupTable.put("f3196114a214a91ae3994b6cf6424d8347b2e918","TestFile2 MODIFIED TestFile2\n");
+		lookupTable.put("b0b5d16e8071c775bdcd1b2d0b1cca464917780b","/dev/null ADDED TestFile4\n");
+		lookupTable.put("bc87c2039d1e14d5fa0131d77780eaa3b2cc627c","/dev/null ADDED TestFile1\n");
+		lookupTable.put("4a486acd6261cdc9876c5cb6b6d0e88883eea28d","/dev/null ADDED TestFile2\n");
+		lookupTable.put("a8dc4129802939d620ce0bd3484a1f0538338a0e","/dev/null ADDED TestFile3\n");
+		return lookupTable.get(commitId);
 	}
 
 	@After

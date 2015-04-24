@@ -28,7 +28,7 @@ public class PublicTestData {
 	 * @category Path Management
 	 */
 	private static final String CSV_FILE_PATH = "/TestRepositoryData.csv";
-	private static final String LOCAL_TEST_REPOSITORY_URI = "/TestRepository/.git";
+	private static final String LOCAL_TEST_REPOSITORY_URI = "/TestRepository/git";
 	
 	public static String getGitTestRepo() {
 		URL url = PublicTestData.class.getResource(LOCAL_TEST_REPOSITORY_URI);
