@@ -1,8 +1,6 @@
 package de.fau.osr.core.vcs.interfaces;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 import de.fau.osr.core.vcs.base.CommitFile;
 

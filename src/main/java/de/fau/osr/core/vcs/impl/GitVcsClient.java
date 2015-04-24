@@ -9,6 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -23,12 +27,6 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.slf4j.LoggerFactory;
-
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.parser.CommitMessageParser;
-import de.fau.osr.parser.GitCommitMessageParser;
 
 /**
  * @author Gayathery
@@ -133,7 +131,7 @@ public class GitVcsClient implements VcsClient{
 	}
 
 	
-	private void getTreeDiffFiles(RevTree a, RevTree b, Set<CommitFile> s, String commitID) throws IOException {
+	private void getTreeDiffFiles(RevTree a, RevTree b, Set<CommitFile> s) throws IOException {
 		DiffFormatter dif = new DiffFormatter(DisabledOutputStream.INSTANCE);
 		dif.setRepository(repo);
 		dif.setDiffComparator(RawTextComparator.DEFAULT);
@@ -162,7 +160,7 @@ public class GitVcsClient implements VcsClient{
 			default:
 				throw new RuntimeException("Encountered an unknown DiffEntry.ChangeType " + diff.getChangeType() + ". Please report a bug.");
 			}
-			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState,commitID);
+			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState);
 			s.add(commitFile);
 			LoggerFactory.getLogger(getClass()).debug(
 					MessageFormat.format("({0} {1} {2})",
@@ -178,13 +176,6 @@ public class GitVcsClient implements VcsClient{
 	 */
 	@Override
 	public Iterator<CommitFile> getCommitFiles(String commitID) {
-		return getCommitFilesInternal(commitID).iterator();
-	}
-	/* (non-Javadoc)
-	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitFilesInternal(java.lang.String)
-	 * @author Gayathery
-	 */
-	private Set<CommitFile> getCommitFilesInternal(String commitID) {
 
 		HashSet<CommitFile> commitFilesList = new HashSet<>();
 
@@ -195,11 +186,11 @@ public class GitVcsClient implements VcsClient{
 			RevCommit commit = revWalk.parseCommit(obj);
 			RevCommit[] parents = commit.getParents();
 			if(parents.length == 0) {
-				getTreeDiffFiles(commit.getTree(), null, commitFilesList,commit.getName());
+				getTreeDiffFiles(commit.getTree(), null, commitFilesList);
 			}
 			for(RevCommit parent : parents) {
 				revWalk.parseBody(parent);
-				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList,commit.getName());
+				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList);
 			}
 		} catch (IOException e1) {
 
@@ -209,7 +200,7 @@ public class GitVcsClient implements VcsClient{
 			e1.printStackTrace();
 		}
 
-		return commitFilesList;
+		return commitFilesList.iterator();
 	}
 
 	/* (non-Javadoc)
@@ -232,5 +223,4 @@ public class GitVcsClient implements VcsClient{
 		}
 		return commit.getFullMessage();
 	}
-	
 }
