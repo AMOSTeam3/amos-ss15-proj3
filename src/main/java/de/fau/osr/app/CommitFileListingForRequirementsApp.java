@@ -7,6 +7,7 @@ import com.beust.jcommander.Parameter;
 
 import de.fau.osr.bl.VcsInterpreter;
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 
 /**
@@ -25,7 +26,9 @@ public class CommitFileListingForRequirementsApp {
 	public static void main(String[] args) {
 		CliOptions cli = new CliOptions();
 		new JCommander(cli, args);
-		final VcsInterpreter interpreter = new VcsInterpreter(VcsEnvironment.GIT,cli.repoURL);
+		VcsController vcs = new VcsController(VcsEnvironment.GIT);
+		vcs.Connect(cli.repoURL);
+		final VcsInterpreter interpreter = new VcsInterpreter(vcs);
 		final String reqId = cli.reqId;
 		for(CommitFile file : new Iterable<CommitFile>() {
 

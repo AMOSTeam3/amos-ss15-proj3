@@ -16,14 +16,11 @@ import de.fau.osr.parser.GitCommitMessageParser;
 public class VcsInterpreter {
 
 	VcsController vcsController;
-	String repositoryUri;
-	boolean isVcsControllerConnected = false;
-	public VcsInterpreter(VcsEnvironment env, String repositoryUri)
-	{
-		vcsController = new VcsController(env);
-		this.repositoryUri = repositoryUri;
-		isVcsControllerConnected = vcsController.Connect(repositoryUri);
+
+	public VcsInterpreter(VcsController vcsController) {
+		this.vcsController = vcsController;
 	}
+
 	/* (non-Javadoc)
 	 * @see de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)
 	 * @author Gayathery
