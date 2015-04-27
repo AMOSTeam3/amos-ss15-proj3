@@ -209,7 +209,7 @@ public class GitVcsClient implements VcsClient{
 			RevCommit commit = revWalk.parseCommit(obj);
 			RevCommit[] parents = commit.getParents();
 			if(parents.length == 0) {
-				getTreeDiffFiles(commit.getTree(), null, commitFilesList,commit.getName());
+				getTreeDiffFiles(null, commit.getTree(), commitFilesList,commit.getName());
 			}
 			for(RevCommit parent : parents) {
 				revWalk.parseBody(parent);

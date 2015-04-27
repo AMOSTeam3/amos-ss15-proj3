@@ -14,6 +14,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.parser.CommitMessageParser;
 import de.fau.osr.parser.GitCommitMessageParser;
@@ -60,16 +61,40 @@ public class VcsInterpreter {
 		Array<Tree<String>> subtrees = history.subForest()._1().toArray();
 		commitToReqToFiles.put(history.root(), TreeMap.<Integer,Set<File>>empty(INT_ORDER));
 		commitToFileToReqs.put(history.root(), TreeMap.<File,Set<Integer>>empty(FILE_ORDER));
+		List<Integer> reqs = new GitCommitMessageParser().parse(vcsController.getCommitMessage(history.root()));
+		if(subtrees.length() == 0) {
+			for(Iterator<CommitFile> it = vcsController.getCommitFiles(history.root()); it.hasNext();) {
+				CommitFile file = it.next();
+				commitToFileToReqs.put(history.root(), commitToFileToReqs.get(history.root()).set(file.newPath, Set.empty(INT_ORDER)));
+				for(Integer req : reqs) {
+					if(!commitToReqToFiles.get(history.root()).contains(req)) {
+						commitToReqToFiles.put(history.root(),
+								commitToReqToFiles.get(history.root()).set(req, Set.single(FILE_ORDER, file.newPath)));
+					} else {
+						commitToReqToFiles.put(history.root(),
+								commitToReqToFiles.get(history.root()).set(req,
+										commitToReqToFiles.get(history.root()).get(req).some().insert(file.newPath)));
+					}
+					commitToFileToReqs.put(history.root(),
+							commitToFileToReqs.get(history.root()).set(file.newPath,
+									commitToFileToReqs.get(history.root()).get(file.newPath).some().insert(req)));
+				}
+			}
+		}
 		for(Tree<String> child : subtrees) {
 			makeAvailable(child);
 			Iterable<CommitFile> diff = vcsController.getDiff(child.root(), history.root());
 			TreeMap<Integer, Set<File>> nextReqToFile = commitToReqToFiles.get(child.root());
 			TreeMap<File, Set<Integer>> nextFileToReq = commitToFileToReqs.get(child.root());
 			for(CommitFile file : diff) {
-				List<Integer> reqs = new GitCommitMessageParser().parse(vcsController.getCommitMessage(history.root()));
+				if(file.commitState != CommitState.DELETED && !nextFileToReq.contains(file.newPath)) {
+					nextFileToReq = nextFileToReq.set(file.newPath, Set.empty(INT_ORDER));
+				}
+				if(file.commitState != CommitState.ADDED && !nextFileToReq.contains(file.oldPath)) {
+					nextFileToReq = nextFileToReq.set(file.oldPath, Set.empty(INT_ORDER));
+				}
 				switch(file.commitState) {
 				case ADDED:
-					nextFileToReq = nextFileToReq.set(file.newPath, Set.empty(INT_ORDER));
 					for(Integer req : reqs) {
 						if(!nextReqToFile.contains(req)) {
 							nextReqToFile = nextReqToFile.set(req, Set.single(FILE_ORDER, file.newPath));
@@ -111,9 +136,17 @@ public class VcsInterpreter {
 						nextReqToFile = nextReqToFile.set(req, nextReqToFile.get(req).some().insert(file.newPath));
 					}
 					for(Integer req : nextFileToReq.get(file.oldPath).some()) {
-						nextReqToFile = nextReqToFile.set(req, nextReqToFile.get(req).some().delete(file.newPath));
+						nextReqToFile = nextReqToFile.set(req, nextReqToFile.get(req).some().delete(file.oldPath));
 					}
 					nextFileToReq = nextFileToReq.delete(file.oldPath);
+					for(Integer req : reqs) {
+						if(!nextReqToFile.contains(req)) {
+							nextReqToFile = nextReqToFile.set(req, Set.single(FILE_ORDER, file.newPath));
+						} else {
+							nextReqToFile = nextReqToFile.set(req, nextReqToFile.get(req).some().insert(file.newPath));
+						}
+						nextFileToReq = nextFileToReq.set(file.newPath, nextFileToReq.get(file.newPath).some().insert(req));
+					}
 					break;
 				default:
 					break;
