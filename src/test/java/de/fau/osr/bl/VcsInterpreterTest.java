@@ -3,6 +3,7 @@ package de.fau.osr.bl;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.Iterator;
 
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class VcsInterpreterTest {
 	@Test
 	public void testGetCommitFilesForRequirementID() {		
 		
-			Iterator<CommitFile> commitFileList = interpreter.getCommitFilesForRequirementID(PublicTestData.getSampleReqID());	
+			Iterator<File> commitFileList = interpreter.getCommitFilesForRequirementID(PublicTestData.getSampleReqID()).iterator();
 			assertNotNull(commitFileList);
 			assertTrue(commitFileList.hasNext());
 		

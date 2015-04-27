@@ -1,5 +1,6 @@
 package de.fau.osr.app;
 
+import java.io.File;
 import java.util.Iterator;
 
 import com.beust.jcommander.JCommander;
@@ -18,8 +19,6 @@ public class CommitFileListingForRequirementsApp {
 	private static class CliOptions {
 		@Parameter(names = "-repo", required = true)
 		String repoURL;
-		@Parameter(names = "-commit", required = true)
-		String commitId;
 		@Parameter(names = "-req", required = true)
 		String reqId;
 	}
@@ -30,13 +29,8 @@ public class CommitFileListingForRequirementsApp {
 		vcs.Connect(cli.repoURL);
 		final VcsInterpreter interpreter = new VcsInterpreter(vcs);
 		final String reqId = cli.reqId;
-		for(CommitFile file : new Iterable<CommitFile>() {
-
-			@Override
-			public Iterator<CommitFile> iterator() {
-				return interpreter.getCommitFilesForRequirementID(reqId);
-			}}) {
-			System.out.println(file.oldPath + " " + file.commitState + " " + file.newPath +  " " + file.commitID);
+		for(File file : interpreter.getCommitFilesForRequirementID(Integer.parseInt(reqId))) {
+			System.out.println(file);
 		}
 	}
 }

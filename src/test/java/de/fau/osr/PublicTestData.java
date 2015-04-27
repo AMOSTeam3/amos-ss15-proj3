@@ -47,8 +47,8 @@ public class PublicTestData {
 		return CSV_FILE_PATH;
 	}
 	
-	public static String getSampleReqID(){
-		return "1";
+	public static Integer getSampleReqID(){
+		return 1;
 	}
 	
 	/*
