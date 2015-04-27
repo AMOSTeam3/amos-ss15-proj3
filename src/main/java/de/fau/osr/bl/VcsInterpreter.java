@@ -115,25 +115,30 @@ public class VcsInterpreter {
 					break;
 				}
 			}
-			for(P2<Integer,Set<File>> entry : nextReqToFile) {
-				Integer req = entry._1();
-				if(!commitToReqToFiles.get(history.root()).contains(req)) {
-					commitToReqToFiles.put(history.root(), commitToReqToFiles.get(history.root()).set(req, Set.<File>empty(FILE_ORDER)));
+			if(subtrees.length() > 1) {
+				for(P2<Integer,Set<File>> entry : nextReqToFile) {
+					Integer req = entry._1();
+					if(!commitToReqToFiles.get(history.root()).contains(req)) {
+						commitToReqToFiles.put(history.root(), commitToReqToFiles.get(history.root()).set(req, Set.<File>empty(FILE_ORDER)));
+					}
+					if(entry._2() != null) for(File file : entry._2()) {
+						Set<File> oldSet = commitToReqToFiles.get(history.root()).get(req).some();
+						commitToReqToFiles.put(history.root(), commitToReqToFiles.get(history.root()).set(req, oldSet.insert(file)));
+					}
 				}
-				if(entry._2() != null) for(File file : entry._2()) {
-					Set<File> oldSet = commitToReqToFiles.get(history.root()).get(req).some();
-					commitToReqToFiles.put(history.root(), commitToReqToFiles.get(history.root()).set(req, oldSet.insert(file)));
+				for(P2<File,Set<Integer>> entry : nextFileToReq) {
+					File file = entry._1();
+					if(!commitToFileToReqs.get(history.root()).contains(file)) {
+						commitToFileToReqs.put(history.root(), commitToFileToReqs.get(history.root()).set(file, Set.<Integer>empty(INT_ORDER)));
+					}
+					for(Integer req : entry._2()) {
+						Set<Integer> oldSet = commitToFileToReqs.get(history.root()).get(file).some();
+						commitToFileToReqs.put(history.root(), commitToFileToReqs.get(history.root()).set(file, oldSet.insert(req)));
+					}
 				}
-			}
-			for(P2<File,Set<Integer>> entry : nextFileToReq) {
-				File file = entry._1();
-				if(!commitToFileToReqs.get(history.root()).contains(file)) {
-					commitToFileToReqs.put(history.root(), commitToFileToReqs.get(history.root()).set(file, Set.<Integer>empty(INT_ORDER)));
-				}
-				for(Integer req : entry._2()) {
-					Set<Integer> oldSet = commitToFileToReqs.get(history.root()).get(file).some();
-					commitToFileToReqs.put(history.root(), commitToFileToReqs.get(history.root()).set(file, oldSet.insert(req)));
-				}
+			} else {
+				commitToReqToFiles.put(history.root(), nextReqToFile);
+				commitToFileToReqs.put(history.root(), nextFileToReq);
 			}
 		}
 	}
