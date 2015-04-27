@@ -73,13 +73,15 @@ public class CommitFileListingAppTest {
 	
 	private String buildOutputString(String commitId){
 		Map<String,String> lookupTable = new HashMap<String,String>();
-		lookupTable.put("dee896c8d52af6bc0b00982ad2fcfca2d9d003dc","TestFile3 MODIFIED TestFile3\n");
-		lookupTable.put("f3196114a214a91ae3994b6cf6424d8347b2e918","TestFile2 MODIFIED TestFile2\n");
-		lookupTable.put("b0b5d16e8071c775bdcd1b2d0b1cca464917780b","/dev/null ADDED TestFile4\n");
-		lookupTable.put("bc87c2039d1e14d5fa0131d77780eaa3b2cc627c","/dev/null ADDED TestFile1\n");
-		lookupTable.put("4a486acd6261cdc9876c5cb6b6d0e88883eea28d","/dev/null ADDED TestFile2\n");
-		lookupTable.put("a8dc4129802939d620ce0bd3484a1f0538338a0e","/dev/null ADDED TestFile3\n");
-		return lookupTable.get(commitId);
+		lookupTable.put("dee896c8d52af6bc0b00982ad2fcfca2d9d003dc","TestFile3 MODIFIED TestFile3");
+		lookupTable.put("f3196114a214a91ae3994b6cf6424d8347b2e918","TestFile2 MODIFIED TestFile2");
+		lookupTable.put("b0b5d16e8071c775bdcd1b2d0b1cca464917780b","/dev/null ADDED TestFile4");
+		lookupTable.put("bc87c2039d1e14d5fa0131d77780eaa3b2cc627c","/dev/null ADDED TestFile1");
+		lookupTable.put("4a486acd6261cdc9876c5cb6b6d0e88883eea28d","/dev/null ADDED TestFile2");
+		lookupTable.put("a8dc4129802939d620ce0bd3484a1f0538338a0e","/dev/null ADDED TestFile3");
+        String message = lookupTable.get(commitId);
+        message = message.replace("/", System.getProperty("file.separator")); //depends on OS
+		return message + System.getProperty("line.separator"); //depends on OS
 	}
 
 	@After
