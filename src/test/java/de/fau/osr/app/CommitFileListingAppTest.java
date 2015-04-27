@@ -22,7 +22,6 @@ import org.junit.runners.Parameterized.Parameters;
 
 import de.fau.osr.PublicTestData;
 import de.fau.osr.core.vcs.base.Commit;
-import de.fau.osr.core.vcs.base.CommitFile;
 
 /**
  * @author Florian Gerdes
