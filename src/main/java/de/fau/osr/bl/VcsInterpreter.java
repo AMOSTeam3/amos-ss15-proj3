@@ -1,6 +1,7 @@
 package de.fau.osr.bl;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import de.fau.osr.parser.GitCommitMessageParser;
 import fj.Ord;
 import fj.P2;
 import fj.data.Array;
+import fj.data.Option;
 import fj.data.Set;
 import fj.data.Tree;
 import fj.data.TreeMap;
@@ -46,7 +48,9 @@ public class VcsInterpreter {
 	{
 		Tree<String> history = vcsController.getCommitTree("HEAD");
 		makeAvailable(history);
-		return commitToReqToFiles.get(history.root()).get(requirementID).some();
+		Option<Set<File>> opt = commitToReqToFiles.get(history.root()).get(requirementID);
+		if(opt.isSome()) return opt.some();
+		return Collections.emptyList();
 	}
 
 	private void makeAvailable(Tree<String> history) {
