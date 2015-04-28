@@ -26,14 +26,14 @@ import fj.data.Set;
 import fj.data.Tree;
 import fj.data.TreeMap;
 /**
- * @author Gayathery
- * @desc This class tracks the relationship between files and requirements. It
+ * This class tracks the relationship between files and requirements. It
  * internally keeps all information for all commits in memory. This leads to
  * efficient incremental updates if commits are added.
  * It assumes that the content of a commit with a constant commitID cannot change,
  * which is a valid assumption for git. If a commit were to change without
  * changing its commitID the internal metadata would become stale and the
  * VcsInterpreter should be recreated.
+ * @author Gayathery
  *
  */
 public class VcsInterpreter {
