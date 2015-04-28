@@ -132,14 +132,10 @@ public class VcsInterpreter {
 					}
 					break;
 				case DELETED:
-					try {
 					for(Integer req : nextFileToReq.get(file.oldPath).some()) {
-						nextReqToFile = nextReqToFile.set(req, nextReqToFile.get(req).some().delete(file.newPath));
+						nextReqToFile = nextReqToFile.set(req, nextReqToFile.get(req).some().delete(file.oldPath));
 					}
 					nextFileToReq = nextFileToReq.delete(file.oldPath);
-					} catch(Throwable e) {
-						System.err.println(file.oldPath + " should have existed in commit " + child.root() + " before " + history.root());
-					}
 					break;
 				case MODIFIED:
 					for(Integer req : reqs) {
