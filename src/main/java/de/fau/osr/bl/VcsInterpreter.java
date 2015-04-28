@@ -27,7 +27,13 @@ import fj.data.Tree;
 import fj.data.TreeMap;
 /**
  * @author Gayathery
- * @desc This class is an interpreter for data from Vcs
+ * @desc This class tracks the relationship between files and requirements. It
+ * internally keeps all information for all commits in memory. This leads to
+ * efficient incremental updates if commits are added.
+ * It assumes that the content of a commit with a constant commitID cannot change,
+ * which is a valid assumption for git. If a commit were to change without
+ * changing its commitID the internal metadata would become stale and the
+ * VcsInterpreter should be recreated.
  *
  */
 public class VcsInterpreter {
@@ -54,6 +60,11 @@ public class VcsInterpreter {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param history
+	 * After calling this method, the internal maps are guaranteed to contain
+	 * all commitIDs in history.
+	 */
 	private void makeAvailable(Tree<String> history) {
 		final Ord<File> FILE_ORDER = Ord.<File>comparableOrd();
 		final Ord<Integer> INT_ORDER = Ord.<Integer>comparableOrd();
@@ -63,6 +74,7 @@ public class VcsInterpreter {
 		commitToFileToReqs.put(history.root(), TreeMap.<File,Set<Integer>>empty(FILE_ORDER));
 		List<Integer> reqs = new GitCommitMessageParser().parse(vcsController.getCommitMessage(history.root()));
 		if(subtrees.length() == 0) {
+			// this is the initial commit, add all files
 			for(Iterator<CommitFile> it = vcsController.getCommitFiles(history.root()); it.hasNext();) {
 				CommitFile file = it.next();
 				commitToFileToReqs.put(history.root(), commitToFileToReqs.get(history.root()).set(file.newPath, Set.empty(INT_ORDER)));
@@ -94,6 +106,7 @@ public class VcsInterpreter {
 					nextFileToReq = nextFileToReq.set(file.oldPath, Set.empty(INT_ORDER));
 				}
 				switch(file.commitState) {
+				// move/insert/delete metadata based on commitState
 				case ADDED:
 					for(Integer req : reqs) {
 						if(!nextReqToFile.contains(req)) {
@@ -153,6 +166,7 @@ public class VcsInterpreter {
 				}
 			}
 			if(subtrees.length() > 1) {
+				// this is a merge commit, insert the entries of this parent
 				for(P2<Integer,Set<File>> entry : nextReqToFile) {
 					Integer req = entry._1();
 					if(!commitToReqToFiles.get(history.root()).contains(req)) {
@@ -174,6 +188,8 @@ public class VcsInterpreter {
 					}
 				}
 			} else {
+				// this is a simple commit with one parent,
+				// we can use the next maps we already merged
 				commitToReqToFiles.put(history.root(), nextReqToFile);
 				commitToFileToReqs.put(history.root(), nextFileToReq);
 			}
