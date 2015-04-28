@@ -59,6 +59,14 @@ public class VcsInterpreter {
 		if(opt.isSome()) return opt.some();
 		return Collections.emptyList();
 	}
+	
+	public Iterable<Integer> getRequirementsForFile(File file) {
+		Tree<String> history = vcsController.getCommitTree("HEAD");
+		makeAvailable(history);
+		Option<Set<Integer>> opt = commitToFileToReqs.get(history.root()).get(file);
+		if(opt.isSome()) return opt.some();
+		return Collections.emptyList();
+	}
 
 	/**
 	 * @param history
