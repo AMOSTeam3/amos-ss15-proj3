@@ -6,20 +6,19 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 import de.fau.osr.bl.VcsInterpreter;
-import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 
 /**
  * @author Gayathery
- * This is an application to fulfill the acceptance criterion for Req-7
+ * This is an application to fulfill the acceptance criterion for Req-8
  */
-public class CommitFileListingForRequirementsApp {
+public class RequirementListingForRepositoryFileApp {
 	private static class CliOptions {
 		@Parameter(names = "-repo", required = true)
 		String repoURL;
-		@Parameter(names = "-req", required = true)
-		String reqId;
+		@Parameter(names = "-filepath", required = true)
+		String filePath;
 	}
 	public static void main(String[] args) {
 		CliOptions cli = new CliOptions();
@@ -27,14 +26,14 @@ public class CommitFileListingForRequirementsApp {
 		VcsController vcs = new VcsController(VcsEnvironment.GIT);
 		vcs.Connect(cli.repoURL);
 		final VcsInterpreter interpreter = new VcsInterpreter(vcs);
-		final String reqId = cli.reqId;
-		for(CommitFile file : new Iterable<CommitFile>() {
+		final String filePath = cli.filePath;
+		for(Integer requirementID : new Iterable<Integer>() {
 
 			@Override
-			public Iterator<CommitFile> iterator() {
-				return interpreter.getCommitFilesForRequirementID(reqId);
+			public Iterator<Integer> iterator() {
+				return interpreter.getRequirementListforAFile(filePath).iterator();
 			}}) {
-			System.out.println(file.oldPath + " " + file.commitState + " " + file.newPath +  " " + file.commitID);
+			System.out.println(requirementID);
 		}
 	}
 }

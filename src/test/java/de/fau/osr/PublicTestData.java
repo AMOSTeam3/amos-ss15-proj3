@@ -51,6 +51,10 @@ public class PublicTestData {
 		return "1";
 	}
 	
+	public static String getSampleFilePathFromTestRepository(){
+		return "TestFile4";
+	}
+	
 	/*
 	 * @category Repository Data
 	 */

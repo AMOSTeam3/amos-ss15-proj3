@@ -39,5 +39,21 @@ public class VcsInterpreterTest {
 			assertTrue(commitFileList.hasNext());
 		
 	}
+	
+	/**
+	 * Test method for {@link de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)}.
+	 */
+	@Test
+	public void testGetRequirementListforAFile() {		
+		
+			Iterator<Integer> reqList = interpreter.getRequirementListforAFile(PublicTestData.getSampleFilePathFromTestRepository()).iterator();	
+			boolean isCommitAvailable = false;
+			while(reqList.hasNext()){
+				if(1 == reqList.next())
+					isCommitAvailable = true;
+			}
+			assertTrue(isCommitAvailable);
+		
+	}
 
 }

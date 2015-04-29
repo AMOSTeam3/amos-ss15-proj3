@@ -9,24 +9,32 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revplot.PlotCommit;
+import org.eclipse.jgit.revplot.PlotCommitList;
+import org.eclipse.jgit.revplot.PlotLane;
+import org.eclipse.jgit.revplot.PlotWalk;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.slf4j.LoggerFactory;
+
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 /**
  * @author Gayathery
@@ -54,7 +62,7 @@ public class GitVcsClient implements VcsClient{
 	
 	
 	/* (non-Javadoc)
-	 * @see org.amos.core.vcs.interfaces.VcsClient#connect()
+	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#connect()
 	 * @author Gayathery
 	 */
 	
@@ -74,7 +82,7 @@ public class GitVcsClient implements VcsClient{
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.amos.core.vcs.interfaces.VcsClient#getBranchList()
+	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#getBranchList()
 	 * @author Gayathery
 	 */
 	@Override
@@ -95,7 +103,7 @@ public class GitVcsClient implements VcsClient{
 	
 	
 	/* (non-Javadoc)
-	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitList()
+	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#getCommitList()
 	 * @author Gayathery
 	 */
 	@Override
@@ -169,9 +177,44 @@ public class GitVcsClient implements VcsClient{
 							diff.getNewPath()));
 		}
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitFiles(java.lang.String)
+	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#getCommitListForFileodification(java.lang.String)
+	 * @author Gayathery
+	 */
+	public Iterator<String> getCommitListForFileodification(String path){
+	    PlotCommitList<PlotLane> plotCommitList = new PlotCommitList<PlotLane>();
+	    PlotWalk revWalk = new PlotWalk(repo);
+	    ArrayList<String> commitIDList = new ArrayList<String>();
+	    try {
+
+	        ObjectId rootId = repo.resolve("HEAD");
+	        if (rootId != null) {
+	            RevCommit root = revWalk.parseCommit(rootId);
+	            revWalk.markStart(root);
+	            revWalk.setTreeFilter(
+	            	    AndTreeFilter.create(PathFilter.create(path), TreeFilter.ANY_DIFF));
+	            plotCommitList.source(revWalk);
+	            plotCommitList.fillTo(Integer.MAX_VALUE);
+	            
+	            Iterator<PlotCommit<PlotLane>> commitListIterator = plotCommitList.iterator();
+	            while(commitListIterator.hasNext())
+	            {
+	            	commitIDList.add(commitListIterator.next().getName());
+	            }
+	            return commitIDList.iterator();
+	        }
+
+	    } catch (AmbiguousObjectException ex) {
+	        
+	    } catch (IOException ex) {
+	       
+	    }
+	    return commitIDList.iterator();
+	}
+	
+	/* (non-Javadoc)
+	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#getCommitFiles(java.lang.String)
 	 * @author Gayathery
 	 */
 	@Override
@@ -204,7 +247,7 @@ public class GitVcsClient implements VcsClient{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.amos.core.vcs.interfaces.VcsClient#getCommitMessage(java.lang.String)
+	 * @see de.fau.osr.core.vcs.VcsClient#getCommitMessage(java.lang.String)
 	 * @author Florian Gerdes
 	 */
 	@Override

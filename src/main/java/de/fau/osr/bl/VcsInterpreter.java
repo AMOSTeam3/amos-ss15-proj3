@@ -1,11 +1,12 @@
 package de.fau.osr.bl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
-import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.parser.CommitMessageParser;
 import de.fau.osr.parser.GitCommitMessageParser;
 /**
@@ -47,5 +48,19 @@ public class VcsInterpreter {
 		
 		
 		return commitFilesList.iterator();
+	}
+	
+	/* (non-Javadoc)
+	 * @see de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)
+	 * @author Gayathery
+	 */
+	public List<Integer> getRequirementListforAFile(String filePath){
+		ArrayList<Integer> requirementList = new ArrayList<Integer>();
+		Iterator<String> commitIdListIterator = vcsController.getCommitIdsForFileodification(filePath);
+		CommitMessageParser messageParser = new GitCommitMessageParser();
+		while(commitIdListIterator.hasNext()){
+			requirementList.addAll(messageParser.parse(vcsController.getCommitMessage(commitIdListIterator.next())));
+		}
+		return requirementList;
 	}
 }

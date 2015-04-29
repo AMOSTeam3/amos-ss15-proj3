@@ -15,4 +15,5 @@ public interface VcsClient {
 	public Iterator<String> getCommitList();
 	public Iterator<CommitFile> getCommitFiles(String commitID);
 	public String getCommitMessage(String commitID);
+	public Iterator<String> getCommitListForFileodification(String filePath);
 }

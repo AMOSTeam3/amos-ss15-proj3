@@ -79,6 +79,14 @@ public class VcsController {
 	}
 	
 	/**
+	 * @return List of commits for a all modifications in a file
+	 * @author Gayathery
+	 */
+	public Iterator<String> getCommitIdsForFileodification(String filePath){
+		return  isConnected ? vcsClient.getCommitListForFileodification(filePath) : new ArrayList<String>().iterator();
+	}
+	
+	/**
 	 * @return List of committed files
 	 * @author Gayathery
 	 */
