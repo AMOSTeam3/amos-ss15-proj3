@@ -7,23 +7,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.jgit.errors.AmbiguousObjectException;
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import de.fau.osr.PublicTestData;
-import fj.Show;
-import fj.data.Tree;
 
 /**
  * @author Gayathery
@@ -130,13 +124,6 @@ public class VcsControllerTest {
 			
 		}
 		assertNotNull(commitMessage);
-	}
-	
-	@Test
-	public void getCommitTreeTest() throws RevisionSyntaxException, AmbiguousObjectException, IncorrectObjectTypeException, IOException {
-		isConnected = controller.Connect(uri);
-		Tree<String> commits = controller.getCommitTree(expectedCommit.id);
-		assertNotNull(commits);
 	}
 
 }

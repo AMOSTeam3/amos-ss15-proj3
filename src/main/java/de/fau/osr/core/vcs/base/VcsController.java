@@ -1,16 +1,10 @@
 package de.fau.osr.core.vcs.base;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.eclipse.jgit.errors.AmbiguousObjectException;
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.RevisionSyntaxException;
-
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-import fj.data.Tree;
 
 /**
  * @author Gayathery
@@ -35,6 +29,13 @@ public class VcsController {
 		isConnected = false;
 	}
 
+	/**
+	 * @author Gayathery
+	 */
+	private VcsController() {
+	}
+
+	
 	/**
 	 * @author Gayathery
 	 */
@@ -92,17 +93,5 @@ public class VcsController {
 	 */
 	public String getCommitMessage(String commitID) {
 		return isConnected ? vcsClient.getCommitMessage(commitID) : null;
-	}
-	
-	public Tree<String> getCommitTree(String commitID) {
-		try {
-			return isConnected ? vcsClient.getCommitTree(commitID) : null;
-		} catch (RevisionSyntaxException | IOException e) {
-			return null;
-		}
-	}
-	
-	public Iterable<CommitFile> getDiff(String commitA, String commitB) {
-		return vcsClient.getDiff(commitA, commitB);
 	}
 }
