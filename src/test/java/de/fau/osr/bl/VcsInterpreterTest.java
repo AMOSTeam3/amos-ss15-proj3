@@ -34,7 +34,7 @@ public class VcsInterpreterTest {
 	@Test
 	public void testGetCommitFilesForRequirementID() {		
 		
-			Iterator<CommitFile> commitFileList = interpreter.getCommitFilesForRequirementID(PublicTestData.getSampleReqID());	
+			Iterator<CommitFile> commitFileList = interpreter.getCommitFilesForRequirementID(PublicTestData.getSampleReqID()).iterator();	
 			assertNotNull(commitFileList);
 			assertTrue(commitFileList.hasNext());
 		

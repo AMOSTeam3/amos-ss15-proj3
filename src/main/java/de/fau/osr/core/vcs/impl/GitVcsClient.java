@@ -1,13 +1,13 @@
 package de.fau.osr.core.vcs.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -29,7 +29,6 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
-import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.slf4j.LoggerFactory;
 
 import de.fau.osr.core.vcs.base.CommitFile;
@@ -139,8 +138,9 @@ public class GitVcsClient implements VcsClient{
 	}
 
 	
-	private void getTreeDiffFiles(RevTree a, RevTree b, Set<CommitFile> s, String commitID) throws IOException {
-		DiffFormatter dif = new DiffFormatter(DisabledOutputStream.INSTANCE);
+	private void getTreeDiffFiles(RevTree a, RevTree b, ArrayList<CommitFile> s, String commitID) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		DiffFormatter dif = new DiffFormatter(out);
 		dif.setRepository(repo);
 		dif.setDiffComparator(RawTextComparator.DEFAULT);
 		dif.setDetectRenames(true);
@@ -168,7 +168,18 @@ public class GitVcsClient implements VcsClient{
 			default:
 				throw new RuntimeException("Encountered an unknown DiffEntry.ChangeType " + diff.getChangeType() + ". Please report a bug.");
 			}
-			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState,commitID);
+			dif.format(diff);
+			diff.getOldId();
+			String changedData = "";
+		      try {
+		    	  changedData = out.toString("UTF-8");
+		    	  out.reset();
+				 
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState,commitID,changedData);
 			s.add(commitFile);
 			LoggerFactory.getLogger(getClass()).debug(
 					MessageFormat.format("({0} {1} {2})",
@@ -218,9 +229,9 @@ public class GitVcsClient implements VcsClient{
 	 * @author Gayathery
 	 */
 	@Override
-	public Iterator<CommitFile> getCommitFiles(String commitID) {
+	public ArrayList<CommitFile> getCommitFiles(String commitID) {
 
-		HashSet<CommitFile> commitFilesList = new HashSet<>();
+		ArrayList<CommitFile> commitFilesList = new ArrayList<>();
 
 		try {
 			Repository repo = git.getRepository();
@@ -243,7 +254,7 @@ public class GitVcsClient implements VcsClient{
 			e1.printStackTrace();
 		}
 
-		return commitFilesList.iterator();
+		return commitFilesList;
 	}
 
 	/* (non-Javadoc)

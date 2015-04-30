@@ -26,9 +26,9 @@ public class VcsInterpreter {
 	 * @see de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)
 	 * @author Gayathery
 	 */
-	public Iterator<CommitFile> getCommitFilesForRequirementID(String requirementID)
+	public ArrayList<CommitFile> getCommitFilesForRequirementID(String requirementID)
 	{
-		HashSet<CommitFile> commitFilesList = new HashSet<CommitFile>();
+		ArrayList<CommitFile> commitFilesList = new ArrayList<CommitFile>();
 		
 			Iterator<String> commits = vcsController.getCommitList();
 			CommitMessageParser commitMessageparser = new GitCommitMessageParser();
@@ -37,7 +37,7 @@ public class VcsInterpreter {
 				String currentCommit = commits.next();
 				if(commitMessageparser.parse(vcsController.getCommitMessage(currentCommit)).contains(Integer.valueOf(requirementID)))
 				{
-					Iterator<CommitFile> commitFilesForAComit = vcsController.getCommitFiles(currentCommit);
+					Iterator<CommitFile> commitFilesForAComit = vcsController.getCommitFiles(currentCommit).iterator();
 					while(commitFilesForAComit.hasNext())
 					{
 						commitFilesList.add(commitFilesForAComit.next());
@@ -47,7 +47,7 @@ public class VcsInterpreter {
 			}
 		
 		
-		return commitFilesList.iterator();
+		return commitFilesList;
 	}
 	
 	/* (non-Javadoc)

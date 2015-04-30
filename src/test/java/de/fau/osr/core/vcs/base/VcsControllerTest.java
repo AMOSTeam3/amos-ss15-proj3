@@ -98,7 +98,7 @@ public class VcsControllerTest {
 		if(isConnected){
 			commitList = controller.getCommitList();
 			if(commitList.hasNext()){
-				commitFileList = controller.getCommitFiles(commitList.next());
+				commitFileList = controller.getCommitFiles(commitList.next()).iterator();
 			}
 			  
 			

@@ -32,7 +32,7 @@ public class CommitFileListingForRequirementsApp {
 
 			@Override
 			public Iterator<CommitFile> iterator() {
-				return interpreter.getCommitFilesForRequirementID(reqId);
+				return interpreter.getCommitFilesForRequirementID(reqId).iterator();
 			}}) {
 			System.out.println(file.oldPath + " " + file.commitState + " " + file.newPath +  " " + file.commitID);
 		}

@@ -90,8 +90,8 @@ public class VcsController {
 	 * @return List of committed files
 	 * @author Gayathery
 	 */
-	public Iterator<CommitFile> getCommitFiles(String commitID) {
-		return isConnected ? vcsClient.getCommitFiles(commitID) : new ArrayList<CommitFile>().iterator();
+	public ArrayList<CommitFile> getCommitFiles(String commitID) {
+		return isConnected ? vcsClient.getCommitFiles(commitID) : new ArrayList<CommitFile>();
 
 	}
 

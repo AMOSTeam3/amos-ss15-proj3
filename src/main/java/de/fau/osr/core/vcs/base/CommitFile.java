@@ -16,6 +16,7 @@ public class CommitFile {
 	public File oldPath;
 	public File newPath;
 	public String commitID;
+	public String changedData;
 	
 	/**
 	 * @author Gayathery
@@ -24,12 +25,13 @@ public class CommitFile {
 	 * @param commitState
 	 * @param commitID
 	 */
-	public CommitFile(File oldPath, File newPath, CommitState commitState, String commitID)
+	public CommitFile(File oldPath, File newPath, CommitState commitState, String commitID,String changedData)
 	{
 		this.commitState = commitState;
 		this.oldPath = oldPath;
 		this.newPath = newPath;
 		this.commitID = commitID;
+		this.changedData = changedData;
 	}
 	
 	@Override
