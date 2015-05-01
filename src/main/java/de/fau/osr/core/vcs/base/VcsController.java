@@ -2,7 +2,12 @@ package de.fau.osr.core.vcs.base;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 
@@ -15,6 +20,8 @@ import de.fau.osr.core.vcs.interfaces.VcsClient;
  */
 
 public class VcsController {
+	
+	Logger logger = LoggerFactory.getLogger(VcsController.class);
 
 	VcsEnvironment sysEnvironment;
 	VcsClient vcsClient;
@@ -48,6 +55,7 @@ public class VcsController {
 	 * @author Gayathery
 	 */
 	public boolean Connect(String repositoryUri) {
+		logger.info("Start call Connect():"+repositoryUri);
 		switch (sysEnvironment) {
 		case GIT:
 			if (repositoryUri != null && !repositoryUri.isEmpty()) {
@@ -58,6 +66,7 @@ public class VcsController {
 			break;
 			
 		}
+		logger.info("End call Connect():isConnected"+isConnected);
 		return isConnected;
 	}
 
@@ -82,7 +91,7 @@ public class VcsController {
 	 * @return List of commits for a all modifications in a file
 	 * @author Gayathery
 	 */
-	public Iterator<String> getCommitIdsForFileodification(String filePath){
+	public Iterator<String> getCommitIdsForFile(String filePath){
 		return  isConnected ? vcsClient.getCommitListForFileodification(filePath) : new ArrayList<String>().iterator();
 	}
 	
@@ -90,7 +99,7 @@ public class VcsController {
 	 * @return List of committed files
 	 * @author Gayathery
 	 */
-	public ArrayList<CommitFile> getCommitFiles(String commitID) {
+	public List<CommitFile> getCommitFiles(String commitID) {
 		return isConnected ? vcsClient.getCommitFiles(commitID) : new ArrayList<CommitFile>();
 
 	}

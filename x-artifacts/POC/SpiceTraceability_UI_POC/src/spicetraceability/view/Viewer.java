@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
 
-import de.fau.osr.bl.VcsInterpreter;
+import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
@@ -36,7 +36,7 @@ public class Viewer extends JFrame {
 	private JButton getInfoButton;
 	private JTextField reqtextField;
 	VcsController vcsController;
-	VcsInterpreter vcsInterpreter;
+	Tracker tracker;
 	JList jList1;
 	ArrayList<CommitFile> totalCommitFiles;
 	private JLabel lblRepositoryuri;
@@ -193,7 +193,7 @@ public class Viewer extends JFrame {
 		vcsController = new VcsController(VcsEnvironment.GIT);
 		if(vcsController.Connect(uritextField.getText()))
 		{
-			vcsInterpreter = new VcsInterpreter(vcsController);
+			tracker = new Tracker(vcsController);
 			return true;
 		}
 		else
@@ -204,7 +204,7 @@ public class Viewer extends JFrame {
 	{
 		
 		ArrayList<String> commitFileStringList = new ArrayList<String>();
-		DataRetriever dataRetriver = new DataRetriever(vcsController, vcsInterpreter);
+		DataRetriever dataRetriver = new DataRetriever(vcsController, tracker);
 		totalCommitFiles = dataRetriver.getCommitFilesForRequirementID(requirmentID,reqPattern.getText());
 		Iterator<CommitFile> commitFileIterator = totalCommitFiles.iterator();
 		while(commitFileIterator.hasNext())

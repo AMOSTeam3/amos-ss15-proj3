@@ -19,9 +19,11 @@ import de.fau.osr.core.vcs.base.VcsEnvironment;
  * @author Gayathery
  *
  */
-public class VcsInterpreterTest {
+public class TrackerTest {
+	
+	
 	VcsController vcs = new VcsController(VcsEnvironment.GIT);
-	VcsInterpreter interpreter = new VcsInterpreter(vcs);
+	Tracker interpreter = new Tracker(vcs);
 
 	@Before
 	public void setup() {
@@ -29,7 +31,7 @@ public class VcsInterpreterTest {
 	}
 	
 	/**
-	 * Test method for {@link de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)}.
+	 * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.
 	 */
 	@Test
 	public void testGetCommitFilesForRequirementID() {		
@@ -41,12 +43,12 @@ public class VcsInterpreterTest {
 	}
 	
 	/**
-	 * Test method for {@link de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)}.
+	 * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.
 	 */
 	@Test
 	public void testGetRequirementListforAFile() {		
 		
-			Iterator<Integer> reqList = interpreter.getRequirementListforAFile(PublicTestData.getSampleFilePathFromTestRepository()).iterator();	
+			Iterator<Integer> reqList = interpreter.getAllRequirementsforFile(PublicTestData.getSampleFilePathFromTestRepository()).iterator();	
 			boolean isCommitAvailable = false;
 			while(reqList.hasNext()){
 				if(1 == reqList.next())

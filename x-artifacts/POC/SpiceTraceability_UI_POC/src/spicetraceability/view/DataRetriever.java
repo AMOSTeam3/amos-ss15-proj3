@@ -1,30 +1,24 @@
 package spicetraceability.view;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-
-import de.fau.osr.bl.VcsInterpreter;
+import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
-import de.fau.osr.parser.CommitMessageParser;
-import de.fau.osr.parser.GitCommitMessageParser;
 
 public class DataRetriever {
 
-	VcsInterpreter vcsInterpreter;
-	VcsController vcsController;	
-	public DataRetriever(VcsController vcsController,VcsInterpreter vcsInterpreter){
+	Tracker tracker;
+	VcsController vcsController;
+	
+	public DataRetriever(VcsController vcsController,Tracker tracker){
 		this.vcsController = vcsController;
-		this.vcsInterpreter = vcsInterpreter;
+		this.tracker = tracker;
 	}
 
 		/*
@@ -52,17 +46,13 @@ public class DataRetriever {
 		ArrayList<CommitFile> commitFilesList = new ArrayList<CommitFile>();
 		
 			Iterator<String> commits = vcsController.getCommitList();
-			CommitMessageParser commitMessageparser = new GitCommitMessageParser();
+			
 			while(commits.hasNext())
 			{
 				String currentCommit = commits.next();
 				if(parse(vcsController.getCommitMessage(currentCommit),requirementPattern).contains(Integer.valueOf(requirementID)))
 				{
-					Iterator<CommitFile> commitFilesForAComit = vcsController.getCommitFiles(currentCommit).iterator();
-					while(commitFilesForAComit.hasNext())
-					{
-						commitFilesList.add(commitFilesForAComit.next());
-					}
+					commitFilesList.addAll(vcsController.getCommitFiles(currentCommit));
 					
 				}
 			}
