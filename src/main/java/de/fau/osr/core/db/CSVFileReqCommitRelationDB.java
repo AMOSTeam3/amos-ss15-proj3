@@ -39,7 +39,7 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
         if (isEmptyFile) {
             try (BufferedWriter writer = Files.newBufferedWriter(storagePath, CHARSET)) {
 
-                String s = String.format("%sreq-id%scommit-id", COMMENTARY_SYMBOL, CSV_DELIMITER);
+                String s = String.format("%sreq-id%scommit-id%n", COMMENTARY_SYMBOL, CSV_DELIMITER);
                 writer.write(s, 0, s.length());
             } catch (IOException x) {
                 System.err.format("IOException: %s%n", x);

@@ -36,7 +36,7 @@ public class PostTraceabilityApp {
         while (retry) {
 
             try {
-                System.out.print("Enter requirement 1 id: Req-");
+                System.out.print("Enter 1 requirement id: Req-");
                 reqID = Integer.valueOf(br.readLine());
                 retry = false;
             } catch (NumberFormatException err) {
@@ -52,7 +52,7 @@ public class PostTraceabilityApp {
         boolean retry = true;
 
         while (retry) {
-                System.out.print("Enter commit 1 id: ");
+                System.out.print("Enter 1 commit id: ");
                 commitID = br.readLine().trim().toLowerCase();
                 if (!commitID.isEmpty())
                     retry = false;
@@ -70,8 +70,13 @@ public class PostTraceabilityApp {
         Path repoFilePath = Paths.get(cli.repoURL);
         controller.Connect(repoFilePath.toString());
 
+
         Path storageFilePath = repoFilePath.getParent().resolve(storageFileName);
         ReqCommitRelationDB storage = new CSVFileReqCommitRelationDB(storageFilePath);
+
+        System.out.format("Will store post traceability datas at '%s'%n", storageFilePath.toString());
+        System.out.format("Exit mit CTRL-C%n%n");
+
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         boolean isRunning = true;
