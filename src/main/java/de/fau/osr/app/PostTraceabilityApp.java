@@ -22,7 +22,7 @@ import java.nio.file.Paths;
  */
 public class PostTraceabilityApp {
 
-    private static String storageFileName = "req2commit.csv";
+    private static String storageFileName = "req--commit.csv";
 
     private static class CliOptions {
         @Parameter(names = "-repo", required = true)
@@ -36,7 +36,7 @@ public class PostTraceabilityApp {
         while (retry) {
 
             try {
-                System.out.print("Enter requirement id: Req-'");
+                System.out.print("Enter requirement 1 id: Req-");
                 reqID = Integer.valueOf(br.readLine());
                 retry = false;
             } catch (NumberFormatException err) {
@@ -52,7 +52,7 @@ public class PostTraceabilityApp {
         boolean retry = true;
 
         while (retry) {
-                System.out.print("Enter commit id: '");
+                System.out.print("Enter commit 1 id: ");
                 commitID = br.readLine().trim().toLowerCase();
                 if (!commitID.isEmpty())
                     retry = false;
