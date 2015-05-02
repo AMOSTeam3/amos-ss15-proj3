@@ -40,7 +40,8 @@ public class CommitMessageParserTest extends TestCase {
     public CommitMessageParserTest(Commit commit) {
 		expectedCommit = commit;
 	}
-	
+
+	@Test
     public void parseSimpleTest() throws Exception {
 
         String test_commit = "major bug-fix Req-10 Req-15.";

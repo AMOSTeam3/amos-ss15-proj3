@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
@@ -69,7 +70,7 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
 
     @Override
     public Iterable<String> getDependencies(Integer reqID) {
-        Set<String> foundCommitIDs = new HashSet<>();
+        Set<String> foundCommitIDs = new HashSet<String>();
         for (Pair<Integer, String> each : iterateFileLines()) {
             if (each.getLeft() == reqID) {
                 foundCommitIDs.add(each.getRight());
@@ -81,9 +82,9 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
 
     @Override
     public Iterable<Integer> getDependencies(String commitID) {
-        Set<Integer> foundReqIDs = new HashSet<>();
+        Set<Integer> foundReqIDs = new HashSet<Integer>();
         for (Pair<Integer, String> each : iterateFileLines()) {
-            if (each.getRight() == commitID) {
+            if (commitID.equals(each.getRight())) {
                 foundReqIDs.add(each.getLeft());
             }
         }
@@ -99,7 +100,7 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
         try (BufferedReader reader = Files.newBufferedReader(storagePath, CHARSET)) {
             String line = null;
             while ((line = reader.readLine()) != null) {
-                String actualLine = new ArrayDeque<String>(Arrays.asList(line.split(COMMENTARY_SYMBOL))).removeLast();
+                String actualLine = new ArrayDeque<String>(Arrays.asList(line.split(COMMENTARY_SYMBOL))).removeFirst();
                 if (actualLine.isEmpty())
                     continue;
 
