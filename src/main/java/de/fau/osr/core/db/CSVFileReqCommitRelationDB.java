@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import javafx.util.Pair;
 
 /**
  * @author Taleh Didover
@@ -19,7 +20,6 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
     final Charset CHARSET = Charset.forName("US-ASCII");
     final String CSV_DELIMITER = ",";
     final String COMMENTARY_SYMBOL = "#";
-    Map<Integer, Set<String>> commitIDsByReqID;
 
     public CSVFileReqCommitRelationDB(Path storagePath) {
         this.storagePath = storagePath;
@@ -67,11 +67,35 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
     }
 
     @Override
-    public Map<Integer, Set<String>> getDependencies() {
-		Map<Integer, Set<String>> reqCommitRel = new HashMap<Integer, Set<String>>();
+    public Iterable<String> getDependencies(Integer reqID) {
+        Set<String> foundCommitIDs = new HashSet<>();
+        for (Pair<Integer, String> each : iterateFileLines()) {
+            if (each.getKey() == reqID) {
+                foundCommitIDs.add(each.getValue());
+            }
+        }
+
+        return foundCommitIDs;
+    }
+
+    @Override
+    public Iterable<Integer> getDependencies(String commitID) {
+        Set<Integer> foundReqIDs = new HashSet<>();
+        for (Pair<Integer, String> each : iterateFileLines()) {
+            if (each.getValue() == commitID) {
+                foundReqIDs.add(each.getKey());
+            }
+        }
+
+        return foundReqIDs;
+    }
+
+    private Iterable<Pair<Integer, String>> iterateFileLines() {
+        // my current implementation is not a very efficient iterator. A lazy iterator would be nicer.
+		Collection<Pair<Integer, String>> lines = new ArrayList<Pair<Integer, String>>();
+
         // https://docs.oracle.com/javase/tutorial/essential/io/file.html
-        Charset charset = Charset.forName("US-ASCII");
-        try (BufferedReader reader = Files.newBufferedReader(storagePath, charset)) {
+        try (BufferedReader reader = Files.newBufferedReader(storagePath, CHARSET)) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 String actualLine = new ArrayDeque<String>(Arrays.asList(line.split(COMMENTARY_SYMBOL))).removeLast();
@@ -80,17 +104,16 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
 
 				String[] splittedLine = actualLine.split(CSV_DELIMITER);
 
+
                 Integer reqID = Integer.valueOf(splittedLine[0]);
                 String commitID = splittedLine[1];
 
-                if (!reqCommitRel.containsKey(reqID))
-                    reqCommitRel.put(reqID, new HashSet<String>());
-                reqCommitRel.get(reqID).add(commitID);
+                lines.add(new Pair<Integer, String>(reqID, commitID));
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
 
-        return reqCommitRel;
+        return lines;
     }
 }

@@ -12,6 +12,6 @@ import java.util.Set;
 public interface ReqCommitRelationDB {
     void addFurtherDependency(Integer reqID, Set<String> commitIDs);
     void addFurtherDependency(Integer reqID, String commitID);
-    Map<Integer, Set<String>> getDependencies();
-    //TODO Will we need a method, which returns an Iterator?
+    Iterable<String> getDependencies(Integer reqID);
+    Iterable<Integer> getDependencies(String commitID);
 }

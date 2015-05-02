@@ -75,7 +75,7 @@ public class PostTraceabilityApp {
         ReqCommitRelationDB storage = new CSVFileReqCommitRelationDB(storageFilePath);
 
         System.out.format("Will store post traceability datas at '%s'%n", storageFilePath.toString());
-        System.out.format("Exit mit CTRL-C%n%n");
+        System.out.format("CTRL-C to exit!%n%n");
 
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
