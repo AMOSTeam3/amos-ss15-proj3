@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.fau.osr.parser;
+package de.fau.osr.util.parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import de.fau.osr.util.AppProperties;
  * Format of requirement ids must be Req-\d+
  *
  */
-public class GitCommitMessageParser implements CommitMessageParser {
+public class CommitMessageParser implements Parser {
 
 	private static final Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
 

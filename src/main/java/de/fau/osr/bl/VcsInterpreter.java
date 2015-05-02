@@ -3,21 +3,14 @@ package de.fau.osr.bl;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.base.VcsController;
-import de.fau.osr.parser.CommitMessageParser;
-import de.fau.osr.parser.GitCommitMessageParser;
+import de.fau.osr.util.parser.CommitMessageParser;
 import fj.Ord;
 import fj.P2;
 import fj.data.Array;
@@ -80,7 +73,7 @@ public class VcsInterpreter {
 		Array<Tree<String>> subtrees = history.subForest()._1().toArray();
 		commitToReqToFiles.put(history.root(), TreeMap.<Integer,Set<File>>empty(INT_ORDER));
 		commitToFileToReqs.put(history.root(), TreeMap.<File,Set<Integer>>empty(FILE_ORDER));
-		List<Integer> reqs = new GitCommitMessageParser().parse(vcsController.getCommitMessage(history.root()));
+		List<Integer> reqs = new CommitMessageParser().parse(vcsController.getCommitMessage(history.root()));
 		if(subtrees.length() == 0) {
 			// this is the initial commit, add all files
 			for(Iterator<CommitFile> it = vcsController.getCommitFiles(history.root()); it.hasNext();) {

@@ -1,5 +1,7 @@
 package de.fau.osr.core.db;
 
+import de.fau.osr.util.Pair;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -8,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import javafx.util.Pair;
 
 /**
  * @author Taleh Didover
@@ -70,8 +71,8 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
     public Iterable<String> getDependencies(Integer reqID) {
         Set<String> foundCommitIDs = new HashSet<>();
         for (Pair<Integer, String> each : iterateFileLines()) {
-            if (each.getKey() == reqID) {
-                foundCommitIDs.add(each.getValue());
+            if (each.getLeft() == reqID) {
+                foundCommitIDs.add(each.getRight());
             }
         }
 
@@ -82,8 +83,8 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
     public Iterable<Integer> getDependencies(String commitID) {
         Set<Integer> foundReqIDs = new HashSet<>();
         for (Pair<Integer, String> each : iterateFileLines()) {
-            if (each.getValue() == commitID) {
-                foundReqIDs.add(each.getKey());
+            if (each.getRight() == commitID) {
+                foundReqIDs.add(each.getLeft());
             }
         }
 

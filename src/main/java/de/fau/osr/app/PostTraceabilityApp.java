@@ -6,8 +6,8 @@ import de.fau.osr.core.db.ReqCommitRelationDB;
 import de.fau.osr.core.db.CSVFileReqCommitRelationDB;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
-import de.fau.osr.parser.CommitMessageParser;
-import de.fau.osr.parser.GitCommitMessageParser;
+import de.fau.osr.util.parser.Parser;
+import de.fau.osr.util.parser.CommitMessageParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class PostTraceabilityApp {
         CliOptions cli = new CliOptions();
         new JCommander(cli, args);
         final VcsController controller = new VcsController(VcsEnvironment.GIT);
-        CommitMessageParser parser = new GitCommitMessageParser();
+        Parser parser = new CommitMessageParser();
 
         Path repoFilePath = Paths.get(cli.repoURL);
         controller.Connect(repoFilePath.toString());
