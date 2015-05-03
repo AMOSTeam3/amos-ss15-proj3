@@ -72,7 +72,7 @@ public class CSVFileReqCommitRelationDB implements ReqCommitRelationDB {
     public Iterable<String> getDependencies(Integer reqID) {
         Set<String> foundCommitIDs = new HashSet<String>();
         for (Pair<Integer, String> each : iterateFileLines()) {
-            if (each.getLeft() == reqID) {
+            if (each.getLeft().equals(reqID)) {
                 foundCommitIDs.add(each.getRight());
             }
         }
