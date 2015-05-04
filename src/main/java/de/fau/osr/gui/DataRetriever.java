@@ -95,6 +95,15 @@ public class DataRetriever {
 	 * Responsibility: Rajab
 	 */
 	public ArrayList<String> getRequirementIDs(){
-		return null;
+		ArrayList<String> requirements = new ArrayList<String>();
+		requirements.add("0");
+		requirements.add("1");
+		requirements.add("2");
+		requirements.add("3");
+		requirements.add("4");
+		requirements.add("5");
+		requirements.add("6");
+		requirements.add("7");
+		return requirements;
 	}
 }
