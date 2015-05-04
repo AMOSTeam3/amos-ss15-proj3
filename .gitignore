@@ -17,3 +17,6 @@ target/
 
 # Maven
 log/
+
+#compiled version
+/out/
