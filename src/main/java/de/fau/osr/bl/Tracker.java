@@ -1,17 +1,15 @@
 package de.fau.osr.bl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import de.fau.osr.util.parser.CommitMessageParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
-import de.fau.osr.parser.CommitMessageParser;
-import de.fau.osr.parser.GitCommitMessageParser;
 /**
  * @author Gayathery
  * @desc This class is an interpreter for data from Vcs
@@ -76,7 +74,7 @@ public class Tracker {
      		
      		String currentCommit = commits.next();
 			
-     		commitMessageparser = new GitCommitMessageParser();
+     		commitMessageparser = new CommitMessageParser();
      		
      		if(commitMessageparser.parse(vcsController.getCommitMessage(currentCommit)).contains(Integer.valueOf(requirementID)))
      			
@@ -145,7 +143,7 @@ public class Tracker {
 		
 		Iterator<String> commitIdListIterator = vcsController.getCommitIdsForFile(filePath);
 		
-		commitMessageparser = new GitCommitMessageParser();
+		commitMessageparser = new CommitMessageParser();
 		
 		while(commitIdListIterator.hasNext()){
 			

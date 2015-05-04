@@ -1,8 +1,8 @@
-package de.fau.osr.parser;
+package de.fau.osr.util.parser;
 
 import java.util.List;
 
-public interface CommitMessageParser {
+public interface Parser {
 
 	List<Integer> parse(String latestCommitMessage);
 

@@ -1,14 +1,10 @@
 /**
  * 
  */
-package de.fau.osr.parser;
+package de.fau.osr.util.parser;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,13 +12,13 @@ import de.fau.osr.util.AppProperties;
 
 
 /**
- * @author Captain Sparrow, Taleh Didover
+ * @author Taleh Didover
  *
  * Parses requirement id in given commit message.
  * Format of requirement ids must be Req-\d+
  *
  */
-public class GitCommitMessageParser implements CommitMessageParser {
+public class CommitMessageParser implements Parser {
 
 	private static final Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
 

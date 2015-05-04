@@ -8,8 +8,8 @@ import com.beust.jcommander.Parameter;
 
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
-import de.fau.osr.parser.CommitMessageParser;
-import de.fau.osr.parser.GitCommitMessageParser;
+import de.fau.osr.util.parser.Parser;
+import de.fau.osr.util.parser.CommitMessageParser;
 
 
 /**
@@ -27,7 +27,7 @@ public class CommitRequirementsListApp {
 		CliOptions cli = new CliOptions();
 		new JCommander(cli, args);
 		final VcsController controller = new VcsController(VcsEnvironment.GIT);
-		CommitMessageParser parser = new GitCommitMessageParser();
+		Parser parser = new CommitMessageParser();
 		controller.Connect(cli.repoURL);
 		for(String commitId : new Iterable<String>(){
 			@Override
