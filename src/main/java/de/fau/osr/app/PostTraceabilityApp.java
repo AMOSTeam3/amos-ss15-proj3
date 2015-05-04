@@ -2,12 +2,12 @@ package de.fau.osr.app;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import de.fau.osr.core.db.ReqCommitRelationDB;
-import de.fau.osr.core.db.CSVFileReqCommitRelationDB;
+import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
-import de.fau.osr.util.parser.Parser;
 import de.fau.osr.util.parser.CommitMessageParser;
+import de.fau.osr.util.parser.Parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -72,7 +72,13 @@ public class PostTraceabilityApp {
 
 
         Path storageFilePath = repoFilePath.getParent().resolve(storageFileName);
-        ReqCommitRelationDB storage = new CSVFileReqCommitRelationDB(storageFilePath);
+        DataSource storage = null;
+
+        try {
+            storage = new CSVFileDataSource(storageFilePath.toFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         System.out.format("Will store post traceability datas at '%s'%n", storageFilePath.toString());
         System.out.format("CTRL-C to exit!%n%n");
@@ -99,7 +105,12 @@ public class PostTraceabilityApp {
                 System.exit(1);
             }
 
-            storage.addFurtherDependency(reqID, commitID);
+            try {
+                assert storage != null;
+                storage.addReqCommitRelation(reqID, commitID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }
