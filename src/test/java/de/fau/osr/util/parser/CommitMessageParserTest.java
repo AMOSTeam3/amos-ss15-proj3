@@ -1,4 +1,4 @@
-package de.fau.osr.parser;
+package de.fau.osr.util.parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import de.fau.osr.core.vcs.base.Commit;
  * Created by Taleh Didover on 17.04.15.
  */
 @RunWith(Parameterized.class)
-public class GitCommitMessageParserTest extends TestCase {
+public class CommitMessageParserTest extends TestCase {
 	private static PublicTestData testData = new PublicTestData();
 	private Commit expectedCommit;
 
@@ -37,14 +37,15 @@ public class GitCommitMessageParserTest extends TestCase {
     	return parameters;
     }
     
-    public GitCommitMessageParserTest(Commit commit) {
+    public CommitMessageParserTest(Commit commit) {
 		expectedCommit = commit;
 	}
-	
+
+	@Test
     public void parseSimpleTest() throws Exception {
 
         String test_commit = "major bug-fix Req-10 Req-15.";
-        CommitMessageParser parser = new GitCommitMessageParser();
+        Parser parser = new CommitMessageParser();
 		List<Integer> got = parser.parse(test_commit);
         List<Integer> expected = Arrays.asList(10, 15);
 
@@ -54,7 +55,7 @@ public class GitCommitMessageParserTest extends TestCase {
     
     @Test
 	public void parseAdvancedTest() {
-		CommitMessageParser parser = new GitCommitMessageParser();
+		Parser parser = new CommitMessageParser();
 		List<Integer> actual = parser.parse(expectedCommit.message);
 		assertTrue(actual.containsAll(expectedCommit.requirements) && expectedCommit.requirements.containsAll(actual));
 	}

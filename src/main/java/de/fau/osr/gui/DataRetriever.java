@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Lists;
 import de.fau.osr.bl.Tracker;
+import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
 
@@ -15,10 +17,12 @@ public class DataRetriever {
 
 	Tracker tracker;
 	VcsController vcsController;
+	DataSource dataSource;
 	
-	public DataRetriever(VcsController vcsController,Tracker tracker){
+	public DataRetriever(VcsController vcsController,Tracker tracker, DataSource dataSource){
 		this.vcsController = vcsController;
 		this.tracker = tracker;
+		this.dataSource = dataSource;
 	}
 
 		/*
@@ -69,16 +73,28 @@ public class DataRetriever {
 	 * Req-13
 	 * Responsibility: Taleh
 	 */
-	public void addRequirementCommitRelation(String requirementID, String commitID){
-		
+	public void addRequirementCommitRelation(Integer requirementID, String commitID) {
+		try {
+			dataSource.addReqCommitRelation(requirementID, commitID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*
 	 * Req-13
 	 * Responsibility: Taleh
 	 */
-	public ArrayList<String> getRequirementCommitRelationFromDB(String requirementID){
-		return null;
+	public ArrayList<String> getRequirementCommitRelationFromDB(Integer requirementID) {
+		// TODO programm to an interface ==> ArrayList to Iterable
+		ArrayList<String> rvalue = null;
+		try {
+			rvalue = Lists.newArrayList(dataSource.getCommitRelationByReq(requirementID));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return rvalue;
 	}
 	
 	/*
