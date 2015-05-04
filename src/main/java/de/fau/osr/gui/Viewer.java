@@ -6,6 +6,9 @@ import java.awt.Point;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,10 +28,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
 
 import de.fau.osr.bl.Tracker;
+import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
-import de.fau.osr.core.vcs.impl.GitVcsClient;
 
 public class Viewer extends JFrame {
 
@@ -43,6 +47,7 @@ public class Viewer extends JFrame {
 	JList jList1;
 	ArrayList<CommitFile> totalCommitFiles;
 	private String reqPattern;
+    // TODO @Florian: We will need a "String dataSourceFileName"
 	private DataRetriever dataRetriever;
 
 	/**
@@ -61,18 +66,24 @@ public class Viewer extends JFrame {
 				if (returnValue == chooser.APPROVE_OPTION) {
 					VcsController vcsController = new VcsController(
 							VcsEnvironment.GIT);
-					if (vcsController.Connect(chooser.getSelectedFile()
-							.getAbsolutePath())) {
+
+					Path repoFilePath = Paths.get(chooser.getSelectedFile().getAbsolutePath());
+					if (vcsController.Connect(repoFilePath.toString())) {
 						Tracker tracker = new Tracker(vcsController);
-						DataRetriever dataRetriever = new DataRetriever(
-								vcsController, tracker);
+						Path dataSrcFilePath= repoFilePath.getParent().resolve("dataSource.csv");
+                        DataRetriever dataRetriever = null;
+						try {
+                            DataSource dataSrc = new CSVFileDataSource(dataSrcFilePath.toFile());
+                            dataRetriever = new DataRetriever(vcsController, tracker, dataSrc);
+						}  catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
 						String reqPattern = JOptionPane
 								.showInputDialog("Choose Requirment Pattern", "Req-(\\d+)");
 						if (reqPattern != null && reqPattern.length() > 0) {
 							try {
-								Viewer frame = new Viewer(dataRetriever,
-										reqPattern);
+								Viewer frame = new Viewer(dataRetriever, reqPattern);
 								frame.setVisible(true);
 							} catch (Exception e) {
 								e.printStackTrace();
