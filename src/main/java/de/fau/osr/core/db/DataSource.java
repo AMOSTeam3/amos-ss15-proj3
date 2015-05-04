@@ -1,6 +1,7 @@
 package de.fau.osr.core.db;
 
 import com.google.common.collect.Lists;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public abstract class DataSource {
      * @param commitId commit part of the relation
      * @throws Exception
      */
-    abstract void addReqCommitRelation(Integer reqId, String commitId) throws Exception;
+    public abstract void addReqCommitRelation(Integer reqId, String commitId) throws Exception;
 
     /**
      * removes relation from data source
@@ -22,7 +23,7 @@ public abstract class DataSource {
      * @param commitId commit part of the relation
      * @throws Exception
      */
-    abstract void removeReqCommitRelation(Integer reqId, String commitId) throws Exception;
+    public abstract void removeReqCommitRelation(Integer reqId, String commitId) throws Exception;
 
     /**
      * get commit ids by requirement id
@@ -30,7 +31,7 @@ public abstract class DataSource {
      * @return commit ids related to {@code reqId}
      * @throws Exception
      */
-    abstract Iterable<String> getCommitRelationByReq(Integer reqId) throws Exception;
+    public abstract Iterable<String> getCommitRelationByReq(Integer reqId) throws Exception;
 
     /**
      * get requirement id by commit id
@@ -38,7 +39,7 @@ public abstract class DataSource {
      * @return all requirements that are related to the {@code commitId}
      * @throws IOException
      */
-    abstract Iterable<Integer> getReqRelationByCommit(String commitId) throws Exception;
+    public abstract Iterable<Integer> getReqRelationByCommit(String commitId) throws Exception;
 
 
 

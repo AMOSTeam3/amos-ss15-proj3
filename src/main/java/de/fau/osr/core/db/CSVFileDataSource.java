@@ -43,24 +43,24 @@ public class CSVFileDataSource extends DataSource {
 
 
     @Override
-    void addReqCommitRelation(Integer reqId, String commitId) throws IOException {
+    public void addReqCommitRelation(Integer reqId, String commitId) throws IOException {
         try(CSVWriter writer = getWriter()){
             writer.writeNext(new String[]{reqId.toString(), commitId});
         }
     }
 
     @Override
-    void removeReqCommitRelation(Integer reqId, String commit) throws Exception {
+    public void removeReqCommitRelation(Integer reqId, String commit) throws Exception {
         throw new NotImplementedException(); //TODO
     }
 
     @Override
-    HashSet<String> getCommitRelationByReq(Integer reqId) throws IOException {
+    public HashSet<String> getCommitRelationByReq(Integer reqId) throws IOException {
         return findBy(reqId.toString(), REQUIREMENT_COLUMN, COMMIT_COLUMN);
     }
 
     @Override
-    HashSet<Integer> getReqRelationByCommit(String commitId) throws IOException {
+    public HashSet<Integer> getReqRelationByCommit(String commitId) throws IOException {
 
         HashSet<String> reqsAsString = findBy(commitId, COMMIT_COLUMN, REQUIREMENT_COLUMN);
         //todo remove if we use reqId as string
