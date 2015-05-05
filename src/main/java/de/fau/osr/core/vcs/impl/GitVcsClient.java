@@ -249,7 +249,6 @@ public class GitVcsClient implements VcsClient{
 				getTreeDiffFiles(parent.getTree(), commit.getTree(), commitFilesList,commit.getName());
 			}
 		} catch (IOException e1) {
-
 			e1.printStackTrace();
 		} catch (ArrayIndexOutOfBoundsException e1) {
 
