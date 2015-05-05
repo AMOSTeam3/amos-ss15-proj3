@@ -7,13 +7,19 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Lists;
+
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
 
 public class DataRetriever {
+	
+	Logger logger = LoggerFactory.getLogger(DataRetriever.class);
 
 	Tracker tracker;
 	VcsController vcsController;
@@ -98,11 +104,18 @@ public class DataRetriever {
 	}
 	
 	/*
-	 * Req-4 + Req-8
+	 * Req-8
 	 * Responsibility: Gayathery
 	 */
-	public ArrayList<String> getRequirementIDsForFile(String fileName){
-		return null;
+	public List<Integer> getRequirementIDsForFile(String filePath){
+		
+		logger.info("Start call :: getRequirementIDsForFile()"+filePath);
+		
+		List<Integer> requirementIDlist = new ArrayList<Integer>();
+		
+		requirementIDlist = tracker.getAllRequirementsforFile(filePath);
+		
+		return requirementIDlist;
 	}
 
 	
