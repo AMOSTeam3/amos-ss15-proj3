@@ -176,7 +176,7 @@ public class GitVcsClient implements VcsClient{
 		    	  out.reset();
 				 
 			} catch (UnsupportedEncodingException e) {
-				
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState,commitID,changedData);
