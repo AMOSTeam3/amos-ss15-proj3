@@ -1,10 +1,13 @@
 package de.fau.osr.bl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,13 +136,13 @@ public class Tracker {
 		
 	}
 	
-	private List<Integer> getRequirementsListByFile(String filePath){
+	private Set<Integer> getRequirementsListByFile(String filePath){
 		
 		long startTime = System.currentTimeMillis();
 		
 		logger.info("Start call : getRequirementsListByFile():filePath ="+filePath);
 		
-		List<Integer> requirementList = new ArrayList<Integer>();
+		Set<Integer> requirementList = new HashSet<Integer>();
 		
 		Iterator<String> commitIdListIterator = vcsController.getCommitIdsForFile(filePath);
 		
@@ -162,13 +165,13 @@ public class Tracker {
 	 * @param filePath
 	 * @return
 	 */
-	private List<Integer> getRequirementsListByLinkage(String filePath){
+	private Set<Integer> getRequirementsListByLinkage(String filePath){
 		
 		long startTime = System.currentTimeMillis();
 		
 		logger.info("Start call :: getRequirementsListByLinkage():filePath ="+filePath);
 		
-		List<Integer> requirementList = new ArrayList<Integer>();
+		Set<Integer> requirementList = new HashSet<Integer>();
 		
 		//TODO:add the method call to actually return the linkage from DB
 		
