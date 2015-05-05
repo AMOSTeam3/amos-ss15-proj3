@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Lists;
 
 import de.fau.osr.bl.Tracker;
@@ -18,6 +21,8 @@ import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
 
 public class DataRetriever {
+	
+	Logger logger = LoggerFactory.getLogger(DataRetriever.class);
 
 	Tracker tracker;
 	VcsController vcsController;
@@ -46,6 +51,8 @@ public class DataRetriever {
 
 	}
 	
+	
+	
 	public ArrayList<Commit> getCommitsForRequirementID(String requirementID,
 			String requirementPattern) {
 		Parser parser = new CommitMessageParser();
@@ -66,30 +73,6 @@ public class DataRetriever {
 
 		return commits;
 	}
-	
-//	/*
-//	 * Req-4 + Req-5 + Req-6 + Req-7
-//	 * Responsibility: Flo
-//	 */
-//	public ArrayList<CommitFile> getCommitFilesForRequirementID(String requirementID,String requirementPattern){
-//
-//		ArrayList<CommitFile> commitFilesList = new ArrayList<CommitFile>();
-//		
-//			Iterator<String> commits = vcsController.getCommitList();
-//			
-//			while(commits.hasNext())
-//			{
-//				String currentCommit = commits.next();
-//				if(parse(vcsController.getCommitMessage(currentCommit),requirementPattern).contains(Integer.valueOf(requirementID)))
-//				{
-//					commitFilesList.addAll(vcsController.getCommitFiles(currentCommit));
-//					
-//				}
-//			}
-//		
-//		
-//		return commitFilesList;
-//	} 
 	
 	
 	/*
@@ -121,11 +104,18 @@ public class DataRetriever {
 	}
 	
 	/*
-	 * Req-4 + Req-8
+	 * Req-8
 	 * Responsibility: Gayathery
 	 */
-	public ArrayList<String> getRequirementIDsForFile(String fileName){
-		return null;
+	public List<Integer> getRequirementIDsForFile(String filePath){
+		
+		logger.info("Start call :: getRequirementIDsForFile()"+filePath);
+		
+		List<Integer> requirementIDlist = new ArrayList<Integer>();
+		
+		requirementIDlist = tracker.getAllRequirementsforFile(filePath);
+		
+		return requirementIDlist;
 	}
 
 	
@@ -146,3 +136,4 @@ public class DataRetriever {
 		return requirements;
 	}
 }
+
