@@ -2,8 +2,10 @@ package de.fau.osr.gui;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +18,7 @@ import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
@@ -34,21 +37,24 @@ public class DataRetriever {
 		this.dataSource = dataSource;
 	}
 
-		/*
-	 * added a parameter 'requirementPattern' to easily change the pattern in runtime
-	 * have to ask the author of this method to extend the method in the master
-	 */
-	public List<Integer> parse(String latestCommitMessage,String requirementPattern) {
-		final Pattern REQUIREMENT_PATTERN = Pattern.compile(requirementPattern);
-		Matcher m = REQUIREMENT_PATTERN.matcher(latestCommitMessage);
-		List<Integer> found_reqids = new ArrayList<Integer>();
-
-		while(m.find())  {
-			found_reqids.add(Integer.valueOf(m.group(1)));
+	public Set<String> getAllFiles(){
+		Set<String> files = new HashSet<String>();
+		Iterator<String> allCommits = vcsController.getCommitList();
+		while (allCommits.hasNext()) {
+			String currentCommit = allCommits.next();
+			for(CommitFile commitfile: vcsController.getCommitFiles(currentCommit)){
+				String name;
+				if(commitfile.commitState == CommitState.DELETED){
+					name = commitfile.oldPath.getPath();
+				}else{
+					name = commitfile.newPath.getPath();
+				}
+				files.add(name);
+			}
 		}
-
-		return found_reqids;
-
+			
+		
+		return files;
 	}
 	
 	

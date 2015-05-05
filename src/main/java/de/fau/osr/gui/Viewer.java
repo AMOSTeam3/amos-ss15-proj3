@@ -9,7 +9,9 @@ import java.awt.event.ActionListener;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -28,6 +30,7 @@ import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 
@@ -160,7 +163,27 @@ public class Viewer extends JFrame {
 	}
 	
 	protected void ShowAllFiles() {
+		JPanel panel = new JPanel(new GridLayout());
 		
+		Set<String> files = dataRetriever.getAllFiles();
+		
+		String[] filesArray = new String[files.size()];
+		files_JList = new JList<String>(files.toArray(filesArray));
+		panel.add(files_JList);
+		Files_scrollPane.setViewportView(panel);
+		
+		MouseEvent listener = new MouseEvent(this, files_JList, Action.ShowRequirements);
+		files_JList.addMouseListener(listener);
+		
+		
+		JPanel panelcommit = new JPanel(new GridLayout());
+		Commit_scrollPane.setViewportView(panelcommit);
+		
+		JPanel panelcode = new JPanel(new GridLayout());
+		Code_scrollPane.setViewportView(panelcode);
+		
+		JPanel panelreq = new JPanel(new GridLayout());
+		RequirementID_scrollPane.setViewportView(panelreq);
 	}
 
 	protected void ShowAllRequirements() {
@@ -174,11 +197,33 @@ public class Viewer extends JFrame {
 		
 		MouseEvent listener = new MouseEvent(this, requirements_JList, Action.ShowCommits);
 		requirements_JList.addMouseListener(listener);
+		
+		JPanel panelcommit = new JPanel(new GridLayout());
+		Commit_scrollPane.setViewportView(panelcommit);
+		
+		JPanel panelfiles = new JPanel(new GridLayout());
+		Files_scrollPane.setViewportView(panelfiles);
+		
+		JPanel panelcode = new JPanel(new GridLayout());
+		Code_scrollPane.setViewportView(panelcode);
 	}
 	
-//	protected void ShowRequirements(){
-//		JPanel panel = new JPanel(new GridLayout());
-//	}
+	protected void ShowRequirements(){
+		JPanel panel = new JPanel(new GridLayout());
+		
+		List<Integer> requirements = dataRetriever.getRequirementIDsForFile(files_JList.getSelectedValue().replace("\\", "/"));
+
+		String[] requirementsArray = new String[requirements.size()];
+		
+		requirements_JList = new JList<String>(requirements.toArray(requirementsArray));
+		if(requirementsArray.length > 0){
+			panel.setBackground(Color.BLUE);
+			RequirementID_scrollPane.setBackground(Color.BLUE);
+			requirements_JList.setBackground(Color.BLUE);
+		}
+		panel.add(requirements_JList);
+		RequirementID_scrollPane.setViewportView(panel);
+	}
 	
 	protected void ShowCode(){
 		JPanel panel = new JPanel(new GridLayout());
@@ -233,13 +278,18 @@ public class Viewer extends JFrame {
 		JButton Files_button = new JButton("Show all");
 		Files_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				
+				ShowAllFiles();
 			}
 		});
 		
 		JButton Commit_button = new JButton("Show all");
 		
 		JButton RequirementID_button = new JButton("Show all");
+		RequirementID_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				ShowAllRequirements();
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)

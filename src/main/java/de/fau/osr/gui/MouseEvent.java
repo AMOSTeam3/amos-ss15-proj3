@@ -28,6 +28,7 @@ public void mouseClicked(java.awt.event.MouseEvent e) {
 public void mousePressed(java.awt.event.MouseEvent e) {
 	switch(action){
 	case ShowRequirements:
+		viewer.ShowRequirements();
 		break;
 	case ShowCommits:
 		viewer.ShowCommits();
