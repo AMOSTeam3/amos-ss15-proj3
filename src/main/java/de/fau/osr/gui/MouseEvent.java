@@ -4,15 +4,19 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JList;
 
+enum Action {ShowCommits, ShowRequirements, ShowFiles, ShowCode};
+
 public class MouseEvent implements MouseListener {
-    //where initialization occurs:
-    //Register for mouse events on blankArea and the panel.
- Viewer viewer;
- JList list;
-public MouseEvent(Viewer viewer, JList list)
+	
+	Action action;
+    Viewer viewer;
+    JList list;
+ 
+public MouseEvent(Viewer viewer, JList list, Action action)
 {
 	this.viewer = viewer;
 	this.list = list;
+	this.action = action;
 }
 
 @Override
@@ -22,7 +26,20 @@ public void mouseClicked(java.awt.event.MouseEvent e) {
 }
 @Override
 public void mousePressed(java.awt.event.MouseEvent e) {
-	viewer.ShowDiff(e.getPoint());
+	switch(action){
+	case ShowRequirements:
+		break;
+	case ShowCommits:
+		viewer.ShowCommits();
+		break;
+	case ShowFiles:
+		viewer.ShowFiles();
+		break;
+	case ShowCode:
+		viewer.ShowCode();
+		break;
+	}
+//	viewer.ShowDiff(e.getPoint());
 	
 }
 @Override

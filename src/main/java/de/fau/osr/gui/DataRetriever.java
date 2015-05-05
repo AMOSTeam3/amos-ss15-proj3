@@ -8,10 +8,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.Lists;
+
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsController;
+import de.fau.osr.util.parser.CommitMessageParser;
+import de.fau.osr.util.parser.Parser;
 
 public class DataRetriever {
 
@@ -42,31 +46,50 @@ public class DataRetriever {
 
 	}
 	
-	
-	
-	/*
-	 * Req-4 + Req-5 + Req-6 + Req-7
-	 * Responsibility: Flo
-	 */
-	public ArrayList<CommitFile> getCommitFilesForRequirementID(String requirementID,String requirementPattern){
+	public ArrayList<Commit> getCommitsForRequirementID(String requirementID,
+			String requirementPattern) {
+		Parser parser = new CommitMessageParser();
+		ArrayList<Commit> commits = new ArrayList<Commit>();
 
-		ArrayList<CommitFile> commitFilesList = new ArrayList<CommitFile>();
-		
-			Iterator<String> commits = vcsController.getCommitList();
-			
-			while(commits.hasNext())
-			{
-				String currentCommit = commits.next();
-				if(parse(vcsController.getCommitMessage(currentCommit),requirementPattern).contains(Integer.valueOf(requirementID)))
-				{
-					commitFilesList.addAll(vcsController.getCommitFiles(currentCommit));
-					
-				}
+		Iterator<String> allCommits = vcsController.getCommitList();
+		while (allCommits.hasNext()) {
+			String currentCommit = allCommits.next();
+			if (parser.parse(vcsController.getCommitMessage(currentCommit))
+					.contains(Integer.valueOf(requirementID))) {
+				commits.add(new Commit(currentCommit, vcsController.getCommitMessage(currentCommit), null, vcsController.getCommitFiles(currentCommit)));
 			}
+		}
 		
-		
-		return commitFilesList;
-	} 
+		for(String commitID: getRequirementCommitRelationFromDB(requirementID)){
+			commits.add(new Commit(commitID, vcsController.getCommitMessage(commitID), null, vcsController.getCommitFiles(commitID)));
+		}
+
+		return commits;
+	}
+	
+//	/*
+//	 * Req-4 + Req-5 + Req-6 + Req-7
+//	 * Responsibility: Flo
+//	 */
+//	public ArrayList<CommitFile> getCommitFilesForRequirementID(String requirementID,String requirementPattern){
+//
+//		ArrayList<CommitFile> commitFilesList = new ArrayList<CommitFile>();
+//		
+//			Iterator<String> commits = vcsController.getCommitList();
+//			
+//			while(commits.hasNext())
+//			{
+//				String currentCommit = commits.next();
+//				if(parse(vcsController.getCommitMessage(currentCommit),requirementPattern).contains(Integer.valueOf(requirementID)))
+//				{
+//					commitFilesList.addAll(vcsController.getCommitFiles(currentCommit));
+//					
+//				}
+//			}
+//		
+//		
+//		return commitFilesList;
+//	} 
 	
 	
 	/*
@@ -85,11 +108,11 @@ public class DataRetriever {
 	 * Req-13
 	 * Responsibility: Taleh
 	 */
-	public ArrayList<String> getRequirementCommitRelationFromDB(Integer requirementID) {
+	public ArrayList<String> getRequirementCommitRelationFromDB(String requirementID) {
 		// TODO programm to an interface ==> ArrayList to Iterable
 		ArrayList<String> rvalue = null;
 		try {
-			rvalue = Lists.newArrayList(dataSource.getCommitRelationByReq(requirementID));
+			rvalue = Lists.newArrayList(dataSource.getCommitRelationByReq(Integer.valueOf(requirementID)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
