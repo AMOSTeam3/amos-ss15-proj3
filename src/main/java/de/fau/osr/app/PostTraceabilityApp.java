@@ -2,10 +2,11 @@ package de.fau.osr.app;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
 
@@ -64,11 +65,10 @@ public class PostTraceabilityApp {
     public static void main(String[] args) {
         CliOptions cli = new CliOptions();
         new JCommander(cli, args);
-        final VcsController controller = new VcsController(VcsEnvironment.GIT);
+        VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
         Parser parser = new CommitMessageParser();
 
         Path repoFilePath = Paths.get(cli.repoURL);
-        controller.Connect(repoFilePath.toString());
 
 
         Path storageFilePath = repoFilePath.getParent().resolve(storageFileName);

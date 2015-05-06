@@ -7,8 +7,8 @@ import com.beust.jcommander.Parameter;
 
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 /**
  * @author Gayathery
@@ -24,9 +24,8 @@ public class CommitFileListingForRequirementsApp {
 	public static void main(String[] args) {
 		CliOptions cli = new CliOptions();
 		new JCommander(cli, args);
-		VcsController vcs = new VcsController(VcsEnvironment.GIT);
-		vcs.Connect(cli.repoURL);
-		final Tracker interpreter = new Tracker(vcs);
+		VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
+		final Tracker interpreter = new Tracker(client);
 		final String reqId = cli.reqId;
 		for(CommitFile file : new Iterable<CommitFile>() {
 

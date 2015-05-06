@@ -6,8 +6,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 /**
  * @author tobias
@@ -23,14 +23,13 @@ public class CommitFileListingApp {
 	public static void main(String[] args) {
 		CliOptions cli = new CliOptions();
 		new JCommander(cli, args);
-		final VcsController controller = new VcsController(VcsEnvironment.GIT);
-		controller.Connect(cli.repoURL);
+		final VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
 		final String commitId = cli.commitId;
 		for(CommitFile file : new Iterable<CommitFile>() {
 
 			@Override
 			public Iterator<CommitFile> iterator() {
-				return controller.getCommitFiles(commitId).iterator();
+				return client.getCommitFiles(commitId).iterator();
 			}}) {
 			System.out.println(file.oldPath + " " + file.commitState + " " + file.newPath);
 		}

@@ -2,10 +2,11 @@ package de.fau.osr.app;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,11 +30,10 @@ public class ShowCodeLinesByReqByFileApp {
     public static void main(String[] args) {
         CliOptions cli = new CliOptions();
         new JCommander(cli, args);
-        final VcsController controller = new VcsController(VcsEnvironment.GIT);
+        final VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
         final String reqId = cli.reqId;
-        controller.Connect(cli.repoURL);
 
-        Tracker tracker = new Tracker(controller);
+        Tracker tracker = new Tracker(client);
 
         //test if there are any reqs linked to the file
         List<Integer> reqsList = tracker.getAllRequirementsforFile(cli.filePath);

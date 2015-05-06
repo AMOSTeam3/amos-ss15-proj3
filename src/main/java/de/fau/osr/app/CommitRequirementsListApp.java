@@ -6,8 +6,8 @@ import java.util.List;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.parser.Parser;
 import de.fau.osr.util.parser.CommitMessageParser;
 
@@ -26,15 +26,14 @@ public class CommitRequirementsListApp {
 	public static void main(String[] args) {
 		CliOptions cli = new CliOptions();
 		new JCommander(cli, args);
-		final VcsController controller = new VcsController(VcsEnvironment.GIT);
+		final VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
 		Parser parser = new CommitMessageParser();
-		controller.Connect(cli.repoURL);
 		for(String commitId : new Iterable<String>(){
 			@Override
 			public Iterator<String> iterator() {
-				return controller.getCommitList();
+				return client.getCommitList();
 			}}) {
-			String commitMsg = controller.getCommitMessage(commitId);
+			String commitMsg = client.getCommitMessage(commitId);
 			List<Integer> reqs = parser.parse(commitMsg);
 			for(Integer i : reqs) {
 				System.out.println("commit " + commitId + " references Req-" + i);

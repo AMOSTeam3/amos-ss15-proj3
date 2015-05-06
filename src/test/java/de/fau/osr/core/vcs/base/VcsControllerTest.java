@@ -18,6 +18,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import de.fau.osr.PublicTestData;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 /**
  * @author Gayathery
@@ -27,10 +28,7 @@ import de.fau.osr.PublicTestData;
 public class VcsControllerTest {
 	private static PublicTestData testData = new PublicTestData();
 	private Commit expectedCommit;
-    VcsController controller = new VcsController(VcsEnvironment.GIT);
-    String uri = PublicTestData.getGitTestRepo();
-	boolean isConnected = false;
-	
+	VcsClient client = VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
 	
 	/*
 	 * @return Collection<Object[]> Each Collection Element represents one set of test data required by one test class execution.
@@ -51,24 +49,12 @@ public class VcsControllerTest {
 	}
     
 	/**
-	 * Test method for {@link org.amos.core.vcs.base.VcsController#Connect(java.lang.String)}.
-	 */
-	@Test
-	public void testConnectString() {
-		
-		isConnected = controller.Connect(uri);
-		assertTrue(isConnected);
-	}
-
-	/**
 	 * Test method for {@link org.amos.core.vcs.base.VcsController#getBranchList()}.
 	 */
 	@Test
 	public void testGetBranchList() {
-		isConnected = controller.Connect(uri);
 		Iterator<String> branchList = null;
-		if(isConnected) 
-		  branchList = controller.getBranchList();
+		 branchList = client.getBranchList();
 		
 		assertNotNull(branchList);
 		assertTrue(branchList.hasNext());
@@ -79,10 +65,8 @@ public class VcsControllerTest {
 	 */
 	@Test
 	public void testGetCommitList() {
-		isConnected = controller.Connect(uri);
 		Iterator<String> commitList = null;
-		if(isConnected)
-			commitList = controller.getCommitList();
+		commitList = client.getCommitList();
 		assertNotNull(commitList);
 		assertTrue(commitList.hasNext());
 	}
@@ -92,16 +76,11 @@ public class VcsControllerTest {
 	 */
 	@Test
 	public void testGetCommitFiles() {
-		isConnected = controller.Connect(uri);
 		Iterator<CommitFile> commitFileList = null;
 		Iterator<String> commitList = null;
-		if(isConnected){
-			commitList = controller.getCommitList();
-			if(commitList.hasNext()){
-				commitFileList = controller.getCommitFiles(commitList.next()).iterator();
-			}
-			  
-			
+		commitList = client.getCommitList();
+		if(commitList.hasNext()){
+			commitFileList = client.getCommitFiles(commitList.next()).iterator();
 		}
 		assertNotNull(commitFileList);
 		assertTrue(commitFileList.hasNext());
@@ -112,17 +91,13 @@ public class VcsControllerTest {
 	 */
 	@Test
 	public void getCommitMessageSimpleTest() {
-		isConnected = controller.Connect(uri);
 		String commitMessage = null;
 		Iterator<String> commitList = null;
-		if(isConnected){
-			commitList = controller.getCommitList();
-			if(commitList.hasNext()){
-				commitMessage = controller.getCommitMessage(commitList.next());
-			}
-			  
-			
+		commitList = client.getCommitList();
+		if(commitList.hasNext()){
+			commitMessage = client.getCommitMessage(commitList.next());
 		}
+
 		assertNotNull(commitMessage);
 	}
 

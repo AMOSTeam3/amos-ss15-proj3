@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 /**
  * @author Gayathery
  * @desc This class is an interpreter for data from Vcs
@@ -20,15 +20,15 @@ import de.fau.osr.core.vcs.base.VcsController;
  */
 public class Tracker {
 
-	VcsController vcsController;
+	VcsClient vcsClient;
 	
 	CommitMessageParser commitMessageparser;
 	
 	Logger logger = LoggerFactory.getLogger(Tracker.class);
 
-	public Tracker(VcsController vcsController) {
+	public Tracker(VcsClient vcsClient) {
 		
-		this.vcsController = vcsController;
+		this.vcsClient = vcsClient;
 	}
 
 	/* 
@@ -71,7 +71,7 @@ public class Tracker {
 		
 		List<CommitFile> commitFilesList = new ArrayList<CommitFile>();
 		
-     	Iterator<String> commits = vcsController.getCommitList();
+     	Iterator<String> commits = vcsClient.getCommitList();
 	
      	while(commits.hasNext()){
      		
@@ -79,9 +79,9 @@ public class Tracker {
 			
      		commitMessageparser = new CommitMessageParser();
      		
-     		if(commitMessageparser.parse(vcsController.getCommitMessage(currentCommit)).contains(Integer.valueOf(requirementID)))
+     		if(commitMessageparser.parse(vcsClient.getCommitMessage(currentCommit)).contains(Integer.valueOf(requirementID)))
      			
-     			commitFilesList.addAll(vcsController.getCommitFiles(currentCommit));
+     			commitFilesList.addAll(vcsClient.getCommitFiles(currentCommit));
 					
 		}
 		
@@ -144,13 +144,13 @@ public class Tracker {
 		
 		Set<Integer> requirementList = new HashSet<Integer>();
 		
-		Iterator<String> commitIdListIterator = vcsController.getCommitIdsForFile(filePath);
+		Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
 		
 		commitMessageparser = new CommitMessageParser();
 		
 		while(commitIdListIterator.hasNext()){
 			
-			requirementList.addAll(commitMessageparser.parse(vcsController.getCommitMessage(commitIdListIterator.next())));
+			requirementList.addAll(commitMessageparser.parse(vcsClient.getCommitMessage(commitIdListIterator.next())));
 		}
 		
 		logger.info("End call -getRequirementsListByFile() Time: "+ (System.currentTimeMillis() - startTime) );

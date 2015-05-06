@@ -19,7 +19,7 @@ import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.base.VcsController;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
 
@@ -28,21 +28,21 @@ public class DataRetriever {
 	Logger logger = LoggerFactory.getLogger(DataRetriever.class);
 
 	Tracker tracker;
-	VcsController vcsController;
+	VcsClient client;
 	DataSource dataSource;
 	
-	public DataRetriever(VcsController vcsController,Tracker tracker, DataSource dataSource){
-		this.vcsController = vcsController;
+	public DataRetriever(VcsClient client,Tracker tracker, DataSource dataSource){
+		this.client = client;
 		this.tracker = tracker;
 		this.dataSource = dataSource;
 	}
 
 	public Set<String> getAllFiles(){
 		Set<String> files = new HashSet<String>();
-		Iterator<String> allCommits = vcsController.getCommitList();
+		Iterator<String> allCommits = client.getCommitList();
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
-			for(CommitFile commitfile: vcsController.getCommitFiles(currentCommit)){
+			for(CommitFile commitfile: client.getCommitFiles(currentCommit)){
 				String name;
 				if(commitfile.commitState == CommitState.DELETED){
 					name = commitfile.oldPath.getPath();
@@ -64,17 +64,17 @@ public class DataRetriever {
 		Parser parser = new CommitMessageParser();
 		ArrayList<Commit> commits = new ArrayList<Commit>();
 
-		Iterator<String> allCommits = vcsController.getCommitList();
+		Iterator<String> allCommits = client.getCommitList();
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
-			if (parser.parse(vcsController.getCommitMessage(currentCommit))
+			if (parser.parse(client.getCommitMessage(currentCommit))
 					.contains(Integer.valueOf(requirementID))) {
-				commits.add(new Commit(currentCommit, vcsController.getCommitMessage(currentCommit), null, vcsController.getCommitFiles(currentCommit)));
+				commits.add(new Commit(currentCommit, client.getCommitMessage(currentCommit), null, client.getCommitFiles(currentCommit)));
 			}
 		}
 		
 		for(String commitID: getRequirementCommitRelationFromDB(requirementID)){
-			commits.add(new Commit(commitID, vcsController.getCommitMessage(commitID), null, vcsController.getCommitFiles(commitID)));
+			commits.add(new Commit(commitID, client.getCommitMessage(commitID), null, client.getCommitFiles(commitID)));
 		}
 
 		return commits;

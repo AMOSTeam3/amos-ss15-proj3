@@ -31,8 +31,8 @@ import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 import javax.swing.JButton;
 
@@ -79,17 +79,17 @@ public class Viewer extends JFrame {
 						"Auswahl des Repository");
 				
 				if (returnValue == chooser.APPROVE_OPTION) {
-					VcsController vcsController = new VcsController(
-							VcsEnvironment.GIT);
 
 					Path repoFilePath = Paths.get(chooser.getSelectedFile().getAbsolutePath());
-					if (vcsController.Connect(repoFilePath.toString())) {
-						Tracker tracker = new Tracker(vcsController);
+					
+					try {
+					VcsClient client = VcsClient.connect(VcsEnvironment.GIT, repoFilePath.toString());
+						Tracker tracker = new Tracker(client);
 						Path dataSrcFilePath= repoFilePath.getParent().resolve("dataSource.csv");
                         DataRetriever dataRetriever = null;
 						try {
                             DataSource dataSrc = new CSVFileDataSource(dataSrcFilePath.toFile());
-                            dataRetriever = new DataRetriever(vcsController, tracker, dataSrc);
+                            dataRetriever = new DataRetriever(client, tracker, dataSrc);
 						}  catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -108,7 +108,7 @@ public class Viewer extends JFrame {
 								e.printStackTrace();
 							}
 						}
-					}else{
+					} catch(RuntimeException e) {
 						JOptionPane.showMessageDialog(null,
 								"Sie müssen ein Repository auswählen!",
 								"Fehler bei er Repository Auswahl",

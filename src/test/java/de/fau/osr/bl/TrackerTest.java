@@ -12,8 +12,8 @@ import org.junit.runners.Parameterized;
 
 import de.fau.osr.PublicTestData;
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 /**
  * @author Gayathery
@@ -22,13 +22,8 @@ import de.fau.osr.core.vcs.base.VcsEnvironment;
 public class TrackerTest {
 	
 	
-	VcsController vcs = new VcsController(VcsEnvironment.GIT);
-	Tracker interpreter = new Tracker(vcs);
-
-	@Before
-	public void setup() {
-		vcs.Connect(PublicTestData.getGitTestRepo());
-	}
+	VcsClient client = VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
+	Tracker interpreter = new Tracker(client);
 	
 	/**
 	 * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.

@@ -40,44 +40,23 @@ import de.fau.osr.core.vcs.interfaces.VcsClient;
  * @desc VCS Client implementation for Git
  *
  */
-public class GitVcsClient implements VcsClient{
+public class GitVcsClient extends VcsClient{
 
 	Git git;
 	String repositoryURI;
 	Repository repo;
-	Boolean isConnected;
 	
 	/**
 	 * @param repositoryURI
 	 * @author Gayathery
+	 * @throws IOException 
 	 */
-	public GitVcsClient(String repositoryURI)
+	public GitVcsClient(String repositoryURI) throws IOException
 	{
 		this.repositoryURI = repositoryURI;
-		isConnected = false;
-		repo = null;
-		git = null;
-	}
-	
-	
-	/* (non-Javadoc)
-	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#connect()
-	 * @author Gayathery
-	 */
-	
-	public boolean connect()
-	{
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
-		try {
-			repo = builder.setGitDir(new File(repositoryURI)).setMustExist(true).build();
-			git = new Git(repo);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return isConnected;
-		}
-		
-		isConnected = true;
-		return isConnected;
+		repo = builder.setGitDir(new File(repositoryURI)).setMustExist(true).build();
+		git = new Git(repo);
 	}
 	
 	/* (non-Javadoc)

@@ -6,8 +6,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 import de.fau.osr.bl.Tracker;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 /**
  * @author Gayathery
@@ -23,9 +23,8 @@ public class RequirementListingForRepositoryFileApp {
 	public static void main(String[] args) {
 		CliOptions cli = new CliOptions();
 		new JCommander(cli, args);
-		VcsController vcs = new VcsController(VcsEnvironment.GIT);
-		vcs.Connect(cli.repoURL);
-		final Tracker requirementsTracer = new Tracker(vcs);
+		VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
+		final Tracker requirementsTracer = new Tracker(client);
 		final String filePath = cli.filePath;
 		for(Integer requirementID : new Iterable<Integer>() {
 
