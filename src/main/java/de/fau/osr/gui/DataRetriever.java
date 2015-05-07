@@ -30,11 +30,13 @@ public class DataRetriever {
 	Tracker tracker;
 	VcsController vcsController;
 	DataSource dataSource;
+	Pattern reqPattern;
 	
-	public DataRetriever(VcsController vcsController,Tracker tracker, DataSource dataSource){
+	public DataRetriever(VcsController vcsController,Tracker tracker, DataSource dataSource, Pattern reqPattern){
 		this.vcsController = vcsController;
 		this.tracker = tracker;
 		this.dataSource = dataSource;
+		this.reqPattern = reqPattern;
 	}
 
 	public Set<String> getAllFiles(){
@@ -59,8 +61,7 @@ public class DataRetriever {
 	
 	
 	
-	public ArrayList<Commit> getCommitsForRequirementID(String requirementID,
-			String requirementPattern) {
+	public ArrayList<Commit> getCommitsForRequirementID(String requirementID) {
 		Parser parser = new CommitMessageParser();
 		ArrayList<Commit> commits = new ArrayList<Commit>();
 
