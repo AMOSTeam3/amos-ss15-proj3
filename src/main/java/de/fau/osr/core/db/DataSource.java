@@ -40,7 +40,7 @@ public abstract class DataSource {
      * @return all requirements that are related to the {@code commitId}
      * @throws IOException
      */
-    public abstract Iterable<Integer> getReqRelationByCommit(String commitId) throws Exception;
+    public abstract Iterable<Integer> getReqRelationByCommit(String commitId) throws IOException;
 
 
 

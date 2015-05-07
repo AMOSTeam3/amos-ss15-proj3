@@ -1,12 +1,25 @@
 package de.fau.osr.core.vcs.impl;
 
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.blame.BlameGenerator;
+import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -25,14 +38,13 @@ import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.google.common.collect.Lists;
+
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.util.parser.CommitMessageParser;
 
 /**
  * @author Gayathery
@@ -203,6 +215,7 @@ public class GitVcsClient extends VcsClient{
 	    }
 	    return commitIDList.iterator();
 	}
+	
 	/* (non-Javadoc)
 	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#getCommitFiles(java.lang.String)
 	 * @author Gayathery
@@ -255,5 +268,27 @@ public class GitVcsClient extends VcsClient{
 			e1.printStackTrace();
 		}
 		return commit.getFullMessage();
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#blame(java.lang.String, de.fau.osr.util.parser.CommitMessageParser)
+	 */
+	@Override
+	public Collection<AnnotatedLine> blame(String path, CommitMessageParser dataSource) throws IOException, GitAPIException {
+		BlameCommand blameCommand = new BlameCommand(git.getRepository());
+		blameCommand.setFollowFileRenames(true);
+		blameCommand.setFilePath(path);
+		BlameResult blameResult = blameCommand.call();
+		ArrayList<AnnotatedLine> res = new ArrayList<>();
+		blameResult.computeAll();
+		RawText text = blameResult.getResultContents();
+		for(int i=0; i<text.size(); ++i) {
+			//String commitId = blameResult.getSourceCommit(res.size()).getName();
+			//TODO add abstract linkage source here
+			String commitMsg = blameResult.getSourceCommit(res.size()).getFullMessage();
+			res.add(new AnnotatedLine(dataSource.parse(commitMsg), text.getString(i)));
+		}
+		return res;
 	}
 }
