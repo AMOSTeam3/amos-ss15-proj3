@@ -6,16 +6,12 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -40,8 +36,6 @@ import de.fau.osr.core.vcs.base.VcsEnvironment;
 
 import javax.swing.JButton;
 
-import org.eclipse.jgit.errors.RepositoryNotFoundException;
-
 public class Viewer extends JFrame {
 	private JScrollPane RequirementID_scrollPane;
 	private JScrollPane Commit_scrollPane;
@@ -55,19 +49,17 @@ public class Viewer extends JFrame {
 	private ArrayList<Commit> commits;
 	private List<CommitFile> commitFiles;
 	
-	private DataRetriever dataRetriever;
-	
-	
 	
 	
 	private JPanel contentPane;
 	
 	private JLabel RequirementID_label;
 
+	JList jList1;
 	ArrayList<CommitFile> totalCommitFiles;
-	
+	private String reqPattern;
     // TODO @Florian: We will need a "String dataSourceFileName"
-	
+	private DataRetriever dataRetriever;
 	private JLabel Code_label;
 	private JLabel ImpactPercentage_label;
 	private JScrollPane ImpactPercentage_scrollPane;
@@ -78,64 +70,60 @@ public class Viewer extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			
 			public void run() {
-				DataRetriever dataRetriever = null;
-				try{
-					dataRetriever = initDataRetriever(Repo_OpeningDialog(), Pattern_OpeningDialog());
-				}catch(Exception ex){
-					System.err.println(ex.getStackTrace());
-					return;
-				}
+				JFileChooser chooser = new JFileChooser("..");
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setAcceptAllFileFilterUsed(false);
+
+				int returnValue = chooser.showDialog(null,
+						"Auswahl des Repository");
 				
-				Viewer frame = new Viewer(dataRetriever);
-				frame.ShowAllRequirements();
-				frame.setVisible(true);
+				if (returnValue == chooser.APPROVE_OPTION) {
+					VcsController vcsController = new VcsController(
+							VcsEnvironment.GIT);
+
+					Path repoFilePath = Paths.get(chooser.getSelectedFile().getAbsolutePath());
+					if (vcsController.Connect(repoFilePath.toString())) {
+						Tracker tracker = new Tracker(vcsController);
+						Path dataSrcFilePath= repoFilePath.getParent().resolve("dataSource.csv");
+                        DataRetriever dataRetriever = null;
+						try {
+                            DataSource dataSrc = new CSVFileDataSource(dataSrcFilePath.toFile());
+                            dataRetriever = new DataRetriever(vcsController, tracker, dataSrc);
+						}  catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+						String reqPattern = JOptionPane
+								.showInputDialog("Choose Requirment Pattern", "Req-(\\d+)");
+						if (reqPattern != null && reqPattern.length() > 0) {
+							try {
+								Viewer frame = new Viewer(dataRetriever,
+										reqPattern);
+								
+								frame.ShowAllRequirements();
+
+								frame.setVisible(true);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}else{
+						JOptionPane.showMessageDialog(null,
+								"Sie müssen ein Repository auswählen!",
+								"Fehler bei er Repository Auswahl",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				} else if (returnValue == chooser.CANCEL_OPTION) {
+					JOptionPane.showMessageDialog(null,
+							"Sie müssen ein Repository auswählen!",
+							"Fehler bei er Repository Auswahl",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 	}
-	
-	private static Path Repo_OpeningDialog() throws IOException{
-		JFileChooser chooser = new JFileChooser("..");
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = chooser.showDialog(null,
-				"Auswahl des Repository");
-		
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			return chooser.getSelectedFile().toPath();
-		}else if (returnValue == JFileChooser.CANCEL_OPTION) {
-			JOptionPane.showMessageDialog(null,
-					"Sie müssen ein Repository auswählen!",
-					"Fehler bei er Repository Auswahl",
-					JOptionPane.ERROR_MESSAGE);
-		}
-		
-		throw new IOException();
-	}
-	
-	private static Pattern Pattern_OpeningDialog() throws PatternSyntaxException{
-		String patternAsString = JOptionPane.showInputDialog("Choose Requirment Pattern", "Req-(\\d+)");
-		return Pattern.compile(patternAsString);
-	}
-	
-	private static DataRetriever initDataRetriever(Path repoPath, Pattern reqPattern) throws IOException{
-		VcsController vcsController = new VcsController(
-				VcsEnvironment.GIT);
-
-		if (vcsController.Connect(repoPath.toString())) {
-			Tracker tracker = new Tracker(vcsController);
-			Path dataSrcFilePath= repoPath.getParent().resolve("dataSource.csv");
-            DataSource dataSrc = new CSVFileDataSource(dataSrcFilePath.toFile());
-            return new DataRetriever(vcsController, tracker, dataSrc, reqPattern);
-		}else{
-			throw new RepositoryNotFoundException(repoPath.toString());
-		}
-	}
-
-	
-	
 	protected void ShowCommits() {
 		JPanel panel = new JPanel(new GridLayout());
 		String requirementID = requirements_JList.getSelectedValue();
@@ -248,13 +236,9 @@ public class Viewer extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Viewer(DataRetriever dataRetriever) {
+	public Viewer(DataRetriever dataRetriever, String reqPattern) {
+		this.reqPattern = reqPattern;
 		this.dataRetriever = dataRetriever;
-		
-		createLayout();
-	}
-
-	private void createLayout() {
 
 		setTitle("Spice Traceability");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -370,5 +354,7 @@ public class Viewer extends JFrame {
 		);
 
 		contentPane.setLayout(gl_contentPane);
+		
+		// commitFilePane.getViewport().getView().addMouseListener(a);
 	}
 }
