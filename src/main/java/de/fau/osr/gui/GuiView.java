@@ -20,6 +20,7 @@ public class GuiView{
 		JFileChooser chooser = new JFileChooser("..");
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setFileHidingEnabled(false);
 
 		int returnValue = chooser.showDialog(null,"Auswahl des Repository");
 		
