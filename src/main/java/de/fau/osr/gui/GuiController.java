@@ -13,10 +13,15 @@ import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 
 
-
+/*
+ * Using a MVC-Pattern for the GUI.
+ * The Controller class fetches the data from the Modell and passes it to the View.
+ * Additional it eventually sets Events to the GUI-Elements, so that an action can call
+ * the appropriate controller method, within which the data is fetched again ...
+ */
 public class GuiController {
+	//Whether the user gets another chance to input correct data
 	enum RetryStatus{Retry, Exit}
-	
 	private static final int MAX_RETRIES = 3;
 	private RetryStatus Status;
 	
@@ -26,6 +31,10 @@ public class GuiController {
 	GuiView guiView;
 	GuiModell guiModell;
 
+	/*
+	 * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
+	 * All Requirements from external tool/DB(jira...)
+	 */
 	public GuiController(){	
 		Status = RetryStatus.Retry;
 		
@@ -51,6 +60,7 @@ public class GuiController {
 							Status = RetryStatus.Exit;
 						}
 						guiView.showErrorDialog(e.getMessage());
+						handleError();
 					}
 				}
 				
@@ -61,10 +71,19 @@ public class GuiController {
 		});
 	}
 	
+	/*
+	 * Every Event should cause a method in this controller to run. Therefore,
+	 * whereever a action is defined, the Controller must be available. This 
+	 * function passes the controller-element to the ElementHandler
+	 */
 	protected void initializeButtonActions() {
 		guiView.initializeButtonActions(this);
 	}
 
+	/*
+	 * Fetching all Requirements from external source (tool/DB) and displays them
+	 * to the user
+	 */
 	void requirementsFromDB() {
 		guiView.clearAllScrollPanes();
 		
@@ -75,6 +94,11 @@ public class GuiController {
 		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.commitsFromRequirement));
 	}
 	
+	/*
+	 * Called when the user clicks on a requirementID. All corresponding
+	 * Commits, where this requirements was mentioned and additionally all
+	 * extra defined relationships are fetched from the Modell and shown.
+	 */
 	void commitsFromRequirement(String requirement) {
 		
 		commits = guiModell.getCommitsForRequirementID(requirement);
@@ -84,6 +108,9 @@ public class GuiController {
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.FilesFromCommit));
 	}
 
+	/*
+	 * Called when clicked on one commit. All file changes should be displayed
+	 */
 	void filesFromCommit(int commitIndex) {
 		commitFiles = commits.get(commitIndex).files;
 		JList<String> commitFileName_JList = new JList<String>(DataTransformer.getNamesFromCommitFiles(commitFiles));
@@ -92,11 +119,19 @@ public class GuiController {
 		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.CodeFromFile));
 	}
 
+	/*
+	 * Called when clicked on a specific file change. Displays the corresponding diff
+	 */
 	void codeFromFile(int filesIndex) {
 		String changeData = commitFiles.get(filesIndex).changedData;
 		guiView.showCode(changeData);
 	}
 
+	/*
+	 * Called if the user clicks on the "show all" button below the file label. Meaning, he wants's
+	 * to navigate the other way round. Chosing one specific file getting the affected requirements ...
+	 * This Method displays all files/paths to the user, which where ever touched in the repo history
+	 */
 	void filesFromDB() {
 		guiView.clearAllScrollPanes();
 		
@@ -104,6 +139,10 @@ public class GuiController {
 		guiView.showFiles(commitFileName_JList);
 	}
 	
+	/*
+	 * For now only terminated the application if the user retried some input to often.
+	 * Later on should handle all actions that have to be completed before exit.
+	 */
 	void handleError(){
 		if(Status == RetryStatus.Exit){
 			System.exit(1);
