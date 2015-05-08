@@ -1,45 +1,64 @@
 package de.fau.osr.gui;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
+import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
 import de.fau.osr.bl.Tracker;
+import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.base.VcsController;
+import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
 
-public class DataRetriever {
+public class GuiModell {
 	
-	Logger logger = LoggerFactory.getLogger(DataRetriever.class);
+	Logger logger = LoggerFactory.getLogger(GuiModell.class);
 
 	Tracker tracker;
 	VcsController vcsController;
 	DataSource dataSource;
 	Pattern reqPattern;
 	
-	public DataRetriever(VcsController vcsController,Tracker tracker, DataSource dataSource, Pattern reqPattern){
-		this.vcsController = vcsController;
-		this.tracker = tracker;
-		this.dataSource = dataSource;
+	public GuiModell(File repoFile, String reqPatternString) throws PatternSyntaxException, IOException{
+		Path repoPath = repoFile.toPath();
+		vcsController = new VcsController(VcsEnvironment.GIT);
+
+		if (vcsController.Connect(repoPath.toString())) {
+			tracker = new Tracker(vcsController);
+		} else {
+			throw new RepositoryNotFoundException(repoPath.toString());
+		}
+		
+		//TODO: This Path should not be hard coded
+		Path dataSrcFilePath = repoPath.getParent().resolve("dataSource.csv");
+		dataSource = new CSVFileDataSource(dataSrcFilePath.toFile());
+		
+		Pattern reqPattern = Pattern.compile(reqPatternString);
+			
 		this.reqPattern = reqPattern;
+		
+		
 	}
 
-	public Set<String> getAllFiles(){
+	public String[] getAllFiles(){
 		Set<String> files = new HashSet<String>();
 		Iterator<String> allCommits = vcsController.getCommitList();
 		while (allCommits.hasNext()) {
@@ -55,8 +74,9 @@ public class DataRetriever {
 			}
 		}
 			
-		
-		return files;
+		String[] filesArray = new String[files.size()];
+		files.toArray(filesArray);
+		return filesArray;
 	}
 	
 	
@@ -68,6 +88,7 @@ public class DataRetriever {
 		Iterator<String> allCommits = vcsController.getCommitList();
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
+			//TODO: parser is not using the input pattern
 			if (parser.parse(vcsController.getCommitMessage(currentCommit))
 					.contains(Integer.valueOf(requirementID))) {
 				commits.add(new Commit(currentCommit, vcsController.getCommitMessage(currentCommit), null, vcsController.getCommitFiles(currentCommit)));
@@ -86,20 +107,7 @@ public class DataRetriever {
 	 * Req-13
 	 * Responsibility: Taleh
 	 */
-	public void addRequirementCommitRelation(Integer requirementID, String commitID) {
-		try {
-			dataSource.addReqCommitRelation(requirementID, commitID);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/*
-	 * Req-13
-	 * Responsibility: Taleh
-	 */
-	public ArrayList<String> getRequirementCommitRelationFromDB(String requirementID) {
-		// TODO programm to an interface ==> ArrayList to Iterable
+	private ArrayList<String> getRequirementCommitRelationFromDB(String requirementID) {
 		ArrayList<String> rvalue = null;
 		try {
 			rvalue = Lists.newArrayList(dataSource.getCommitRelationByReq(Integer.valueOf(requirementID)));
@@ -109,28 +117,13 @@ public class DataRetriever {
 
 		return rvalue;
 	}
-	
-	/*
-	 * Req-8
-	 * Responsibility: Gayathery
-	 */
-	public List<Integer> getRequirementIDsForFile(String filePath){
-		
-		logger.info("Start call :: getRequirementIDsForFile()"+filePath);
-		
-		List<Integer> requirementIDlist = new ArrayList<Integer>();
-		
-		requirementIDlist = tracker.getAllRequirementsforFile(filePath);
-		
-		return requirementIDlist;
-	}
 
 	
 	/*
 	 * Req-12
 	 * Responsibility: Rajab
 	 */
-	public ArrayList<String> getRequirementIDs(){
+	public String[] getRequirementIDs(){
 		ArrayList<String> requirements = new ArrayList<String>();
 		requirements.add("0");
 		requirements.add("1");
@@ -140,7 +133,8 @@ public class DataRetriever {
 		requirements.add("5");
 		requirements.add("6");
 		requirements.add("7");
-		return requirements;
+		String[] returntype = new String[requirements.size()];
+		return requirements.toArray(returntype);
 	}
 }
 

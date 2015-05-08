@@ -34,7 +34,7 @@
                     </descriptorRefs>
                     <archive>
             			<manifest>
-              				<mainClass>de.fau.osr.gui.Viewer</mainClass>
+              				<mainClass>de.fau.osr.gui.Application</mainClass>
             			</manifest>
           			</archive>
                 </configuration>
