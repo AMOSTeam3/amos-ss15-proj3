@@ -35,31 +35,22 @@ public class GuiController {
 				
 				guiView = new GuiView();
 				
-				File repoFile;
 				for(int i = 0; true; i++){
+					File repoFile = null;
 					try {
 						repoFile = guiView.Repo_OpeningDialog();
-						break;
-					} catch (IOException e) {
-						if(i >= MAX_RETRIES){
-							Status = RetryStatus.Exit;
-						}
-						guiView.showErrorDialog(e.getMessage());
+					} catch (IOException e1) {
+						System.exit(0);
 					}
-				}
-				
-				for(int i = 0; true; i++){
 					String reqPatternString = guiView.Pattern_OpeningDialog();
 					try {
 						guiModell = new GuiModell(repoFile, reqPatternString);
 						break;
-					} catch (PatternSyntaxException pse) {
+					} catch (PatternSyntaxException | IOException e) {
 						if(i >= MAX_RETRIES){
 							Status = RetryStatus.Exit;
 						}
-						guiView.showErrorDialog(pse.getMessage());
-					} catch (IOException e) {
-						throw new RuntimeException(e);
+						guiView.showErrorDialog(e.getMessage());
 					}
 				}
 				
