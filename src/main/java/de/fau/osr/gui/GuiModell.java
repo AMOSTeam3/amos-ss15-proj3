@@ -88,8 +88,7 @@ public class GuiModell {
 		Iterator<String> allCommits = vcsController.getCommitList();
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
-			//TODO: parser is not using the input pattern
-			if (parser.parse(vcsController.getCommitMessage(currentCommit))
+			if (parser.parse(vcsController.getCommitMessage(currentCommit), reqPattern)
 					.contains(Integer.valueOf(requirementID))) {
 				commits.add(new Commit(currentCommit, vcsController.getCommitMessage(currentCommit), null, vcsController.getCommitFiles(currentCommit)));
 			}

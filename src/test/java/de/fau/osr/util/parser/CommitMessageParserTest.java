@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
@@ -42,7 +43,7 @@ public class CommitMessageParserTest extends TestCase {
 	}
 
 	@Test
-    public void parseSimpleTest() throws Exception {
+    public void parseSimpleTest1() throws Exception {
 
         String test_commit = "major bug-fix Req-10 Req-15.";
         Parser parser = new CommitMessageParser();
@@ -52,11 +53,32 @@ public class CommitMessageParserTest extends TestCase {
         assertEquals(expected, got);
 
     }
+	
+	@Test
+    public void parseSimpleTest2() throws Exception {
+
+        String test_commit = "major bug-fix Req-10 Req-15.";
+        Pattern pattern = Pattern.compile("Req-(\\d+)");
+        Parser parser = new CommitMessageParser();
+		List<Integer> got = parser.parse(test_commit, pattern);
+        List<Integer> expected = Arrays.asList(10, 15);
+
+        assertEquals(expected, got);
+
+    }
     
     @Test
-	public void parseAdvancedTest() {
+	public void parseAdvancedTest1() {
 		Parser parser = new CommitMessageParser();
 		List<Integer> actual = parser.parse(expectedCommit.message);
+		assertTrue(actual.containsAll(expectedCommit.requirements) && expectedCommit.requirements.containsAll(actual));
+	}
+    
+    @Test
+	public void parseAdvancedTest2() {
+		Parser parser = new CommitMessageParser();
+		Pattern pattern = Pattern.compile("Req-(\\d+)");
+		List<Integer> actual = parser.parse(expectedCommit.message, pattern);
 		assertTrue(actual.containsAll(expectedCommit.requirements) && expectedCommit.requirements.containsAll(actual));
 	}
 }

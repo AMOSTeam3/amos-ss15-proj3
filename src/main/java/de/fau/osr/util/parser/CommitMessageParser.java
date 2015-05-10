@@ -34,4 +34,16 @@ public class CommitMessageParser implements Parser {
 		return found_reqids;
 
 	}
+
+	@Override
+	public List<Integer> parse(String commitMessage, Pattern pattern) {
+		Matcher m = pattern.matcher(commitMessage);
+		List<Integer> found_reqids = new ArrayList<Integer>();
+
+		while(m.find())  {
+			found_reqids.add(Integer.valueOf(m.group(1)));
+		}
+
+		return found_reqids;
+	}
 }
