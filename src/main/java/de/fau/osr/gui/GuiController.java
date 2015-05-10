@@ -137,6 +137,20 @@ public class GuiController {
 		
 		JList<String> commitFileName_JList = new JList<String>(guiModell.getAllFiles());
 		guiView.showFiles(commitFileName_JList);
+		
+		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsFromFile));
+	}
+
+	/*
+	 * When the user clicks on one specific file display from "filesFromDB",
+	 * all requirements who ever influenced this file should be displayed to the user.
+	 * This is the responsibility of this method
+	 */
+	void requirementsFromFile(String filePath) {
+		JList<String> requirements = new JList<String>(guiModell.getRequirementsForFile(filePath));
+		guiView.showRequirements(requirements);
+		
+		//guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsFromFile));
 	}
 	
 	/*

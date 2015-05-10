@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javax.swing.ListModel;
+
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,6 @@ public class GuiModell {
 	Tracker tracker;
 	VcsController vcsController;
 	DataSource dataSource;
-	Pattern reqPattern;
 	
 	public GuiModell(File repoFile, String reqPatternString) throws PatternSyntaxException, IOException{
 		Path repoPath = repoFile.toPath();
@@ -52,10 +53,7 @@ public class GuiModell {
 		dataSource = new CSVFileDataSource(dataSrcFilePath.toFile());
 		
 		Pattern reqPattern = Pattern.compile(reqPatternString);
-			
-		this.reqPattern = reqPattern;
-		
-		
+		CommitMessageParser.setPattern(reqPattern);
 	}
 
 	public String[] getAllFiles(){
@@ -88,7 +86,6 @@ public class GuiModell {
 		Iterator<String> allCommits = vcsController.getCommitList();
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
-			//TODO: parser is not using the input pattern
 			if (parser.parse(vcsController.getCommitMessage(currentCommit))
 					.contains(Integer.valueOf(requirementID))) {
 				commits.add(new Commit(currentCommit, vcsController.getCommitMessage(currentCommit), null, vcsController.getCommitFiles(currentCommit)));
@@ -135,6 +132,10 @@ public class GuiModell {
 		requirements.add("7");
 		String[] returntype = new String[requirements.size()];
 		return requirements.toArray(returntype);
+	}
+
+	public String[] getRequirementsForFile(String filePath) {
+		return DataTransformer.getIntegerCollectionAsArray(tracker.getAllRequirementsforFile(filePath));
 	}
 }
 

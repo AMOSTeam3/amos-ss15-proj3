@@ -4,7 +4,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JList;
 
-enum Action {commitsFromRequirement, FilesFromCommit, CodeFromFile};
+enum Action {commitsFromRequirement, FilesFromCommit, CodeFromFile, RequirementsFromFile};
 
 public class MouseEvent implements MouseListener {
 
@@ -40,6 +40,11 @@ public class MouseEvent implements MouseListener {
 			JList<String> theList2 = (JList<String>) e.getSource();
 			int filesIndex = theList2.getSelectedIndex();
 			guiController.codeFromFile(filesIndex);
+			break;
+		case RequirementsFromFile:
+			JList<String> theList3 = (JList<String>) e.getSource();
+			String value1 = (String) theList3.getSelectedValue();
+			guiController.requirementsFromFile(value1);
 			break;
 		}
 	}

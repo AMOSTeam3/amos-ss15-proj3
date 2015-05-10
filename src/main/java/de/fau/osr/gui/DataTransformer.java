@@ -1,6 +1,7 @@
 package de.fau.osr.gui;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.fau.osr.core.vcs.base.Commit;
@@ -24,6 +25,17 @@ public class DataTransformer {
 						+ commitFiles.get(i).newPath;
 			}
 			return commitfilesArray;
+	}
+	
+	public static String[] getIntegerCollectionAsArray(Collection<Integer> collection){
+		Integer[] IntArray = new Integer[collection.size()];
+		collection.toArray(IntArray);
+		
+		String[] array = new String[collection.size()];
+		for(int i = 0; i<collection.size(); i++){
+			array[i] = IntArray[i].toString();
+		}
+		return array;
 	}
 
 }
