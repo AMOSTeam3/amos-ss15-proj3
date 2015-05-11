@@ -4,7 +4,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JList;
 
-enum Action {commitsFromRequirement, FilesFromCommit, CodeFromFile, RequirementsFromFile};
+enum Action {commitsFromRequirement, FilesFromCommit, CodeFromFile, RequirementsFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit};
 
 public class MouseEvent implements MouseListener {
 
@@ -32,9 +32,9 @@ public class MouseEvent implements MouseListener {
 			guiController.commitsFromRequirement(value);
 			break;
 		case FilesFromCommit:
-			JList<String> theList1 = (JList<String>) e.getSource();
-			int commitIndex = theList1.getSelectedIndex();
-			guiController.filesFromCommit(commitIndex);
+			JList<String> theList0 = (JList<String>) e.getSource();
+			int value0 = theList0.getSelectedIndex();
+			guiController.filesFromCommit(value0);
 			break;
 		case CodeFromFile:
 			JList<String> theList2 = (JList<String>) e.getSource();
@@ -45,6 +45,17 @@ public class MouseEvent implements MouseListener {
 			JList<String> theList3 = (JList<String>) e.getSource();
 			String value1 = (String) theList3.getSelectedValue();
 			guiController.requirementsFromFile(value1);
+			guiController.commitsFromFile(value1);
+			break;
+		case CommitsFromRequirementAndFile:
+			JList<String> theList4 = (JList<String>) e.getSource();
+			String value2 = (String) theList4.getSelectedValue();
+			guiController.commitsFromRequirementAndFile(value2);
+			break;
+		case RequirementsFromFileAndCommit:
+			JList<String> theList5 = (JList<String>) e.getSource();
+			String value3 = (String) theList5.getSelectedValue();
+			guiController.requirementsFromFileAndCommit(value3);
 			break;
 		}
 	}

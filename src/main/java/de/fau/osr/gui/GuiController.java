@@ -2,15 +2,11 @@ package de.fau.osr.gui;
 
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JList;
-
-import de.fau.osr.core.vcs.base.Commit;
-import de.fau.osr.core.vcs.base.CommitFile;
 
 
 /*
@@ -24,9 +20,6 @@ public class GuiController {
 	enum RetryStatus{Retry, Exit}
 	private static final int MAX_RETRIES = 3;
 	private RetryStatus Status;
-	
-	private ArrayList<Commit> commits;
-	private List<CommitFile> commitFiles;
 	
 	GuiView guiView;
 	GuiModell guiModell;
@@ -53,7 +46,7 @@ public class GuiController {
 					}
 					String reqPatternString = guiView.Pattern_OpeningDialog();
 					try {
-						guiModell = new GuiModell(repoFile, reqPatternString);
+						guiModell = new GUIModellFacadeAdapter(repoFile, reqPatternString);
 						break;
 					} catch (PatternSyntaxException | IOException e) {
 						if(i >= MAX_RETRIES){
@@ -87,7 +80,7 @@ public class GuiController {
 	void requirementsFromDB() {
 		guiView.clearAllScrollPanes();
 		
-		String[] requirements = guiModell.getRequirementIDs();
+		String[] requirements = guiModell.getAllRequirements();
 		JList<String> requirements_JList = new JList<String>(requirements);
 		guiView.showRequirements(requirements_JList);
 		
@@ -100,9 +93,7 @@ public class GuiController {
 	 * extra defined relationships are fetched from the Modell and shown.
 	 */
 	void commitsFromRequirement(String requirement) {
-		
-		commits = guiModell.getCommitsForRequirementID(requirement);
-		JList<String> commitMessages_JList = new JList<String>(DataTransformer.getMessagesFromCommits(commits));
+		JList<String> commitMessages_JList = new JList<String>(guiModell.getCommitsFromRequirementID(requirement));
 		guiView.showCommits(commitMessages_JList);
 		
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.FilesFromCommit));
@@ -112,8 +103,13 @@ public class GuiController {
 	 * Called when clicked on one commit. All file changes should be displayed
 	 */
 	void filesFromCommit(int commitIndex) {
-		commitFiles = commits.get(commitIndex).files;
-		JList<String> commitFileName_JList = new JList<String>(DataTransformer.getNamesFromCommitFiles(commitFiles));
+		JList<String> commitFileName_JList;
+		try {
+			commitFileName_JList = new JList<String>(guiModell.getFilesFromCommit(commitIndex));
+		} catch (FileNotFoundException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}
 		guiView.showFiles(commitFileName_JList);
 		
 		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.CodeFromFile));
@@ -123,7 +119,13 @@ public class GuiController {
 	 * Called when clicked on a specific file change. Displays the corresponding diff
 	 */
 	void codeFromFile(int filesIndex) {
-		String changeData = commitFiles.get(filesIndex).changedData;
+		String changeData;
+		try {
+			changeData = guiModell.getChangeDataFromFileIndex(filesIndex);
+		} catch (FileNotFoundException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}
 		guiView.showCode(changeData);
 	}
 
@@ -147,10 +149,31 @@ public class GuiController {
 	 * This is the responsibility of this method
 	 */
 	void requirementsFromFile(String filePath) {
-		JList<String> requirements = new JList<String>(guiModell.getRequirementsForFile(filePath));
+		JList<String> requirements = new JList<String>(guiModell.getRequirementsFromFile(filePath));
 		guiView.showRequirements(requirements);
 		
-		//guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsFromFile));
+		guiView.addMouseListener(requirements, new MouseEvent(this, Action.CommitsFromRequirementAndFile));
+	}
+	
+	/*
+	 * Called together with method requirementsFromFile. Displaying all Commits, which ever touched the choosen
+	 * file.
+	 */
+	void commitsFromFile(String filePath){
+		JList<String> commits = new JList<String>(guiModell.getCommitsFromFile(filePath));
+		guiView.showCommits(commits);
+		
+		guiView.addMouseListener(commits, new MouseEvent(this, Action.RequirementsFromFileAndCommit));
+	}
+
+	void commitsFromRequirementAndFile(String requirementID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	void requirementsFromFileAndCommit(String commitID) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/*
