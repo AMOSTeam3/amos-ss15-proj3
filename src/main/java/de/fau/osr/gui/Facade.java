@@ -138,9 +138,36 @@ public class Facade {
 		return tracker.getAllRequirementsforFile(filePath);
 	}
 
-	public Iterator<String> getCommitsFromFile(String filePath) {
+	public Collection<Commit> getCommitsFromFile(String filePath) {
 		Iterator<String> iterator = vcsController.getCommitIdsForFile(filePath);
-		return iterator;
+		ArrayList<Commit> commits = new ArrayList<Commit>();
+		while(iterator.hasNext()){
+			String Id = iterator.next();
+			commits.add(new Commit(Id, vcsController.getCommitMessage(Id), null, vcsController.getCommitFiles(Id)));
+					
+		}
+		return commits;
+	}
+
+	public Collection<Commit> getCommitsFromDB() {
+		Iterator<String> iterator = vcsController.getCommitList();
+		ArrayList<Commit> commits = new ArrayList<Commit>();
+		while(iterator.hasNext()){
+			String Id = iterator.next();
+			commits.add(new Commit(Id, vcsController.getCommitMessage(Id), null, vcsController.getCommitFiles(Id)));
+					
+		}
+		return commits;
+	}
+
+	public Collection<Integer> getRequirementsFromCommit(Commit commit) {
+		Parser parser = new CommitMessageParser();
+		Collection<Integer> requirements = parser.parse(commit.message);
+		return requirements;
+	}
+
+	public Collection<CommitFile> getFilesFromRequirement(String requirementID) {
+		return tracker.getCommitFilesForRequirementID(requirementID);
 	}
 }
 

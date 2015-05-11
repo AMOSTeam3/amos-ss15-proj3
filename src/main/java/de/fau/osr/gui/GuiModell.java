@@ -25,4 +25,19 @@ public interface GuiModell {
 
 	String getChangeDataFromFileIndex(int filesIndex) throws FileNotFoundException;
 
+	String[] getCommitsFromDB();
+
+	String[] getRequirementsFromCommit(int commitIndex) throws FileNotFoundException;
+
+	String[] commitsFromRequirementAndFile(String requirementID,
+			String filePath);
+
+	String[] getRequirementsFromFileAndCommit(int commitIndex,
+			String filePath) throws FileNotFoundException;
+
+	String[] getFilesFromRequirement(String requirementID);
+
+	String[] commitsFromRequirementAndFile(String requirementID,
+			int fileIndex) throws FileNotFoundException;
+
 }

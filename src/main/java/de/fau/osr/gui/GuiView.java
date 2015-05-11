@@ -69,29 +69,53 @@ public class GuiView{
 	}
 
 	/*
-	 * Clearing all scrollpanes. Containing the Code_ScrollPane.
+	 * Clearing all scrollpanes. Containing the Code_ScrollPane. And clearing all Textfields
 	 * Color is set to the initial white.
 	 */
-	void clearAllScrollPanes(){
-		JPanel panelrequirement = new JPanel(new GridLayout());
-		panelrequirement.setBackground(Color.WHITE);
-		elementHandler.getRequirementID_scrollPane().setViewportView(panelrequirement);
+	void clearAll(){
+		clearRequirements();
 		
-		JPanel panelcommit = new JPanel(new GridLayout());
-		panelcommit.setBackground(Color.WHITE);
-		elementHandler.getCommit_scrollPane().setViewportView(panelcommit);
+		clearCommits();
 		
-		JPanel panelfiles = new JPanel(new GridLayout());
-		panelfiles.setBackground(Color.WHITE);
-		elementHandler.getFiles_scrollPane().setViewportView(panelfiles);
+		clearFiles();
 		
-		JPanel panelcode = new JPanel(new GridLayout());
-		panelcode.setBackground(Color.WHITE);
-		elementHandler.getCode_scrollPane().setViewportView(panelcode);
+		clearCode();
 		
+		clearImpactPercentage();
+		
+		elementHandler.getCommit_textField().setText("");
+		elementHandler.getRequirementID_textField().setText("");
+	}
+
+	void clearImpactPercentage() {
 		JPanel panelimpact = new JPanel(new GridLayout());
 		panelimpact.setBackground(Color.WHITE);
 		elementHandler.getImpactPercentage_scrollPane().setViewportView(panelimpact);
+	}
+
+	void clearFiles() {
+		JPanel panelfiles = new JPanel(new GridLayout());
+		panelfiles.setBackground(Color.WHITE);
+		elementHandler.getFiles_scrollPane().setViewportView(panelfiles);
+	}
+
+	
+	void clearRequirements() {
+		JPanel panelrequirement = new JPanel(new GridLayout());
+		panelrequirement.setBackground(Color.WHITE);
+		elementHandler.getRequirementID_scrollPane().setViewportView(panelrequirement);
+	}
+
+	void clearCommits() {
+		JPanel panelcommit = new JPanel(new GridLayout());
+		panelcommit.setBackground(Color.WHITE);
+		elementHandler.getCommit_scrollPane().setViewportView(panelcommit);
+	}
+
+	void clearCode() {
+		JPanel panelcode = new JPanel(new GridLayout());
+		panelcode.setBackground(Color.WHITE);
+		elementHandler.getCode_scrollPane().setViewportView(panelcode);
 	}
 
 	/*

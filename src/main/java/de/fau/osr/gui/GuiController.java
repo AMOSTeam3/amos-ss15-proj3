@@ -23,6 +23,10 @@ public class GuiController {
 	
 	GuiView guiView;
 	GuiModell guiModell;
+	
+	JList<String> requirements_JList;
+	JList<String> commitMessages_JList;
+	JList<String> commitFileName_JList;
 
 	/*
 	 * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
@@ -73,37 +77,195 @@ public class GuiController {
 		guiView.initializeButtonActions(this);
 	}
 
+	
+	
 	/*
-	 * Fetching all Requirements from external source (tool/DB) and displays them
-	 * to the user
+	 * Navigation: ->Requirements
+	 * Clear: All
+	 * Setting: Requirements
+	 * Using: getAllRequirements
 	 */
 	void requirementsFromDB() {
-		guiView.clearAllScrollPanes();
+		guiView.clearAll();
 		
 		String[] requirements = guiModell.getAllRequirements();
-		JList<String> requirements_JList = new JList<String>(requirements);
+		requirements_JList = new JList<String>(requirements);
 		guiView.showRequirements(requirements_JList);
 		
-		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.commitsFromRequirement));
+		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.CommitsAndFilesFromRequirement));
 	}
 	
 	/*
-	 * Called when the user clicks on a requirementID. All corresponding
-	 * Commits, where this requirements was mentioned and additionally all
-	 * extra defined relationships are fetched from the Modell and shown.
+	 * Navigation: ->Requirements->Commit
+	 * Clear: Files/Code/ImpactPercentage
+	 * Setting: Commits
+	 * Using: getCommitsFromRequirementID
 	 */
 	void commitsFromRequirement(String requirement) {
-		JList<String> commitMessages_JList = new JList<String>(guiModell.getCommitsFromRequirementID(requirement));
+		guiView.clearFiles();
+		guiView.clearCode();
+		guiView.clearImpactPercentage();
+		
+		commitMessages_JList = new JList<String>(guiModell.getCommitsFromRequirementID(requirement));
 		guiView.showCommits(commitMessages_JList);
 		
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.FilesFromCommit));
 	}
 
 	/*
-	 * Called when clicked on one commit. All file changes should be displayed
+	 * Navigation: ->Requirements->File
+	 * Clear: Code/ImpactPercentage
+	 * Setting: Files
+	 * Using: getFilesFromRequirement
+	 */
+	void filesFromRequirement(String requirementID) {
+		guiView.clearCode();
+		guiView.clearImpactPercentage();
+		
+		commitFileName_JList = new JList<String>(guiModell.getFilesFromRequirement(requirementID));
+		guiView.showFiles(commitFileName_JList);
+		
+		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
+		
+	}
+	
+	/*
+	 * Navigation: ->Requirements->File->Commit
+	 * Clear: 
+	 * Setting: Commits
+	 * Using: commitsFromRequirementAndFile
+	 */
+	void commitsFromRequirementAndFile(String requirementID, int fileIndex) {
+		try {
+			commitMessages_JList = new JList<String>(guiModell.commitsFromRequirementAndFile(requirementID, fileIndex));
+		} catch (FileNotFoundException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}
+		guiView.showCommits(commitMessages_JList);
+	}
+	
+	
+
+
+	
+	/*
+	 * Navigation: ->Files->Code
+	 * Clear: ImpactPercentage
+	 * Setting: Code
+	 * Using: getChangeDataFromFileIndex
+	 */
+	void codeFromFile(int filesIndex) {
+		guiView.clearImpactPercentage();
+		
+		String changeData;
+		try {
+			changeData = guiModell.getChangeDataFromFileIndex(filesIndex);
+		} catch (FileNotFoundException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}
+		guiView.showCode(changeData);
+	}
+
+	/*
+	 * Navigation: ->Files
+	 * Clear: All
+	 * Setting: Files
+	 * Using: getAllFiles
+	 */
+	void filesFromDB() {
+		guiView.clearAll();
+		
+		commitFileName_JList = new JList<String>(guiModell.getAllFiles());
+		guiView.showFiles(commitFileName_JList);
+		
+		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
+	}
+
+	/*
+	 * Navigation: ->File->Requirement
+	 * Clear: 
+	 * Setting: Requirement
+	 * Using: getRequirementsFromFile
+	 */
+	void requirementsFromFile(String filePath) {
+		requirements_JList = new JList<String>(guiModell.getRequirementsFromFile(filePath));
+		guiView.showRequirements(requirements_JList);
+		
+		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.CommitsFromRequirementAndFile));
+	}
+	
+	/*
+	 * Navigation: ->File->Commit
+	 * Clear: 
+	 * Setting: Commits
+	 * Using: getCommitsFromFile
+	 */
+	void commitsFromFile(String filePath){
+		commitMessages_JList = new JList<String>(guiModell.getCommitsFromFile(filePath));
+		guiView.showCommits(commitMessages_JList);
+		
+		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.RequirementsFromFileAndCommit));
+	}
+
+	/*
+	 * Navigation: ->File->Requirement->Commit
+	 * Clear: 
+	 * Setting: Commits
+	 * Using: commitsFromRequirementAndFile
+	 */
+	void commitsFromRequirementAndFile(String requirementID, String filePath) {
+		commitMessages_JList = new JList<String>(guiModell.commitsFromRequirementAndFile(requirementID, filePath));
+		guiView.showCommits(commitMessages_JList);
+	}
+
+	/*
+	 * Navigation: ->Files->Commit->Requirement
+	 * Clear: 
+	 * Setting: Requirement
+	 * Using: getRequirementsFromFileAndCommit
+	 */
+	void requirementsFromFileAndCommit(int commitIndex, String filePath) {
+		try {
+			requirements_JList = new JList<String>(guiModell.getRequirementsFromFileAndCommit(commitIndex, filePath));
+		} catch (FileNotFoundException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}
+		guiView.showRequirements(requirements_JList);
+		
+	}
+
+	
+	
+	
+	/*
+	 * Navigation: ->Commits
+	 * Clear: All
+	 * Setting: Commits
+	 * Using: getCommitsFromDB
+	 */
+	void commitsFromDB() {
+		guiView.clearAll();
+		
+		commitMessages_JList = new JList<String>(guiModell.getCommitsFromDB());
+		guiView.showCommits(commitMessages_JList);
+		
+		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.RequirementsAndFilesFromCommit));
+	}
+	
+	/*
+	 * Navigation: ->Commit->Files
+	 * Clear: Code/ImpactPercentage
+	 * Setting: Files
+	 * Using: getFilesFromCommit
 	 */
 	void filesFromCommit(int commitIndex) {
-		JList<String> commitFileName_JList;
+		guiView.clearCode();
+		guiView.clearImpactPercentage();
+		
+		
 		try {
 			commitFileName_JList = new JList<String>(guiModell.getFilesFromCommit(commitIndex));
 		} catch (FileNotFoundException e) {
@@ -116,65 +278,29 @@ public class GuiController {
 	}
 
 	/*
-	 * Called when clicked on a specific file change. Displays the corresponding diff
+	 * Navigation: ->Commits->Requirements
+	 * Clear: 
+	 * Setting: Requirements
+	 * Using: getRequirementsFromCommit
 	 */
-	void codeFromFile(int filesIndex) {
-		String changeData;
+	void requirementsFromCommit(int commitIndex) {
 		try {
-			changeData = guiModell.getChangeDataFromFileIndex(filesIndex);
+			requirements_JList = new JList<String>(guiModell.getRequirementsFromCommit(commitIndex));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
 		}
-		guiView.showCode(changeData);
-	}
-
-	/*
-	 * Called if the user clicks on the "show all" button below the file label. Meaning, he wants's
-	 * to navigate the other way round. Chosing one specific file getting the affected requirements ...
-	 * This Method displays all files/paths to the user, which where ever touched in the repo history
-	 */
-	void filesFromDB() {
-		guiView.clearAllScrollPanes();
-		
-		JList<String> commitFileName_JList = new JList<String>(guiModell.getAllFiles());
-		guiView.showFiles(commitFileName_JList);
-		
-		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsFromFile));
-	}
-
-	/*
-	 * When the user clicks on one specific file display from "filesFromDB",
-	 * all requirements who ever influenced this file should be displayed to the user.
-	 * This is the responsibility of this method
-	 */
-	void requirementsFromFile(String filePath) {
-		JList<String> requirements = new JList<String>(guiModell.getRequirementsFromFile(filePath));
-		guiView.showRequirements(requirements);
-		
-		guiView.addMouseListener(requirements, new MouseEvent(this, Action.CommitsFromRequirementAndFile));
+		guiView.showRequirements(requirements_JList);
 	}
 	
 	/*
-	 * Called together with method requirementsFromFile. Displaying all Commits, which ever touched the choosen
-	 * file.
+	 * For button AddLinkage
 	 */
-	void commitsFromFile(String filePath){
-		JList<String> commits = new JList<String>(guiModell.getCommitsFromFile(filePath));
-		guiView.showCommits(commits);
-		
-		guiView.addMouseListener(commits, new MouseEvent(this, Action.RequirementsFromFileAndCommit));
-	}
-
-	void commitsFromRequirementAndFile(String requirementID) {
+	void requirementsAndCommitsFromDB() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	void requirementsFromFileAndCommit(String commitID) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	/*
 	 * For now only terminated the application if the user retried some input to often.
