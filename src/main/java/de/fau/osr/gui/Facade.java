@@ -13,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +24,8 @@ import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.base.VcsController;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
 
@@ -35,18 +34,15 @@ public class Facade {
 	Logger logger = LoggerFactory.getLogger(Facade.class);
 
 	Tracker tracker;
-	VcsController vcsController;
+	VcsClient vcsClient;
 	DataSource dataSource;
 	
 	public Facade(File repoFile, String reqPatternString) throws PatternSyntaxException, IOException{
 		Path repoPath = repoFile.toPath();
-		vcsController = new VcsController(VcsEnvironment.GIT);
+		
+		vcsClient = VcsClient.connect(VcsEnvironment.GIT, repoPath.toString());
 
-		if (vcsController.Connect(repoPath.toString())) {
-			tracker = new Tracker(vcsController);
-		} else {
-			throw new RepositoryNotFoundException(repoPath.toString());
-		}
+		tracker = new Tracker(vcsClient);
 		
 		//TODO: This Path should not be hard coded
 		Path dataSrcFilePath = repoPath.getParent().resolve("dataSource.csv");
@@ -58,10 +54,10 @@ public class Facade {
 
 	public Collection<String> getAllFiles(){
 		Set<String> files = new HashSet<String>();
-		Iterator<String> allCommits = vcsController.getCommitList();
+		Iterator<String> allCommits = vcsClient.getCommitList();
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
-			for(CommitFile commitfile: vcsController.getCommitFiles(currentCommit)){
+			for(CommitFile commitfile: vcsClient.getCommitFiles(currentCommit)){
 				String name;
 				if(commitfile.commitState == CommitState.DELETED){
 					name = commitfile.oldPath.getPath();
@@ -84,17 +80,17 @@ public class Facade {
 		Parser parser = new CommitMessageParser();
 		ArrayList<Commit> commits = new ArrayList<Commit>();
 
-		Iterator<String> allCommits = vcsController.getCommitList();
+		Iterator<String> allCommits = vcsClient.getCommitList();
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
-			if (parser.parse(vcsController.getCommitMessage(currentCommit))
+			if (parser.parse(vcsClient.getCommitMessage(currentCommit))
 					.contains(Integer.valueOf(requirementID))) {
-				commits.add(new Commit(currentCommit, vcsController.getCommitMessage(currentCommit), null, vcsController.getCommitFiles(currentCommit)));
+				commits.add(new Commit(currentCommit, vcsClient.getCommitMessage(currentCommit), null, vcsClient.getCommitFiles(currentCommit)));
 			}
 		}
 		
 		for(String commitID: getRequirementCommitRelationFromDB(requirementID)){
-			commits.add(new Commit(commitID, vcsController.getCommitMessage(commitID), null, vcsController.getCommitFiles(commitID)));
+			commits.add(new Commit(commitID, vcsClient.getCommitMessage(commitID), null, vcsClient.getCommitFiles(commitID)));
 		}
 
 		return commits;
@@ -139,22 +135,22 @@ public class Facade {
 	}
 
 	public Collection<Commit> getCommitsFromFile(String filePath) {
-		Iterator<String> iterator = vcsController.getCommitIdsForFile(filePath);
+		Iterator<String> iterator = vcsClient.getCommitListForFileodification(filePath);
 		ArrayList<Commit> commits = new ArrayList<Commit>();
 		while(iterator.hasNext()){
 			String Id = iterator.next();
-			commits.add(new Commit(Id, vcsController.getCommitMessage(Id), null, vcsController.getCommitFiles(Id)));
+			commits.add(new Commit(Id, vcsClient.getCommitMessage(Id), null, vcsClient.getCommitFiles(Id)));
 					
 		}
 		return commits;
 	}
 
 	public Collection<Commit> getCommitsFromDB() {
-		Iterator<String> iterator = vcsController.getCommitList();
+		Iterator<String> iterator = vcsClient.getCommitList();
 		ArrayList<Commit> commits = new ArrayList<Commit>();
 		while(iterator.hasNext()){
 			String Id = iterator.next();
-			commits.add(new Commit(Id, vcsController.getCommitMessage(Id), null, vcsController.getCommitFiles(Id)));
+			commits.add(new Commit(Id, vcsClient.getCommitMessage(Id), null, vcsClient.getCommitFiles(Id)));
 					
 		}
 		return commits;
