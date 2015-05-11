@@ -275,7 +275,7 @@ public class GitVcsClient extends VcsClient{
 	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#blame(java.lang.String, de.fau.osr.util.parser.CommitMessageParser)
 	 */
 	@Override
-	public Collection<AnnotatedLine> blame(String path, CommitMessageParser dataSource) throws IOException, GitAPIException {
+	public List<AnnotatedLine> blame(String path, CommitMessageParser dataSource) throws IOException, GitAPIException {
 		BlameCommand blameCommand = new BlameCommand(git.getRepository());
 		blameCommand.setFollowFileRenames(true);
 		blameCommand.setFilePath(path);
