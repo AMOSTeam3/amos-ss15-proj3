@@ -14,6 +14,9 @@ import javax.swing.JScrollPane;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class GuiViewElementHandler extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -38,6 +41,9 @@ public class GuiViewElementHandler extends JFrame{
 	
 	private JTextField RequirementID_textField;
 	private JTextField Commit_textField;
+	private JMenuBar menuBar;
+	private JMenu mnTools;
+	private JMenuItem mntmConfigure;
 
 	public GuiViewElementHandler() {
 		JPanel contentPane = createMainFrame();
@@ -235,6 +241,15 @@ public class GuiViewElementHandler extends JFrame{
                 Toolkit.getDefaultToolkit().getScreenSize());
         pack();
         setResizable(false);
+		
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		mnTools = new JMenu("Tools");
+		menuBar.add(mnTools);
+		
+		mntmConfigure = new JMenuItem("Configure");
+		mnTools.add(mntmConfigure);
 		contentPane.setBackground(Color.WHITE);
 		setContentPane(contentPane);
 		return contentPane;
@@ -263,6 +278,12 @@ public class GuiViewElementHandler extends JFrame{
 		Linkage_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				guiController.requirementsAndCommitsFromDB();
+			}
+		});
+		
+		mntmConfigure.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				guiController.reConfigure();
 			}
 		});
 		

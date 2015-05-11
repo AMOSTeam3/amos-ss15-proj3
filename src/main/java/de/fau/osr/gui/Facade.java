@@ -36,14 +36,16 @@ public class Facade {
 	Tracker tracker;
 	VcsClient vcsClient;
 	DataSource dataSource;
+	Path repoPath;
 	
-	public Facade(File repoFile, String reqPatternString) throws PatternSyntaxException, IOException{
+	public Facade(File repoFile, String reqPatternString) throws IOException,RuntimeException{
 		Path repoPath = repoFile.toPath();
 		
 		vcsClient = VcsClient.connect(VcsEnvironment.GIT, repoPath.toString());
 
 		tracker = new Tracker(vcsClient);
 		
+		this.repoPath = repoPath;
 		//TODO: This Path should not be hard coded
 		Path dataSrcFilePath = repoPath.getParent().resolve("dataSource.csv");
 		dataSource = new CSVFileDataSource(dataSrcFilePath.toFile());
@@ -51,7 +53,7 @@ public class Facade {
 		Pattern reqPattern = Pattern.compile(reqPatternString);
 		CommitMessageParser.setPattern(reqPattern);
 	}
-
+	
 	public Collection<String> getAllFiles(){
 		Set<String> files = new HashSet<String>();
 		Iterator<String> allCommits = vcsClient.getCommitList();
@@ -164,6 +166,20 @@ public class Facade {
 
 	public Collection<CommitFile> getFilesFromRequirement(String requirementID) {
 		return tracker.getCommitFilesForRequirementID(requirementID);
+	}
+	
+	/*
+	 * method to get the current requirement pattern used by the implementation behind the facade
+	 */
+	public String getCurrentRequirementPatternString(){
+		return CommitMessageParser.getPattern().toString();
+	}
+	
+	/*
+	 * method to get the current repository path  used by the implementation behind the facade
+	 */
+	public String getCurrentRepositoryPath(){
+		return repoPath.toString();
 	}
 }
 

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.jgit.errors.RepositoryNotFoundException;
+
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
@@ -29,9 +31,12 @@ public abstract class VcsClient {
 			default:
 				throw new RuntimeException("unknown vcs environment " + env);
 			}
-		} catch(IOException e) {
+		} catch(RepositoryNotFoundException e){
+			throw new RuntimeException("Repository Not Found");
+		}catch(IOException e) {
 			throw new RuntimeException(e);
 		}
+		
 		return client;
 	}
 }

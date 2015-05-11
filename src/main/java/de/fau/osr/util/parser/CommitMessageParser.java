@@ -38,4 +38,8 @@ public class CommitMessageParser implements Parser {
 	public static void setPattern(Pattern pattern) {
 		REQUIREMENT_PATTERN = pattern;
 	}
+	
+	public static Pattern getPattern() {
+		return REQUIREMENT_PATTERN;
+	}
 }

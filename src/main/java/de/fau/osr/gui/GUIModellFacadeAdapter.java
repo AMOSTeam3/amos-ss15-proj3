@@ -23,7 +23,7 @@ public class GUIModellFacadeAdapter implements GuiModell {
 	private Collection<Commit> commits;
 
 	public GUIModellFacadeAdapter(File repoFile, String reqPatternString)
-			throws PatternSyntaxException, IOException {
+			throws IOException, RuntimeException {
 		facade = new Facade(repoFile, reqPatternString);
 	}
 
@@ -190,4 +190,15 @@ public class GUIModellFacadeAdapter implements GuiModell {
 		
 		return array;
 	}
+
+	@Override
+	public String getCurrentRequirementPatternString() {
+		return facade.getCurrentRequirementPatternString();
+	}
+
+	@Override
+	public String getCurrentRepositoryPath() {
+		return facade.getCurrentRepositoryPath();
+	}
+	
 }

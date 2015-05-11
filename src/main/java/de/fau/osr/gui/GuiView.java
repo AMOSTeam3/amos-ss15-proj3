@@ -47,9 +47,20 @@ public class GuiView{
 	 * or external sources.
 	 * @return String containing the directly the user input. Not yet checked whether it's a proper pattern
 	 */
-	String Pattern_OpeningDialog() {
-		String returnValue = JOptionPane.showInputDialog("Choose Requirment Pattern", "Req-(\\d+)");
+	String Pattern_OpeningDialog(String currentPattern) {
+		String returnValue = JOptionPane.showInputDialog("Choose Requirment Pattern", currentPattern);
 		return returnValue;
+	}
+	
+	/*
+	 * Method to open a option dialog for configuration where user can select which 
+	 * configuration needs to be modified
+	 * @return integer containing the option selected for configuration (TODO int to be converted to 
+	 * a proper enum)
+	 */
+	int Configure_OptionDialog(){
+		Object[] options = { "Change Repository", "Change Requirement Pattern"};
+		return JOptionPane.showOptionDialog(null, "Choose to Configure", "SpiceTraceability Configuration", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 	}
 
 	/*
@@ -66,6 +77,14 @@ public class GuiView{
 	 */
 	void showErrorDialog(String messsage) {
 		JOptionPane.showMessageDialog(null, messsage, "Fehler", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/*
+	 * Showing a dialog to the user. Marked as Information dialog
+	 * @parameter message to be presented to the user
+	 */
+	void showInformationDialog(String messsage) {
+		JOptionPane.showMessageDialog(null, messsage, "Information", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/*

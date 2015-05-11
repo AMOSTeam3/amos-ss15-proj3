@@ -8,6 +8,8 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JList;
 
+import de.fau.osr.util.AppProperties;
+
 
 /*
  * Using a MVC-Pattern for the GUI.
@@ -17,7 +19,7 @@ import javax.swing.JList;
  */
 public class GuiController {
 	//Whether the user gets another chance to input correct data
-	enum RetryStatus{Retry, Exit}
+	enum RetryStatus{Retry, Exit, Cancel}
 	private static final int MAX_RETRIES = 3;
 	private RetryStatus Status;
 	
@@ -48,7 +50,7 @@ public class GuiController {
 					} catch (IOException e1) {
 						System.exit(0);
 					}
-					String reqPatternString = guiView.Pattern_OpeningDialog();
+					String reqPatternString = guiView.Pattern_OpeningDialog(AppProperties.GetValue("RequirementPattern"));
 					try {
 						guiModell = new GUIModellFacadeAdapter(repoFile, reqPatternString);
 						break;
@@ -310,5 +312,90 @@ public class GuiController {
 		if(Status == RetryStatus.Exit){
 			System.exit(1);
 		}
+	}
+	
+	/*
+	 *For reconfiguring the repository to a new path while the application is running
+	 *Once this method is successful, the application refers to the new repository 
+	 */
+	
+	void reConfigureRepository(){
+		GuiModell guiModellTrial = guiModell;
+		for(int i = 0; i<=MAX_RETRIES; i++){
+			if(i == MAX_RETRIES){
+				Status = RetryStatus.Cancel;
+				guiView.showErrorDialog("Maximum retries exceeded");
+				return;
+			}
+			File repoFile = null;
+			try {
+				repoFile = guiView.Repo_OpeningDialog();
+			} catch (IOException e1) {
+				
+			}
+			if(repoFile == null){
+				Status = RetryStatus.Cancel;
+				return;
+			}
+			try {
+				guiModellTrial = new GUIModellFacadeAdapter(repoFile, guiModell.getCurrentRequirementPatternString());
+				guiView.showInformationDialog("Repository Path modified to " + repoFile.getPath());
+				break;
+			} catch (IOException | RuntimeException e) {
+				
+				guiView.showErrorDialog(e.getMessage());
+				handleError();
+			}
+		}
+		guiModell = guiModellTrial;
+		requirementsFromDB();
+	}
+	/*
+	 * For reconfiguring the requirement pattern to a new pattern while the application is running
+	 * Once this method is successful, the application refers to the new requirement pattern 
+	 */
+	void reConfigureRequirementPattern(){
+		GuiModell guiModellTrial = guiModell;
+		for(int i = 0; true; i++){
+			if(i == MAX_RETRIES){
+				Status = RetryStatus.Cancel;
+				guiView.showErrorDialog("Maximum retries exceeded");
+				return;
+			}
+			String reqPatternString = guiView.Pattern_OpeningDialog(guiModell.getCurrentRequirementPatternString());
+			if(reqPatternString == null){
+				Status = RetryStatus.Cancel;
+				return;
+			}
+			try {
+				guiModellTrial = new GUIModellFacadeAdapter(new File(guiModell.getCurrentRepositoryPath()), reqPatternString);
+				guiView.showInformationDialog("Requirement Pattern modified to " + reqPatternString);
+				break;
+			} catch (RuntimeException | IOException e) {				
+				guiView.showErrorDialog(e.getMessage());
+				handleError();
+			}
+		}
+		guiModell = guiModellTrial;
+		requirementsFromDB();
+		
+	}
+	
+	/*
+	 * method to divert configuration calls
+	 */
+	void reConfigure(){
+		switch(guiView.Configure_OptionDialog())
+		{
+		// these values have to be replaced by some enums
+		case 0:
+			reConfigureRepository();
+			break;
+		case 1:
+			reConfigureRequirementPattern();
+			break;
+		}
+			
+		
 	}
 }

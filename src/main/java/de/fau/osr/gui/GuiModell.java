@@ -24,6 +24,10 @@ public interface GuiModell {
 	String[] getFilesFromCommit(int commitIndex) throws FileNotFoundException;
 
 	String getChangeDataFromFileIndex(int filesIndex) throws FileNotFoundException;
+	
+	String getCurrentRequirementPatternString();
+	
+	String getCurrentRepositoryPath();
 
 	String[] getCommitsFromDB();
 
