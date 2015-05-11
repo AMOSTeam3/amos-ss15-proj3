@@ -40,4 +40,5 @@ public interface GuiModell {
 	String[] commitsFromRequirementAndFile(String requirementID,
 			int fileIndex) throws FileNotFoundException;
 
+	void addRequirementCommitLinkage(String requirementID, int commitIndex) throws FileNotFoundException;
 }

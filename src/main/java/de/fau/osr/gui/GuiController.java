@@ -8,6 +8,8 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JList;
 
+import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
+
 
 /*
  * Using a MVC-Pattern for the GUI.
@@ -297,8 +299,26 @@ public class GuiController {
 	 * For button AddLinkage
 	 */
 	void requirementsAndCommitsFromDB() {
-		// TODO Auto-generated method stub
+		guiView.clearAll();
 		
+		String[] requirements = guiModell.getAllRequirements();
+		requirements_JList = new JList<String>(requirements);
+		guiView.showRequirements(requirements_JList);
+		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.RequirementToLinkage));
+		
+		commitMessages_JList = new JList<String>(guiModell.getCommitsFromDB());
+		guiView.showCommits(commitMessages_JList);
+		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.CommitToLinkage));
+		
+		guiView.switchLinkage_Button(ButtonState.Activate);
+	}
+
+	void RequirementToLinkage(String requirementID) {
+		guiView.showLinkageRequirement(requirementID);
+	}
+
+	void CommitToLinkage(String commit) {
+		guiView.showLinkageCommit(commit);
 	}
 
 	
@@ -309,6 +329,18 @@ public class GuiController {
 	void handleError(){
 		if(Status == RetryStatus.Exit){
 			System.exit(1);
+		}
+	}
+
+	void addLinkage(String requirementID, int commitIndex) {
+		try {
+			guiModell.addRequirementCommitLinkage(requirementID, commitIndex);
+			guiView.showInformationDialog("Successfully Added!");
+		} catch (FileNotFoundException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}finally{
+			guiView.clearAll();
 		}
 	}
 }

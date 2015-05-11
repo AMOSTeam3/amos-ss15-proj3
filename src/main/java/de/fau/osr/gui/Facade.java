@@ -165,5 +165,13 @@ public class Facade {
 	public Collection<CommitFile> getFilesFromRequirement(String requirementID) {
 		return tracker.getCommitFilesForRequirementID(requirementID);
 	}
+	
+	/*
+	 * Req-13 Responsibility: Taleh
+	 */
+	public void addRequirementCommitRelation(Integer requirementID,
+			String commitID) throws Exception {
+		dataSource.addReqCommitRelation(requirementID, commitID);
+	}
 }
 
