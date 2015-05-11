@@ -20,7 +20,7 @@ import de.fau.osr.util.AppProperties;
  */
 public class CommitMessageParser implements Parser {
 
-	private static final Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
+	private static Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
 
 	@Override
 	public List<Integer> parse(String latestCommitMessage) {
@@ -33,5 +33,9 @@ public class CommitMessageParser implements Parser {
 
 		return found_reqids;
 
+	}
+
+	public static void setPattern(Pattern pattern) {
+		REQUIREMENT_PATTERN = pattern;
 	}
 }
