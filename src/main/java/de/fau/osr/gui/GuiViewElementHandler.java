@@ -233,7 +233,7 @@ public class GuiViewElementHandler extends JFrame{
 		contentPane.setPreferredSize(
                 Toolkit.getDefaultToolkit().getScreenSize());
         pack();
-        setResizable(false);
+        //setResizable(false);
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
