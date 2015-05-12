@@ -1,19 +1,14 @@
 package de.fau.osr;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import de.fau.osr.core.vcs.base.Commit;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import de.fau.osr.core.vcs.base.Commit;
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
 
 /*
  * This Class handles all Testdata. If u want to get any Path related to a Test Repository or any other Test file,
@@ -101,11 +96,11 @@ public class PublicTestData {
 			while ((line = br.readLine()) != null) {
 				String[] commitString = line.split(csvSplitStringsBy);
 				
-				List<Integer> requirements = new ArrayList<Integer>();
+				List<String> requirements = new ArrayList<String>();
 				String [] requirementStrings = commitString[2].split(csvSplitEntriesBy);
 				for(String str: requirementStrings){
 					if(!str.equals("")){
-						requirements.add(Integer.parseInt(str));
+						requirements.add(str);
 					}
 				}
 				

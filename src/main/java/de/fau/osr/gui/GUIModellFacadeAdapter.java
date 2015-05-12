@@ -43,20 +43,11 @@ public class GUIModellFacadeAdapter implements GuiModell {
 	@Override
 	public String[] getRequirementsFromFile(String filePath) throws IOException {
 		String filePathTransformed = filePath.replace("\\", "/");
-		Collection<Integer> requirements = facade
+		Collection<String> requirements = facade
 				.getRequirementsForFile(filePathTransformed);
-		return convertCollectionIntToArray(requirements);
+		return convertCollectionToArray(requirements);
 	}
 
-	String[] convertCollectionIntToArray(Collection<Integer> requirements) {
-		String[] requirementArray = new String[requirements.size()];
-		int i = 0;
-		for (Integer requirement : requirements) {
-			requirementArray[i] = requirement.toString();
-			i++;
-		}
-		return requirementArray;
-	}
 
 	@Override
 	public String[] getCommitsFromFile(String filePath) {
@@ -87,9 +78,9 @@ public class GUIModellFacadeAdapter implements GuiModell {
 	@Override
 	public String[] getRequirementsFromCommit(int commitIndex)
 			throws FileNotFoundException {
-		Set<Integer> collection = new HashSet<Integer>(facade
+		Set<String> collection = new HashSet<String>(facade
 				.getRequirementsFromCommit(getCommit(commitIndex)));
-		return convertCollectionIntToArray(collection);
+		return convertCollectionToArray(collection);
 	}
 
 	@Override

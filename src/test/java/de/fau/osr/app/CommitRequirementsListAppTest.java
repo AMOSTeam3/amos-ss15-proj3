@@ -3,18 +3,17 @@
  */
 package de.fau.osr.app;
 
-import static org.junit.Assert.assertEquals;
+import de.fau.osr.PublicTestData;
+import de.fau.osr.core.vcs.base.Commit;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.fau.osr.PublicTestData;
-import de.fau.osr.core.vcs.base.Commit;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Florian Gerdes
@@ -44,7 +43,7 @@ public class CommitRequirementsListAppTest {
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		PrintStream stream = new PrintStream(result);
 		for(Commit commit: commits){
-			for(Integer i: commit.requirements){
+			for(String i: commit.requirements){
 				stream.println("commit " + commit.id + " references Req-" + i); 
 			}
 		}

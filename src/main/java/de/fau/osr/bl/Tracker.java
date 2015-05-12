@@ -1,6 +1,5 @@
 package de.fau.osr.bl;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Lists;
 import de.fau.osr.core.db.CSVFileDataSource;
@@ -83,23 +82,18 @@ public class Tracker {
 	 * @author Gayathery
 	 * @desc This method returns all the requirements for the given File.
 	 */
-	public Set<Integer> getAllRequirementsForFile(String filePath) throws IOException {
+	public Set<String> getAllRequirementsForFile(String filePath) throws IOException {
 
         long startTime = System.currentTimeMillis();
 
         logger.info("Start call : getAllRequirementsForFile():filePath = "+filePath);
-        Set<Integer> requirementList = new HashSet<>();
+        Set<String> requirementList = new HashSet<>();
 
         Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
         ImmutableSetMultimap<String, String> relations = getAllCommitReqRelations();
 
-        ImmutableSet<String> allReqs;
         while(commitIdListIterator.hasNext()){
-            allReqs = relations.get(commitIdListIterator.next());
-            for(String reqId : allReqs){
-                requirementList.add(Integer.parseInt(reqId));
-            }
-
+                requirementList.addAll(relations.get(commitIdListIterator.next()));
         }
 
         logger.info("End call -getAllRequirementsForFile() Time: "+ (System.currentTimeMillis() - startTime) );
@@ -137,12 +131,12 @@ public class Tracker {
         ImmutableSetMultimap.Builder<String, String> allRelations = ImmutableSetMultimap.builder();
         ArrayList<String> commitIds = Lists.newArrayList(vcsClient.getCommitList());
         String message;
-        List<Integer> reqs;
+        List<String> reqs;
         for(String commit : commitIds){
             message = vcsClient.getCommitMessage(commit);
             reqs = commitMessageparser.parse(message);
-            for(Integer reqId : reqs){
-                allRelations.put(reqId.toString(), commit);
+            for(String reqId : reqs){
+                allRelations.put(reqId, commit);
             }
         }
 

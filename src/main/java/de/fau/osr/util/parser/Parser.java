@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface Parser {
 
-	List<Integer> parse(String latestCommitMessage);
+	List<String> parse(String latestCommitMessage);
 
 }

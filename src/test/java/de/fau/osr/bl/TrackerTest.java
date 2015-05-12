@@ -53,10 +53,10 @@ public class TrackerTest {
 	@Test
 	public void testGetRequirementListforAFile() throws IOException {
 		
-			Iterator<Integer> reqList = interpreter.getAllRequirementsForFile(PublicTestData.getSampleFilePathFromTestRepository()).iterator();
+			Iterator<String> reqList = interpreter.getAllRequirementsForFile(PublicTestData.getSampleFilePathFromTestRepository()).iterator();
 			boolean isCommitAvailable = false;
 			while(reqList.hasNext()){
-				if(1 == reqList.next())
+				if("1".equals(reqList.next()))
 					isCommitAvailable = true;
 			}
 			assertTrue(isCommitAvailable);

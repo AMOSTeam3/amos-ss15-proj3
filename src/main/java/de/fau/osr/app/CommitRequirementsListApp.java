@@ -1,15 +1,14 @@
 package de.fau.osr.app;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.util.parser.Parser;
 import de.fau.osr.util.parser.CommitMessageParser;
+import de.fau.osr.util.parser.Parser;
+
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -34,9 +33,9 @@ public class CommitRequirementsListApp {
 				return client.getCommitList();
 			}}) {
 			String commitMsg = client.getCommitMessage(commitId);
-			List<Integer> reqs = parser.parse(commitMsg);
-			for(Integer i : reqs) {
-				System.out.println("commit " + commitId + " references Req-" + i);
+			List<String> reqs = parser.parse(commitMsg);
+			for(String req : reqs) {
+				System.out.println("commit " + commitId + " references Req-" + req);
 			}
 		}
 	}

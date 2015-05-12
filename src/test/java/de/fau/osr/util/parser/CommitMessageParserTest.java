@@ -1,19 +1,17 @@
 package de.fau.osr.util.parser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
+import de.fau.osr.PublicTestData;
+import de.fau.osr.core.vcs.base.Commit;
 import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import de.fau.osr.PublicTestData;
-import de.fau.osr.core.vcs.base.Commit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Taleh Didover on 17.04.15.
@@ -46,8 +44,8 @@ public class CommitMessageParserTest extends TestCase {
 
         String test_commit = "major bug-fix Req-10 Req-15.";
         Parser parser = new CommitMessageParser();
-		List<Integer> got = parser.parse(test_commit);
-        List<Integer> expected = Arrays.asList(10, 15);
+		List<String> got = parser.parse(test_commit);
+        List<String> expected = Arrays.asList("10", "15");
 
         assertEquals(expected, got);
 
@@ -56,7 +54,7 @@ public class CommitMessageParserTest extends TestCase {
     @Test
 	public void parseAdvancedTest() {
 		Parser parser = new CommitMessageParser();
-		List<Integer> actual = parser.parse(expectedCommit.message);
+		List<String> actual = parser.parse(expectedCommit.message);
 		assertTrue(actual.containsAll(expectedCommit.requirements) && expectedCommit.requirements.containsAll(actual));
 	}
 }

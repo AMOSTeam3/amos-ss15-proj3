@@ -79,7 +79,7 @@ public class Facade {
 		while (allCommits.hasNext()) {
 			String currentCommit = allCommits.next();
 			if (parser.parse(vcsClient.getCommitMessage(currentCommit))
-					.contains(Integer.valueOf(requirementID))) {
+					.contains(requirementID)) {
 				commits.add(new Commit(currentCommit, vcsClient.getCommitMessage(currentCommit), null, vcsClient.getCommitFiles(currentCommit)));
 			}
 		}
@@ -125,7 +125,7 @@ public class Facade {
 		return requirements;
 	}
 
-	public Collection<Integer> getRequirementsForFile(String filePath) throws IOException {
+	public Collection<String> getRequirementsForFile(String filePath) throws IOException {
 		return tracker.getAllRequirementsForFile(filePath);
 	}
 
@@ -151,9 +151,9 @@ public class Facade {
 		return commits;
 	}
 
-	public Collection<Integer> getRequirementsFromCommit(Commit commit) {
+	public Collection<String> getRequirementsFromCommit(Commit commit) {
 		Parser parser = new CommitMessageParser();
-		Collection<Integer> requirements = parser.parse(commit.message);
+		Collection<String> requirements = parser.parse(commit.message);
 		return requirements;
 	}
 

@@ -26,10 +26,10 @@ public class RequirementListingForRepositoryFileApp {
 		VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
 		final Tracker requirementsTracer = new Tracker(client);
 		final String filePath = cli.filePath;
-		for(Integer requirementID : new Iterable<Integer>() {
+		for(String requirementID : new Iterable<String>() {
 
 			@Override
-			public Iterator<Integer> iterator() {
+			public Iterator<String> iterator() {
 				try {
 					return requirementsTracer.getAllRequirementsForFile(filePath).iterator();
 				} catch (IOException e) {
