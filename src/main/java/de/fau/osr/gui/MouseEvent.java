@@ -39,7 +39,7 @@ public class MouseEvent implements MouseListener {
                 guiController.filesFromCommit(value0);
                 break;
             case CodeFromFile:
-                JList<String> theList2 = (JList<String>) guiController.commitFileName_JList;
+                JList<String> theList2 = (JList<String>) e.getSource();
                 int filesIndex = theList2.getSelectedIndex();
                 JList<String> theList12 = (JList<String>) guiController.requirements_JList;
                 String value12 = theList12.getSelectedValue();
