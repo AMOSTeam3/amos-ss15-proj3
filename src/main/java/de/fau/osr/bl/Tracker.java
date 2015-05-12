@@ -1,53 +1,75 @@
 package de.fau.osr.bl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSetMultimap;
+import com.google.common.collect.Lists;
+import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
 /**
- * @author Gayathery
- * @desc This class is an interpreter for data from Vcs
- *
+ * This class is an interpreter for data from Vcs and Database
  */
 public class Tracker {
 
 	VcsClient vcsClient;
 	
+	DataSource dataSource;
+
 	CommitMessageParser commitMessageparser;
 	
 	Logger logger = LoggerFactory.getLogger(Tracker.class);
 
-	public Tracker(VcsClient vcsClient) {
-		
-		this.vcsClient = vcsClient;
-	}
+    public Tracker(VcsClient vcsClient) throws IOException {
+        this(vcsClient, null);
+    }
+
+    public Tracker(VcsClient vcsClient, DataSource ds) throws IOException {
+
+        this.vcsClient = vcsClient;
+        commitMessageparser = new CommitMessageParser();
+        //assign default value, temp solution, todo
+        if (ds == null) {
+            ds = new CSVFileDataSource(new File(AppProperties.GetValue("DefaultPathToCSVFile")));
+        }
+
+        this.dataSource = ds;
+
+    }
 
 	/* 
 	 * @author Gayathery
 	 * This method returns a list of FILES for the given requirement ID.
 	 */
-	
-	public List<CommitFile> getCommitFilesForRequirementID(String requirementID){
+	public List<CommitFile> getCommitFilesForRequirementID(String requirementID) throws IOException {
 		
 		long startTime = System.currentTimeMillis();
 		
-		logger.info("Start call :: getCommitFilesForRequirementID():requirementID ="+requirementID + " Time:"+startTime);
+		logger.info("Start call :: getCommitFilesForRequirementID():requirementID = " + requirementID + " Time:" + startTime);
+
+        List<CommitFile> commitFilesList = new ArrayList<>();
+
+        Iterator<String> commits = vcsClient.getCommitList();
+        ImmutableSetMultimap<String, String> relationsByCommit = getAllCommitReqRelations();
+
+        while(commits.hasNext()){
+
+            String currentCommit = commits.next();
+            if (relationsByCommit.containsKey(currentCommit)){
+                commitFilesList.addAll(vcsClient.getCommitFiles(currentCommit));
+            }
+        }
 		
-		List<CommitFile> commitFilesList = new ArrayList<CommitFile>();
-		
-		commitFilesList.addAll(getFilesByRequirementID(requirementID));
-		
-		commitFilesList.addAll(getFilesByLinkage(requirementID));
-		
+
 		logger.info("End call :: getCommitFilesForRequirementID() Time: "+ (System.currentTimeMillis() - startTime) );
      			
 		return commitFilesList;
@@ -55,128 +77,75 @@ public class Tracker {
 		
 	}
 	
-	
-	
-	/**
-	 * @Gayathery
-	 * @desc This method returns all the commit files for the given requirement Id from the source control repository
-	 * @param requirementID
-	 * @return
-	 */
-	private List<CommitFile> getFilesByRequirementID(String requirementID){
-		
-		long startTime = System.currentTimeMillis();
-		
-		logger.info("Start call :: getFilesByRequirementID():requirementID ="+requirementID + " Time:"+startTime);
-		
-		List<CommitFile> commitFilesList = new ArrayList<CommitFile>();
-		
-     	Iterator<String> commits = vcsClient.getCommitList();
-	
-     	while(commits.hasNext()){
-     		
-     		String currentCommit = commits.next();
-			
-     		commitMessageparser = new CommitMessageParser();
-     		
-     		if(commitMessageparser.parse(vcsClient.getCommitMessage(currentCommit)).contains(Integer.valueOf(requirementID)))
-     			
-     			commitFilesList.addAll(vcsClient.getCommitFiles(currentCommit));
-					
-		}
-		
-     	logger.info("End call :: getFilesByRequirementID() Time: "+ (System.currentTimeMillis() - startTime) );
-     	
-		return commitFilesList;
-	}
-	
-	/**
-	 * @Gayathery
-	 * @desc This method returns all the commit files for the requirement ID which are additionally linked to commits.
-	 * @param requirementID
-	 * @return
-	 */
-	private List<CommitFile> getFilesByLinkage(String requirementID){
-		
-		long startTime = System.currentTimeMillis();
-		
-		logger.info("Start call :: getFilesByLinkage():requirementID ="+requirementID + " Time:"+startTime);
-		
-		logger.info("End call :: getFilesByLinkage() Time: "+ (System.currentTimeMillis() - startTime) );
-		
-		//TODO: add the method call to get linkage from database
-		
-		List<CommitFile> commitFilesList = new ArrayList<CommitFile>();
-     	
-		return commitFilesList;
-		
-	}
-	
+
 	/* (non-Javadoc)
 	 * @see de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)
 	 * @author Gayathery
 	 * @desc This method returns all the requirements for the given File.
 	 */
-	
-	public List<Integer> getAllRequirementsforFile(String filePath){
-		
-		long startTime = System.currentTimeMillis();
-		
-		logger.info("Start call : getAllRequirementsforFile():filePath ="+filePath);
-		
-		List<Integer> requirementList = new ArrayList<Integer>();
-		
-		requirementList.addAll(getRequirementsListByFile(filePath));
-		
-		requirementList.addAll(getRequirementsListByLinkage(filePath));
-		
-		logger.info("End call -getAllRequirementsforFile() Time: "+ (System.currentTimeMillis() - startTime) );
+	public Set<Integer> getAllRequirementsForFile(String filePath) throws IOException {
+
+        long startTime = System.currentTimeMillis();
+
+        logger.info("Start call : getAllRequirementsForFile():filePath = "+filePath);
+        Set<Integer> requirementList = new HashSet<>();
+
+        Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
+        ImmutableSetMultimap<String, String> relations = getAllCommitReqRelations();
+
+        ImmutableSet<String> allReqs;
+        while(commitIdListIterator.hasNext()){
+            allReqs = relations.get(commitIdListIterator.next());
+            for(String reqId : allReqs){
+                requirementList.add(Integer.parseInt(reqId));
+            }
+
+        }
+
+        logger.info("End call -getAllRequirementsForFile() Time: "+ (System.currentTimeMillis() - startTime) );
 		
 		return requirementList;
 		
 	}
 	
-	private Set<Integer> getRequirementsListByFile(String filePath){
-		
-		long startTime = System.currentTimeMillis();
-		
-		logger.info("Start call : getRequirementsListByFile():filePath ="+filePath);
-		
-		Set<Integer> requirementList = new HashSet<Integer>();
-		
-		Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
-		
-		commitMessageparser = new CommitMessageParser();
-		
-		while(commitIdListIterator.hasNext()){
-			
-			requirementList.addAll(commitMessageparser.parse(vcsClient.getCommitMessage(commitIdListIterator.next())));
-		}
-		
-		logger.info("End call -getRequirementsListByFile() Time: "+ (System.currentTimeMillis() - startTime) );
-		
-		return requirementList;
-	}
-	
-	
-	/**
-	 * @Gayathery
-	 * @desc This method return the requirement Ids for the given File , due to explicit linkages from DB 
-	 * @param filePath
-	 * @return
-	 */
-	private Set<Integer> getRequirementsListByLinkage(String filePath){
-		
-		long startTime = System.currentTimeMillis();
-		
-		logger.info("Start call :: getRequirementsListByLinkage():filePath ="+filePath);
-		
-		Set<Integer> requirementList = new HashSet<Integer>();
-		
-		//TODO:add the method call to actually return the linkage from DB
-		
-		logger.info("End call :: getRequirementsListByLinkage() Time: "+ (System.currentTimeMillis() - startTime) );
-		
-		return requirementList;
-	}
+    /**
+     * relation ReqId - CommitId of VCS + Database
+     * @return set of the relations
+     * @throws IOException
+     */
+	public ImmutableSetMultimap<String, String> getAllReqCommitRelations() throws IOException {
+        ImmutableSetMultimap.Builder<String, String> totalMap = ImmutableSetMultimap.builder();
+        totalMap.putAll(getAllReqCommitRelationsFromVcs());
+        totalMap.putAll(dataSource.getAllReqCommitRelations());
+        return totalMap.build();
+    }
+
+    /**
+     * relation CommitId - ReqId of VCS + Database
+     * @return set of the relations
+     * @throws IOException
+     */
+    public ImmutableSetMultimap<String, String> getAllCommitReqRelations() throws IOException {
+        return getAllReqCommitRelations().inverse();
+    }
+
+    /**
+     * relation ReqId - CommitId of VCS only
+     * @return set of the relations
+     */
+    protected ImmutableSetMultimap<String, String> getAllReqCommitRelationsFromVcs() {
+        ImmutableSetMultimap.Builder<String, String> allRelations = ImmutableSetMultimap.builder();
+        ArrayList<String> commitIds = Lists.newArrayList(vcsClient.getCommitList());
+        String message;
+        List<Integer> reqs;
+        for(String commit : commitIds){
+            message = vcsClient.getCommitMessage(commit);
+            reqs = commitMessageparser.parse(message);
+            for(Integer reqId : reqs){
+                allRelations.put(reqId.toString(), commit);
+            }
+        }
+
+        return allRelations.build();
+    }
 }

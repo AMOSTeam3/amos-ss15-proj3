@@ -1,6 +1,7 @@
 package de.fau.osr.core.db;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.SetMultimap;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,4 +85,6 @@ public abstract class DataSource {
             addReqCommitRelation(reqId, commitId);
         }
     }
+
+    public abstract SetMultimap<String, String> getAllReqCommitRelations() throws IOException;
 }

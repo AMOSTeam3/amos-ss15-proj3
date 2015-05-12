@@ -1,8 +1,8 @@
 package de.fau.osr.gui;
 
+import javax.swing.*;
 import java.awt.event.MouseListener;
-
-import javax.swing.JList;
+import java.io.IOException;
 
 enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, RequirementsAndCommitsFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit, RequirementsAndFilesFromCommit, CommitsAndCodeFromRequirementAndFile};
 
@@ -30,7 +30,11 @@ public class MouseEvent implements MouseListener {
 			JList<String> theList = (JList<String>) e.getSource();
 			String value = (String) theList.getSelectedValue();
 			guiController.commitsFromRequirement(value);
-			guiController.filesFromRequirement(value);
+			try {
+				guiController.filesFromRequirement(value);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			break;
 		case FilesFromCommit:
 			JList<String> theList0 = (JList<String>) e.getSource();
@@ -45,7 +49,11 @@ public class MouseEvent implements MouseListener {
 		case RequirementsAndCommitsFromFile:
 			JList<String> theList3 = (JList<String>) e.getSource();
 			String value1 = (String) theList3.getSelectedValue();
-			guiController.requirementsFromFile(value1);
+			try {
+				guiController.requirementsFromFile(value1);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			guiController.commitsFromFile(value1);
 			break;
 		case CommitsFromRequirementAndFile:

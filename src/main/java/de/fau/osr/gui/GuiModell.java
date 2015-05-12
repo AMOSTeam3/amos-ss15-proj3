@@ -1,6 +1,7 @@
 package de.fau.osr.gui;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /*
  * Adapter Pattern used. Since the Functionlibrary itself
@@ -17,7 +18,7 @@ public interface GuiModell {
 
 	String[] getAllFiles();
 
-	String[] getRequirementsFromFile(String filePath);
+	String[] getRequirementsFromFile(String filePath) throws IOException;
 
 	String[] getCommitsFromFile(String filePath);
 
@@ -37,9 +38,9 @@ public interface GuiModell {
 			String filePath);
 
 	String[] getRequirementsFromFileAndCommit(int commitIndex,
-			String filePath) throws FileNotFoundException;
+			String filePath) throws IOException;
 
-	String[] getFilesFromRequirement(String requirementID);
+	String[] getFilesFromRequirement(String requirementID) throws IOException;
 
 	String[] commitsFromRequirementAndFile(String requirementID,
 			int fileIndex) throws FileNotFoundException;

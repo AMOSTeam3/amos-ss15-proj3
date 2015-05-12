@@ -1,17 +1,12 @@
 package de.fau.osr.gui;
 
+import de.fau.osr.core.vcs.base.Commit;
+import de.fau.osr.core.vcs.base.CommitFile;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.PatternSyntaxException;
-
-import de.fau.osr.core.vcs.base.Commit;
-import de.fau.osr.core.vcs.base.CommitFile;
+import java.util.*;
 
 /*
  * Adapter class. Providing the correct formatted input for the Library Facade and transforming
@@ -46,7 +41,7 @@ public class GUIModellFacadeAdapter implements GuiModell {
 	}
 
 	@Override
-	public String[] getRequirementsFromFile(String filePath) {
+	public String[] getRequirementsFromFile(String filePath) throws IOException {
 		String filePathTransformed = filePath.replace("\\", "/");
 		Collection<Integer> requirements = facade
 				.getRequirementsForFile(filePathTransformed);
@@ -126,7 +121,7 @@ public class GUIModellFacadeAdapter implements GuiModell {
 
 	@Override
 	public String[] getRequirementsFromFileAndCommit(int commitIndex,
-			String filePath) throws FileNotFoundException {
+			String filePath) throws IOException {
 		Set<String> requirements1 = new HashSet<String>(Arrays.asList(getRequirementsFromCommit(commitIndex)));
 		Set<String> requirements2 = new HashSet<String>(Arrays.asList(getRequirementsFromFile(filePath)));
 		
@@ -135,7 +130,7 @@ public class GUIModellFacadeAdapter implements GuiModell {
 	}
 
 	@Override
-	public String[] getFilesFromRequirement(String requirementID) {
+	public String[] getFilesFromRequirement(String requirementID) throws IOException {
 		commitFiles = facade.getFilesFromRequirement(requirementID);
 		return getCommitFileName(); 
 	}

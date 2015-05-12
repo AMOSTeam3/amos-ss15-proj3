@@ -1,23 +1,7 @@
 package de.fau.osr.gui;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Lists;
-
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -28,6 +12,15 @@ import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Facade {
 	
@@ -132,8 +125,8 @@ public class Facade {
 		return requirements;
 	}
 
-	public Collection<Integer> getRequirementsForFile(String filePath) {
-		return tracker.getAllRequirementsforFile(filePath);
+	public Collection<Integer> getRequirementsForFile(String filePath) throws IOException {
+		return tracker.getAllRequirementsForFile(filePath);
 	}
 
 	public Collection<Commit> getCommitsFromFile(String filePath) {
@@ -164,7 +157,7 @@ public class Facade {
 		return requirements;
 	}
 
-	public Collection<CommitFile> getFilesFromRequirement(String requirementID) {
+	public Collection<CommitFile> getFilesFromRequirement(String requirementID) throws IOException {
 		return tracker.getCommitFilesForRequirementID(requirementID);
 	}
 	

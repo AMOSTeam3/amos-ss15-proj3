@@ -1,14 +1,13 @@
 package de.fau.osr.gui;
 
-import java.awt.EventQueue;
+import de.fau.osr.util.AppProperties;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.regex.PatternSyntaxException;
-
-import javax.swing.JList;
-
-import de.fau.osr.util.AppProperties;
 
 
 /*
@@ -120,7 +119,7 @@ public class GuiController {
 	 * Setting: Files
 	 * Using: getFilesFromRequirement
 	 */
-	void filesFromRequirement(String requirementID) {
+	void filesFromRequirement(String requirementID) throws IOException {
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
 		
@@ -191,7 +190,7 @@ public class GuiController {
 	 * Setting: Requirement
 	 * Using: getRequirementsFromFile
 	 */
-	void requirementsFromFile(String filePath) {
+	void requirementsFromFile(String filePath) throws IOException {
 		requirements_JList = new JList<String>(guiModell.getRequirementsFromFile(filePath));
 		guiView.showRequirements(requirements_JList);
 		
@@ -234,6 +233,8 @@ public class GuiController {
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		guiView.showRequirements(requirements_JList);
 		

@@ -2,6 +2,7 @@ package de.fau.osr.core.db;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+import com.google.common.collect.ImmutableSetMultimap;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
@@ -70,6 +71,24 @@ public class CSVFileDataSource extends DataSource {
         }
 
         return reqsAsInts;
+    }
+
+    @Override
+    public ImmutableSetMultimap<String, String> getAllReqCommitRelations() throws IOException {
+        ImmutableSetMultimap.Builder<String, String> relations = ImmutableSetMultimap.builder();
+
+        try (CSVReader reader = getReader()) {
+            List<String[]> allLines = reader.readAll();
+            String reqId;
+            String commitId;
+            for (String[] line : allLines) {
+                reqId = line[REQUIREMENT_COLUMN];
+                commitId = line[COMMIT_COLUMN];
+                relations.put(reqId, commitId);
+            }
+
+        }
+        return relations.build();
     }
 
     /**

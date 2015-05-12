@@ -1,5 +1,6 @@
 package de.fau.osr.core.db;
 
+import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.io.Files;
 import org.junit.After;
 import org.junit.Before;
@@ -125,4 +126,23 @@ public class CSVFileDataSourceTest {
 
     }
 
+    @Test
+    public void getAllReqCommitRelationsTest() throws Exception {
+        String fileContent = qt + "4" + qt + sep + qt + "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc" + qt + lend
+                + qt + "4" + qt + sep + qt + "a8dc4129802939d620ce0bd3484a1f0538338a0e" + qt + lend
+                + qt + "5" + qt + sep + qt + "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc" + qt + lend
+                + qt + "3" + qt + sep + qt + "a8dc4129802939d620ce0bd3484a1f0538338a0e" + qt + lend;
+
+        ImmutableSetMultimap.Builder<String, String> relationsInFile = ImmutableSetMultimap.builder();
+        relationsInFile.put("4", "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
+        relationsInFile.put("4", "a8dc4129802939d620ce0bd3484a1f0538338a0e");
+        relationsInFile.put("5", "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
+        relationsInFile.put("3", "a8dc4129802939d620ce0bd3484a1f0538338a0e");
+
+        Files.append(fileContent, sourceFile, cs);
+
+        ImmutableSetMultimap<String, String> relations = csvFileDataSource.getAllReqCommitRelations();
+
+        assertEquals(relationsInFile.build(), relations);
+    }
 }
