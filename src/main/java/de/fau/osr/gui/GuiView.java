@@ -1,17 +1,10 @@
 package de.fau.osr.gui;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 /*
  * View part of the MVC. This Class is responsible for the setting up the UI and interacting with the 
@@ -48,8 +41,7 @@ public class GuiView{
 	 * @return String containing the directly the user input. Not yet checked whether it's a proper pattern
 	 */
 	String Pattern_OpeningDialog(String currentPattern) {
-		String returnValue = JOptionPane.showInputDialog("Choose Requirment Pattern", currentPattern);
-		return returnValue;
+		return JOptionPane.showInputDialog("Choose Requirment Pattern", currentPattern);
 	}
 	
 	/*
@@ -75,16 +67,16 @@ public class GuiView{
 	 * Showing an Dialog to the User. Marked as Error dialog.
 	 * @parameter message to be presented to the user
 	 */
-	void showErrorDialog(String messsage) {
-		JOptionPane.showMessageDialog(null, messsage, "Fehler", JOptionPane.ERROR_MESSAGE);
+	void showErrorDialog(String message) {
+		JOptionPane.showMessageDialog(null, message, "Fehler", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	/*
 	 * Showing a dialog to the user. Marked as Information dialog
 	 * @parameter message to be presented to the user
 	 */
-	void showInformationDialog(String messsage) {
-		JOptionPane.showMessageDialog(null, messsage, "Information", JOptionPane.INFORMATION_MESSAGE);
+	void showInformationDialog(String message) {
+		JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/*
