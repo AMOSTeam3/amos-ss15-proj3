@@ -47,8 +47,9 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
 	@Override
 	public String[] getAllFiles() {
-		Collection<String> collection = tracker.getAllFiles();
-		return convertCollectionToArray(collection);
+		String[] fileNames = convertCollectionToArray(tracker.getAllFiles());
+		Arrays.sort(fileNames);
+		return fileNames;
 	}
 
 	@Override
