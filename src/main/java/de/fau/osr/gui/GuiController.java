@@ -27,7 +27,7 @@ public class GuiController {
 	private RetryStatus Status;
 	
 	GuiView guiView;
-	GuiModell guiModell;
+	GuiModel guiModel;
 	
 	JList<String> requirements_JList;
 	JList<String> commitMessages_JList;
@@ -55,7 +55,7 @@ public class GuiController {
 					}
 					String reqPatternString = guiView.Pattern_OpeningDialog(AppProperties.GetValue("RequirementPattern"));
 					try {
-						guiModell = reInitModel(null, null, repoFile, reqPatternString);
+						guiModel = reInitModel(null, null, repoFile, reqPatternString);
 						break;
 					} catch (PatternSyntaxException | IOException e) {
 						if(i >= MAX_RETRIES){
@@ -97,7 +97,7 @@ public class GuiController {
 	void requirementsFromDB() throws IOException {
 		guiView.clearAll();
 		
-		String[] requirements = guiModell.getAllRequirements();
+		String[] requirements = guiModel.getAllRequirements();
 		requirements_JList = new JList<String>(requirements);
 		guiView.showRequirements(requirements_JList);
 		
@@ -115,7 +115,7 @@ public class GuiController {
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
 		
-		commitMessages_JList = new JList<String>(guiModell.getCommitsFromRequirementID(requirement));
+		commitMessages_JList = new JList<String>(guiModel.getCommitsFromRequirementID(requirement));
 		guiView.showCommits(commitMessages_JList);
 		
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.FilesFromCommit));
@@ -131,7 +131,7 @@ public class GuiController {
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
 		
-		commitFileName_JList = new JList<String>(guiModell.getFilesFromRequirement(requirementID));
+		commitFileName_JList = new JList<String>(guiModel.getFilesFromRequirement(requirementID));
 		guiView.showFiles(commitFileName_JList);
 		
 		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
@@ -146,7 +146,7 @@ public class GuiController {
 	 */
 	void commitsFromRequirementAndFile(String requirementID, int fileIndex) {
 		try {
-			commitMessages_JList = new JList<String>(guiModell.commitsFromRequirementAndFile(requirementID, fileIndex));
+			commitMessages_JList = new JList<String>(guiModel.commitsFromRequirementAndFile(requirementID, fileIndex));
 		} catch (IOException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
@@ -169,7 +169,7 @@ public class GuiController {
 		
 		String changeData;
 		try {
-			changeData = guiModell.getChangeDataFromFileIndex(filesIndex);
+			changeData = guiModel.getChangeDataFromFileIndex(filesIndex);
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
@@ -186,7 +186,7 @@ public class GuiController {
 	void filesFromDB() {
 		guiView.clearAll();
 		
-		commitFileName_JList = new JList<String>(guiModell.getAllFiles());
+		commitFileName_JList = new JList<String>(guiModel.getAllFiles());
 		guiView.showFiles(commitFileName_JList);
 		
 		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
@@ -199,7 +199,7 @@ public class GuiController {
 	 * Using: getRequirementsFromFile
 	 */
 	void requirementsFromFile(String filePath) throws IOException {
-		requirements_JList = new JList<String>(guiModell.getRequirementsFromFile(filePath));
+		requirements_JList = new JList<String>(guiModel.getRequirementsFromFile(filePath));
 		guiView.showRequirements(requirements_JList);
 		
 		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.CommitsFromRequirementAndFile));
@@ -212,7 +212,7 @@ public class GuiController {
 	 * Using: getCommitsFromFile
 	 */
 	void commitsFromFile(String filePath){
-		commitMessages_JList = new JList<String>(guiModell.getCommitsFromFile(filePath));
+		commitMessages_JList = new JList<String>(guiModel.getCommitsFromFile(filePath));
 		guiView.showCommits(commitMessages_JList);
 		
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.RequirementsFromFileAndCommit));
@@ -225,7 +225,7 @@ public class GuiController {
 	 * Using: commitsFromRequirementAndFile
 	 */
 	void commitsFromRequirementAndFile(String requirementID, String filePath) throws IOException {
-		commitMessages_JList = new JList<String>(guiModell.commitsFromRequirementAndFile(requirementID, filePath));
+		commitMessages_JList = new JList<String>(guiModel.commitsFromRequirementAndFile(requirementID, filePath));
 		guiView.showCommits(commitMessages_JList);
 	}
 
@@ -237,7 +237,7 @@ public class GuiController {
 	 */
 	void requirementsFromFileAndCommit(int commitIndex, String filePath) {
 		try {
-			requirements_JList = new JList<String>(guiModell.getRequirementsFromFileAndCommit(commitIndex, filePath));
+			requirements_JList = new JList<String>(guiModel.getRequirementsFromFileAndCommit(commitIndex, filePath));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
@@ -260,7 +260,7 @@ public class GuiController {
 	void commitsFromDB() {
 		guiView.clearAll();
 		
-		commitMessages_JList = new JList<String>(guiModell.getCommitsFromDB());
+		commitMessages_JList = new JList<String>(guiModel.getCommitsFromDB());
 		guiView.showCommits(commitMessages_JList);
 		
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.RequirementsAndFilesFromCommit));
@@ -278,7 +278,7 @@ public class GuiController {
 		
 		
 		try {
-			commitFileName_JList = new JList<String>(guiModell.getFilesFromCommit(commitIndex));
+			commitFileName_JList = new JList<String>(guiModel.getFilesFromCommit(commitIndex));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
@@ -296,7 +296,7 @@ public class GuiController {
 	 */
 	void requirementsFromCommit(int commitIndex) {
 		try {
-			requirements_JList = new JList<String>(guiModell.getRequirementsFromCommit(commitIndex));
+			requirements_JList = new JList<String>(guiModel.getRequirementsFromCommit(commitIndex));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
@@ -329,7 +329,7 @@ public class GuiController {
 	 */
 	
 	void reConfigureRepository() throws IOException {
-		GuiModell guiModellTrial = guiModell;
+		GuiModel guiModelTrial = guiModel;
 		for(int i = 0; i<=MAX_RETRIES; i++){
 			if(i == MAX_RETRIES){
 				Status = RetryStatus.Cancel;
@@ -347,7 +347,7 @@ public class GuiController {
 				return;
 			}
 			try {
-				guiModellTrial = reInitModel(null, null, repoFile, guiModell.getCurrentRequirementPatternString());
+				guiModelTrial = reInitModel(null, null, repoFile, guiModel.getCurrentRequirementPatternString());
 				guiView.showInformationDialog("Repository Path modified to " + repoFile.getPath());
 				break;
 			} catch (IOException | RuntimeException e) {
@@ -356,7 +356,7 @@ public class GuiController {
 				handleError();
 			}
 		}
-		guiModell = guiModellTrial;
+		guiModel = guiModelTrial;
 		requirementsFromDB();
 	}
 	/*
@@ -364,20 +364,20 @@ public class GuiController {
 	 * Once this method is successful, the application refers to the new requirement pattern 
 	 */
 	void reConfigureRequirementPattern() throws IOException {
-		GuiModell guiModellTrial = guiModell;
+		GuiModel guiModelTrial = guiModel;
 		for(int i = 0; true; i++){
 			if(i == MAX_RETRIES){
 				Status = RetryStatus.Cancel;
 				guiView.showErrorDialog("Maximum retries exceeded");
 				return;
 			}
-			String reqPatternString = guiView.Pattern_OpeningDialog(guiModell.getCurrentRequirementPatternString());
+			String reqPatternString = guiView.Pattern_OpeningDialog(guiModel.getCurrentRequirementPatternString());
 			if(reqPatternString == null){
 				Status = RetryStatus.Cancel;
 				return;
 			}
 			try {
-				guiModellTrial = reInitModel(null, null, new File(guiModell.getCurrentRepositoryPath()), reqPatternString);
+				guiModelTrial = reInitModel(null, null, new File(guiModel.getCurrentRepositoryPath()), reqPatternString);
 				guiView.showInformationDialog("Requirement Pattern modified to " + reqPatternString);
 				break;
 			} catch (RuntimeException | IOException e) {				
@@ -385,7 +385,7 @@ public class GuiController {
 				handleError();
 			}
 		}
-		guiModell = guiModellTrial;
+		guiModel = guiModelTrial;
 		requirementsFromDB();
 		
 	}
@@ -416,7 +416,7 @@ public class GuiController {
      * @param reqPatternString pattern to parse req id from commit messages
      * @return model to use
      */
-    private GUIModellFacadeAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString) throws IOException {
+    private GUITrackerToModelAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString) throws IOException {
 
         if (vcs == null){
             vcs = new GitVcsClient(repoFile.toString());
@@ -434,6 +434,6 @@ public class GuiController {
             reqPatternString = AppProperties.GetValue("RequirementPattern");
         }
 
-        return new GUIModellFacadeAdapter(vcs, ds, repoFile, reqPatternString);
+        return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPatternString);
     }
 }
