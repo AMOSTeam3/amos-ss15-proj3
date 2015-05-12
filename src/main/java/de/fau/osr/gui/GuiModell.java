@@ -12,9 +12,9 @@ import java.io.IOException;
 
 public interface GuiModell {
 
-	String[] getAllRequirements();
+	String[] getAllRequirements() throws IOException;
 
-	String[] getCommitsFromRequirementID(String requirement);
+	String[] getCommitsFromRequirementID(String requirement) throws IOException;
 
 	String[] getAllFiles();
 
@@ -35,7 +35,7 @@ public interface GuiModell {
 	String[] getRequirementsFromCommit(int commitIndex) throws FileNotFoundException;
 
 	String[] commitsFromRequirementAndFile(String requirementID,
-			String filePath);
+			String filePath) throws IOException;
 
 	String[] getRequirementsFromFileAndCommit(int commitIndex,
 			String filePath) throws IOException;
@@ -43,6 +43,6 @@ public interface GuiModell {
 	String[] getFilesFromRequirement(String requirementID) throws IOException;
 
 	String[] commitsFromRequirementAndFile(String requirementID,
-			int fileIndex) throws FileNotFoundException;
+			int fileIndex) throws IOException;
 
 }

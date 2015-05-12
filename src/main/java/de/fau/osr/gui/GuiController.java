@@ -1,5 +1,9 @@
 package de.fau.osr.gui;
 
+import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.impl.GitVcsClient;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 
 import javax.swing.*;
@@ -35,7 +39,7 @@ public class GuiController {
 	 */
 	public GuiController(){	
 		Status = RetryStatus.Retry;
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			
 			public void run() {
@@ -51,7 +55,7 @@ public class GuiController {
 					}
 					String reqPatternString = guiView.Pattern_OpeningDialog(AppProperties.GetValue("RequirementPattern"));
 					try {
-						guiModell = new GUIModellFacadeAdapter(repoFile, reqPatternString);
+						guiModell = reInitModel(null, null, repoFile, reqPatternString);
 						break;
 					} catch (PatternSyntaxException | IOException e) {
 						if(i >= MAX_RETRIES){
@@ -64,7 +68,11 @@ public class GuiController {
 				
 				guiView.showView();
 				initializeButtonActions();
-				requirementsFromDB();
+				try {
+					requirementsFromDB();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -86,7 +94,7 @@ public class GuiController {
 	 * Setting: Requirements
 	 * Using: getAllRequirements
 	 */
-	void requirementsFromDB() {
+	void requirementsFromDB() throws IOException {
 		guiView.clearAll();
 		
 		String[] requirements = guiModell.getAllRequirements();
@@ -102,7 +110,7 @@ public class GuiController {
 	 * Setting: Commits
 	 * Using: getCommitsFromRequirementID
 	 */
-	void commitsFromRequirement(String requirement) {
+	void commitsFromRequirement(String requirement) throws IOException {
 		guiView.clearFiles();
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
@@ -139,7 +147,7 @@ public class GuiController {
 	void commitsFromRequirementAndFile(String requirementID, int fileIndex) {
 		try {
 			commitMessages_JList = new JList<String>(guiModell.commitsFromRequirementAndFile(requirementID, fileIndex));
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
 		}
@@ -216,7 +224,7 @@ public class GuiController {
 	 * Setting: Commits
 	 * Using: commitsFromRequirementAndFile
 	 */
-	void commitsFromRequirementAndFile(String requirementID, String filePath) {
+	void commitsFromRequirementAndFile(String requirementID, String filePath) throws IOException {
 		commitMessages_JList = new JList<String>(guiModell.commitsFromRequirementAndFile(requirementID, filePath));
 		guiView.showCommits(commitMessages_JList);
 	}
@@ -247,7 +255,7 @@ public class GuiController {
 	 * Navigation: ->Commits
 	 * Clear: All
 	 * Setting: Commits
-	 * Using: getCommitsFromDB
+	 * Using: getCommits
 	 */
 	void commitsFromDB() {
 		guiView.clearAll();
@@ -320,7 +328,7 @@ public class GuiController {
 	 *Once this method is successful, the application refers to the new repository 
 	 */
 	
-	void reConfigureRepository(){
+	void reConfigureRepository() throws IOException {
 		GuiModell guiModellTrial = guiModell;
 		for(int i = 0; i<=MAX_RETRIES; i++){
 			if(i == MAX_RETRIES){
@@ -339,7 +347,7 @@ public class GuiController {
 				return;
 			}
 			try {
-				guiModellTrial = new GUIModellFacadeAdapter(repoFile, guiModell.getCurrentRequirementPatternString());
+				guiModellTrial = reInitModel(null, null, repoFile, guiModell.getCurrentRequirementPatternString());
 				guiView.showInformationDialog("Repository Path modified to " + repoFile.getPath());
 				break;
 			} catch (IOException | RuntimeException e) {
@@ -355,7 +363,7 @@ public class GuiController {
 	 * For reconfiguring the requirement pattern to a new pattern while the application is running
 	 * Once this method is successful, the application refers to the new requirement pattern 
 	 */
-	void reConfigureRequirementPattern(){
+	void reConfigureRequirementPattern() throws IOException {
 		GuiModell guiModellTrial = guiModell;
 		for(int i = 0; true; i++){
 			if(i == MAX_RETRIES){
@@ -369,7 +377,7 @@ public class GuiController {
 				return;
 			}
 			try {
-				guiModellTrial = new GUIModellFacadeAdapter(new File(guiModell.getCurrentRepositoryPath()), reqPatternString);
+				guiModellTrial = reInitModel(null, null, new File(guiModell.getCurrentRepositoryPath()), reqPatternString);
 				guiView.showInformationDialog("Requirement Pattern modified to " + reqPatternString);
 				break;
 			} catch (RuntimeException | IOException e) {				
@@ -385,7 +393,7 @@ public class GuiController {
 	/*
 	 * method to divert configuration calls
 	 */
-	void reConfigure(){
+	void reConfigure() throws IOException {
 		switch(guiView.Configure_OptionDialog())
 		{
 		// these values have to be replaced by some enums
@@ -399,4 +407,33 @@ public class GuiController {
 			
 		
 	}
+
+    /**
+     * initialize model again. If any arg is null, the default value will be used
+     * @param vcs vcs client
+     * @param ds data source
+     * @param repoFile path to git repo
+     * @param reqPatternString pattern to parse req id from commit messages
+     * @return model to use
+     */
+    private GUIModellFacadeAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString) throws IOException {
+
+        if (vcs == null){
+            vcs = new GitVcsClient(repoFile.toString());
+        }
+
+        if (ds == null){
+            ds = new CSVFileDataSource(new File(AppProperties.GetValue("DefaultPathToCSVFile")));
+        }
+
+        if (repoFile == null){
+            repoFile = new File(".");
+        }
+
+        if (reqPatternString == null){
+            reqPatternString = AppProperties.GetValue("RequirementPattern");
+        }
+
+        return new GUIModellFacadeAdapter(vcs, ds, repoFile, reqPatternString);
+    }
 }

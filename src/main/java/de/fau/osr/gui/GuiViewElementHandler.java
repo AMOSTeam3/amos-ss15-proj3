@@ -1,22 +1,12 @@
 package de.fau.osr.gui;
 
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTextField;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class GuiViewElementHandler extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -265,7 +255,11 @@ public class GuiViewElementHandler extends JFrame{
 		
 		RequirementID_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				guiController.requirementsFromDB();
+				try {
+					guiController.requirementsFromDB();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		
@@ -283,7 +277,11 @@ public class GuiViewElementHandler extends JFrame{
 		
 		mntmConfigure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				guiController.reConfigure();
+				try {
+					guiController.reConfigure();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		

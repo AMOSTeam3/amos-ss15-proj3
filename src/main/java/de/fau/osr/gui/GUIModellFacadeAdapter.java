@@ -1,7 +1,10 @@
 package de.fau.osr.gui;
 
+import de.fau.osr.bl.Tracker;
+import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,38 +16,39 @@ import java.util.*;
  * the output to match the needed Interface.
  */
 public class GUIModellFacadeAdapter implements GuiModell {
-	Facade facade;
+	Tracker tracker;
 	private Collection<CommitFile> commitFiles;
 	private Collection<Commit> commits;
 
-	public GUIModellFacadeAdapter(File repoFile, String reqPatternString)
+	public GUIModellFacadeAdapter(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString)
 			throws IOException, RuntimeException {
-		facade = new Facade(repoFile, reqPatternString);
+
+		tracker = new Tracker(vcs, ds, repoFile, reqPatternString);
 	}
 
 	@Override
-	public String[] getAllRequirements() {
-		Collection<String> collection = facade.getAllRequirements();
+	public String[] getAllRequirements() throws IOException {
+		Collection<String> collection = tracker.getAllRequirements();
 		return convertCollectionToArray(collection);
 	}
 
 	@Override
-	public String[] getCommitsFromRequirementID(String requirement) {
-		commits = facade.getCommitsForRequirementID(requirement);
+	public String[] getCommitsFromRequirementID(String requirement) throws IOException {
+		commits = tracker.getCommitsForRequirementID(requirement);
 		return getMessagesFromCommits();
 	}
 
 	@Override
 	public String[] getAllFiles() {
-		Collection<String> collection = facade.getAllFiles();
+		Collection<String> collection = tracker.getAllFiles();
 		return convertCollectionToArray(collection);
 	}
 
 	@Override
 	public String[] getRequirementsFromFile(String filePath) throws IOException {
 		String filePathTransformed = filePath.replace("\\", "/");
-		Collection<String> requirements = facade
-				.getRequirementsForFile(filePathTransformed);
+		Collection<String> requirements = tracker
+				.getAllRequirementsForFile(filePathTransformed);
 		return convertCollectionToArray(requirements);
 	}
 
@@ -52,7 +56,7 @@ public class GUIModellFacadeAdapter implements GuiModell {
 	@Override
 	public String[] getCommitsFromFile(String filePath) {
 		String filePathTransformed = filePath.replace("\\", "/");
-		commits = facade.getCommitsFromFile(filePathTransformed);
+		commits = tracker.getCommitsFromFile(filePathTransformed);
 		return getMessagesFromCommits();
 	}
 
@@ -71,21 +75,21 @@ public class GUIModellFacadeAdapter implements GuiModell {
 
 	@Override
 	public String[] getCommitsFromDB() {
-		commits = facade.getCommitsFromDB();
+		commits = tracker.getCommits();
 		return getMessagesFromCommits();
 	}
 
 	@Override
 	public String[] getRequirementsFromCommit(int commitIndex)
 			throws FileNotFoundException {
-		Set<String> collection = new HashSet<String>(facade
+		Set<String> collection = new HashSet<String>(tracker
 				.getRequirementsFromCommit(getCommit(commitIndex)));
 		return convertCollectionToArray(collection);
 	}
 
 	@Override
 	public String[] commitsFromRequirementAndFile(String requirementID,
-			String filePath){
+			String filePath) throws IOException {
 		Set<String> commits1 = new HashSet<String>(Arrays.asList(getCommitsFromFile(filePath)));
 		Set<String> commits2 = new HashSet<String>(Arrays.asList(getCommitsFromRequirementID(requirementID)));
 		
@@ -95,8 +99,8 @@ public class GUIModellFacadeAdapter implements GuiModell {
 
 	@Override
 	public String[] commitsFromRequirementAndFile(String requirementID,
-			int fileIndex) throws FileNotFoundException {
-		Collection<Commit> AllCommits = facade.getCommitsForRequirementID(requirementID);
+			int fileIndex) throws IOException {
+		Collection<Commit> AllCommits = tracker.getCommitsForRequirementID(requirementID);
 		CommitFile commitFile = getCommitFile(fileIndex);
 		for(Commit commit: AllCommits){
 			for(CommitFile commitFilecompare: commit.files){
@@ -122,7 +126,7 @@ public class GUIModellFacadeAdapter implements GuiModell {
 
 	@Override
 	public String[] getFilesFromRequirement(String requirementID) throws IOException {
-		commitFiles = facade.getFilesFromRequirement(requirementID);
+		commitFiles = tracker.getCommitFilesForRequirementID(requirementID);
 		return getCommitFileName(); 
 	}
 
@@ -179,12 +183,12 @@ public class GUIModellFacadeAdapter implements GuiModell {
 
 	@Override
 	public String getCurrentRequirementPatternString() {
-		return facade.getCurrentRequirementPatternString();
+		return tracker.getCurrentRequirementPatternString();
 	}
 
 	@Override
 	public String getCurrentRepositoryPath() {
-		return facade.getCurrentRepositoryPath();
+		return tracker.getCurrentRepositoryPath();
 	}
 	
 }

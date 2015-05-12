@@ -68,7 +68,7 @@ public class TrackerTest {
         //given
         VcsClient mockedClient = mock(VcsClient.class);
         DataSource mockedSource = mock(DataSource.class);
-        Tracker tracker = Mockito.spy(new Tracker(mockedClient, mockedSource));
+        Tracker tracker = Mockito.spy(new Tracker(mockedClient, mockedSource, null, null));
         //stub for dataSource.getAllReqCommitRelations()
         SetMultimap<String, String> dbReqs = HashMultimap.create();
         dbReqs.put("1","commit1");
