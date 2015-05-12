@@ -28,8 +28,15 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
 	@Override
 	public String[] getAllRequirements() throws IOException {
-		Collection<String> collection = tracker.getAllRequirements();
-		return convertCollectionToArray(collection);
+        String[] result = convertCollectionToArray(tracker.getAllRequirements());
+        //temp comparator, todo implement more universal one
+        Arrays.sort(result, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return Integer.parseInt(o1) - Integer.parseInt(o2);
+            }
+        });
+		return result;
 	}
 
 	@Override
