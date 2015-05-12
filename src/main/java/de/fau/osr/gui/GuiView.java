@@ -197,8 +197,9 @@ public class GuiView{
 	 */
 	void initializeButtonActions(GuiController guiController) {
 		elementHandler.initializeButtonActions(guiController);
+		elementHandler.initializeComboboxActions(guiController);
 	}
-	
+
 	void showLinkageRequirement(String requirementID) {
 		elementHandler.getRequirementID_textField().setText(requirementID);
 	}

@@ -1,8 +1,8 @@
 
 package de.fau.osr.gui;
 
-import com.google.common.collect.ImmutableMap;
-import de.fau.osr.util.sorting.SortByChronic;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.util.sorting.SortByCommitID;
 import de.fau.osr.util.sorting.SortByFilename;
 
 import javax.swing.*;
@@ -11,8 +11,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class GuiViewElementHandler extends JFrame{
 	public enum ButtonState{Deactivate, Activate}
@@ -45,9 +47,11 @@ public class GuiViewElementHandler extends JFrame{
 
 
 	private JComboBox FilesSort_combobox;
-	final private ImmutableMap<String, Comparator<String>> SORT_COMBOBO_ITEMS = ImmutableMap.of(
-			"sort by chronic", new SortByChronic(),
-			"sort by filename", new SortByFilename()
+	final private String[] SORT_COMBOBOX_CHOICES = {
+			"sort by chronic", "sort by filename"
+	};
+	final private List<Comparator<CommitFile>> SORT_ALGORITHMS = Arrays.asList(
+			new SortByCommitID(), new SortByFilename()
 	);
 	private JLabel FilesSort_label;
 
@@ -227,7 +231,7 @@ public class GuiViewElementHandler extends JFrame{
 	}
 
 	private void createComboBoxes() {
-		FilesSort_combobox = new JComboBox(SORT_COMBOBO_ITEMS.keySet().toArray());
+		FilesSort_combobox = new JComboBox<>(SORT_COMBOBOX_CHOICES);
 	}
 
 	
@@ -318,6 +322,30 @@ public class GuiViewElementHandler extends JFrame{
 			}
 		});
 		
+	}
+
+	void initializeComboboxActions(GuiController guiControllertemp) {
+        this.guiController = guiControllertemp;
+
+		// Defining default selection.
+		FilesSort_combobox.setSelectedIndex(0);
+		guiController.setCommitFileSorting(SORT_ALGORITHMS.get(0));
+
+		FilesSort_combobox.addActionListener(
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						guiController.setCommitFileSorting(SORT_ALGORITHMS.get(FilesSort_combobox.getSelectedIndex()));
+
+					}
+				}
+		);
+
+		FilesSort_combobox.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				guiController.setCommitFileSorting(SORT_ALGORITHMS.get(FilesSort_combobox.getSelectedIndex()));
+			}
+		});
 	}
 	
 	void switchLinkageButton(ButtonState Linkage_ButtonState) {

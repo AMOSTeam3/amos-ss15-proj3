@@ -5,13 +5,12 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import java.util.Comparator;
 
 /*
- * Sort-Strategy for GuiModel to sort files list by their file name.
+ * Sort-Strategy for GuiModel to sort files by commit id (=> chronological).
  * @author: Taleh Didover
  */
-public class SortByFilename implements Comparator<CommitFile> {
+public class SortByCommitID implements Comparator<CommitFile> {
     @Override
     public int compare(CommitFile lhs, CommitFile rhs) {
-        return lhs.oldPath.compareTo(rhs.oldPath);
+        return lhs.commitID.compareToIgnoreCase(rhs.commitID);
     }
 }
-
