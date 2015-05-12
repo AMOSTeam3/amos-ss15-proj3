@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -286,8 +287,13 @@ public class GitVcsClient extends VcsClient{
 		for(int i=0; i<text.size(); ++i) {
 			//String commitId = blameResult.getSourceCommit(res.size()).getName();
 			//TODO add abstract linkage source here
-			String commitMsg = blameResult.getSourceCommit(res.size()).getFullMessage();
-			res.add(new AnnotatedLine(dataSource.parse(commitMsg), text.getString(i)));
+			List<String> annotation;
+			RevCommit commit = blameResult.getSourceCommit(res.size());
+			if(commit != null)
+				annotation =  dataSource.parse(blameResult.getSourceCommit(res.size()).getFullMessage());
+			else
+				annotation = Collections.emptyList();
+			res.add(new AnnotatedLine(annotation, text.getString(i)));
 		}
 		return res;
 	}
