@@ -41,7 +41,9 @@ public class MouseEvent implements MouseListener {
             case CodeFromFile:
                 JList<String> theList2 = (JList<String>) e.getSource();
                 int filesIndex = theList2.getSelectedIndex();
-                guiController.codeFromFile(filesIndex);
+                JList<String> theList12 = (JList<String>) guiController.requirements_JList;
+                String value12 = theList12.getSelectedValue();
+                guiController.codeFromFile(filesIndex, value12);
                 break;
             case RequirementsAndCommitsFromFile:
                 JList<String> theList3 = (JList<String>) e.getSource();
@@ -62,7 +64,7 @@ public class MouseEvent implements MouseListener {
                 JList<String> theList9 = (JList<String>) guiController.commitFileName_JList;
                 int value7 = theList9.getSelectedIndex();
                 guiController.commitsFromRequirementAndFile(value6, value7);
-                guiController.codeFromFile(value7);
+                guiController.codeFromFile(value7, value6);
                 break;
             case RequirementsFromFileAndCommit:
                 JList<String> theList5 = (JList<String>) e.getSource();
@@ -83,8 +85,8 @@ public class MouseEvent implements MouseListener {
 				guiController.RequirementToLinkage(value9);
 				break;
 			case CommitToLinkage:
-				JList<String> theList12 = (JList<String>) e.getSource();
-				String value10 = (String) theList12.getSelectedValue();
+				JList<String> theList13 = (JList<String>) e.getSource();
+				String value10 = (String) theList13.getSelectedValue();
 				guiController.CommitToLinkage(value10);
 				break;
             }

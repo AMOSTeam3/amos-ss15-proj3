@@ -5,11 +5,15 @@ import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
+import de.fau.osr.gui.GuiView.HighlightedLine;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 /*
  * Adapter class. Providing the correct formatted input for the Library Facade and transforming
@@ -209,6 +213,17 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	@Override
 	public String getCurrentRepositoryPath() {
 		return tracker.getCurrentRepositoryPath();
+	}
+
+	@Override
+	public Collection<HighlightedLine> getBlame(int filesIndex,
+			String requirementID) throws FileNotFoundException, IOException, GitAPIException {
+		Collection<AnnotatedLine> lines = tracker.getBlame(getCommitFile(filesIndex).newPath.getPath());
+		Collection<HighlightedLine> highlightedLines = new ArrayList<HighlightedLine>();
+		for(AnnotatedLine line: lines){
+			highlightedLines.add(new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID)));
+		}
+		return null;
 	}
 	
 }

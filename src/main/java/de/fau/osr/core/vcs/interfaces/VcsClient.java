@@ -107,7 +107,7 @@ public abstract class VcsClient {
 		/**
 		 * @return all associated requirements
 		 */
-		public Iterable<String> getRequirements() {
+		public Collection<String> getRequirements() {
 			return requirements;
 		}
 		private String line;
