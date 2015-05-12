@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
-enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, RequirementsAndCommitsFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit, RequirementsAndFilesFromCommit, CommitsAndCodeFromRequirementAndFile};
+enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, RequirementsAndCommitsFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit, RequirementsAndFilesFromCommit, CommitsAndCodeFromRequirementAndFile, RequirementToLinkage, CommitToLinkage};
 
 public class MouseEvent implements MouseListener {
 
@@ -76,7 +76,17 @@ public class MouseEvent implements MouseListener {
                 int value4 = theList6.getSelectedIndex();
                 guiController.filesFromCommit(value4);
                 guiController.requirementsFromCommit(value4);
-                break;
+				break;
+			case RequirementToLinkage:
+				JList<String> theList11 = (JList<String>) e.getSource();
+				String value9 = (String) theList11.getSelectedValue();
+				guiController.RequirementToLinkage(value9);
+				break;
+			case CommitToLinkage:
+				JList<String> theList12 = (JList<String>) e.getSource();
+				String value10 = (String) theList12.getSelectedValue();
+				guiController.CommitToLinkage(value10);
+				break;
             }
         } catch (IOException ex) {
             ex.printStackTrace();

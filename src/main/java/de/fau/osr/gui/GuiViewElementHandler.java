@@ -1,3 +1,4 @@
+
 package de.fau.osr.gui;
 
 import javax.swing.*;
@@ -9,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class GuiViewElementHandler extends JFrame{
+	public enum ButtonState{Deactivate, Activate}
+
 	private static final long serialVersionUID = 1L;
 	private GuiController guiController;
 	
@@ -286,4 +289,28 @@ public class GuiViewElementHandler extends JFrame{
 		});
 		
 	}
+	
+	void switchLinkageButton(ButtonState Linkage_ButtonState) {
+		switch(Linkage_ButtonState){
+		case Deactivate:
+			Linkage_button.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					guiController.requirementsAndCommitsFromDB();
+				}
+			});
+			break;
+		case Activate:
+			Linkage_button.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(!guiController.requirements_JList.isSelectionEmpty() && !guiController.commitMessages_JList.isSelectionEmpty()){
+						guiController.addLinkage(guiController.requirements_JList.getSelectedValue(), guiController.commitMessages_JList.getSelectedIndex());
+					}
+				}
+			});
+			break;
+		}
+	}
+	
 }

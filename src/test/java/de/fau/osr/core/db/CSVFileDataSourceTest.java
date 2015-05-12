@@ -48,9 +48,9 @@ public class CSVFileDataSourceTest {
 
     @Test
     public void addReqCommitRelationTest() throws Exception {
-        csvFileDataSource.addReqCommitRelation(1, "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
-        csvFileDataSource.addReqCommitRelation(1, "a8dc4129802939d620ce0bd3484a1f0538338a0e");
-        csvFileDataSource.addReqCommitRelation(2, "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
+        csvFileDataSource.addReqCommitRelation("1", "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
+        csvFileDataSource.addReqCommitRelation("1", "a8dc4129802939d620ce0bd3484a1f0538338a0e");
+        csvFileDataSource.addReqCommitRelation("2", "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
 
         String expectedFileContent = qt + "1" + qt + sep + qt + "dee896c8d52af6bc0b00982ad2fcfca2d9d003dc" + qt + lend;
         expectedFileContent += qt + "1" + qt + sep + qt + "a8dc4129802939d620ce0bd3484a1f0538338a0e" + qt + lend;
@@ -76,7 +76,7 @@ public class CSVFileDataSourceTest {
         Files.append(fileContent, sourceFile, cs);
 
 
-        Collection<String> acutalCommitIDs = csvFileDataSource.getCommitRelationByReq(5);
+        Collection<String> acutalCommitIDs = csvFileDataSource.getCommitRelationByReq("5");
         Collection<String> expectedCommitIDs = new HashSet<>();
         expectedCommitIDs.add("dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
 
@@ -93,35 +93,35 @@ public class CSVFileDataSourceTest {
         Files.append(fileContent, sourceFile, cs);
 
 
-        Collection<Integer> acutalReqIDs = csvFileDataSource.getReqRelationByCommit("a8dc4129802939d620ce0bd3484a1f0538338a0e");
-        Collection<Integer> expectedCommitIDs = new HashSet<>();
-        expectedCommitIDs.add(4);
-        expectedCommitIDs.add(3);
+        Collection<String> acutalReqIDs = csvFileDataSource.getReqRelationByCommit("a8dc4129802939d620ce0bd3484a1f0538338a0e");
+        Collection<String> expectedCommitIDs = new HashSet<>();
+        expectedCommitIDs.add("4");
+        expectedCommitIDs.add("3");
 
         assertEquals(acutalReqIDs, expectedCommitIDs);
     }
 
     @Test
     public void addAndGetCSVTest() throws IOException {
-        csvFileDataSource.addReqCommitRelation(1, "commit 1");
-        csvFileDataSource.addReqCommitRelation(1, "commit");
-        csvFileDataSource.addReqCommitRelation(1, "commit 1");
-        csvFileDataSource.addReqCommitRelation(2, "commit 9000");
-        csvFileDataSource.addReqCommitRelation(3, "a8dc4129802939d620ce0bd3484a1f0538338a0e");
-        csvFileDataSource.addReqCommitRelation(4, "commit 1");
-        csvFileDataSource.addReqCommitRelation(4, "commit 1");
-        csvFileDataSource.addReqCommitRelation(1, "commit 1");
+        csvFileDataSource.addReqCommitRelation("1", "commit 1");
+        csvFileDataSource.addReqCommitRelation("1", "commit");
+        csvFileDataSource.addReqCommitRelation("1", "commit 1");
+        csvFileDataSource.addReqCommitRelation("2", "commit 9000");
+        csvFileDataSource.addReqCommitRelation("3", "a8dc4129802939d620ce0bd3484a1f0538338a0e");
+        csvFileDataSource.addReqCommitRelation("4", "commit 1");
+        csvFileDataSource.addReqCommitRelation("4", "commit 1");
+        csvFileDataSource.addReqCommitRelation("1", "commit 1");
 
         Collection<String> expectedCommitIDs = new HashSet<>();
         expectedCommitIDs.add("commit 1");
         expectedCommitIDs.add("commit");
 
-        assertEquals(csvFileDataSource.getCommitRelationByReq(1), expectedCommitIDs);
+        assertEquals(csvFileDataSource.getCommitRelationByReq("1"), expectedCommitIDs);
 
 
-        Collection<Integer> expectedReqIDs = new HashSet<>();
-        expectedReqIDs.add(1);
-        expectedReqIDs.add(4);
+        Collection<String> expectedReqIDs = new HashSet<>();
+        expectedReqIDs.add("1");
+        expectedReqIDs.add("4");
         assertEquals(csvFileDataSource.getReqRelationByCommit("commit 1"), expectedReqIDs);
 
     }

@@ -233,6 +233,16 @@ public class Tracker {
         Parser parser = new CommitMessageParser();
         return parser.parse(commit.message);
     }
+	
+    /**
+     * add Linkage between Requirement and Commit
+     * @param commitID and requirementId to be linked
+     * @return 
+     */
+	public void addRequirementCommitRelation(String requirementID,
+			String commitID) throws Exception {
+		dataSource.addReqCommitRelation(requirementID, commitID);
+	}
 
     /**
      * method to get the current requirement pattern

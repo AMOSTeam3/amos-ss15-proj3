@@ -2,7 +2,6 @@ package de.fau.osr.app;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
@@ -30,7 +29,7 @@ public class PostTraceabilityApp {
         String repoURL;
     }
 
-    private static Integer readReqID(BufferedReader br) throws IOException {
+    private static String readReqID(BufferedReader br) throws IOException {
         Integer reqID = null;
         boolean retry = true;
 
@@ -45,7 +44,7 @@ public class PostTraceabilityApp {
             }
         }
 
-        return Math.abs(reqID);
+        return String.valueOf(Math.abs(reqID));
     }
 
     private static String readCommitID(BufferedReader br) throws IOException {
@@ -88,7 +87,7 @@ public class PostTraceabilityApp {
         boolean isRunning = true;
 
         while (isRunning) {
-            Integer reqID = null;
+            String reqID = null;
             String commitID = null;
 
             try {
