@@ -2,6 +2,7 @@ package de.fau.osr.bl;
 
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Lists;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
@@ -11,6 +12,7 @@ import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -233,6 +235,16 @@ public class Tracker {
         Parser parser = new CommitMessageParser();
         return parser.parse(commit.message);
     }
+	
+    /**
+     * add Linkage between Requirement and Commit
+     * @param commitID and requirementId to be linked
+     * @return 
+     */
+	public void addRequirementCommitRelation(Integer requirementID,
+			String commitID) throws Exception {
+		dataSource.addReqCommitRelation(requirementID, commitID);
+	}
 
     /**
      * method to get the current requirement pattern

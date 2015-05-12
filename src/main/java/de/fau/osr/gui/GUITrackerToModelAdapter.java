@@ -137,6 +137,19 @@ public class GUITrackerToModelAdapter implements GuiModel {
 		return getCommitFileName(); 
 	}
 
+	@Override
+	public void addRequirementCommitLinkage(String requirementID,
+			int commitIndex) throws FileNotFoundException {
+		String commitId = getCommit(commitIndex).id;
+		Integer requirementIDInt = Integer.valueOf(requirementID);
+		try {
+			tracker.addRequirementCommitRelation(requirementIDInt, commitId);
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
+		
+	}
+
 	private CommitFile getCommitFile(int filesIndex)
 			throws FileNotFoundException {
 		int i = 0;

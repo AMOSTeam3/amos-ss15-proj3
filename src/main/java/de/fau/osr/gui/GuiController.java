@@ -4,9 +4,11 @@ import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -308,8 +310,32 @@ public class GuiController {
 	 * For button AddLinkage
 	 */
 	void requirementsAndCommitsFromDB() {
-		// TODO Auto-generated method stub
+		guiView.clearAll();
 		
+		String[] requirements;
+		try {
+			requirements = guiModel.getAllRequirements();
+		} catch (IOException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}
+		requirements_JList = new JList<String>(requirements);
+		guiView.showRequirements(requirements_JList);
+		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.RequirementToLinkage));
+		
+		commitMessages_JList = new JList<String>(guiModel.getCommitsFromDB());
+		guiView.showCommits(commitMessages_JList);
+		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.CommitToLinkage));
+		
+		guiView.switchLinkage_Button(ButtonState.Activate);
+	}
+
+	void RequirementToLinkage(String requirementID) {
+		guiView.showLinkageRequirement(requirementID);
+	}
+
+	void CommitToLinkage(String commit) {
+		guiView.showLinkageCommit(commit);
 	}
 
 	
@@ -436,4 +462,16 @@ public class GuiController {
 
         return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPatternString);
     }
+    
+    void addLinkage(String requirementID, int commitIndex) {
+		try {
+			guiModel.addRequirementCommitLinkage(requirementID, commitIndex);
+			guiView.showInformationDialog("Successfully Added!");
+		} catch (FileNotFoundException e) {
+			guiView.showErrorDialog("Internal storing Error");
+			return;
+		}finally{
+			guiView.clearAll();
+		}
+	}
 }

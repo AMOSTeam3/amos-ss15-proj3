@@ -1,6 +1,10 @@
+
 package de.fau.osr.gui;
 
 import javax.swing.*;
+
+import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
+
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -80,7 +84,8 @@ public class GuiView{
 	}
 
 	/*
-	 * Clearing all scrollpanes. Containing the Code_ScrollPane. And clearing all Textfields
+	 * Clearing all scrollpanes. Containing the Code_ScrollPane. And clearing all Textfields.
+	 * Deactivating Linkage_Button
 	 * Color is set to the initial white.
 	 */
 	void clearAll(){
@@ -96,6 +101,8 @@ public class GuiView{
 		
 		elementHandler.getCommit_textField().setText("");
 		elementHandler.getRequirementID_textField().setText("");
+		
+		switchLinkage_Button(ButtonState.Deactivate);
 	}
 
 	void clearImpactPercentage() {
@@ -192,5 +199,16 @@ public class GuiView{
 		elementHandler.initializeButtonActions(guiController);
 	}
 	
+	void showLinkageRequirement(String requirementID) {
+		elementHandler.getRequirementID_textField().setText(requirementID);
+	}
 	
+	void showLinkageCommit(String commit) {
+		elementHandler.getCommit_textField().setText(commit);
+	}
+
+	void switchLinkage_Button(ButtonState buttonState){
+		elementHandler.switchLinkageButton(buttonState);
+	}
 }
+
