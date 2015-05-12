@@ -44,33 +44,25 @@ public class CSVFileDataSource extends DataSource {
 
 
     @Override
-    public void addReqCommitRelation(Integer reqId, String commitId) throws IOException {
+    public void addReqCommitRelation(String reqId, String commitId) throws IOException {
         try(CSVWriter writer = getWriter()){
             writer.writeNext(new String[]{reqId.toString(), commitId});
         }
     }
 
     @Override
-    public void removeReqCommitRelation(Integer reqId, String commit) throws Exception {
+    public void removeReqCommitRelation(String reqId, String commit) throws Exception {
         throw new NotImplementedException(); //TODO
     }
 
     @Override
-    public HashSet<String> getCommitRelationByReq(Integer reqId) throws IOException {
+    public HashSet<String> getCommitRelationByReq(String reqId) throws IOException {
         return findBy(reqId.toString(), REQUIREMENT_COLUMN, COMMIT_COLUMN);
     }
 
     @Override
-    public HashSet<Integer> getReqRelationByCommit(String commitId) throws IOException {
-
-        HashSet<String> reqsAsString = findBy(commitId, COMMIT_COLUMN, REQUIREMENT_COLUMN);
-        //todo remove if we use reqId as string
-        HashSet<Integer> reqsAsInts = new HashSet<>();
-        for (String req : reqsAsString) {
-            reqsAsInts.add(Integer.parseInt(req));
-        }
-
-        return reqsAsInts;
+    public HashSet<String> getReqRelationByCommit(String commitId) throws IOException {
+        return findBy(commitId, COMMIT_COLUMN, REQUIREMENT_COLUMN);
     }
 
     @Override

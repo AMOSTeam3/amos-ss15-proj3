@@ -13,7 +13,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
@@ -34,20 +35,20 @@ public class DataSourceTest {
     public void isReqCommitRelationExistsTest() throws Exception {
 
         //given some test data returned
-        Mockito.when(dataSourceMock.getReqRelationByCommit(anyString())).thenReturn(new HashSet<Integer>());
-        Mockito.when(dataSourceMock.getReqRelationByCommit("commit")).thenReturn(Arrays.asList(5, 4, 3, 2, 1));
+        Mockito.when(dataSourceMock.getReqRelationByCommit(anyString())).thenReturn(new HashSet<String>());
+        Mockito.when(dataSourceMock.getReqRelationByCommit("commit")).thenReturn(new HashSet<>(Arrays.asList("5, 4, 3, 2, 1".split(", "))));
         //then
-        assertTrue(dataSourceMock.isReqCommitRelationExists(5, "commit"));
-        assertFalse(dataSourceMock.isReqCommitRelationExists(5, "commit_"));
-        assertFalse(dataSourceMock.isReqCommitRelationExists(6, "commit"));
+        assertTrue(dataSourceMock.isReqCommitRelationExists("5", "commit"));
+        assertFalse(dataSourceMock.isReqCommitRelationExists("5", "commit_"));
+        assertFalse(dataSourceMock.isReqCommitRelationExists("6", "commit"));
     }
 
     @Test
     public void setReqCommitRelation_relAlreadyExists_removeOldThanAdd_Test() throws Exception {
         //given
-        Integer reqId = 5;
+        String reqId = "5";
         String commitId = "commit";
-        Integer reqIdNew = 6;
+        String reqIdNew = "6";
         String commitIdNew = "commit_new";
         //stub relation exists
         Mockito.doReturn(true).when(dataSourceMock).isReqCommitRelationExists(reqId, commitId);
@@ -62,12 +63,12 @@ public class DataSourceTest {
     @Test
     public void setReqCommitRelation_noRelationExists_doesNotCallRemoveRelation_Test() throws Exception {
         //given
-        Mockito.doReturn(false).when(dataSourceMock).isReqCommitRelationExists(1, "commit_old");
+        Mockito.doReturn(false).when(dataSourceMock).isReqCommitRelationExists("1", "commit_old");
         //when
-        dataSourceMock.setReqCommitRelation(1, "commit_old", 2, "com_new");
+        dataSourceMock.setReqCommitRelation("1", "commit_old", "2", "com_new");
         //then
-        Mockito.verify(dataSourceMock, never()).removeReqCommitRelation(anyInt(), anyString());
-        Mockito.verify(dataSourceMock).addReqCommitRelation(2, "com_new");
+        Mockito.verify(dataSourceMock, never()).removeReqCommitRelation(anyString(), anyString());
+        Mockito.verify(dataSourceMock).addReqCommitRelation("2", "com_new");
     }
 
     @Test
@@ -75,18 +76,18 @@ public class DataSourceTest {
         //given
         List<String> coms = Arrays.asList("1,commit,test,something, non trimmed  , text".split(","));
         //when
-        dataSourceMock.addReqCommitRelations(5, coms);
+        dataSourceMock.addReqCommitRelations("5", coms);
         //then
-        Mockito.verify(dataSourceMock, times(coms.size())).addReqCommitRelation(eq(5), anyString());
+        Mockito.verify(dataSourceMock, times(coms.size())).addReqCommitRelation(eq("5"), anyString());
     }
 
     @Test
     public void addReqCommitRelations_addManyByCommit_addReqCommitRelationCalledSoMuchTimesWithTheSameCommitId_Test() throws Exception {
         //given
-        List<Integer> reqs = Arrays.asList(1, 2, 3, 4, 5000);
+        List<String> reqs = Arrays.asList("1, 2, 3, 4, 5000".split(", "));
         //when
         dataSourceMock.addReqCommitRelations(reqs, "someCommit");
         //then
-        Mockito.verify(dataSourceMock, times(reqs.size())).addReqCommitRelation(anyInt(), eq("someCommit"));
+        Mockito.verify(dataSourceMock, times(reqs.size())).addReqCommitRelation(anyString(), eq("someCommit"));
     }
 }

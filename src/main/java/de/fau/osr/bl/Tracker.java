@@ -2,7 +2,6 @@ package de.fau.osr.bl;
 
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Lists;
-
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
@@ -12,7 +11,6 @@ import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -241,7 +239,7 @@ public class Tracker {
      * @param commitID and requirementId to be linked
      * @return 
      */
-	public void addRequirementCommitRelation(Integer requirementID,
+	public void addRequirementCommitRelation(String requirementID,
 			String commitID) throws Exception {
 		dataSource.addReqCommitRelation(requirementID, commitID);
 	}
