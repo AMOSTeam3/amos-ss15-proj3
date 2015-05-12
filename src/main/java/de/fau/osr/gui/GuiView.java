@@ -2,6 +2,11 @@
 package de.fau.osr.gui;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 
@@ -9,12 +14,21 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 /*
  * View part of the MVC. This Class is responsible for the setting up the UI and interacting with the 
  * Elements. Whenever the texts or functionality of UI-Elements are changed, this class must be called.
  */
 public class GuiView{
+	public static class HighlightedLine{
+		String line;
+		boolean highlighted;
+		public HighlightedLine(String line, boolean hightlighted){
+			this.line = line;
+			this.highlighted = hightlighted;
+		}
+	}
 	//The UI-Elements themselfes are handled by the Element Handler. 
 	private GuiViewElementHandler elementHandler = new GuiViewElementHandler();
 	
@@ -176,11 +190,26 @@ public class GuiView{
 	 * with Req-11
 	 * @parameter changeData String to be presented
 	 */
-	void showCode(String changeData) {
+	void showCode(Collection<HighlightedLine> lines) {
 		JPanel panel = new JPanel(new GridLayout());
 		
-		JTextArea Code_textArea = new JTextArea(changeData);
-		panel.add(Code_textArea);
+		JTextPane Code_textPane = new JTextPane();
+		for(HighlightedLine line: lines){
+			StyledDocument doc = Code_textPane.getStyledDocument();
+
+			SimpleAttributeSet keyWord = new SimpleAttributeSet();
+	        if(line.highlighted){
+	        	StyleConstants.setForeground(keyWord, Color.red);
+			}else{
+				StyleConstants.setForeground(keyWord, Color.black);
+			}
+	        
+
+	        try { doc.insertString(doc.getLength(), "\n" + line.line ,keyWord); }
+	        catch (BadLocationException e){}
+		}
+		
+		panel.add(Code_textPane);
 		elementHandler.getCode_scrollPane().setViewportView(panel);
 	}
 	

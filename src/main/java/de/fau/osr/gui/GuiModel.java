@@ -2,6 +2,11 @@ package de.fau.osr.gui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+
+import de.fau.osr.gui.GuiView.HighlightedLine;
 
 /*
  * Adapter Pattern used. Since the Functionlibrary itself
@@ -46,5 +51,7 @@ public interface GuiModel {
 			int fileIndex) throws IOException;
 	
 	void addRequirementCommitLinkage(String requirementID, int commitIndex) throws FileNotFoundException;
+
+	Collection<HighlightedLine> getBlame(int filesIndex, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
 
 }

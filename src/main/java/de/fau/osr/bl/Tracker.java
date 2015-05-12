@@ -2,15 +2,19 @@ package de.fau.osr.bl;
 
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Lists;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -254,5 +258,9 @@ public class Tracker {
 
     public String getCurrentRepositoryPath(){
         return repoFile.toString();
+    }
+    
+    public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
+    	return vcsClient.blame(path,  commitMessageparser);
     }
 }

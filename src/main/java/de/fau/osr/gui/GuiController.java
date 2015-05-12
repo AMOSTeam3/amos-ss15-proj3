@@ -4,15 +4,20 @@ import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
+import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
 
 import javax.swing.*;
 
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.regex.PatternSyntaxException;
 
 
@@ -166,17 +171,20 @@ public class GuiController {
 	 * Setting: Code
 	 * Using: getChangeDataFromFileIndex
 	 */
-	void codeFromFile(int filesIndex) {
+	void codeFromFile(int filesIndex, String requirementID) {
 		guiView.clearImpactPercentage();
 		
-		String changeData;
+		Collection<HighlightedLine> lines;
 		try {
-			changeData = guiModel.getChangeDataFromFileIndex(filesIndex);
-		} catch (FileNotFoundException e) {
-			guiView.showErrorDialog("Internal storing Error");
+			lines = guiModel.getBlame(filesIndex, requirementID);
+		}catch(FileNotFoundException e){
+			guiView.showInformationDialog("Can only be displayed if file is up-to-date!");
+			return;
+		} catch (IOException | GitAPIException e) {
+			guiView.showErrorDialog("Internal storing Error" + e);
 			return;
 		}
-		guiView.showCode(changeData);
+		guiView.showCode(lines);
 	}
 
 	/*
