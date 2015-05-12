@@ -449,7 +449,7 @@ public class GuiController {
         }
 
         if (repoFile == null){
-            repoFile = new File("./.git");
+            repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
         }
 
         if (vcs == null){
