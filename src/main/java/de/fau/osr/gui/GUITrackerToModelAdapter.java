@@ -223,7 +223,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 		for(AnnotatedLine line: lines){
 			highlightedLines.add(new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID)));
 		}
-		return null;
+		return highlightedLines;
 	}
 	
 }
