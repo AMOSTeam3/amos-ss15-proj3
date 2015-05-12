@@ -122,7 +122,8 @@ public class GUITrackerToModelAdapter implements GuiModel {
 				}
 			}
 		}
-		throw new FileNotFoundException();
+		//throw new FileNotFoundException();
+		return new String[0];
 	}
 
 	@Override
