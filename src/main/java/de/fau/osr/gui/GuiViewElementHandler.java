@@ -1,6 +1,10 @@
 
 package de.fau.osr.gui;
 
+import com.google.common.collect.ImmutableMap;
+import de.fau.osr.util.sorting.SortByChronic;
+import de.fau.osr.util.sorting.SortByFilename;
+
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -8,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.*;
 
 public class GuiViewElementHandler extends JFrame{
 	public enum ButtonState{Deactivate, Activate}
@@ -20,7 +25,7 @@ public class GuiViewElementHandler extends JFrame{
 	private JScrollPane Files_scrollPane;
 	private JScrollPane Code_scrollPane;
 	private JScrollPane ImpactPercentage_scrollPane;
-	
+
 	private JLabel RequirementID_label;
 	private JLabel Code_label;
 	private JLabel ImpactPercentage_label;
@@ -37,6 +42,13 @@ public class GuiViewElementHandler extends JFrame{
 	private JMenuBar menuBar;
 	private JMenu mnTools;
 	private JMenuItem mntmConfigure;
+
+
+	private JComboBox FilesSort_combobox;
+	final private ImmutableMap<String, Comparator<String>> SORT_COMBOBO_ITEMS = ImmutableMap.of(
+			"sort by chronic", new SortByChronic(),
+			"sort by filename", new SortByFilename()
+	);
 
 	public GuiViewElementHandler() {
 		JPanel contentPane = createMainFrame();
@@ -80,6 +92,8 @@ public class GuiViewElementHandler extends JFrame{
 		createLabels();
 	
 		createButtons();
+
+		createComboBoxes();
 		
 		createTextFields();
 		
@@ -198,6 +212,10 @@ public class GuiViewElementHandler extends JFrame{
 		Commit_button = new JButton("Navigate From Commit");
 		RequirementID_button = new JButton("Navigate From ID");
 		Linkage_button = new JButton("Add Linkage");
+	}
+
+	private void createComboBoxes() {
+		FilesSort_combobox = new JComboBox(SORT_COMBOBO_ITEMS.keySet().toArray());
 	}
 
 	
