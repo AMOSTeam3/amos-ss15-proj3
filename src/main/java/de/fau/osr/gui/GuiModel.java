@@ -1,8 +1,12 @@
 package de.fau.osr.gui;
 
+import de.fau.osr.core.vcs.base.Commit;
+import de.fau.osr.core.vcs.base.CommitFile;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Comparator;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -21,13 +25,13 @@ public interface GuiModel {
 
 	String[] getCommitsFromRequirementID(String requirement) throws IOException;
 
-	String[] getAllFiles();
+	String[] getAllFiles(Comparator<CommitFile> sorting);
 
 	String[] getRequirementsFromFile(String filePath) throws IOException;
 
 	String[] getCommitsFromFile(String filePath);
 
-	String[] getFilesFromCommit(int commitIndex) throws FileNotFoundException;
+	String[] getFilesFromCommit(int commitIndex, Comparator<CommitFile> sorting) throws FileNotFoundException;
 
 	String getChangeDataFromFileIndex(int filesIndex) throws FileNotFoundException;
 	
@@ -45,7 +49,7 @@ public interface GuiModel {
 	String[] getRequirementsFromFileAndCommit(int commitIndex,
 			String filePath) throws IOException;
 
-	String[] getFilesFromRequirement(String requirementID) throws IOException;
+	String[] getFilesFromRequirement(String requirementID, Comparator<CommitFile> sorting) throws IOException;
 
 	String[] commitsFromRequirementAndFile(String requirementID,
 			int fileIndex) throws IOException;

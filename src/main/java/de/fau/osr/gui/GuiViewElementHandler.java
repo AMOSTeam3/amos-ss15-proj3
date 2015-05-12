@@ -1,13 +1,20 @@
 
 package de.fau.osr.gui;
 
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.util.sorting.SortByCommitID;
+import de.fau.osr.util.sorting.SortByFilename;
+
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 public class GuiViewElementHandler extends JFrame{
 	public enum ButtonState{Deactivate, Activate}
@@ -20,7 +27,7 @@ public class GuiViewElementHandler extends JFrame{
 	private JScrollPane Files_scrollPane;
 	private JScrollPane Code_scrollPane;
 	private JScrollPane ImpactPercentage_scrollPane;
-	
+
 	private JLabel RequirementID_label;
 	private JLabel Code_label;
 	private JLabel ImpactPercentage_label;
@@ -37,6 +44,16 @@ public class GuiViewElementHandler extends JFrame{
 	private JMenuBar menuBar;
 	private JMenu mnTools;
 	private JMenuItem mntmConfigure;
+
+
+	private JComboBox FilesSort_combobox;
+	final private String[] SORT_COMBOBOX_CHOICES = {
+			"sort by chronic", "sort by filename"
+	};
+	final private List<Comparator<CommitFile>> SORT_ALGORITHMS = Arrays.asList(
+			new SortByCommitID(), new SortByFilename()
+	);
+	private JLabel FilesSort_label;
 
 	public GuiViewElementHandler() {
 		JPanel contentPane = createMainFrame();
@@ -80,6 +97,8 @@ public class GuiViewElementHandler extends JFrame{
 		createLabels();
 	
 		createButtons();
+
+		createComboBoxes();
 		
 		createTextFields();
 		
@@ -90,6 +109,9 @@ public class GuiViewElementHandler extends JFrame{
 	 * @param contentPane
 	 */
 	private void positionElements(JPanel contentPane) {
+		
+		
+		FilesSort_label = new JLabel("Sort By:");
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -141,40 +163,48 @@ public class GuiViewElementHandler extends JFrame{
 							.addGap(81)
 							.addComponent(Files_button))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(128)
-							.addComponent(Files_label)))
+							.addGap(50)
+							.addComponent(FilesSort_label)
+							.addGap(32)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+								.addComponent(Files_label))
+							.addPreferredGap(ComponentPlacement.RELATED, 929, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(RequirementID_label)
+						.addComponent(Commit_label)
+						.addComponent(Files_label))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(RequirementID_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(Commit_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(Linkage_button))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(FilesSort_label)))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(RequirementID_button)
+							.addComponent(Files_button)
+							.addComponent(Commit_button))
+						.addGroup(Alignment.TRAILING, gl_contentPane.createParallelGroup(Alignment.BASELINE)
 							.addComponent(Code_label)
-							.addComponent(ImpactPercentage_label))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(RequirementID_label)
-								.addComponent(Commit_label)
-								.addComponent(Files_label))
-							.addGap(6)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(RequirementID_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(Commit_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(Linkage_button))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(RequirementID_button)
-								.addComponent(Files_button)
-								.addComponent(Commit_button))))
+							.addComponent(ImpactPercentage_label)))
 					.addGap(26)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(RequirementID_scrollPane, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-						.addComponent(Code_scrollPane, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-						.addComponent(ImpactPercentage_scrollPane, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-						.addComponent(Files_scrollPane, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-						.addComponent(Commit_scrollPane, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE))
+						.addComponent(RequirementID_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+						.addComponent(Code_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+						.addComponent(ImpactPercentage_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+						.addComponent(Files_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+						.addComponent(Commit_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 
@@ -198,6 +228,10 @@ public class GuiViewElementHandler extends JFrame{
 		Commit_button = new JButton("Navigate From Commit");
 		RequirementID_button = new JButton("Navigate From ID");
 		Linkage_button = new JButton("Add Linkage");
+	}
+
+	private void createComboBoxes() {
+		FilesSort_combobox = new JComboBox<>(SORT_COMBOBOX_CHOICES);
 	}
 
 	
@@ -288,6 +322,30 @@ public class GuiViewElementHandler extends JFrame{
 			}
 		});
 		
+	}
+
+	void initializeComboboxActions(GuiController guiControllertemp) {
+        this.guiController = guiControllertemp;
+
+		// Defining default selection.
+		FilesSort_combobox.setSelectedIndex(0);
+		guiController.setCommitFileSorting(SORT_ALGORITHMS.get(0));
+
+		FilesSort_combobox.addActionListener(
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						guiController.setCommitFileSorting(SORT_ALGORITHMS.get(FilesSort_combobox.getSelectedIndex()));
+
+					}
+				}
+		);
+
+		FilesSort_combobox.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				guiController.setCommitFileSorting(SORT_ALGORITHMS.get(FilesSort_combobox.getSelectedIndex()));
+			}
+		});
 	}
 	
 	void switchLinkageButton(ButtonState Linkage_ButtonState) {

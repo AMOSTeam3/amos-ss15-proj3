@@ -21,7 +21,8 @@ import org.eclipse.jgit.api.errors.GitAPIException;
  */
 public class GUITrackerToModelAdapter implements GuiModel {
 	Tracker tracker;
-	private Collection<CommitFile> commitFiles;
+	private List<CommitFile> commitFiles;
+	// TODO maybe we should use "List" instead of "Collection".
 	private Collection<Commit> commits;
 
 	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString)
@@ -50,9 +51,11 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public String[] getAllFiles() {
-		Collection<String> collection = tracker.getAllFiles();
-		return convertCollectionToArray(collection);
+	public String[] getAllFiles(Comparator<CommitFile> sorting) {
+		// TODO "tracker.getAllFiles" should return "CommitFiles". Otherwise "sorting" doesn't work.
+		String[] fileNames = convertCollectionToArray(tracker.getAllFiles());
+		Arrays.sort(fileNames);
+		return fileNames;
 	}
 
 	@Override
@@ -71,9 +74,11 @@ public class GUITrackerToModelAdapter implements GuiModel {
 		return getMessagesFromCommits();
 	}
 
-	public String[] getFilesFromCommit(int commitIndex)
+	@Override
+	public String[] getFilesFromCommit(int commitIndex, Comparator<CommitFile> sorting)
 			throws FileNotFoundException {
 		commitFiles = getCommit(commitIndex).files;
+		Collections.sort(commitFiles, sorting);
 		return getCommitFileName();
 	}
 
@@ -137,9 +142,10 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public String[] getFilesFromRequirement(String requirementID) throws IOException {
+	public String[] getFilesFromRequirement(String requirementID, Comparator<CommitFile> sorting) throws IOException {
 		commitFiles = tracker.getCommitFilesForRequirementID(requirementID);
-		return getCommitFileName(); 
+		Collections.sort(commitFiles, sorting);
+		return getCommitFileName();
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package de.fau.osr.gui;
 
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.regex.PatternSyntaxException;
 
 
@@ -35,10 +37,13 @@ public class GuiController {
 	
 	GuiView guiView;
 	GuiModel guiModel;
-	
+
 	JList<String> requirements_JList;
 	JList<String> commitMessages_JList;
 	JList<String> commitFileName_JList;
+
+	// sorting algorithm for commitFileName_JList
+	Comparator<CommitFile> commitFileSorting;
 
 	/*
 	 * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
@@ -83,7 +88,17 @@ public class GuiController {
 			}
 		});
 	}
-	
+
+	public Comparator<CommitFile> getCommitFileSorting() {
+		return commitFileSorting;
+	}
+
+	public void setCommitFileSorting(Comparator<CommitFile> commitFileSorting) {
+		this.commitFileSorting = commitFileSorting;
+		// TODO we need a refresh method
+		System.out.format("Commit file sorting selected: %s%n", commitFileSorting);
+	}
+
 	/*
 	 * Every Event should cause a method in this controller to run. Therefore,
 	 * whereever a action is defined, the Controller must be available. This 
@@ -137,8 +152,8 @@ public class GuiController {
 	void filesFromRequirement(String requirementID) throws IOException {
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
-		
-		commitFileName_JList = new JList<String>(guiModel.getFilesFromRequirement(requirementID));
+
+		commitFileName_JList = new JList<String>(guiModel.getFilesFromRequirement(requirementID, commitFileSorting));
 		guiView.showFiles(commitFileName_JList);
 		
 		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
@@ -196,7 +211,7 @@ public class GuiController {
 	void filesFromDB() {
 		guiView.clearAll();
 		
-		commitFileName_JList = new JList<String>(guiModel.getAllFiles());
+		commitFileName_JList = new JList<String>(guiModel.getAllFiles(getCommitFileSorting()));
 		guiView.showFiles(commitFileName_JList);
 		
 		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
@@ -285,10 +300,9 @@ public class GuiController {
 	void filesFromCommit(int commitIndex) {
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
-		
-		
+
 		try {
-			commitFileName_JList = new JList<String>(guiModel.getFilesFromCommit(commitIndex));
+			commitFileName_JList = new JList<String>(guiModel.getFilesFromCommit(commitIndex, commitFileSorting));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
