@@ -3,6 +3,7 @@ package de.fau.osr.core.vcs.impl;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -282,6 +283,7 @@ public class GitVcsClient extends VcsClient{
 		blameCommand.setFilePath(path);
 		BlameResult blameResult = blameCommand.call();
 		ArrayList<AnnotatedLine> res = new ArrayList<>();
+		if(blameResult == null) throw new FileNotFoundException(path);
 		blameResult.computeAll();
 		RawText text = blameResult.getResultContents();
 		for(int i=0; i<text.size(); ++i) {
