@@ -2,6 +2,11 @@
 package de.fau.osr.gui;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 
@@ -190,11 +195,18 @@ public class GuiView{
 		
 		JTextPane Code_textPane = new JTextPane();
 		for(HighlightedLine line: lines){
-			JLabel label = new JLabel(line.line);
-			if(line.highlighted){
-				label.setBackground(Color.RED);
+			StyledDocument doc = Code_textPane.getStyledDocument();
+
+			SimpleAttributeSet keyWord = new SimpleAttributeSet();
+	        if(line.highlighted){
+	        	StyleConstants.setForeground(keyWord, Color.red);
+			}else{
+				StyleConstants.setForeground(keyWord, Color.black);
 			}
-			Code_textPane.add(label);
+	        
+
+	        try { doc.insertString(doc.getLength(), "\n" + line.line ,keyWord); }
+	        catch (BadLocationException e){}
 		}
 		
 		panel.add(Code_textPane);
