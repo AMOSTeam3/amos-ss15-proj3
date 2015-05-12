@@ -20,3 +20,4 @@ log/
 
 #compiled version
 /out/
+dataSource.csv
