@@ -444,16 +444,16 @@ public class GuiController {
      */
     private GUITrackerToModelAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString) throws IOException {
 
-        if (vcs == null){
-            vcs = new GitVcsClient(repoFile.toString());
-        }
-
         if (ds == null){
             ds = new CSVFileDataSource(new File(AppProperties.GetValue("DefaultPathToCSVFile")));
         }
 
         if (repoFile == null){
-            repoFile = new File(".");
+            repoFile = new File("./.git");
+        }
+
+        if (vcs == null){
+            vcs = new GitVcsClient(repoFile.toString());
         }
 
         if (reqPatternString == null){
