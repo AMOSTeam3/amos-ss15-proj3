@@ -52,8 +52,12 @@ public class GuiView{
 
 		
 	}
-	//The UI-Elements themselfes are handled by the Element Handler. 
-	private GuiViewElementHandler elementHandler = new GuiViewElementHandler();
+	//The UI-Elements themselves are handled by the Element Handler. 
+	private GuiViewElementHandler elementHandler;
+	
+	GuiView(GuiController guiController) {
+		elementHandler = new GuiViewElementHandler(guiController);
+	}
 	
 	/*
 	 * Setting up the initial Dialog to choose the Repository.
@@ -100,7 +104,6 @@ public class GuiView{
 	 * Creating the UI. Frame + Elements
 	 */
 	void showView() {
-		this.elementHandler = new GuiViewElementHandler();
 		elementHandler.setVisible(true);
 	}
 
@@ -228,15 +231,6 @@ public class GuiView{
 	 */
 	void addMouseListener(JComponent component, MouseListener actListener){
 		component.addMouseListener(actListener);
-	}
-
-	/*
-	 * This Method should be called pre processing further methods. It initializes the buttons, so that
-	 * whenever a button is pressed the according method in the GUIController is called.
-	 */
-	void initializeButtonActions(GuiController guiController) {
-		elementHandler.initializeButtonActions(guiController);
-		elementHandler.initializeComboboxActions(guiController);
 	}
 
 	void showLinkageRequirement(String requirementID) {

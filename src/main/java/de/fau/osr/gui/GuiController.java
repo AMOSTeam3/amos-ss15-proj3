@@ -56,7 +56,7 @@ public class GuiController {
 			
 			public void run() {
 				
-				guiView = new GuiView();
+				guiView = new GuiView(GuiController.this);
 				
 				for(int i = 0; true; i++){
 					File repoFile = null;
@@ -79,7 +79,6 @@ public class GuiController {
 				}
 				
 				guiView.showView();
-				initializeButtonActions();
 				try {
 					requirementsFromDB();
 				} catch (IOException e) {
@@ -97,15 +96,6 @@ public class GuiController {
 		this.commitFileSorting = commitFileSorting;
 		// TODO we need a refresh method
 		System.out.format("Commit file sorting selected: %s%n", commitFileSorting);
-	}
-
-	/*
-	 * Every Event should cause a method in this controller to run. Therefore,
-	 * whereever a action is defined, the Controller must be available. This 
-	 * function passes the controller-element to the ElementHandler
-	 */
-	protected void initializeButtonActions() {
-		guiView.initializeButtonActions(this);
 	}
 
 	

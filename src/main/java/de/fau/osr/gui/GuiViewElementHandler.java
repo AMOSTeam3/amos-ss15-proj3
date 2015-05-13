@@ -8,6 +8,7 @@ import de.fau.osr.util.sorting.SortByFilename;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,48 +17,74 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class GuiViewElementHandler extends JFrame{
+public class GuiViewElementHandler extends JFrame {
 	public enum ButtonState{Deactivate, Activate}
 
 	private static final long serialVersionUID = 1L;
 	private GuiController guiController;
-	
-	private JScrollPane RequirementID_scrollPane;
-	private JScrollPane Commit_scrollPane;
-	private JScrollPane Files_scrollPane;
-	private JScrollPane Code_scrollPane;
-	private JScrollPane ImpactPercentage_scrollPane;
 
-	private JLabel RequirementID_label;
-	private JLabel Code_label;
-	private JLabel ImpactPercentage_label;
-	private JLabel Commit_label;
-	private JLabel Files_label;
+	private JLabel RequirementID_label = new JLabel("RequirementID");
+	private JLabel Code_label = new JLabel("Code");
+	private JLabel ImpactPercentage_label = new JLabel("Impact Percentage");
+	private JLabel Commit_label = new JLabel("Commit");
+	private JLabel Files_label = new JLabel("Files");
 	
-	private JButton Files_button;
-	private JButton Commit_button;
-	private JButton RequirementID_button;
-	private JButton Linkage_button;
+	private JButton Files_button = new JButton("Navigate From File");
+	private JButton Commit_button = new JButton("Navigate From Commit");
+	private JButton RequirementID_button = new JButton("Navigate From ID");
+	private JButton Linkage_button = new JButton("Add Linkage");
 	
-	private JTextField RequirementID_textField;
-	private JTextField Commit_textField;
-	private JMenuBar menuBar;
-	private JMenu mnTools;
-	private JMenuItem mntmConfigure;
-
-
-	private JComboBox FilesSort_combobox;
+	private JTextField RequirementID_textField = new JTextField();
+	private JTextField Commit_textField = new JTextField();
+	private JMenuBar menuBar = new JMenuBar();
+	private JMenu mnTools = menuBar.add(new JMenu("Tools"));
+	private JMenuItem mntmConfigure = mnTools.add(new JMenuItem("Configure"));
 	final private String[] SORT_COMBOBOX_CHOICES = {
 			"sort by chronic", "sort by filename"
 	};
+	
+	//this enables eclipse to use the WindowBuilder
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private JComboBox<String> FilesSort_combobox = new JComboBox(SORT_COMBOBOX_CHOICES);
+	
+	
+	private JScrollPane RequirementID_scrollPane = new JScrollPane();
+	private JScrollPane Commit_scrollPane = new JScrollPane();
+	private JScrollPane Files_scrollPane = new JScrollPane();
+	private JScrollPane Code_scrollPane = new JScrollPane();
+	private JScrollPane ImpactPercentage_scrollPane = new JScrollPane();
+
+
+	
 	final private List<Comparator<CommitFile>> SORT_ALGORITHMS = Arrays.asList(
 			new SortByCommitID(), new SortByFilename()
 	);
-	private JLabel FilesSort_label;
+	private JLabel FilesSort_label = new JLabel("Sort By:");
 
-	public GuiViewElementHandler() {
-		JPanel contentPane = createMainFrame();
-		createLayout(contentPane);
+	public GuiViewElementHandler(GuiController guiController) {
+		this.guiController = guiController;
+		initializeButtonActions();
+		initializeComboboxActions();
+		setTitle("Spice Traceability");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		JPanel contentPane1 = new JPanel();
+		contentPane1.setPreferredSize(
+		        Toolkit.getDefaultToolkit().getScreenSize());
+		
+		contentPane1.setBackground(Color.WHITE);
+		setContentPane(contentPane1);
+		JPanel contentPane = contentPane1;
+		setJMenuBar(menuBar);
+
+		for(JTextField textField : new JTextField[]{RequirementID_textField, Commit_textField}) {
+			textField.setEditable(false);
+			textField.setColumns(10);
+		}
+		
+		positionElements(contentPane);
+
+		pack();
 	}
 
 	public JScrollPane getRequirementID_scrollPane() {
@@ -87,31 +114,12 @@ public class GuiViewElementHandler extends JFrame{
 	public JTextField getCommit_textField() {
 		return Commit_textField;
 	}
-	
-	/**
-	 * @param contentPane
-	 */
-	public void createLayout(JPanel contentPane) {
-		createScrollPanes();
-		
-		createLabels();
-	
-		createButtons();
-
-		createComboBoxes();
-		
-		createTextFields();
-		
-		positionElements(contentPane);
-	}
 
 	/**
 	 * @param contentPane
 	 */
 	private void positionElements(JPanel contentPane) {
 		
-		
-		FilesSort_label = new JLabel("Sort By:");
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -210,80 +218,8 @@ public class GuiViewElementHandler extends JFrame{
 
 		contentPane.setLayout(gl_contentPane);
 	}
-
 	
-	private void createTextFields() {
-		RequirementID_textField = new JTextField();
-		RequirementID_textField.setEditable(false);
-		RequirementID_textField.setColumns(10);
-		
-		Commit_textField = new JTextField();
-		Commit_textField.setEditable(false);
-		Commit_textField.setColumns(10);
-	}
-
-	
-	private void createButtons() {
-		Files_button = new JButton("Navigate From File");
-		Commit_button = new JButton("Navigate From Commit");
-		RequirementID_button = new JButton("Navigate From ID");
-		Linkage_button = new JButton("Add Linkage");
-	}
-
-	private void createComboBoxes() {
-		FilesSort_combobox = new JComboBox<>(SORT_COMBOBOX_CHOICES);
-	}
-
-	
-	private void createLabels() {
-		RequirementID_label = new JLabel("RequirementID");
-		Code_label = new JLabel("Code");
-		ImpactPercentage_label = new JLabel("Impact Percentage");
-		Commit_label = new JLabel("Commit");
-		Files_label = new JLabel("Files");
-	}
-	
-	private void createScrollPanes() {
-		Files_scrollPane = new JScrollPane();
-		Files_scrollPane.setBackground(Color.WHITE);
-		
-		Commit_scrollPane = new JScrollPane();
-		Commit_scrollPane.setBackground(Color.WHITE);
-		
-		RequirementID_scrollPane = new JScrollPane();
-		RequirementID_scrollPane.setBackground(Color.WHITE);
-		
-		ImpactPercentage_scrollPane = new JScrollPane();
-		ImpactPercentage_scrollPane.setBackground(Color.WHITE);
-		
-		Code_scrollPane = new JScrollPane();
-	}
-	
-	private JPanel createMainFrame() {
-		setTitle("Spice Traceability");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		JPanel contentPane = new JPanel();
-		contentPane.setPreferredSize(
-                Toolkit.getDefaultToolkit().getScreenSize());
-        pack();
-        //setResizable(false);
-		
-		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		mnTools = new JMenu("Tools");
-		menuBar.add(mnTools);
-		
-		mntmConfigure = new JMenuItem("Configure");
-		mnTools.add(mntmConfigure);
-		contentPane.setBackground(Color.WHITE);
-		setContentPane(contentPane);
-		return contentPane;
-	}
-
-	void initializeButtonActions(GuiController guiControllertemp) {
-		this.guiController = guiControllertemp;
+	void initializeButtonActions() {
 		Files_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				guiController.filesFromDB();
@@ -324,8 +260,7 @@ public class GuiViewElementHandler extends JFrame{
 		
 	}
 
-	void initializeComboboxActions(GuiController guiControllertemp) {
-        this.guiController = guiControllertemp;
+	void initializeComboboxActions() {
 
 		// Defining default selection.
 		FilesSort_combobox.setSelectedIndex(0);
@@ -340,12 +275,6 @@ public class GuiViewElementHandler extends JFrame{
 					}
 				}
 		);
-
-		FilesSort_combobox.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				guiController.setCommitFileSorting(SORT_ALGORITHMS.get(FilesSort_combobox.getSelectedIndex()));
-			}
-		});
 	}
 	
 	void switchLinkageButton(ButtonState Linkage_ButtonState) {
