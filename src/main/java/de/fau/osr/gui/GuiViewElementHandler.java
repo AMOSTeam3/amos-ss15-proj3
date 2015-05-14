@@ -68,21 +68,14 @@ public class GuiViewElementHandler extends JFrame {
 		setTitle("Spice Traceability");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		JPanel contentPane1 = new JPanel();
-		contentPane1.setPreferredSize(
-		        Toolkit.getDefaultToolkit().getScreenSize());
-		
-		contentPane1.setBackground(Color.WHITE);
-		setContentPane(contentPane1);
-		JPanel contentPane = contentPane1;
+		setBackground(Color.WHITE);
 		setJMenuBar(menuBar);
-
 		for(JTextField textField : new JTextField[]{RequirementID_textField, Commit_textField}) {
 			textField.setEditable(false);
 			textField.setColumns(10);
 		}
 		
-		positionElements(contentPane);
+		positionElements();
 
 		pack();
 	}
@@ -118,105 +111,73 @@ public class GuiViewElementHandler extends JFrame {
 	/**
 	 * @param contentPane
 	 */
-	private void positionElements(JPanel contentPane) {
+	private void positionElements() {
+		GroupLayout layout = new GroupLayout(getContentPane());
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
 		
-		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(RequirementID_scrollPane, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(Commit_scrollPane, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(27)
-							.addComponent(RequirementID_label)
-							.addGap(112)
-							.addComponent(Commit_label, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(RequirementID_textField, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(Commit_textField, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-									.addGap(18)
-									.addComponent(Linkage_button))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(RequirementID_button, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(Commit_button, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)))))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(6)
-									.addComponent(Files_scrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(Code_scrollPane, GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(581)
-									.addComponent(Code_label)
-									.addGap(484)))
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(ImpactPercentage_label, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-								.addComponent(ImpactPercentage_scrollPane, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(81)
-							.addComponent(Files_button))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(50)
-							.addComponent(FilesSort_label)
-							.addGap(32)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
-								.addComponent(Files_label))
-							.addPreferredGap(ComponentPlacement.RELATED, 929, Short.MAX_VALUE)))
-					.addContainerGap())
+		layout.setHorizontalGroup(
+			layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup()
+						//here follow the columns of the UI
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(RequirementID_textField)
+								.addComponent(RequirementID_button)
+								.addComponent(RequirementID_label)
+								.addComponent(RequirementID_scrollPane))
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(Commit_textField)
+								.addComponent(Commit_button)
+								.addComponent(Commit_label)
+								.addComponent(Commit_scrollPane, 10, 100, Short.MAX_VALUE))
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(Linkage_button)
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+										.addComponent(Files_button)
+										.addComponent(FilesSort_combobox)
+										.addComponent(Files_label)
+										.addComponent(Files_scrollPane, 10, 100, Short.MAX_VALUE)
+										)
+								)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(Code_scrollPane, 10, 400, Short.MAX_VALUE))
+						)
 		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(RequirementID_label)
-						.addComponent(Commit_label)
-						.addComponent(Files_label))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(RequirementID_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(Commit_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(Linkage_button))
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(FilesSort_label)))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(RequirementID_button)
-							.addComponent(Files_button)
-							.addComponent(Commit_button))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(Code_label)
-							.addComponent(ImpactPercentage_label)))
-					.addGap(26)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(RequirementID_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
-						.addComponent(Code_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
-						.addComponent(ImpactPercentage_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
-						.addComponent(Files_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
-						.addComponent(Commit_scrollPane, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE))
-					.addContainerGap())
+		
+		layout.setVerticalGroup(
+			layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup()
+						//two rows, one to create linkage, the other one for the rest
+						.addGroup(layout.createParallelGroup()
+								//GroupLayout.PREFERRED_SIZE in the three arguments prevents the TextFields from scaling to multirow input
+								.addComponent(RequirementID_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(Commit_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(Linkage_button, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						)
+						.addGroup(layout.createParallelGroup()
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(RequirementID_button)
+										.addComponent(RequirementID_label)
+										.addComponent(RequirementID_scrollPane))
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(Commit_button)
+										.addComponent(Commit_label)
+										.addComponent(Commit_scrollPane))
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(Files_button)
+										.addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(Files_label)
+										.addComponent(Files_scrollPane))
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(Code_scrollPane))
+						)
+				)
 		);
 
-		contentPane.setLayout(gl_contentPane);
+		//make the requirement column non-resizable and have all elements with the same horizontal size
+		layout.linkSize(SwingConstants.HORIZONTAL, RequirementID_button, RequirementID_scrollPane, RequirementID_textField);
+		
+		setLayout(layout);
 	}
 	
 	void initializeButtonActions() {
