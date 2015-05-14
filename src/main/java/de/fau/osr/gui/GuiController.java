@@ -1,26 +1,24 @@
 package de.fau.osr.gui;
 
+import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.JList;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
-
-import javax.swing.*;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-
-import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.regex.PatternSyntaxException;
 
 
 /*
@@ -41,9 +39,11 @@ public class GuiController {
 	JList<String> requirements_JList;
 	JList<String> commitMessages_JList;
 	JList<String> commitFileName_JList;
+	JList<HighlightedLine> code_JList;
 
 	// sorting algorithm for commitFileName_JList
 	Comparator<CommitFile> commitFileSorting;
+	
 
 	/*
 	 * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
@@ -189,9 +189,8 @@ public class GuiController {
 	void codeFromFile(int filesIndex, String requirementID) {
 		guiView.clearImpactPercentage();
 		
-		Collection<HighlightedLine> lines;
 		try {
-			lines = guiModel.getBlame(filesIndex, requirementID);
+			code_JList = new JList<HighlightedLine>(guiModel.getBlame(filesIndex, requirementID));
 		}catch(FileNotFoundException e){
 			guiView.showInformationDialog("Can only be displayed if file is up-to-date!");
 			return;
@@ -199,7 +198,31 @@ public class GuiController {
 			guiView.showErrorDialog("Internal storing Error" + e);
 			return;
 		}
-		guiView.showCode(lines);
+		
+		guiView.showCode(code_JList);
+		
+		guiView.addMouseListener(code_JList, new MouseEvent(this, Action.RequirmentsFromCode));
+	}
+	
+	/**
+	 * Navigation: ->File->Code->Requirements
+	 * Clear: Commits
+	 * Setting: Requirements
+	 * Using: getRequirementsForBlame
+	 * @param filesIndex
+	 * @param codeIndex
+	 */
+	void requirementsFromCode(int filesIndex, int codeIndex){
+		guiView.clearCommits();
+		
+		try{
+			requirements_JList = new JList<String>(guiModel.getRequirementsForBlame(codeIndex, filesIndex));
+		} catch (IOException | GitAPIException e) {
+			guiView.showErrorDialog("Internal storing Error" + e);
+			return;
+		}
+		
+		guiView.showRequirements(requirements_JList);
 	}
 
 	/*

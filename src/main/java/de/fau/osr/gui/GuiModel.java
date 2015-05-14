@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 
+import javax.swing.ListModel;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import de.fau.osr.gui.GuiView.HighlightedLine;
@@ -56,6 +58,8 @@ public interface GuiModel {
 	
 	void addRequirementCommitLinkage(String requirementID, int commitIndex) throws FileNotFoundException;
 
-	Collection<HighlightedLine> getBlame(int filesIndex, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
+	HighlightedLine[] getBlame(int filesIndex, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
+	
+	String[] getRequirementsForBlame(int lineIndex, int filesIndex) throws FileNotFoundException, IOException, GitAPIException;
 
 }

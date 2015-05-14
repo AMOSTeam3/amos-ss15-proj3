@@ -1,20 +1,23 @@
 
 package de.fau.osr.gui;
 
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-
-import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+
+import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 
 /*
  * View part of the MVC. This Class is responsible for the setting up the UI and interacting with the 
@@ -28,6 +31,26 @@ public class GuiView{
 			this.line = line;
 			this.highlighted = hightlighted;
 		}
+	}
+	
+	private class ComplexCellRenderer implements ListCellRenderer<HighlightedLine>{
+		protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+		
+		@Override
+		public Component getListCellRendererComponent(
+				JList<? extends HighlightedLine> list, HighlightedLine value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			
+			if(value.highlighted){
+				renderer.setForeground(Color.RED);
+			}
+			renderer.setText(value.line);
+			
+			return renderer;
+		}
+
+		
 	}
 	//The UI-Elements themselfes are handled by the Element Handler. 
 	private GuiViewElementHandler elementHandler = new GuiViewElementHandler();
@@ -190,26 +213,13 @@ public class GuiView{
 	 * with Req-11
 	 * @parameter changeData String to be presented
 	 */
-	void showCode(Collection<HighlightedLine> lines) {
+	void showCode(JList<HighlightedLine> code_JList) {
 		JPanel panel = new JPanel(new GridLayout());
-		
-		JTextPane Code_textPane = new JTextPane();
-		for(HighlightedLine line: lines){
-			StyledDocument doc = Code_textPane.getStyledDocument();
 
-			SimpleAttributeSet keyWord = new SimpleAttributeSet();
-	        if(line.highlighted){
-	        	StyleConstants.setForeground(keyWord, Color.red);
-			}else{
-				StyleConstants.setForeground(keyWord, Color.black);
-			}
-	        
+		ComplexCellRenderer renderer = new ComplexCellRenderer();
+		code_JList.setCellRenderer(renderer);
 
-	        try { doc.insertString(doc.getLength(), "\n" + line.line ,keyWord); }
-	        catch (BadLocationException e){}
-		}
-		
-		panel.add(Code_textPane);
+		panel.add(code_JList);
 		elementHandler.getCode_scrollPane().setViewportView(panel);
 	}
 	

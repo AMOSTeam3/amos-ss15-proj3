@@ -222,14 +222,26 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public Collection<HighlightedLine> getBlame(int filesIndex,
+	public HighlightedLine[] getBlame(int filesIndex,
 			String requirementID) throws FileNotFoundException, IOException, GitAPIException {
 		Collection<AnnotatedLine> lines = tracker.getBlame(getCommitFile(filesIndex).newPath.getPath());
-		Collection<HighlightedLine> highlightedLines = new ArrayList<HighlightedLine>();
+		HighlightedLine[] hightlightedLines = new HighlightedLine[lines.size()];
+		int i= 0;
 		for(AnnotatedLine line: lines){
-			highlightedLines.add(new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID)));
+			hightlightedLines[i++] = new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID));
 		}
-		return highlightedLines;
+		return hightlightedLines;
 	}
 	
+	public String[] getRequirementsForBlame(int lineIndex, int filesIndex) throws FileNotFoundException, IOException, GitAPIException{
+		Collection<AnnotatedLine> lines = tracker.getBlame(getCommitFile(filesIndex).newPath.getPath());
+		int i = 0;
+		for(AnnotatedLine line: lines){
+			if(i == lineIndex){
+				return convertCollectionToArray(line.getRequirements());
+			}
+			i++;
+		}
+		throw new FileNotFoundException();
+	}
 }
