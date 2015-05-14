@@ -1,19 +1,19 @@
 package de.fau.osr.gui;
 
 import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
-
-import javax.swing.*;
-
+import de.fau.osr.util.parser.CommitMessageParser;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -460,13 +460,15 @@ public class GuiController {
             repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
         }
 
-        if (ds == null){
-            ds = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
-        }
-
         if (vcs == null){
             vcs = new GitVcsClient(repoFile.toString());
         }
+
+		if (ds == null) {
+			CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
+			VCSDataSource vcsDs = new VCSDataSource(vcs, new CommitMessageParser());
+			ds = new CompositeDataSource(csvDs, vcsDs);
+		}
 
         if (reqPatternString == null){
             reqPatternString = AppProperties.GetValue("RequirementPattern");

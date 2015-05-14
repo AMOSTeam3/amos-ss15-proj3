@@ -2,7 +2,7 @@ package de.fau.osr.core.db;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
-import com.google.common.collect.ImmutableSetMultimap;
+import com.google.common.collect.HashMultimap;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
@@ -21,7 +21,6 @@ public class CSVFileDataSource extends DataSource {
     public static final Charset CHARSET = Charset.forName("UTF-8");
     public static final char SEPARATOR = ',';
     public static final char QUOTE_CHAR = '\"';
-//    public final String COMMENTARY_SYMBOL = "#";
 
     private File storageFile;
 
@@ -46,18 +45,18 @@ public class CSVFileDataSource extends DataSource {
     @Override
     public void addReqCommitRelation(String reqId, String commitId) throws IOException {
         try(CSVWriter writer = getWriter()){
-            writer.writeNext(new String[]{reqId.toString(), commitId});
+            writer.writeNext(new String[]{reqId, commitId});
         }
     }
 
     @Override
-    public void removeReqCommitRelation(String reqId, String commit) throws Exception {
+    public void removeReqCommitRelation(String reqId, String commit) throws IOException {
         throw new NotImplementedException(); //TODO
     }
 
     @Override
     public HashSet<String> getCommitRelationByReq(String reqId) throws IOException {
-        return findBy(reqId.toString(), REQUIREMENT_COLUMN, COMMIT_COLUMN);
+        return findBy(reqId, REQUIREMENT_COLUMN, COMMIT_COLUMN);
     }
 
     @Override
@@ -66,8 +65,8 @@ public class CSVFileDataSource extends DataSource {
     }
 
     @Override
-    public ImmutableSetMultimap<String, String> getAllReqCommitRelations() throws IOException {
-        ImmutableSetMultimap.Builder<String, String> relations = ImmutableSetMultimap.builder();
+    public HashMultimap<String, String> getAllReqCommitRelations() throws IOException {
+        HashMultimap<String, String> relations = HashMultimap.create();
 
         try (CSVReader reader = getReader()) {
             List<String[]> allLines = reader.readAll();
@@ -80,7 +79,7 @@ public class CSVFileDataSource extends DataSource {
             }
 
         }
-        return relations.build();
+        return relations;
     }
 
     /**
