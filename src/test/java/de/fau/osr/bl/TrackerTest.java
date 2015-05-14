@@ -1,7 +1,6 @@
 package de.fau.osr.bl;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.SetMultimap;
 import de.fau.osr.PublicTestData;
 import de.fau.osr.core.db.DataSource;
@@ -78,16 +77,6 @@ public class TrackerTest {
         dbReqs.put("4", "commit4");
 
         Mockito.doReturn(dbReqs).when(mockedSource).getAllReqCommitRelations();
-        //stub getAllReqCommitRelationsFromVcs
-        ImmutableSetMultimap.Builder<String, String> vcsReqBuilder = ImmutableSetMultimap.builder();
-        vcsReqBuilder.put("1", "commit1");
-        vcsReqBuilder.put("1", "commit2");
-        vcsReqBuilder.put("1", "commit20");
-        vcsReqBuilder.put("2", "commit30");
-        vcsReqBuilder.put("3", "commit30");
-        vcsReqBuilder.put("4", "commit40");
-        ImmutableSetMultimap<String, String> vcsReq = vcsReqBuilder.build();
-        Mockito.doReturn(vcsReq).when(tracker).getAllReqCommitRelationsFromVcs();
 
         //when
         SetMultimap<String, String> reqCommitLinkage = tracker.getAllReqCommitRelations();
@@ -95,7 +84,6 @@ public class TrackerTest {
         //than
         SetMultimap<String, String> expected = HashMultimap.create();
         expected.putAll(dbReqs);
-        expected.putAll(vcsReq);
 
         for (Map.Entry<String, String> entry : expected.entries()){
             assertTrue(reqCommitLinkage.containsEntry(entry.getKey(), entry.getValue()));
@@ -103,15 +91,4 @@ public class TrackerTest {
         assertEquals(reqCommitLinkage.size(), expected.size());
     }
 
-    @Test
-    public void getAllReqCommitRelationsFromVcsTest() throws Exception {
-        SetMultimap<String, String> result = interpreter.getAllReqCommitRelationsFromVcs();
-        SetMultimap<String, String> expected = HashMultimap.create();
-        expected.put("0","f3196114a214a91ae3994b6cf6424d8347b2e918");
-        expected.put("1","b0b5d16e8071c775bdcd1b2d0b1cca464917780b");
-        expected.put("6","f3196114a214a91ae3994b6cf6424d8347b2e918");
-        expected.put("11","dee896c8d52af6bc0b00982ad2fcfca2d9d003dc");
-        assertEquals(result, expected);
-
-    }
 }

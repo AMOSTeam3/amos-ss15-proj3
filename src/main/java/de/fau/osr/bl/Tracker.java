@@ -1,10 +1,12 @@
 package de.fau.osr.bl;
 
-import com.google.common.collect.ImmutableSetMultimap;
-import com.google.common.collect.Lists;
-
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.SetMultimap;
 import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
@@ -13,7 +15,6 @@ import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +49,11 @@ public class Tracker {
         this.vcsClient = vcsClient;
         commitMessageparser = new CommitMessageParser();
         //assign default value, temp solution, todo
+        if (repoFile == null) repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
         if (ds == null) {
-            ds = new CSVFileDataSource(new File(AppProperties.GetValue("DefaultPathToCSVFile")));
+            CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
+            VCSDataSource vcsDs = new VCSDataSource(vcsClient, commitMessageparser);
+            ds = new CompositeDataSource(csvDs, vcsDs);
         }
 
         this.dataSource = ds;
@@ -69,7 +73,7 @@ public class Tracker {
         List<CommitFile> commitFilesList = new ArrayList<>();
 
         Iterator<String> commits = vcsClient.getCommitList();
-        ImmutableSetMultimap<String, String> relationsByCommit = getAllCommitReqRelations();
+        SetMultimap<String, String> relationsByCommit = getAllCommitReqRelations();
 
         while(commits.hasNext()){
 
@@ -101,7 +105,7 @@ public class Tracker {
         Set<String> requirementList = new HashSet<>();
 
         Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
-        ImmutableSetMultimap<String, String> relations = getAllCommitReqRelations();
+        SetMultimap<String, String> relations = getAllCommitReqRelations();
 
         while(commitIdListIterator.hasNext()){
                 requirementList.addAll(relations.get(commitIdListIterator.next()));
@@ -118,11 +122,8 @@ public class Tracker {
      * @return set of the relations
      * @throws IOException
      */
-	public ImmutableSetMultimap<String, String> getAllReqCommitRelations() throws IOException {
-        ImmutableSetMultimap.Builder<String, String> totalMap = ImmutableSetMultimap.builder();
-        totalMap.putAll(getAllReqCommitRelationsFromVcs());
-        totalMap.putAll(dataSource.getAllReqCommitRelations());
-        return totalMap.build();
+	public SetMultimap<String, String> getAllReqCommitRelations() throws IOException {
+        return dataSource.getAllReqCommitRelations();
     }
 
     /**
@@ -130,28 +131,10 @@ public class Tracker {
      * @return set of the relations
      * @throws IOException
      */
-    public ImmutableSetMultimap<String, String> getAllCommitReqRelations() throws IOException {
-        return getAllReqCommitRelations().inverse();
-    }
-
-    /**
-     * relation ReqId - CommitId of VCS only
-     * @return set of the relations
-     */
-    protected ImmutableSetMultimap<String, String> getAllReqCommitRelationsFromVcs() {
-        ImmutableSetMultimap.Builder<String, String> allRelations = ImmutableSetMultimap.builder();
-        ArrayList<String> commitIds = Lists.newArrayList(vcsClient.getCommitList());
-        String message;
-        List<String> reqs;
-        for(String commit : commitIds){
-            message = vcsClient.getCommitMessage(commit);
-            reqs = commitMessageparser.parse(message);
-            for(String reqId : reqs){
-                allRelations.put(reqId, commit);
-            }
-        }
-
-        return allRelations.build();
+    public SetMultimap<String, String> getAllCommitReqRelations() throws IOException {
+        SetMultimap<String, String> result = HashMultimap.create();
+        Multimaps.invertFrom(getAllReqCommitRelations(), result);
+        return result;
     }
 
     public Collection<Commit> getCommitsForRequirementID(String requirementID) throws IOException {
