@@ -12,16 +12,13 @@ import javax.swing.JList;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import de.fau.osr.core.db.CSVFileDataSource;
-import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
-import de.fau.osr.util.parser.CommitMessageParser;
 
 
 /*

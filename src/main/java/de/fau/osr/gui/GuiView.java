@@ -32,6 +32,7 @@ public class GuiView{
 			this.highlighted = hightlighted;
 		}
 	}
+
 	
 	private class ComplexCellRenderer implements ListCellRenderer<HighlightedLine>{
 		protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
@@ -52,6 +53,7 @@ public class GuiView{
 
 		
 	}
+
 	//The UI-Elements themselves are handled by the Element Handler. 
 	private GuiViewElementHandler elementHandler;
 	
