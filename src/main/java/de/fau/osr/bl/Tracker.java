@@ -48,6 +48,7 @@ public class Tracker {
         this.repoFile = repoFile;
         this.vcsClient = vcsClient;
         commitMessageparser = new CommitMessageParser();
+
         //assign default value, temp solution, todo
         if (repoFile == null) repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
         if (ds == null) {
@@ -72,15 +73,10 @@ public class Tracker {
 
         List<CommitFile> commitFilesList = new ArrayList<>();
 
-        Iterator<String> commits = vcsClient.getCommitList();
-        SetMultimap<String, String> relationsByCommit = getAllCommitReqRelations();
+        Set<String> commits = getAllReqCommitRelations().get(requirementID);
 
-        while(commits.hasNext()){
-
-            String currentCommit = commits.next();
-            if (relationsByCommit.containsKey(currentCommit)){
-                commitFilesList.addAll(vcsClient.getCommitFiles(currentCommit));
-            }
+        for (String commit : commits){
+            commitFilesList.addAll(vcsClient.getCommitFiles(commit));
         }
 		
 
