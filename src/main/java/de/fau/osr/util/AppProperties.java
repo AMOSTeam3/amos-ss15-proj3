@@ -37,7 +37,7 @@ public class AppProperties {
 		Properties properties = new Properties();
 		try {
 		  properties.load(AppProperties.class.getResourceAsStream("/prop.properties"));
-		  return Integer.getInteger(properties.getProperty(key));
+		  return Integer.parseInt(properties.getProperty(key));
 		} catch (IOException e)  {
 		  e.printStackTrace();
 		}
