@@ -203,7 +203,6 @@ public class GuiController {
 		
 		commitFileName_JList = new JList<String>(guiModel.getAllFiles(getCommitFileSorting()));
 		guiView.showFiles(commitFileName_JList);
-		
 		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
 	}
 
