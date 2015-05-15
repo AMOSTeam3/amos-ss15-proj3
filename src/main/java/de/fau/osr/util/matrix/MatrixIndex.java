@@ -1,4 +1,4 @@
-package de.fau.osr.util;
+package de.fau.osr.util.matrix;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package de.fau.osr.util;
+package de.fau.osr.util.matrix;
 
 import java.util.ArrayList;
 import java.util.HashMap;

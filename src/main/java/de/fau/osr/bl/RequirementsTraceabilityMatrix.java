@@ -9,8 +9,8 @@ import java.util.concurrent.Semaphore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fau.osr.util.MatrixIndex;
-import de.fau.osr.util.SymmetricMatrix;
+import de.fau.osr.util.matrix.MatrixIndex;
+import de.fau.osr.util.matrix.SymmetricMatrix;
 
 public class RequirementsTraceabilityMatrix {
 	
