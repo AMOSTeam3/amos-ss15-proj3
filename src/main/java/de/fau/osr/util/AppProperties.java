@@ -26,4 +26,21 @@ public class AppProperties {
 		}
 		 return null;
 	}
+	
+	/**
+	 * @param key
+	 * @desc This method returns the values of properties represented by the param as an integer
+	 * @author Gayathery
+	 */
+	public static Integer GetValueAsInt(String key)
+	{
+		Properties properties = new Properties();
+		try {
+		  properties.load(AppProperties.class.getResourceAsStream("/prop.properties"));
+		  return Integer.getInteger(properties.getProperty(key));
+		} catch (IOException e)  {
+		  e.printStackTrace();
+		}
+		 return null;
+	}
 }
