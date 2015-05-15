@@ -3,6 +3,7 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -15,6 +16,7 @@ import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -246,4 +249,36 @@ public class Tracker {
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
     	return vcsClient.blame(path,  commitMessageparser);
     }
+    
+    
+    public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
+    	
+    	try{
+	    	List<String> requirements = new ArrayList<String>( getAllRequirements());
+	    	
+	    	RequirementsTraceabilityMatrix requirementsTraceabilityMatrix = new RequirementsTraceabilityMatrix(requirements);
+	    	System.out.println(requirements.size());
+	    	
+	    	List<String> files = new ArrayList<String>( getAllFiles()) ;
+	    	
+	    	
+	    	for(String file: files){
+	    		
+	    		@SuppressWarnings("unchecked")
+				List<String> fileRequirements = new ArrayList<String>( getAllRequirementsForFile(file));
+	    		System.out.println( " req = "+fileRequirements.size());
+	    		if(fileRequirements !=null && !fileRequirements.isEmpty())
+	    		requirementsTraceabilityMatrix.populateMatrix(fileRequirements);
+	    	}
+	    	
+	    	return requirementsTraceabilityMatrix;
+	    	
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return null;
+    	
+    }
+    
+    
 }
