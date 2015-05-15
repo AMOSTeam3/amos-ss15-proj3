@@ -13,9 +13,12 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -39,11 +42,18 @@ public class TrackerTest {
 	 */
 	@Test
 	public void testGetCommitFilesForRequirementID() throws IOException {
-		
-			Iterator<CommitFile> commitFileList = interpreter.getCommitFilesForRequirementID(PublicTestData.getSampleReqID()).iterator();	
-			assertNotNull(commitFileList);
-			assertTrue(commitFileList.hasNext());
-		
+        //refault pattern Req-(\\d+)
+        List<CommitFile> commitFileList = interpreter.getCommitFilesForRequirementID("1");
+        assertTrue(commitFileList.size() == 1);
+        assertEquals(commitFileList.get(0).newPath.getName(), "TestFile4");
+
+        //test another pattern, should contain 2 files
+        interpreter = new Tracker(client, null, null, Pattern.compile("Req\\s(\\d+)"));
+        commitFileList = interpreter.getCommitFilesForRequirementID("1");
+        assertTrue(commitFileList.size() == 2);
+        assertEquals(commitFileList.get(0).newPath.getName(), "TestFile2");
+        assertEquals(commitFileList.get(1).newPath.getName(), "TestFile1");
+
 	}
 	
 	/**
