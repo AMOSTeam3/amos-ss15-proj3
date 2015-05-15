@@ -1,5 +1,6 @@
 package de.fau.osr.gui;
 
+import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
@@ -7,6 +8,7 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
@@ -243,5 +245,11 @@ public class GUITrackerToModelAdapter implements GuiModel {
 			i++;
 		}
 		throw new FileNotFoundException();
+	}
+
+	@Override
+	public RequirementsTraceabilityMatrix getRequirementsTraceability()
+			throws IOException {
+		return tracker.generateRequirementsTraceability();
 	}
 }

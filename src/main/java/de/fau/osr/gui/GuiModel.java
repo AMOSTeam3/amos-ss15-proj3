@@ -1,5 +1,6 @@
 package de.fau.osr.gui;
 
+import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 
@@ -61,5 +62,7 @@ public interface GuiModel {
 	HighlightedLine[] getBlame(int filesIndex, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
 	
 	String[] getRequirementsForBlame(int lineIndex, int filesIndex) throws FileNotFoundException, IOException, GitAPIException;
+	
+	public RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
 
 }
