@@ -7,13 +7,13 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
+import java.util.regex.Pattern;
 
 /*
  * Adapter class. Providing the correct formatted input for the Library Facade and transforming
@@ -25,7 +25,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	// TODO maybe we should use "List" instead of "Collection".
 	private Collection<Commit> commits;
 
-	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString)
+	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, Pattern reqPatternString)
 			throws IOException, RuntimeException {
 
 		tracker = new Tracker(vcs, ds, repoFile, reqPatternString);

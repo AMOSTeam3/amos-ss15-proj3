@@ -1,16 +1,5 @@
 package de.fau.osr.gui;
 
-import java.awt.EventQueue;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.regex.PatternSyntaxException;
-
-import javax.swing.JList;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -22,6 +11,16 @@ import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+import org.eclipse.jgit.api.errors.GitAPIException;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 
 /*
@@ -68,8 +67,9 @@ public class GuiController {
 					} catch (IOException e1) {
 						System.exit(0);
 					}
-					String reqPatternString = guiView.Pattern_OpeningDialog(AppProperties.GetValue("RequirementPattern"));
+
 					try {
+						Pattern reqPatternString = Pattern.compile(guiView.Pattern_OpeningDialog(AppProperties.GetValue("RequirementPattern")));
 						guiModel = reInitModel(null, null, repoFile, reqPatternString);
 						break;
 					} catch (PatternSyntaxException | IOException e) {
@@ -411,7 +411,7 @@ public class GuiController {
 				return;
 			}
 			try {
-				guiModelTrial = reInitModel(null, null, repoFile, guiModel.getCurrentRequirementPatternString());
+				guiModelTrial = reInitModel(null, null, repoFile, Pattern.compile(guiModel.getCurrentRequirementPatternString()));
 				guiView.showInformationDialog("Repository Path modified to " + repoFile.getPath());
 				break;
 			} catch (IOException | RuntimeException e) {
@@ -435,14 +435,18 @@ public class GuiController {
 				guiView.showErrorDialog("Maximum retries exceeded");
 				return;
 			}
-			String reqPatternString = guiView.Pattern_OpeningDialog(guiModel.getCurrentRequirementPatternString());
-			if(reqPatternString == null){
+			Pattern reqPattern;
+			try {
+				reqPattern = Pattern.compile(guiView.Pattern_OpeningDialog(guiModel.getCurrentRequirementPatternString()));
+			}catch (Exception e){
+				//todo error message about bad pattern
 				Status = RetryStatus.Cancel;
 				return;
 			}
+
 			try {
-				guiModelTrial = reInitModel(null, null, new File(guiModel.getCurrentRepositoryPath()), reqPatternString);
-				guiView.showInformationDialog("Requirement Pattern modified to " + reqPatternString);
+				guiModelTrial = reInitModel(null, null, new File(guiModel.getCurrentRepositoryPath()), reqPattern);
+				guiView.showInformationDialog("Requirement Pattern modified to " + reqPattern);
 				break;
 			} catch (RuntimeException | IOException e) {				
 				guiView.showErrorDialog(e.getMessage());
@@ -477,10 +481,10 @@ public class GuiController {
      * @param vcs vcs client
      * @param ds data source
      * @param repoFile path to git repo
-     * @param reqPatternString pattern to parse req id from commit messages
+     * @param reqPattern pattern to parse req id from commit messages
      * @return model to use
      */
-    private GUITrackerToModelAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString) throws IOException {
+    private GUITrackerToModelAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, Pattern reqPattern) throws IOException {
 
         if (repoFile == null){
             repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
@@ -496,11 +500,12 @@ public class GuiController {
 			ds = new CompositeDataSource(csvDs, vcsDs);
 		}
 
-        if (reqPatternString == null){
-            reqPatternString = AppProperties.GetValue("RequirementPattern");
+
+        if (reqPattern == null){
+            reqPattern = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
         }
 
-        return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPatternString);
+        return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPattern);
     }
     
     void addLinkage(String requirementID, int commitIndex) {

@@ -44,10 +44,10 @@ public class Tracker {
         this(vcsClient, null, null, null);
     }
 
-    public Tracker(VcsClient vcsClient, DataSource ds, File repoFile, String parsePattern) throws IOException {
+    public Tracker(VcsClient vcsClient, DataSource ds, File repoFile, Pattern parsePattern) throws IOException {
         this.repoFile = repoFile;
         this.vcsClient = vcsClient;
-        commitMessageparser = new CommitMessageParser();
+        commitMessageparser = new CommitMessageParser(parsePattern);
 
         //assign default value, temp solution, todo
         if (repoFile == null) repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
@@ -232,7 +232,7 @@ public class Tracker {
      * @return
      */
     public String getCurrentRequirementPatternString(){
-        return CommitMessageParser.getPattern().toString();
+        return commitMessageparser.getPattern().toString();
     }
 
     public String getCurrentRepositoryPath(){
