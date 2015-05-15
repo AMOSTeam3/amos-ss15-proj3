@@ -1,20 +1,5 @@
 package de.fau.osr.bl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
@@ -31,6 +16,17 @@ import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class is an interpreter for data from Vcs and Database
@@ -269,8 +265,7 @@ public class Tracker {
 	    	for(String file: files){
 	    		
 	    		@SuppressWarnings("unchecked")
-	    		String formatedFileName = file.replaceAll(Matcher.quoteReplacement( "\\"), "/");
-				List<String> fileRequirements = new ArrayList<String>( getAllRequirementsForFile(formatedFileName));
+				List<String> fileRequirements = new ArrayList<String>( getAllRequirementsForFile(file));
 	    		System.out.println( " req = "+fileRequirements.size());
 	    		if(fileRequirements !=null && !fileRequirements.isEmpty())
 	    		requirementsTraceabilityMatrix.populateMatrix(fileRequirements);

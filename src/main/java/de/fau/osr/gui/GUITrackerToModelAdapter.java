@@ -1,6 +1,5 @@
 package de.fau.osr.gui;
 
-import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
@@ -231,12 +230,6 @@ public class GUITrackerToModelAdapter implements GuiModel {
 			highlightedLines.add(new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID)));
 		}
 		return highlightedLines;
-	}
-
-	@Override
-	public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException {
-		return tracker.generateRequirementsTraceability();
-
 	}
 	
 }
