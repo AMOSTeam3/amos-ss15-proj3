@@ -1,8 +1,26 @@
 package de.fau.osr.bl;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -15,15 +33,6 @@ import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class is an interpreter for data from Vcs and Database
@@ -97,7 +106,7 @@ public class Tracker {
 
         long startTime = System.currentTimeMillis();
 
-        logger.info("Start call : getAllRequirementsForFile():filePath = "+filePath);
+        logger.debug("Start call : getAllRequirementsForFile():filePath = "+filePath);
         Set<String> requirementList = new HashSet<>();
 
         Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
@@ -107,7 +116,7 @@ public class Tracker {
                 requirementList.addAll(relations.get(commitIdListIterator.next()));
         }
 
-        logger.info("End call -getAllRequirementsForFile() Time: "+ (System.currentTimeMillis() - startTime) );
+        logger.debug("End call -getAllRequirementsForFile() Time: "+ (System.currentTimeMillis() - startTime) );
 		
 		return requirementList;
 		
@@ -242,33 +251,77 @@ public class Tracker {
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
     	return vcsClient.blame(path,  commitMessageparser);
     }
-    
- public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
+ /*
+  * Method which performs the complete processing of Requirement Traceability
+  */
+    public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
     	
     	try{
-	    	List<String> requirements = new ArrayList<String>( getAllRequirements());
-	    	
-	    	RequirementsTraceabilityMatrix requirementsTraceabilityMatrix = new RequirementsTraceabilityMatrix(requirements);
-	    	System.out.println(requirements.size());
-	    	
-	    	List<String> files = new ArrayList<String>( getAllFiles()) ;
 	    	
 	    	
-	    	for(String file: files){
-	    		
-	    		@SuppressWarnings("unchecked")
-				List<String> fileRequirements = new ArrayList<String>( getAllRequirementsForFile(file));
-	    		System.out.println( " req = "+fileRequirements.size());
-	    		if(fileRequirements !=null && !fileRequirements.isEmpty())
-	    		requirementsTraceabilityMatrix.populateMatrix(fileRequirements);
+	    	Collection<String> files = getAllFiles() ;	    	
+	    	
+	    	ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(AppProperties.GetValueAsInt("TraceabilityMatrixProcessingThreadPoolCount"));
+	    	TraceabilityMatrixThread.setRequirementTraceabilityMatrix(this);
+	    	for(String file: files){	    		
+	    		TraceabilityMatrixThread traceabilityMatrixWorkerThread = new TraceabilityMatrixThread(file);
+	    		threadPoolExecutor.execute(traceabilityMatrixWorkerThread);
 	    	}
+	    	threadPoolExecutor.shutdown();
+	    	while (!threadPoolExecutor.isTerminated()) {
+	    		        }
+	    	return TraceabilityMatrixThread.getRequirementTraceabilityMatrix();
 	    	
-	    	return requirementsTraceabilityMatrix;
-	    	
-    	}catch(Exception e){
+    	}catch(IndexOutOfBoundsException e){
+    		return null;
+    	}
+    	catch(Exception e){
     		e.printStackTrace();
     	}
     	return null;
     	
     }
+}
+/*
+ * class for Thread of Traceability Matrix processing
+ */
+class TraceabilityMatrixThread implements Runnable{
+	static Tracker tracker;
+	String filePath;
+	static RequirementsTraceabilityMatrix requirementsTraceabilityMatrixWorker;
+	static void setRequirementTraceabilityMatrix(Tracker trackerObject){
+		try {
+			tracker = trackerObject;
+			requirementsTraceabilityMatrixWorker = new RequirementsTraceabilityMatrix(tracker.getAllRequirements());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	static RequirementsTraceabilityMatrix getRequirementTraceabilityMatrix(){
+		return requirementsTraceabilityMatrixWorker;
+	}
+	TraceabilityMatrixThread(String filePath){
+		this.filePath = filePath;
+	}
+
+	@Override
+	public void run() throws IndexOutOfBoundsException{
+		List<String> fileRequirements;
+		try {
+			String unixFormatedFilePath = filePath.replaceAll(Matcher.quoteReplacement("\\"), "/");
+			fileRequirements = new ArrayList<String>( tracker.getAllRequirementsForFile(unixFormatedFilePath));
+			if(fileRequirements !=null && !fileRequirements.isEmpty())
+    			requirementsTraceabilityMatrixWorker.populateMatrix(fileRequirements,unixFormatedFilePath);
+		} catch(IndexOutOfBoundsException e){
+    		throw e;
+    	}catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 }

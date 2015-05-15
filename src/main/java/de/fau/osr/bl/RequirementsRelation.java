@@ -1,13 +1,17 @@
 package de.fau.osr.bl;
 
+import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Gayathery Sathya
+ * @desc This class represents the relationship between requirements
+ */
 public class RequirementsRelation {
 	
 	String requirementX;
 	String requirementY;
-	Integer CommonFilesCount = 0;
-	List<String> files;
+	Integer commonFilesCount = 0;
+	List<String> commonFiles = new ArrayList<String>();
 	
 	
 	public RequirementsRelation() {
@@ -21,7 +25,7 @@ public class RequirementsRelation {
 		super();
 		this.requirementX = requirementX;
 		this.requirementY = requirementY;
-		this.files = files;
+		this.commonFiles = files;
 	}
 
 
@@ -30,7 +34,7 @@ public class RequirementsRelation {
 		super();
 		this.requirementX = requirementX;
 		this.requirementY = requirementY;
-		CommonFilesCount = commonFilesCount;
+		this.commonFilesCount = commonFilesCount;
 	}
 
 
@@ -55,24 +59,34 @@ public class RequirementsRelation {
 
 
 	public Integer getCommonFilesCount() {
-		return CommonFilesCount;
+		return commonFilesCount;
 	}
 
 
 	public void setCommonFilesCount(Integer commonFilesCount) {
-		CommonFilesCount = commonFilesCount;
+		commonFilesCount = commonFilesCount;
 	}
 
 
 	public List<String> getFiles() {
-		return files;
+		return commonFiles;
 	}
 
 
 	public void setFiles(List<String> files) {
-		this.files = files;
+		this.commonFiles = files;
 	}
 	
+	public void incrementRelations(int commonFilesCount, List<String> commonFiles)	{
+		this.commonFilesCount += commonFilesCount;
+		if(commonFiles != null)
+			this.commonFiles.addAll(commonFiles);
+	}
 	
+	public void decrementRelations(int commonFilesCount, List<String> commonFiles)	{
+		this.commonFilesCount -= commonFilesCount;
+		if(commonFiles != null)
+			this.commonFiles.removeAll(commonFiles);
+	}
 
 }

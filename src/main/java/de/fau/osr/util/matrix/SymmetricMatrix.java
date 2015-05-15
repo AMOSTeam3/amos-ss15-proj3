@@ -6,19 +6,31 @@ import java.util.List;
 import java.util.Map;
 
 
-
+/*
+ * @author Gayathery Sathya
+ * @desc class to represent a symmetric matrix with element type T
+ */
 public class SymmetricMatrix<T> {
 	
 	Map<MatrixIndex,T> matrix= new HashMap<MatrixIndex, T>();
 			
 	int size;
+	boolean hasDiagonalElements;
 
 	public SymmetricMatrix(int size) {
+		this(size,false);
+	}
+	
+	public SymmetricMatrix(int size, boolean hasDiagonalElements) {
 		super();
 		this.size = size;
 		initMatrix();
+		this.hasDiagonalElements = hasDiagonalElements;
+		
 	}
-	
+	/*
+	 * method to initialize the matrix elements (to null)
+	 */
 	public void initMatrix(){
 		List<MatrixIndex> element = generateElement(size);
 		for(MatrixIndex index: element)
@@ -26,18 +38,13 @@ public class SymmetricMatrix<T> {
 		
 	}
     
-	public T getMatrixValue(MatrixIndex matrixIndex){
+	public T getAt(MatrixIndex matrixIndex){
 		
 		return matrix.get(orderElement(matrixIndex));
 	}
 	
-	public void setMatrixElement(MatrixIndex matrixIndex, T value){
+	public void setAt(MatrixIndex matrixIndex, T value){
 		matrix.put(orderElement(matrixIndex), value);
-	}
-    
-	public boolean findKey(MatrixIndex matrixIndex){
-		
-		return matrix.containsKey(matrixIndex);
 	}
    
 	public Map<MatrixIndex, T> getMatrix() {
@@ -46,27 +53,31 @@ public class SymmetricMatrix<T> {
 	
 	private MatrixIndex orderElement(MatrixIndex matrixIndex){
 		Integer temp;
-		
-		if (matrixIndex.getX() > matrixIndex.getY()) {
-			temp = matrixIndex.getX();
-			matrixIndex.setX(matrixIndex.getY());
-			matrixIndex.setY(temp);
+		if (matrixIndex.getRowIndex() > matrixIndex.getColumnIndex()) {
+			temp = matrixIndex.getRowIndex();
+			matrixIndex.setRowIndex(matrixIndex.getColumnIndex());
+			matrixIndex.setColumnIndex(temp);
 		}
 		
 		return matrixIndex;
 		    
 	}
+	/*
+	 * method to generate the elements of the symmetric matrix where data can be stored
+	 */
 	private List<MatrixIndex> generateElement(int size){
 		
 		List<MatrixIndex> element = new ArrayList<MatrixIndex>();
 		int count;
 		for(int i = 0 ; i< size ; i++){	
-			count = i+1;
-			while(count < size){
-				element.add(new MatrixIndex(i, count));
-				count++;
+			for(int j = i+1 ; j< size ; j++){
+				if(i==j && !hasDiagonalElements){
+					continue;	
+				}								
+				element.add(new MatrixIndex(i, j));
+					
+				}
 			}
-		}
 		return element;
 		
 	}

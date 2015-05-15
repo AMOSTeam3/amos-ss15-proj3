@@ -2,43 +2,55 @@ package de.fau.osr.util.matrix;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-public class MatrixIndex {
+/*
+ * @author Gayathery Sathya
+ * @desc class to represent the index of an element in a matrix
+ */
+public class MatrixIndex{
 
 	Logger logger = LoggerFactory.getLogger(MatrixIndex.class);
 	
-	int x;
-	int y;
+	int rowIndex;
+	int columnIndex;
 	
 	public MatrixIndex(int x, int y) {
 		super();
-		this.x = x;
-		this.y = y;
+		this.rowIndex = x;
+		this.columnIndex = y;
 			
 	}
 	
 	
 
-	public int getX() {
-		return x;
+	public int getRowIndex() {
+		return rowIndex;
 	}
 
 
 
-	public void setX(int x) {
-		this.x = x;
+	public void setRowIndex(int rowIndex) throws IndexOutOfBoundsException{
+		if(rowIndex<0)
+			throw new IndexOutOfBoundsException("Matrix index cannot be negative");
+		this.rowIndex = rowIndex;
+	}
+	
+	public void set(int rowIndex,int columnIndex) {
+		setRowIndex(rowIndex);
+		setColumnIndex(columnIndex);
 	}
 
 
 
-	public int getY() {
-		return y;
+	public int getColumnIndex() {
+		return columnIndex;
 	}
 
 
 
-	public void setY(int y) {
-		this.y = y;
+	public void setColumnIndex(int columnIndex) throws IndexOutOfBoundsException{
+		if(columnIndex<0)
+			throw new IndexOutOfBoundsException("Matrix index cannot be negative");
+		this.columnIndex = columnIndex;
 	}
 
 
@@ -47,8 +59,8 @@ public class MatrixIndex {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
+		result = prime * result + rowIndex;
+		result = prime * result + columnIndex;
 		return result;
 	}
 
@@ -61,9 +73,9 @@ public class MatrixIndex {
 		if (getClass() != obj.getClass())
 			return false;
 		MatrixIndex other = (MatrixIndex) obj;
-		if (x != other.x)
+		if (rowIndex != other.rowIndex)
 			return false;
-		if (y != other.y)
+		if (columnIndex != other.columnIndex)
 			return false;
 		return true;
 	}
@@ -72,7 +84,7 @@ public class MatrixIndex {
 
 	@Override
 	public String toString() {
-		return "MatrixIndex [x=" + x + ", y=" + y + "]";
+		return "MatrixIndex [x=" + rowIndex + ", y=" + columnIndex + "]";
 	}
 	
 	
