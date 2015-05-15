@@ -18,8 +18,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 
@@ -41,9 +41,11 @@ public class GuiController {
 	JList<String> requirements_JList;
 	JList<String> commitMessages_JList;
 	JList<String> commitFileName_JList;
+	JList<HighlightedLine> code_JList;
 
 	// sorting algorithm for commitFileName_JList
 	Comparator<CommitFile> commitFileSorting;
+	
 
 	/*
 	 * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
@@ -65,8 +67,9 @@ public class GuiController {
 					} catch (IOException e1) {
 						System.exit(0);
 					}
-					String reqPatternString = guiView.Pattern_OpeningDialog(AppProperties.GetValue("RequirementPattern"));
+
 					try {
+						Pattern reqPatternString = Pattern.compile(guiView.Pattern_OpeningDialog(AppProperties.GetValue("RequirementPattern")));
 						guiModel = reInitModel(null, null, repoFile, reqPatternString);
 						break;
 					} catch (PatternSyntaxException | IOException e) {
@@ -179,9 +182,8 @@ public class GuiController {
 	void codeFromFile(int filesIndex, String requirementID) {
 		guiView.clearImpactPercentage();
 		
-		Collection<HighlightedLine> lines;
 		try {
-			lines = guiModel.getBlame(filesIndex, requirementID);
+			code_JList = new JList<HighlightedLine>(guiModel.getBlame(filesIndex, requirementID));
 		}catch(FileNotFoundException e){
 			guiView.showInformationDialog("Can only be displayed if file is up-to-date!");
 			return;
@@ -189,7 +191,31 @@ public class GuiController {
 			guiView.showErrorDialog("Internal storing Error" + e);
 			return;
 		}
-		guiView.showCode(lines);
+		
+		guiView.showCode(code_JList);
+		
+		guiView.addMouseListener(code_JList, new MouseEvent(this, Action.RequirmentsFromCode));
+	}
+	
+	/**
+	 * Navigation: ->File->Code->Requirements
+	 * Clear: Commits
+	 * Setting: Requirements
+	 * Using: getRequirementsForBlame
+	 * @param filesIndex
+	 * @param codeIndex
+	 */
+	void requirementsFromCode(int filesIndex, int codeIndex){
+		guiView.clearCommits();
+		
+		try{
+			requirements_JList = new JList<String>(guiModel.getRequirementsForBlame(codeIndex, filesIndex));
+		} catch (IOException | GitAPIException e) {
+			guiView.showErrorDialog("Internal storing Error" + e);
+			return;
+		}
+		
+		guiView.showRequirements(requirements_JList);
 	}
 
 	/*
@@ -385,7 +411,7 @@ public class GuiController {
 				return;
 			}
 			try {
-				guiModelTrial = reInitModel(null, null, repoFile, guiModel.getCurrentRequirementPatternString());
+				guiModelTrial = reInitModel(null, null, repoFile, Pattern.compile(guiModel.getCurrentRequirementPatternString()));
 				guiView.showInformationDialog("Repository Path modified to " + repoFile.getPath());
 				break;
 			} catch (IOException | RuntimeException e) {
@@ -409,14 +435,18 @@ public class GuiController {
 				guiView.showErrorDialog("Maximum retries exceeded");
 				return;
 			}
-			String reqPatternString = guiView.Pattern_OpeningDialog(guiModel.getCurrentRequirementPatternString());
-			if(reqPatternString == null){
+			Pattern reqPattern;
+			try {
+				reqPattern = Pattern.compile(guiView.Pattern_OpeningDialog(guiModel.getCurrentRequirementPatternString()));
+			}catch (Exception e){
+				//todo error message about bad pattern
 				Status = RetryStatus.Cancel;
 				return;
 			}
+
 			try {
-				guiModelTrial = reInitModel(null, null, new File(guiModel.getCurrentRepositoryPath()), reqPatternString);
-				guiView.showInformationDialog("Requirement Pattern modified to " + reqPatternString);
+				guiModelTrial = reInitModel(null, null, new File(guiModel.getCurrentRepositoryPath()), reqPattern);
+				guiView.showInformationDialog("Requirement Pattern modified to " + reqPattern);
 				break;
 			} catch (RuntimeException | IOException e) {				
 				guiView.showErrorDialog(e.getMessage());
@@ -451,10 +481,10 @@ public class GuiController {
      * @param vcs vcs client
      * @param ds data source
      * @param repoFile path to git repo
-     * @param reqPatternString pattern to parse req id from commit messages
+     * @param reqPattern pattern to parse req id from commit messages
      * @return model to use
      */
-    private GUITrackerToModelAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString) throws IOException {
+    private GUITrackerToModelAdapter reInitModel(VcsClient vcs, DataSource ds, File repoFile, Pattern reqPattern) throws IOException {
 
         if (repoFile == null){
             repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
@@ -470,11 +500,12 @@ public class GuiController {
 			ds = new CompositeDataSource(csvDs, vcsDs);
 		}
 
-        if (reqPatternString == null){
-            reqPatternString = AppProperties.GetValue("RequirementPattern");
+
+        if (reqPattern == null){
+            reqPattern = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
         }
 
-        return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPatternString);
+        return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPattern);
     }
     
     void addLinkage(String requirementID, int commitIndex) {

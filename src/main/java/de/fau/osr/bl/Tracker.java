@@ -3,7 +3,6 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
-
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -16,7 +15,6 @@ import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,10 +44,11 @@ public class Tracker {
         this(vcsClient, null, null, null);
     }
 
-    public Tracker(VcsClient vcsClient, DataSource ds, File repoFile, String parsePattern) throws IOException {
+    public Tracker(VcsClient vcsClient, DataSource ds, File repoFile, Pattern parsePattern) throws IOException {
         this.repoFile = repoFile;
         this.vcsClient = vcsClient;
-        commitMessageparser = new CommitMessageParser();
+        commitMessageparser = new CommitMessageParser(parsePattern);
+
         //assign default value, temp solution, todo
         if (repoFile == null) repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
         if (ds == null) {
@@ -75,15 +73,10 @@ public class Tracker {
 
         List<CommitFile> commitFilesList = new ArrayList<>();
 
-        Iterator<String> commits = vcsClient.getCommitList();
-        SetMultimap<String, String> relationsByCommit = getAllCommitReqRelations();
+        Set<String> commits = getAllReqCommitRelations().get(requirementID);
 
-        while(commits.hasNext()){
-
-            String currentCommit = commits.next();
-            if (relationsByCommit.containsKey(currentCommit)){
-                commitFilesList.addAll(vcsClient.getCommitFiles(currentCommit));
-            }
+        for (String commit : commits){
+            commitFilesList.addAll(vcsClient.getCommitFiles(commit));
         }
 		
 
@@ -239,7 +232,7 @@ public class Tracker {
      * @return
      */
     public String getCurrentRequirementPatternString(){
-        return CommitMessageParser.getPattern().toString();
+        return commitMessageparser.getPattern().toString();
     }
 
     public String getCurrentRepositoryPath(){
@@ -250,8 +243,7 @@ public class Tracker {
     	return vcsClient.blame(path,  commitMessageparser);
     }
     
-    
-    public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
+ public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
     	
     	try{
 	    	List<String> requirements = new ArrayList<String>( getAllRequirements());
@@ -279,6 +271,4 @@ public class Tracker {
     	return null;
     	
     }
-    
-    
 }

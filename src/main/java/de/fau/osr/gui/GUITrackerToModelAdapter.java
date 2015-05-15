@@ -7,13 +7,13 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
+import java.util.regex.Pattern;
 
 /*
  * Adapter class. Providing the correct formatted input for the Library Facade and transforming
@@ -25,7 +25,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	// TODO maybe we should use "List" instead of "Collection".
 	private Collection<Commit> commits;
 
-	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, String reqPatternString)
+	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, Pattern reqPatternString)
 			throws IOException, RuntimeException {
 
 		tracker = new Tracker(vcs, ds, repoFile, reqPatternString);
@@ -222,14 +222,26 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public Collection<HighlightedLine> getBlame(int filesIndex,
+	public HighlightedLine[] getBlame(int filesIndex,
 			String requirementID) throws FileNotFoundException, IOException, GitAPIException {
 		Collection<AnnotatedLine> lines = tracker.getBlame(getCommitFile(filesIndex).newPath.getPath());
-		Collection<HighlightedLine> highlightedLines = new ArrayList<HighlightedLine>();
+		HighlightedLine[] hightlightedLines = new HighlightedLine[lines.size()];
+		int i= 0;
 		for(AnnotatedLine line: lines){
-			highlightedLines.add(new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID)));
+			hightlightedLines[i++] = new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID));
 		}
-		return highlightedLines;
+		return hightlightedLines;
 	}
 	
+	public String[] getRequirementsForBlame(int lineIndex, int filesIndex) throws FileNotFoundException, IOException, GitAPIException{
+		Collection<AnnotatedLine> lines = tracker.getBlame(getCommitFile(filesIndex).newPath.getPath());
+		int i = 0;
+		for(AnnotatedLine line: lines){
+			if(i == lineIndex){
+				return convertCollectionToArray(line.getRequirements());
+			}
+			i++;
+		}
+		throw new FileNotFoundException();
+	}
 }

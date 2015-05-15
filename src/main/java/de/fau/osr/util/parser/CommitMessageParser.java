@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.fau.osr.util.parser;
 
 import de.fau.osr.util.AppProperties;
@@ -20,7 +17,18 @@ import java.util.regex.Pattern;
  */
 public class CommitMessageParser implements Parser {
 
-	private static Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
+    private Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
+
+    /**
+     * default pattern will be used
+     */
+    public CommitMessageParser() {}
+
+    public CommitMessageParser(Pattern pattern) {
+        if (pattern != null) {
+            this.setPattern(pattern);
+        }
+    }
 
 	@Override
 	public List<String> parse(String latestCommitMessage) {
@@ -35,11 +43,11 @@ public class CommitMessageParser implements Parser {
 
 	}
 
-	public static void setPattern(Pattern pattern) {
+	public void setPattern(Pattern pattern) {
 		REQUIREMENT_PATTERN = pattern;
 	}
 	
-	public static Pattern getPattern() {
+	public Pattern getPattern() {
 		return REQUIREMENT_PATTERN;
 	}
 }
