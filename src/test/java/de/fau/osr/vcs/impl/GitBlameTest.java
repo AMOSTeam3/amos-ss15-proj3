@@ -5,7 +5,9 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import de.fau.osr.util.AppProperties;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -24,9 +26,10 @@ public class GitBlameTest {
 	
 	@Test
 	public void getBlame() throws Exception {
-		List<AnnotatedLine> blame = client.blame("TestFile4", new CommitMessageParser());
+		CommitMessageParser cmparser =  new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
+		List<AnnotatedLine> blame = client.blame("TestFile4", cmparser);
 		assertEquals(Collections.singletonList(new AnnotatedLine(Lists.<String>newArrayList("1"), "File 4")), Lists.newArrayList(blame));
-		blame = client.blame("LICENSE", new CommitMessageParser());
+		blame = client.blame("LICENSE", cmparser);
 		for(AnnotatedLine line : blame) {
 			assertEquals(Collections.emptyList(), line.getRequirements());
 		}

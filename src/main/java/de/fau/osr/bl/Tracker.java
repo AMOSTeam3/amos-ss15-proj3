@@ -56,6 +56,7 @@ public class Tracker {
     public Tracker(VcsClient vcsClient, DataSource ds, File repoFile, Pattern parsePattern) throws IOException {
         this.repoFile = repoFile;
         this.vcsClient = vcsClient;
+        // TODO Tracker doesn't need "commitMessageParser". This should just be used in VCSDataSource.
         commitMessageparser = new CommitMessageParser(parsePattern);
 
         //assign default value, temp solution, todo
@@ -222,8 +223,7 @@ public class Tracker {
      * todo move to vcsClient?
      */
     public Collection<String> getRequirementsFromCommit(Commit commit) {
-        Parser parser = new CommitMessageParser();
-        return parser.parse(commit.message);
+        return commitMessageparser.parse(commit.message);
     }
 	
     /**

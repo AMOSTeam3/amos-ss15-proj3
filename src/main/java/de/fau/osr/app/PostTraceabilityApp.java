@@ -6,6 +6,7 @@ import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import de.fau.osr.util.parser.Parser;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 /**
  * @author Taleh Didover
@@ -65,7 +67,7 @@ public class PostTraceabilityApp {
         CliOptions cli = new CliOptions();
         new JCommander(cli, args);
         VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
-        Parser parser = new CommitMessageParser();
+        Parser parser = new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
 
         Path repoFilePath = Paths.get(cli.repoURL);
 
