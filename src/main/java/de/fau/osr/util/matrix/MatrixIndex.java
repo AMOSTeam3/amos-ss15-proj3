@@ -20,7 +20,12 @@ public class MatrixIndex{
 			
 	}
 	
-	
+	public MatrixIndex(MatrixIndex mIndex) {
+		super();
+		this.rowIndex = mIndex.getRowIndex();
+		this.columnIndex = mIndex.getColumnIndex();
+			
+	}
 
 	public int getRowIndex() {
 		return rowIndex;

@@ -64,15 +64,15 @@ public class RequirementsTraceabilityMatrix {
 			MatrixIndex mIndex = new MatrixIndex(-1, -1);
 			for(int i = 0 ; i< size ; i++){	
 				mIndex.setRowIndex(getRequirementIndex(dependantRequirements.get(i)));
-				for(int j=i+1;j<size;j++){
+				for(int j=i+1;j<size;j++){					
 					mIndex.setColumnIndex(getRequirementIndex(dependantRequirements.get(j)));
 					synchronized(lockObject){
-
-						RequirementsRelation requirementsRelation = traceabilityMatrix.getAt(mIndex);
+						MatrixIndex mIndexForPassing = new MatrixIndex(mIndex);
+						RequirementsRelation requirementsRelation = traceabilityMatrix.getAt(mIndexForPassing);
 						if (requirementsRelation == null)
 							requirementsRelation = new RequirementsRelation();
 						requirementsRelation.incrementRelations(1, relatedFileList);
-						traceabilityMatrix.setAt(mIndex, requirementsRelation);
+						traceabilityMatrix.setAt(mIndexForPassing, requirementsRelation);
 					}			
 				}
 			}
