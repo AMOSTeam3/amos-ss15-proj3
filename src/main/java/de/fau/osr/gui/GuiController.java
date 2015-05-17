@@ -1,5 +1,6 @@
 package de.fau.osr.gui;
 
+import com.google.common.base.Predicate;
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -45,6 +46,8 @@ public class GuiController {
 
 	// sorting algorithm for commitFileName_JList
 	Comparator<CommitFile> commitFileSorting;
+	// filtering/finding a specific reqiurementID
+	Predicate requirementIDFiltering;
 	
 
 	/*
@@ -101,6 +104,15 @@ public class GuiController {
 		System.out.format("Commit file sorting selected: %s%n", commitFileSorting);
 	}
 
+	public Predicate getRequirementIDFiltering() {
+		return requirementIDFiltering;
+	}
+
+	public void setRequirementIDFiltering(Predicate requirementIDFiltering) {
+		this.requirementIDFiltering = requirementIDFiltering;
+	}
+
+
 	
 	
 	/*
@@ -112,7 +124,7 @@ public class GuiController {
 	void requirementsFromDB() throws IOException {
 		guiView.clearAll();
 		
-		String[] requirements = guiModel.getAllRequirements();
+		String[] requirements = guiModel.getAllRequirements(requirementIDFiltering);
 		requirements_JList = new JList<String>(requirements);
 		guiView.showRequirements(requirements_JList);
 		
@@ -352,7 +364,7 @@ public class GuiController {
 		
 		String[] requirements;
 		try {
-			requirements = guiModel.getAllRequirements();
+			requirements = guiModel.getAllRequirements(requirementIDFiltering);
 		} catch (IOException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;

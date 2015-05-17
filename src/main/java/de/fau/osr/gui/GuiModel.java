@@ -1,5 +1,6 @@
 package de.fau.osr.gui;
 
+import com.google.common.base.Predicate;
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
@@ -24,7 +25,7 @@ import de.fau.osr.gui.GuiView.HighlightedLine;
 
 public interface GuiModel {
 
-	String[] getAllRequirements() throws IOException;
+	String[] getAllRequirements(Predicate<String> filtering) throws IOException;
 
 	String[] getCommitsFromRequirementID(String requirement) throws IOException;
 

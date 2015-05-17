@@ -2,17 +2,15 @@
 package de.fau.osr.gui;
 
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.util.filtering.FilterByExactString;
 import de.fau.osr.util.sorting.SortByCommitID;
 import de.fau.osr.util.sorting.SortByFilename;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -65,6 +63,7 @@ public class GuiViewElementHandler extends JFrame {
 		this.guiController = guiController;
 		initializeButtonActions();
 		initializeComboboxActions();
+		initializeSearchTextField();
 		setTitle("Spice Traceability");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -236,6 +235,11 @@ public class GuiViewElementHandler extends JFrame {
 					}
 				}
 		);
+	}
+
+	void initializeSearchTextField() {
+		//TODO insert search text field initialization
+		guiController.setRequirementIDFiltering(new FilterByExactString());
 	}
 	
 	void switchLinkageButton(ButtonState Linkage_ButtonState) {

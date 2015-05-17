@@ -1,5 +1,8 @@
 package de.fau.osr.gui;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DataSource;
@@ -34,8 +37,9 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public String[] getAllRequirements() throws IOException {
-        String[] result = convertCollectionToArray(tracker.getAllRequirements());
+	public String[] getAllRequirements(Predicate<String> filtering) throws IOException {
+		Collection<String> reqIds = tracker.getAllRequirements();
+        String[] result = convertCollectionToArray(Collections2.filter(reqIds, filtering));
         //temp comparator, todo implement more universal one
         Arrays.sort(result, new Comparator<String>() {
             @Override
@@ -43,6 +47,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
                 return Integer.parseInt(o1) - Integer.parseInt(o2);
             }
         });
+
 		return result;
 	}
 
