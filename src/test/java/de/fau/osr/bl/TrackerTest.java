@@ -34,7 +34,7 @@ public class TrackerTest {
 	@BeforeClass
 	public static void prepare() throws IOException {
         client =  VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
-		interpreter = new Tracker(client);
+        interpreter = new Tracker(client, null, null, Pattern.compile("Req-(\\d+)"));
 	}
 
 	/**

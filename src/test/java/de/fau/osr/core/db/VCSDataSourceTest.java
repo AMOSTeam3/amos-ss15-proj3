@@ -5,12 +5,14 @@ import com.google.common.collect.SetMultimap;
 import de.fau.osr.PublicTestData;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,7 +26,7 @@ public class VCSDataSourceTest {
     @BeforeClass
     public static void prepare() throws IOException {
         client =  VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
-        vcsDs = new VCSDataSource(client, new CommitMessageParser());
+        vcsDs = new VCSDataSource(client, new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern"))));
     }
 
     @Test(expected = OperationNotSupportedException.class)

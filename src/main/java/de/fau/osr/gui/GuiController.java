@@ -494,16 +494,15 @@ public class GuiController {
             vcs = new GitVcsClient(repoFile.toString());
         }
 
-		if (ds == null) {
-			CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
-			VCSDataSource vcsDs = new VCSDataSource(vcs, new CommitMessageParser());
-			ds = new CompositeDataSource(csvDs, vcsDs);
+		if (reqPattern == null){
+			reqPattern = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
 		}
 
-
-        if (reqPattern == null){
-            reqPattern = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
-        }
+		if (ds == null) {
+			CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
+			VCSDataSource vcsDs = new VCSDataSource(vcs, new CommitMessageParser(reqPattern));
+			ds = new CompositeDataSource(csvDs, vcsDs);
+		}
 
         return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPattern);
     }

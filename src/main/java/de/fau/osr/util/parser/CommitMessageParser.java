@@ -17,12 +17,7 @@ import java.util.regex.Pattern;
  */
 public class CommitMessageParser implements Parser {
 
-    private Pattern REQUIREMENT_PATTERN = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
-
-    /**
-     * default pattern will be used
-     */
-    public CommitMessageParser() {}
+	private Pattern reqPattern;
 
     public CommitMessageParser(Pattern pattern) {
         if (pattern != null) {
@@ -32,22 +27,25 @@ public class CommitMessageParser implements Parser {
 
 	@Override
 	public List<String> parse(String latestCommitMessage) {
-		Matcher m = REQUIREMENT_PATTERN.matcher(latestCommitMessage);
+		Matcher m = reqPattern.matcher(latestCommitMessage);
 		List<String> found_reqids = new ArrayList<String>();
 
-		while(m.find())  {
-			found_reqids.add(m.group(1));
-		}
+		while (m.find())
+			for (int i=0; i < m.groupCount(); ++i) {
+				String group = m.group(i + 1);
+				if (group != null)
+                    found_reqids.add(group);
+			}
 
 		return found_reqids;
 
 	}
 
 	public void setPattern(Pattern pattern) {
-		REQUIREMENT_PATTERN = pattern;
+		reqPattern = pattern;
 	}
 	
 	public Pattern getPattern() {
-		return REQUIREMENT_PATTERN;
+		return reqPattern;
 	}
 }
