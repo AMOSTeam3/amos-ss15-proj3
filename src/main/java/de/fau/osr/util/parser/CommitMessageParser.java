@@ -30,9 +30,12 @@ public class CommitMessageParser implements Parser {
 		Matcher m = reqPattern.matcher(latestCommitMessage);
 		List<String> found_reqids = new ArrayList<String>();
 
-		while(m.find())  {
-			found_reqids.add(m.group(1));
-		}
+		while (m.find())
+			for (int i=0; i < m.groupCount(); ++i) {
+				String group = m.group(i + 1);
+				if (group != null)
+                    found_reqids.add(group);
+			}
 
 		return found_reqids;
 

@@ -88,7 +88,10 @@ public class GuiView{
 	 * @return String containing the directly the user input. Not yet checked whether it's a proper pattern
 	 */
 	String Pattern_OpeningDialog(String currentPattern) {
-		return JOptionPane.showInputDialog("Choose Requirment Pattern", currentPattern);
+		String msg = "Gebe \"Requirement-Pattern\" als RegExp ein.\n" +
+				"Mehrere \"Requirement-Pattern\" müssen gemäß der RegExp-Syntax\n" +
+				"mit | (Pipe) getrennt eingegeben werden.";
+		return JOptionPane.showInputDialog(msg, currentPattern);
 	}
 	
 	/*
