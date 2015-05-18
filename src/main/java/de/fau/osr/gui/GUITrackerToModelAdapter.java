@@ -8,7 +8,6 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
@@ -99,7 +98,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
 	@Override
 	public String[] getRequirementsFromCommit(int commitIndex)
-			throws FileNotFoundException {
+			throws IOException {
 		Set<String> collection = new HashSet<String>(tracker
 				.getRequirementsFromCommit(getCommit(commitIndex)));
 		return convertCollectionToArray(collection);

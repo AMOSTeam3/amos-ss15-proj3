@@ -1,19 +1,13 @@
 package de.fau.osr.gui;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
-import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.gui.GuiView.HighlightedLine;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Comparator;
-
-import javax.swing.ListModel;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-
-import de.fau.osr.gui.GuiView.HighlightedLine;
 
 /*
  * Adapter Pattern used. Since the Functionlibrary itself
@@ -44,7 +38,7 @@ public interface GuiModel {
 
 	String[] getCommitsFromDB();
 
-	String[] getRequirementsFromCommit(int commitIndex) throws FileNotFoundException;
+	String[] getRequirementsFromCommit(int commitIndex) throws IOException;
 
 	String[] commitsFromRequirementAndFile(String requirementID,
 			String filePath) throws IOException;

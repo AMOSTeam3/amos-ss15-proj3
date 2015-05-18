@@ -337,7 +337,7 @@ public class GuiController {
 	void requirementsFromCommit(int commitIndex) {
 		try {
 			requirements_JList = new JList<String>(guiModel.getRequirementsFromCommit(commitIndex));
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
 		}
