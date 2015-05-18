@@ -11,7 +11,7 @@ import java.util.Comparator;
 public class SortByFilename implements Comparator<CommitFile> {
     @Override
     public int compare(CommitFile lhs, CommitFile rhs) {
-        return lhs.oldPath.compareTo(rhs.oldPath);
+        return lhs.newPath.compareTo(rhs.newPath);
     }
 }
 
