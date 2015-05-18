@@ -1,21 +1,31 @@
-
 package de.fau.osr.gui;
 
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.util.sorting.SortByCommitID;
-import de.fau.osr.util.sorting.SortByFilename;
-
-import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.util.filtering.FilterByExactString;
+import de.fau.osr.util.sorting.SortByCommitID;
+import de.fau.osr.util.sorting.SortByFilename;
 
 public class GuiViewElementHandler extends JFrame {
 	public enum ButtonState{Deactivate, Activate}
@@ -36,6 +46,7 @@ public class GuiViewElementHandler extends JFrame {
 	
 	private JTextField RequirementID_textField = new JTextField();
 	private JTextField Commit_textField = new JTextField();
+	private JTextField RequirementSearch_textField = new JTextField();
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu mnTools = menuBar.add(new JMenu("Tools"));
 	private JMenuItem mntmConfigure = mnTools.add(new JMenuItem("Configure"));
@@ -108,9 +119,6 @@ public class GuiViewElementHandler extends JFrame {
 		return Commit_textField;
 	}
 
-	/**
-	 * @param contentPane
-	 */
 	private void positionElements() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		layout.setAutoCreateGaps(true);
@@ -124,6 +132,7 @@ public class GuiViewElementHandler extends JFrame {
 								.addComponent(RequirementID_textField)
 								.addComponent(RequirementID_button)
 								.addComponent(RequirementID_label)
+								.addComponent(RequirementSearch_textField)
 								.addComponent(RequirementID_scrollPane))
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(Commit_textField)
@@ -140,6 +149,7 @@ public class GuiViewElementHandler extends JFrame {
 										)
 								)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(Code_label)
 								.addComponent(Code_scrollPane, 10, 400, Short.MAX_VALUE))
 						)
 		);
@@ -158,6 +168,7 @@ public class GuiViewElementHandler extends JFrame {
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(RequirementID_button)
 										.addComponent(RequirementID_label)
+										.addComponent(RequirementSearch_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(RequirementID_scrollPane))
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(Commit_button)
@@ -169,13 +180,14 @@ public class GuiViewElementHandler extends JFrame {
 										.addComponent(Files_label)
 										.addComponent(Files_scrollPane))
 								.addGroup(layout.createSequentialGroup()
+										.addComponent(Code_label)
 										.addComponent(Code_scrollPane))
 						)
 				)
 		);
 
 		//make the requirement column non-resizable and have all elements with the same horizontal size
-		layout.linkSize(SwingConstants.HORIZONTAL, RequirementID_button, RequirementID_scrollPane, RequirementID_textField);
+		layout.linkSize(SwingConstants.HORIZONTAL, RequirementID_button, RequirementID_scrollPane, RequirementID_textField, RequirementSearch_textField);
 		
 		setLayout(layout);
 	}
@@ -218,7 +230,27 @@ public class GuiViewElementHandler extends JFrame {
 				}
 			}
 		});
-		
+
+    	guiController.setRequirementIDFiltering(new FilterByExactString());
+		RequirementSearch_textField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				guiController.setRequirementIDFiltering(new FilterByExactString(RequirementSearch_textField.getText()));
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				guiController.setRequirementIDFiltering(new FilterByExactString(RequirementSearch_textField.getText()));
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				guiController.setRequirementIDFiltering(new FilterByExactString(RequirementSearch_textField.getText()));
+			}
+		});
+
+
 	}
 
 	void initializeComboboxActions() {
@@ -237,7 +269,7 @@ public class GuiViewElementHandler extends JFrame {
 				}
 		);
 	}
-	
+
 	void switchLinkageButton(ButtonState Linkage_ButtonState) {
 		switch(Linkage_ButtonState){
 		case Deactivate:
