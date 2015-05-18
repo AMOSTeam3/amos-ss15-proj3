@@ -14,4 +14,10 @@ public class CommitTest {
         Commit commitToTest = new Commit("new_id", null, null, null);
         assertEquals("commit id should be equal the initialization id", "new_id", commitToTest.id);
     }
+
+    @Test
+    public void CommitConstructor_messageField_Test(){
+        Commit commitToTest = new Commit(null, "msg ok", null, null);
+        assertEquals("message should be equal the initialization message", "msg ok", commitToTest.message);
+    }
 }
