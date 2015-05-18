@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 
-/*
+/**
  * Using a MVC-Pattern for the GUI.
  * The Controller class fetches the data from the Modell and passes it to the View.
  * Additional it eventually sets Events to the GUI-Elements, so that an action can call
@@ -40,14 +40,14 @@ public class GuiController {
 
 	JList<String> requirements_JList;
 	JList<String> commitMessages_JList;
-	JList<String> commitFileName_JList;
+	JList<CommitFile> commitFile_JList;
 	JList<HighlightedLine> code_JList;
 
-	// sorting algorithm for commitFileName_JList
+	// sorting algorithm for commitFile_JList
 	Comparator<CommitFile> commitFileSorting;
 	
 
-	/*
+	/**
 	 * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
 	 * All Requirements from external tool/DB(jira...)
 	 */
@@ -103,7 +103,7 @@ public class GuiController {
 
 	
 	
-	/*
+	/**
 	 * Navigation: ->Requirements
 	 * Clear: All
 	 * Setting: Requirements
@@ -119,7 +119,7 @@ public class GuiController {
 		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.CommitsAndFilesFromRequirement));
 	}
 	
-	/*
+	/**
 	 * Navigation: ->Requirements->Commit
 	 * Clear: Files/Code/ImpactPercentage
 	 * Setting: Commits
@@ -136,7 +136,7 @@ public class GuiController {
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.FilesFromCommit));
 	}
 
-	/*
+	/**
 	 * Navigation: ->Requirements->File
 	 * Clear: Code/ImpactPercentage
 	 * Setting: Files
@@ -146,22 +146,23 @@ public class GuiController {
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
 
-		commitFileName_JList = new JList<String>(guiModel.getFilesFromRequirement(requirementID, commitFileSorting));
-		guiView.showFiles(commitFileName_JList);
+		commitFile_JList = new JList<CommitFile>(guiModel.getFilesFromRequirement(requirementID, commitFileSorting));
+		guiView.showFiles(commitFile_JList);
 		
-		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
+		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
 		
 	}
 	
-	/*
+	/**
 	 * Navigation: ->Requirements->File->Commit
+	 *             ->File->Requirement->Commit
 	 * Clear: 
 	 * Setting: Commits
 	 * Using: commitsFromRequirementAndFile
 	 */
-	void commitsFromRequirementAndFile(String requirementID, int fileIndex) {
+	void commitsFromRequirementAndFile(String requirementID, CommitFile file) {
 		try {
-			commitMessages_JList = new JList<String>(guiModel.commitsFromRequirementAndFile(requirementID, fileIndex));
+			commitMessages_JList = new JList<String>(guiModel.commitsFromRequirementAndFile(requirementID, file));
 		} catch (IOException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
@@ -173,17 +174,17 @@ public class GuiController {
 
 
 	
-	/*
+	/**
 	 * Navigation: ->Files->Code
 	 * Clear: ImpactPercentage
 	 * Setting: Code
 	 * Using: getChangeDataFromFileIndex
 	 */
-	void codeFromFile(int filesIndex, String requirementID) {
+	void codeFromFile(CommitFile file, String requirementID) {
 		guiView.clearImpactPercentage();
 		
 		try {
-			code_JList = new JList<HighlightedLine>(guiModel.getBlame(filesIndex, requirementID));
+			code_JList = new JList<HighlightedLine>(guiModel.getBlame(file, requirementID));
 		}catch(FileNotFoundException e){
 			guiView.showInformationDialog("Can only be displayed if file is up-to-date!");
 			return;
@@ -205,11 +206,11 @@ public class GuiController {
 	 * @param filesIndex
 	 * @param codeIndex
 	 */
-	void requirementsFromCode(int filesIndex, int codeIndex){
+	void requirementsFromCode(CommitFile file, int codeIndex){
 		guiView.clearCommits();
 		
 		try{
-			requirements_JList = new JList<String>(guiModel.getRequirementsForBlame(codeIndex, filesIndex));
+			requirements_JList = new JList<String>(guiModel.getRequirementsForBlame(codeIndex, file));
 		} catch (IOException | GitAPIException e) {
 			guiView.showErrorDialog("Internal storing Error" + e);
 			return;
@@ -218,7 +219,7 @@ public class GuiController {
 		guiView.showRequirements(requirements_JList);
 	}
 
-	/*
+	/**
 	 * Navigation: ->Files
 	 * Clear: All
 	 * Setting: Files
@@ -227,58 +228,47 @@ public class GuiController {
 	void filesFromDB() {
 		guiView.clearAll();
 		
-		commitFileName_JList = new JList<String>(guiModel.getAllFiles(getCommitFileSorting()));
-		guiView.showFiles(commitFileName_JList);
+		commitFile_JList = new JList<CommitFile>(guiModel.getAllFiles(getCommitFileSorting()));
+		guiView.showFiles(commitFile_JList);
 		
-		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
+		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
 	}
 
-	/*
+	/**
 	 * Navigation: ->File->Requirement
 	 * Clear: 
 	 * Setting: Requirement
 	 * Using: getRequirementsFromFile
 	 */
-	void requirementsFromFile(String filePath) throws IOException {
-		requirements_JList = new JList<String>(guiModel.getRequirementsFromFile(filePath));
+	void requirementsFromFile(CommitFile file) throws IOException {
+		requirements_JList = new JList<String>(guiModel.getRequirementsFromFile(file));
 		guiView.showRequirements(requirements_JList);
 		
 		guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.CommitsFromRequirementAndFile));
 	}
 	
-	/*
+	/**
 	 * Navigation: ->File->Commit
 	 * Clear: 
 	 * Setting: Commits
 	 * Using: getCommitsFromFile
 	 */
-	void commitsFromFile(String filePath){
-		commitMessages_JList = new JList<String>(guiModel.getCommitsFromFile(filePath));
+	void commitsFromFile(CommitFile file){
+		commitMessages_JList = new JList<String>(guiModel.getCommitsFromFile(file));
 		guiView.showCommits(commitMessages_JList);
 		
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.RequirementsFromFileAndCommit));
 	}
 
-	/*
-	 * Navigation: ->File->Requirement->Commit
-	 * Clear: 
-	 * Setting: Commits
-	 * Using: commitsFromRequirementAndFile
-	 */
-	void commitsFromRequirementAndFile(String requirementID, String filePath) throws IOException {
-		commitMessages_JList = new JList<String>(guiModel.commitsFromRequirementAndFile(requirementID, filePath));
-		guiView.showCommits(commitMessages_JList);
-	}
-
-	/*
+	/**
 	 * Navigation: ->Files->Commit->Requirement
 	 * Clear: 
 	 * Setting: Requirement
 	 * Using: getRequirementsFromFileAndCommit
 	 */
-	void requirementsFromFileAndCommit(int commitIndex, String filePath) {
+	void requirementsFromFileAndCommit(int commitIndex, CommitFile file) {
 		try {
-			requirements_JList = new JList<String>(guiModel.getRequirementsFromFileAndCommit(commitIndex, filePath));
+			requirements_JList = new JList<String>(guiModel.getRequirementsFromFileAndCommit(commitIndex, file));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
@@ -292,7 +282,7 @@ public class GuiController {
 	
 	
 	
-	/*
+	/**
 	 * Navigation: ->Commits
 	 * Clear: All
 	 * Setting: Commits
@@ -307,7 +297,7 @@ public class GuiController {
 		guiView.addMouseListener(commitMessages_JList, new MouseEvent(this, Action.RequirementsAndFilesFromCommit));
 	}
 	
-	/*
+	/**
 	 * Navigation: ->Commit->Files
 	 * Clear: Code/ImpactPercentage
 	 * Setting: Files
@@ -318,17 +308,17 @@ public class GuiController {
 		guiView.clearImpactPercentage();
 
 		try {
-			commitFileName_JList = new JList<String>(guiModel.getFilesFromCommit(commitIndex, commitFileSorting));
+			commitFile_JList = new JList<CommitFile>(guiModel.getFilesFromCommit(commitIndex, commitFileSorting));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
 		}
-		guiView.showFiles(commitFileName_JList);
+		guiView.showFiles(commitFile_JList);
 		
-		guiView.addMouseListener(commitFileName_JList, new MouseEvent(this, Action.CodeFromFile));
+		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.CodeFromFile));
 	}
 
-	/*
+	/**
 	 * Navigation: ->Commits->Requirements
 	 * Clear: 
 	 * Setting: Requirements
@@ -344,7 +334,7 @@ public class GuiController {
 		guiView.showRequirements(requirements_JList);
 	}
 	
-	/*
+	/**
 	 * For button AddLinkage
 	 */
 	void requirementsAndCommitsFromDB() {
@@ -377,7 +367,7 @@ public class GuiController {
 	}
 
 	
-	/*
+	/**
 	 * For now only terminated the application if the user retried some input to often.
 	 * Later on should handle all actions that have to be completed before exit.
 	 */
@@ -387,7 +377,7 @@ public class GuiController {
 		}
 	}
 	
-	/*
+	/**
 	 *For reconfiguring the repository to a new path while the application is running
 	 *Once this method is successful, the application refers to the new repository 
 	 */
@@ -423,7 +413,7 @@ public class GuiController {
 		guiModel = guiModelTrial;
 		requirementsFromDB();
 	}
-	/*
+	/**
 	 * For reconfiguring the requirement pattern to a new pattern while the application is running
 	 * Once this method is successful, the application refers to the new requirement pattern 
 	 */
@@ -458,7 +448,7 @@ public class GuiController {
 		
 	}
 	
-	/*
+	/**
 	 * method to divert configuration calls
 	 */
 	void reConfigure() throws IOException {
