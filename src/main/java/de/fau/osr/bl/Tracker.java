@@ -104,6 +104,24 @@ public class Tracker {
 		
 	}
 	
+	public float getImpactPercentageForFileAndRequirement(String file, String requirementID){
+		List<AnnotatedLine> currentBlame;
+		try {
+			currentBlame = this.getBlame(file);
+		} catch (GitAPIException | IOException e) {
+			return -1;
+		}
+		int i = 1;
+		int influenced = 0;
+		for(; i<currentBlame.size(); i++){
+			if(currentBlame.get(i).getRequirements().contains(requirementID)){
+				influenced++;
+			}
+		}
+		float impact = (influenced/i)*100;
+		return impact;
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)
@@ -183,6 +201,31 @@ public class Tracker {
         
         return files;
     }
+    
+    /**
+     * @return all ever committed file paths
+     */
+    public Collection<String> getAllFilesAsString(){
+        Set<String> files = new HashSet<String>();
+        Iterator<String> allCommits = vcsClient.getCommitList();
+        while (allCommits.hasNext()) {
+            String currentCommit = allCommits.next();
+            for(CommitFile commitfile: vcsClient.getCommitFiles(currentCommit)){
+                String name;
+                if(commitfile.commitState == CommitState.DELETED){
+                    name = commitfile.oldPath.getPath();
+                }else{
+                    name = commitfile.newPath.getPath();
+                }
+                Pattern pattern = Pattern.compile("src");
+                Matcher m = pattern.matcher(name);
+                if(m.find()){
+                    files.add(name);
+                }
+            }
+        }
+        return files;
+    }
 
     /**
      * @return collection of all commit objects
@@ -250,12 +293,12 @@ public class Tracker {
     	try{
 	    	
 	    	
-	    	Collection<CommitFile> files = getAllFiles() ;	    	
+	    	Collection<String> files = getAllFilesAsString() ;	    	
 	    	
 	    	ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(AppProperties.GetValueAsInt("TraceabilityMatrixProcessingThreadPoolCount"));
 	    	TraceabilityMatrixThread.setRequirementTraceabilityMatrix(this);
-	    	for(CommitFile file: files){	    		
-	    		TraceabilityMatrixThread traceabilityMatrixWorkerThread = new TraceabilityMatrixThread(file.newPath.getPath().toString());
+	    	for(String file: files){	    		
+	    		TraceabilityMatrixThread traceabilityMatrixWorkerThread = new TraceabilityMatrixThread(file);
 	    		threadPoolExecutor.execute(traceabilityMatrixWorkerThread);
 	    	}
 	    	threadPoolExecutor.shutdown();
@@ -271,6 +314,14 @@ public class Tracker {
     	}
     	return null;
     	
+    }
+    /*
+     * Method which performs the complete processing of Requirement Traceability by Impact
+     */
+    public RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact(){
+    	RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact = new RequirementsTraceabilityMatrixByImpact(this);
+    	requirementsTraceabilityMatrixByImpact.Process();
+    	return requirementsTraceabilityMatrixByImpact;
     }
 }
 /*
@@ -316,3 +367,5 @@ class TraceabilityMatrixThread implements Runnable{
 	}
 	
 }
+
+

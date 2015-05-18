@@ -50,6 +50,9 @@ public class GuiViewElementHandler extends JFrame {
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu mnTools = menuBar.add(new JMenu("Tools"));
 	private JMenuItem mntmConfigure = mnTools.add(new JMenuItem("Configure"));
+	private JMenuItem mntmTraceabilityMatrixByImpact = mnTools.add(new JMenuItem("Traceability Matrix By Impact"));
+	private JMenuItem mntmTraceabilityMatrixByOtherData = mnTools.add(new JMenuItem("Traceability Matrix By Other Data"));
+	private JMenu mnTraceabilityMatrix = new JMenu("TraceabilityMatrix");
 	final private String[] SORT_COMBOBOX_CHOICES = {
 			"sort by chronic", "sort by filename"
 	};
@@ -74,6 +77,7 @@ public class GuiViewElementHandler extends JFrame {
 
 	public GuiViewElementHandler(GuiController guiController) {
 		this.guiController = guiController;
+		linkMenuItems();
 		initializeButtonActions();
 		initializeComboboxActions();
 		setTitle("Spice Traceability");
@@ -230,6 +234,44 @@ public class GuiViewElementHandler extends JFrame {
 				}
 			}
 		});
+		
+		mntmTraceabilityMatrixByImpact.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+
+				class TraceabilityMatrixViewerThread implements Runnable{
+
+					@Override
+					public void run() {
+						guiController.getTraceabilityMatrixByImpact();
+						
+					}
+					
+				}
+				Thread tr = new Thread(new TraceabilityMatrixViewerThread());
+		        tr.start();
+					
+			}
+		});
+		
+		mntmTraceabilityMatrixByOtherData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+
+				class TraceabilityMatrixViewerThread implements Runnable{
+
+					@Override
+					public void run() {
+						guiController.getTraceabilityMatrix();
+						
+					}
+					
+				}
+				Thread tr = new Thread(new TraceabilityMatrixViewerThread());
+		        tr.start();
+
+					
+
+			}
+		});
 
     	guiController.setRequirementIDFiltering(new FilterByExactString());
 		RequirementSearch_textField.getDocument().addDocumentListener(new DocumentListener() {
@@ -291,6 +333,12 @@ public class GuiViewElementHandler extends JFrame {
 			});
 			break;
 		}
+	}
+	
+	void linkMenuItems(){
+		mnTraceabilityMatrix.add(mntmTraceabilityMatrixByImpact);
+		mnTraceabilityMatrix.add(mntmTraceabilityMatrixByOtherData);
+		mnTools.add(mnTraceabilityMatrix);
 	}
 	
 }

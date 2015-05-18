@@ -520,4 +520,22 @@ public class GuiController {
 			guiView.clearAll();
 		}
 	}
+    
+    void getTraceabilityMatrix(){
+    	try {
+			guiView.showTraceabilityMatrix(guiModel.getRequirementsTraceability());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    void getTraceabilityMatrixByImpact(){
+    	try {
+			guiView.showTraceabilityMatrixByImpact(guiModel.getRequirementsTraceabilityByImpact());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }

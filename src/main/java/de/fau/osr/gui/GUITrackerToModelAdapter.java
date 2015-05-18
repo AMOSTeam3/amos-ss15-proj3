@@ -3,7 +3,9 @@ package de.fau.osr.gui;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
+
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.Commit;
@@ -11,6 +13,7 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
@@ -217,5 +220,11 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	public RequirementsTraceabilityMatrix getRequirementsTraceability()
 			throws IOException {
 		return tracker.generateRequirementsTraceability();
+	}
+
+	@Override
+	public RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact()
+			throws IOException {
+		return tracker.generateRequirementsTraceabilityByImpact();
 	}
 }

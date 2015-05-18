@@ -17,8 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
+import de.fau.osr.bl.RequirementsTraceabilityMatrix;
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 
 /*
@@ -280,6 +281,25 @@ public class GuiView{
 
 	void switchLinkage_Button(ButtonState buttonState){
 		elementHandler.switchLinkageButton(buttonState);
+	}
+	
+	void showTraceabilityMatrix(RequirementsTraceabilityMatrix requirementsTraceabilityMatrix){
+		try {
+			TraceabilityMatrixViewHandler trMatrix = new TraceabilityMatrixViewHandler(requirementsTraceabilityMatrix);
+			trMatrix.initTable();
+			trMatrix.setVisible(true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	void showTraceabilityMatrixByImpact(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
+
+			TraceabilityMatrixByImpactViewHandler trMatrixByImpact = new TraceabilityMatrixByImpactViewHandler(requirementsTraceabilityMatrixByImpact);
+			trMatrixByImpact.initTable();
+			trMatrixByImpact.setVisible(true);
+
 	}
 }
 

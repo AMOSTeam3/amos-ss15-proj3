@@ -9,6 +9,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import com.google.common.base.Predicate;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.gui.GuiView.HighlightedLine;
 
@@ -58,5 +59,7 @@ public interface GuiModel {
 	String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
 	
 	public RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
+	
+	public RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
 
 }
