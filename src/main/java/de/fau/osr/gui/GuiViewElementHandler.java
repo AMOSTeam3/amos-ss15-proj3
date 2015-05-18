@@ -1,4 +1,3 @@
-
 package de.fau.osr.gui;
 
 import java.awt.Color;
@@ -77,7 +76,6 @@ public class GuiViewElementHandler extends JFrame {
 		this.guiController = guiController;
 		initializeButtonActions();
 		initializeComboboxActions();
-		initializeSearchTextField();
 		setTitle("Spice Traceability");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -121,9 +119,6 @@ public class GuiViewElementHandler extends JFrame {
 		return Commit_textField;
 	}
 
-	/**
-	 * @param contentPane
-	 */
 	private void positionElements() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		layout.setAutoCreateGaps(true);
@@ -235,7 +230,8 @@ public class GuiViewElementHandler extends JFrame {
 				}
 			}
 		});
-		
+
+    	guiController.setRequirementIDFiltering(new FilterByExactString());
 		RequirementSearch_textField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -253,7 +249,8 @@ public class GuiViewElementHandler extends JFrame {
 				guiController.setRequirementIDFiltering(new FilterByExactString(RequirementSearch_textField.getText()));
 			}
 		});
-		
+
+
 	}
 
 	void initializeComboboxActions() {
@@ -273,11 +270,6 @@ public class GuiViewElementHandler extends JFrame {
 		);
 	}
 
-	void initializeSearchTextField() {
-		//TODO insert search text field initialization
-		guiController.setRequirementIDFiltering(new FilterByExactString());
-	}
-	
 	void switchLinkageButton(ButtonState Linkage_ButtonState) {
 		switch(Linkage_ButtonState){
 		case Deactivate:
