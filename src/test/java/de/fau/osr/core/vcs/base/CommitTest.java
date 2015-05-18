@@ -15,6 +15,7 @@ public class CommitTest {
         assertEquals("commit id should be equal the initialization id", "new_id", commitToTest.id);
     }
 
+    @Test
     public void CommitConstructor_CommitIdInitializedWithNoUsualChars_allTheCharsReturnedProperly(){
         String[] ids = {"   ", "$&/&$//", "09084§§§", " kl%45$$%$%", "\"\"__ __\"\"", "", null};
         for (String id : ids){
