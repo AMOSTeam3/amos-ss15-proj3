@@ -14,6 +14,8 @@ import java.util.Set;
  * Created by Dmitry Gorelenkov on 03.05.2015.
  */
 public abstract class DataSource {
+    SetMultimap<String, String> cachedReqCommitRelations;
+
     /**
      * adds new relation to data source
      * @param reqId requirement part of the relation
@@ -30,6 +32,12 @@ public abstract class DataSource {
      */
     public abstract void removeReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException;
 
+    /**
+     * perform computing, and gets set of all requirements to commit relations
+     * @return SetMultimap of relations
+     * @throws IOException
+     */
+    public abstract SetMultimap<String, String> getAllReqCommitRelations() throws IOException;
 
     /* default implementations */
 
@@ -97,5 +105,41 @@ public abstract class DataSource {
         }
     }
 
-    public abstract SetMultimap<String, String> getAllReqCommitRelations() throws IOException;
+    /**
+     * try to get cached version of set of all relations, creates cached version, if it was was not created before
+     * @return SetMultimap of all requirement to commit relations
+     * @throws IOException
+     */
+    public SetMultimap<String, String> getCachedAllReqCommitRelations() throws IOException {
+        if (!isCachedReqCommitRelations()){
+            doCacheReqCommitRelations(getAllReqCommitRelations());
+        }
+
+        return doGetCachedReqCommitRelations();
+    }
+
+    /**
+     * used for default implementation of getCachedAllReqCommitRelations
+     * @param setToCache set should be cached
+     */
+    protected void doCacheReqCommitRelations(SetMultimap<String, String> setToCache){
+        cachedReqCommitRelations = setToCache;
+    }
+
+    /**
+     * used for default implementation of getCachedAllReqCommitRelations
+     * @return cached set of data
+     */
+    protected SetMultimap<String, String> doGetCachedReqCommitRelations(){
+        return cachedReqCommitRelations;
+    }
+
+    /**
+     * used for default implementation of getCachedAllReqCommitRelations
+     * @return true if ReqCommitRelations set is cached
+     */
+    protected boolean isCachedReqCommitRelations(){
+        return cachedReqCommitRelations != null;
+    }
+
 }

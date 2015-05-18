@@ -154,7 +154,7 @@ public class Tracker {
      * @throws IOException
      */
 	public SetMultimap<String, String> getAllReqCommitRelations() throws IOException {
-        return dataSource.getAllReqCommitRelations();
+        return dataSource.getCachedAllReqCommitRelations();
     }
 
     /**
@@ -283,7 +283,7 @@ public class Tracker {
     }
     
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-    	return vcsClient.blame(path,  dataSource);
+    	return vcsClient.blame(path, dataSource);
     }
  /*
   * Method which performs the complete processing of Requirement Traceability
