@@ -5,7 +5,7 @@ package de.fau.osr.bl;
  */
 public class RequirementFileImpactValue {
 
-	float impactPercentage;
+	float impactPercentage = -1;
 	
 	public RequirementFileImpactValue(float impactPercentage){
 		

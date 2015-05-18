@@ -43,7 +43,7 @@ public class RequirementsTraceabilityByImpactTableModel extends DefaultTableMode
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
 		if(requirementsTraceabilityMatrixByImpact != null)
-			return requirementsTraceabilityMatrixByImpact.getImpactValue(new RequirementFilePair(requirementsTraceabilityMatrixByImpact.getFiles().get(rowIndex), requirementsTraceabilityMatrixByImpact.getRequirements().get(columnIndex)));
+			return requirementsTraceabilityMatrixByImpact.getImpactValue(new RequirementFilePair(requirementsTraceabilityMatrixByImpact.getFiles().get(rowIndex), requirementsTraceabilityMatrixByImpact.getRequirements().get(columnIndex))).getImpactPercentage();
 		else 
 			return null;
 	}
