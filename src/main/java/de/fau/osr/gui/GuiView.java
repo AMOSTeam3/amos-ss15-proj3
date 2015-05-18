@@ -71,13 +71,13 @@ public class GuiView{
 				renderer.setBackground(Color.GREEN);
 				break;
 			case DELETED:
-				renderer.setBackground(Color.GREEN);
+				renderer.setBackground(Color.RED);
 				break;
 			default:
 				renderer.setBackground(Color.WHITE);
 				break;
 			}
-			renderer.setText(value.newPath.getName().toString());
+			renderer.setText(value.newPath.getName().toString() + " - " + value.impact);
 			
 			return renderer;
 		}

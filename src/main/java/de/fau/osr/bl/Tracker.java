@@ -79,7 +79,23 @@ public class Tracker {
         for (String commit : commits){
             commitFilesList.addAll(vcsClient.getCommitFiles(commit));
         }
-		
+        
+        for(CommitFile file: commitFilesList){
+        	List<AnnotatedLine> currentBlame;
+			try {
+				currentBlame = this.getBlame(file.newPath.getPath().toString());
+			} catch (GitAPIException | IOException e) {
+				continue;
+			}
+			int i = 1;
+			int influenced = 0;
+			for(; i<currentBlame.size(); i++){
+				if(currentBlame.get(i).getRequirements().contains(requirementID)){
+					influenced++;
+				}
+			}
+			file.impact = (influenced/i)*100;
+		}
 
 		logger.info("End call :: getCommitFilesForRequirementID() Time: "+ (System.currentTimeMillis() - startTime) );
      			

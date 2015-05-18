@@ -26,7 +26,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	// TODO maybe we should use "List" instead of "Collection".
 	private Collection<Commit> commits;
 	private Pattern currentReqPattern;
-	Collection<AnnotatedLine> currentBlame;
+	List<AnnotatedLine> currentBlame;
 
 	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, Pattern reqPatternString)
 			throws IOException, RuntimeException {
