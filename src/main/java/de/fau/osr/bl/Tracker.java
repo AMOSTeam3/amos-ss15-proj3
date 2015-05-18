@@ -37,25 +37,24 @@ public class Tracker {
 	
 	DataSource dataSource;
 
-	CommitMessageParser commitMessageparser;
-	
 	Logger logger = LoggerFactory.getLogger(Tracker.class);
 
     public Tracker(VcsClient vcsClient) throws IOException {
-        this(vcsClient, null, null, null);
+        this(vcsClient, null, null);
     }
 
-    public Tracker(VcsClient vcsClient, DataSource ds, File repoFile, Pattern parsePattern) throws IOException {
+    public Tracker(VcsClient vcsClient, DataSource ds, File repoFile) throws IOException {
         this.repoFile = repoFile;
         this.vcsClient = vcsClient;
-        // TODO Tracker doesn't need "commitMessageParser". This should just be used in VCSDataSource.
-        commitMessageparser = new CommitMessageParser(parsePattern);
 
         //assign default value, temp solution, todo
         if (repoFile == null) repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
         if (ds == null) {
             CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
-            VCSDataSource vcsDs = new VCSDataSource(vcsClient, commitMessageparser);
+
+            CommitMessageParser parser = new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
+            VCSDataSource vcsDs = new VCSDataSource(vcsClient, parser);
+
             ds = new CompositeDataSource(csvDs, vcsDs);
         }
 
@@ -228,20 +227,13 @@ public class Tracker {
 		dataSource.addReqCommitRelation(requirementID, commitID);
 	}
 
-    /**
-     * method to get the current requirement pattern
-     * @return
-     */
-    public String getCurrentRequirementPatternString(){
-        return commitMessageparser.getPattern().toString();
-    }
 
     public String getCurrentRepositoryPath(){
         return repoFile.toString();
     }
     
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-    	return vcsClient.blame(path,  commitMessageparser);
+    	return vcsClient.blame(path,  dataSource);
     }
  /*
   * Method which performs the complete processing of Requirement Traceability

@@ -4,14 +4,17 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import de.fau.osr.PublicTestData;
 import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.util.parser.CommitMessageParser;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,7 @@ public class TrackerTest {
 	@BeforeClass
 	public static void prepare() throws IOException {
         client =  VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
-        interpreter = new Tracker(client, null, null, Pattern.compile("Req-(\\d+)"));
+        interpreter = new Tracker(client, null, null);
 	}
 
 	/**
@@ -48,11 +51,19 @@ public class TrackerTest {
         assertEquals(commitFileList.get(0).newPath.getName(), "TestFile4");
 
         //test another pattern, should contain 2 files
-        interpreter = new Tracker(client, null, null, Pattern.compile("Req\\s(\\d+)"));
+        VCSDataSource ds = new VCSDataSource(client, new CommitMessageParser(Pattern.compile("Req\\s(\\d+)")));
+        interpreter = new Tracker(client, ds, null);
         commitFileList = interpreter.getCommitFilesForRequirementID("1");
         assertTrue(commitFileList.size() == 2);
-        assertEquals(commitFileList.get(0).newPath.getName(), "TestFile2");
-        assertEquals(commitFileList.get(1).newPath.getName(), "TestFile1");
+        //get names only
+        HashSet<String> fileNames = new HashSet<>();
+        for (CommitFile x : commitFileList){
+            fileNames.add(x.newPath.getName());
+        }
+
+        assertTrue(fileNames.size() == 2);
+        assertTrue(fileNames.contains("TestFile1"));
+        assertTrue(fileNames.contains("TestFile2"));
 
 	}
 	
@@ -77,7 +88,7 @@ public class TrackerTest {
         //given
         VcsClient mockedClient = mock(VcsClient.class);
         DataSource mockedSource = mock(DataSource.class);
-        Tracker tracker = Mockito.spy(new Tracker(mockedClient, mockedSource, null, null));
+        Tracker tracker = Mockito.spy(new Tracker(mockedClient, mockedSource, null));
         //stub for dataSource.getAllReqCommitRelations()
         SetMultimap<String, String> dbReqs = HashMultimap.create();
         dbReqs.put("1","commit1");

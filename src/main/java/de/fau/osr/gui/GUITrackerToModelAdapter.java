@@ -25,11 +25,12 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	private List<CommitFile> commitFiles;
 	// TODO maybe we should use "List" instead of "Collection".
 	private Collection<Commit> commits;
+	private Pattern currentReqPattern;
 
 	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, Pattern reqPatternString)
 			throws IOException, RuntimeException {
-
-		tracker = new Tracker(vcs, ds, repoFile, reqPatternString);
+		currentReqPattern = reqPatternString;
+		tracker = new Tracker(vcs, ds, repoFile);
 	}
 
 	@Override
@@ -214,7 +215,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
 	@Override
 	public String getCurrentRequirementPatternString() {
-		return tracker.getCurrentRequirementPatternString();
+		return currentReqPattern.pattern();
 	}
 
 	@Override

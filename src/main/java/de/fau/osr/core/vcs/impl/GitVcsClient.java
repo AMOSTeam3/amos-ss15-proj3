@@ -1,23 +1,13 @@
 package de.fau.osr.core.vcs.impl;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
+import com.beust.jcommander.internal.Lists;
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.blame.BlameGenerator;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -40,13 +30,12 @@ import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
-
-import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.util.parser.CommitMessageParser;
+import java.io.*;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Gayathery
@@ -277,7 +266,7 @@ public class GitVcsClient extends VcsClient{
 	 * @see de.fau.osr.core.vcs.interfaces.VcsClient#blame(java.lang.String, de.fau.osr.util.parser.CommitMessageParser)
 	 */
 	@Override
-	public List<AnnotatedLine> blame(String path, CommitMessageParser dataSource) throws IOException, GitAPIException {
+	public List<AnnotatedLine> blame(String path, DataSource dataSource) throws IOException, GitAPIException {
 		BlameCommand blameCommand = new BlameCommand(git.getRepository());
 		blameCommand.setFollowFileRenames(true);
 		blameCommand.setFilePath(path);
@@ -292,7 +281,7 @@ public class GitVcsClient extends VcsClient{
 			List<String> annotation;
 			RevCommit commit = blameResult.getSourceCommit(res.size());
 			if(commit != null)
-				annotation =  dataSource.parse(blameResult.getSourceCommit(res.size()).getFullMessage());
+				annotation = Lists.newArrayList(dataSource.getReqRelationByCommit(blameResult.getSourceCommit(res.size()).getName()));
 			else
 				annotation = Collections.emptyList();
 			res.add(new AnnotatedLine(annotation, text.getString(i)));

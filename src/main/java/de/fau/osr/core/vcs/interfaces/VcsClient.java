@@ -1,18 +1,17 @@
 package de.fau.osr.core.vcs.interfaces;
 
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.VcsEnvironment;
+import de.fau.osr.core.vcs.impl.GitVcsClient;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.RepositoryNotFoundException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.errors.RepositoryNotFoundException;
-
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.VcsEnvironment;
-import de.fau.osr.core.vcs.impl.GitVcsClient;
-import de.fau.osr.util.parser.CommitMessageParser;
 
 /**
  * @author Gayathery
@@ -52,9 +51,9 @@ public abstract class VcsClient {
 	 * @throws GitAPIException
 	 */
 	public abstract List<AnnotatedLine> blame(String path,
-			CommitMessageParser dataSource) throws IOException, GitAPIException;
+			DataSource dataSource) throws IOException, GitAPIException;
 	
-	static public class AnnotatedLine {
+	public class AnnotatedLine {
 		/* (non-Javadoc)
 		 * @see java.lang.Object#hashCode()
 		 */
