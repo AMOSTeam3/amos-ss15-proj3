@@ -79,7 +79,23 @@ public class Tracker {
         for (String commit : commits){
             commitFilesList.addAll(vcsClient.getCommitFiles(commit));
         }
-		
+        
+        for(CommitFile file: commitFilesList){
+        	List<AnnotatedLine> currentBlame;
+			try {
+				currentBlame = this.getBlame(file.newPath.getPath().toString());
+			} catch (GitAPIException | IOException e) {
+				continue;
+			}
+			int i = 1;
+			int influenced = 0;
+			for(; i<currentBlame.size(); i++){
+				if(currentBlame.get(i).getRequirements().contains(requirementID)){
+					influenced++;
+				}
+			}
+			file.impact = (influenced/i)*100;
+		}
 
 		logger.info("End call :: getCommitFilesForRequirementID() Time: "+ (System.currentTimeMillis() - startTime) );
      			
@@ -155,25 +171,16 @@ public class Tracker {
     /**
      * @return all ever committed file paths
      */
-    public Collection<String> getAllFiles(){
-        Set<String> files = new HashSet<String>();
+    public Collection<CommitFile> getAllFiles(){
+        Set<CommitFile> files = new HashSet<CommitFile>();
         Iterator<String> allCommits = vcsClient.getCommitList();
         while (allCommits.hasNext()) {
             String currentCommit = allCommits.next();
             for(CommitFile commitfile: vcsClient.getCommitFiles(currentCommit)){
-                String name;
-                if(commitfile.commitState == CommitState.DELETED){
-                    name = commitfile.oldPath.getPath();
-                }else{
-                    name = commitfile.newPath.getPath();
-                }
-                Pattern pattern = Pattern.compile("src");
-                Matcher m = pattern.matcher(name);
-                if(m.find()){
-                    files.add(name);
-                }
+                files.add(commitfile);
             }
         }
+        
         return files;
     }
 
@@ -243,12 +250,12 @@ public class Tracker {
     	try{
 	    	
 	    	
-	    	Collection<String> files = getAllFiles() ;	    	
+	    	Collection<CommitFile> files = getAllFiles() ;	    	
 	    	
 	    	ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(AppProperties.GetValueAsInt("TraceabilityMatrixProcessingThreadPoolCount"));
 	    	TraceabilityMatrixThread.setRequirementTraceabilityMatrix(this);
-	    	for(String file: files){	    		
-	    		TraceabilityMatrixThread traceabilityMatrixWorkerThread = new TraceabilityMatrixThread(file);
+	    	for(CommitFile file: files){	    		
+	    		TraceabilityMatrixThread traceabilityMatrixWorkerThread = new TraceabilityMatrixThread(file.newPath.getPath().toString());
 	    		threadPoolExecutor.execute(traceabilityMatrixWorkerThread);
 	    	}
 	    	threadPoolExecutor.shutdown();

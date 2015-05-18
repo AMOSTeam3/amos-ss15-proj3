@@ -29,6 +29,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	// TODO maybe we should use "List" instead of "Collection".
 	private Collection<Commit> commits;
 	private Pattern currentReqPattern;
+	List<AnnotatedLine> currentBlame;
 
 	public GUITrackerToModelAdapter(VcsClient vcs, DataSource ds, File repoFile, Pattern reqPatternString)
 			throws IOException, RuntimeException {
@@ -58,16 +59,16 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public String[] getAllFiles(Comparator<CommitFile> sorting) {
-		// TODO "tracker.getAllFiles" should return "CommitFiles". Otherwise "sorting" doesn't work.
-		String[] fileNames = convertCollectionToArray(tracker.getAllFiles());
-		Arrays.sort(fileNames);
-		return fileNames;
+	public CommitFile[] getAllFiles(Comparator<CommitFile> sorting) {
+		List<CommitFile> commitFiles = new ArrayList<CommitFile>(tracker.getAllFiles());
+		Collections.sort(commitFiles, sorting);
+		CommitFile[] returnValue = new CommitFile[commitFiles.size()];
+		return commitFiles.toArray(returnValue);
 	}
 
 	@Override
-	public String[] getRequirementsFromFile(String filePath) throws IOException {
-		String filePathTransformed = filePath.replace("\\", "/");
+	public String[] getRequirementsFromFile(CommitFile file) throws IOException {
+		String filePathTransformed = file.newPath.getPath().toString().replace("\\", "/");
 		Collection<String> requirements = tracker
 				.getAllRequirementsForFile(filePathTransformed);
 		return convertCollectionToArray(requirements);
@@ -75,25 +76,26 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
 
 	@Override
-	public String[] getCommitsFromFile(String filePath) {
-		String filePathTransformed = filePath.replace("\\", "/");
+	public String[] getCommitsFromFile(CommitFile file) {
+		String filePathTransformed = file.newPath.getPath().toString().replace("\\", "/");
 		commits = tracker.getCommitsFromFile(filePathTransformed);
 		return getMessagesFromCommits();
 	}
 
 	@Override
-	public String[] getFilesFromCommit(int commitIndex, Comparator<CommitFile> sorting)
+	public CommitFile[] getFilesFromCommit(int commitIndex, Comparator<CommitFile> sorting)
 			throws FileNotFoundException {
-		commitFiles = getCommit(commitIndex).files;
+		List<CommitFile> commitFiles = getCommit(commitIndex).files;
 		Collections.sort(commitFiles, sorting);
-		return getCommitFileName();
+		CommitFile[] returnValue = new CommitFile[commitFiles.size()];
+		return commitFiles.toArray(returnValue);
 	}
 
 	@Override
-	public String getChangeDataFromFileIndex(int filesIndex)
+	public String getChangeDataFromFileIndex(CommitFile file)
 			throws FileNotFoundException {
 
-		return getCommitFile(filesIndex).changedData;
+		return file.changedData;
 	}
 
 	@Override
@@ -112,8 +114,8 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
 	@Override
 	public String[] commitsFromRequirementAndFile(String requirementID,
-			String filePath) throws IOException {
-		Set<String> commits1 = new HashSet<String>(Arrays.asList(getCommitsFromFile(filePath)));
+			CommitFile file) throws IOException {
+		Set<String> commits1 = new HashSet<String>(Arrays.asList(getCommitsFromFile(file)));
 		Set<String> commits2 = new HashSet<String>(Arrays.asList(getCommitsFromRequirementID(requirementID)));
 		
 		commits1.retainAll(commits2);
@@ -121,38 +123,21 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public String[] commitsFromRequirementAndFile(String requirementID,
-			int fileIndex) throws IOException {
-		Collection<Commit> AllCommits = tracker.getCommitsForRequirementID(requirementID);
-		CommitFile commitFile = getCommitFile(fileIndex);
-		for(Commit commit: AllCommits){
-			for(CommitFile commitFilecompare: commit.files){
-				if(commitFile.equals(commitFilecompare)){
-					commits = new ArrayList<Commit>();
-					commits.add(commit);
-					return getMessagesFromCommits();
-				}
-			}
-		}
-		//throw new FileNotFoundException();
-		return new String[0];
-	}
-
-	@Override
 	public String[] getRequirementsFromFileAndCommit(int commitIndex,
-			String filePath) throws IOException {
+			CommitFile file) throws IOException {
 		Set<String> requirements1 = new HashSet<String>(Arrays.asList(getRequirementsFromCommit(commitIndex)));
-		Set<String> requirements2 = new HashSet<String>(Arrays.asList(getRequirementsFromFile(filePath)));
+		Set<String> requirements2 = new HashSet<String>(Arrays.asList(getRequirementsFromFile(file)));
 		
 		requirements1.retainAll(requirements2);
 		return convertCollectionToArray(requirements1);
 	}
 
 	@Override
-	public String[] getFilesFromRequirement(String requirementID, Comparator<CommitFile> sorting) throws IOException {
-		commitFiles = tracker.getCommitFilesForRequirementID(requirementID);
+	public CommitFile[] getFilesFromRequirement(String requirementID, Comparator<CommitFile> sorting) throws IOException {
+		List<CommitFile> commitFiles = tracker.getCommitFilesForRequirementID(requirementID);
 		Collections.sort(commitFiles, sorting);
-		return getCommitFileName();
+		CommitFile[] returnValue = new CommitFile[commitFiles.size()];
+		return commitFiles.toArray(returnValue);
 	}
 
 	@Override
@@ -165,18 +150,6 @@ public class GUITrackerToModelAdapter implements GuiModel {
 			throw new RuntimeException(e.getMessage());
 		}
 		
-	}
-
-	private CommitFile getCommitFile(int filesIndex)
-			throws FileNotFoundException {
-		int i = 0;
-		for (CommitFile commitFile : commitFiles) {
-			if (i == filesIndex) {
-				return commitFile;
-			}
-			i++;
-		}
-		throw new FileNotFoundException();
 	}
 
 	private Commit getCommit(int commitIndex) throws FileNotFoundException {
@@ -206,18 +179,6 @@ public class GUITrackerToModelAdapter implements GuiModel {
 		return commitMessagesArray;
 	}
 
-	private String[] getCommitFileName() {
-		String[] array;
-		array = new String[commitFiles.size()];
-		int j = 0;
-		for (CommitFile commitfile : commitFiles) {
-			array[j++] = commitfile.oldPath + " " + commitfile.commitState
-					+ " " + commitfile.newPath;
-		}
-		
-		return array;
-	}
-
 	@Override
 	public String getCurrentRequirementPatternString() {
 		return currentReqPattern.pattern();
@@ -229,19 +190,19 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public HighlightedLine[] getBlame(int filesIndex,
+	public HighlightedLine[] getBlame(CommitFile file,
 			String requirementID) throws FileNotFoundException, IOException, GitAPIException {
-		Collection<AnnotatedLine> lines = tracker.getBlame(getCommitFile(filesIndex).newPath.getPath());
-		HighlightedLine[] hightlightedLines = new HighlightedLine[lines.size()];
+		currentBlame = tracker.getBlame(file.newPath.getPath());
+		HighlightedLine[] hightlightedLines = new HighlightedLine[currentBlame.size()];
 		int i= 0;
-		for(AnnotatedLine line: lines){
+		for(AnnotatedLine line: currentBlame){
 			hightlightedLines[i++] = new HighlightedLine(line.getLine(), line.getRequirements().contains(requirementID));
 		}
 		return hightlightedLines;
 	}
 	
-	public String[] getRequirementsForBlame(int lineIndex, int filesIndex) throws FileNotFoundException, IOException, GitAPIException{
-		Collection<AnnotatedLine> lines = tracker.getBlame(getCommitFile(filesIndex).newPath.getPath());
+	public String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException{
+		Collection<AnnotatedLine> lines = tracker.getBlame(file.newPath.getPath());
 		int i = 0;
 		for(AnnotatedLine line: lines){
 			if(i == lineIndex){

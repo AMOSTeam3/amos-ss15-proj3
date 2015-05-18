@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 
 /*
@@ -34,7 +36,7 @@ public class GuiView{
 	}
 
 	
-	private class ComplexCellRenderer implements ListCellRenderer<HighlightedLine>{
+	private class HighlightedLine_Renderer implements ListCellRenderer<HighlightedLine>{
 		protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 		
 		@Override
@@ -50,8 +52,35 @@ public class GuiView{
 			
 			return renderer;
 		}
-
+	}
+	
+	private class CommitFile_Renderer implements ListCellRenderer<CommitFile>{
+		protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 		
+		@Override
+		public Component getListCellRendererComponent(
+				JList<? extends CommitFile> list, CommitFile value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			
+			switch(value.commitState){
+			case MODIFIED:
+				renderer.setBackground(Color.YELLOW);
+				break;
+			case ADDED:
+				renderer.setBackground(Color.GREEN);
+				break;
+			case DELETED:
+				renderer.setBackground(Color.RED);
+				break;
+			default:
+				renderer.setBackground(Color.WHITE);
+				break;
+			}
+			renderer.setText(value.newPath.getName().toString() + " - " + value.impact);
+			
+			return renderer;
+		}
 	}
 
 	//The UI-Elements themselves are handled by the Element Handler. 
@@ -206,11 +235,14 @@ public class GuiView{
 
 	/*
 	 * Showing all Elements of the JList parameter in the Files_Scrollpane
-	 * @parameter commitFileName_JList containing the Elements to be displayed
+	 * @parameter commitFile_JList containing the Elements to be displayed
 	 */
-	void showFiles(JList<String> commitFileName_JList) {
+	void showFiles(JList<CommitFile> commitFileName_JList) {
         JPanel panel = new JPanel(new GridLayout());
 		
+        CommitFile_Renderer CommitFile_Renderer = new CommitFile_Renderer();
+        commitFileName_JList.setCellRenderer(CommitFile_Renderer);
+        
 		panel.add(commitFileName_JList);
 		elementHandler.getFiles_scrollPane().setViewportView(panel);
 	}
@@ -224,7 +256,7 @@ public class GuiView{
 	void showCode(JList<HighlightedLine> code_JList) {
 		JPanel panel = new JPanel(new GridLayout());
 
-		ComplexCellRenderer renderer = new ComplexCellRenderer();
+		HighlightedLine_Renderer renderer = new HighlightedLine_Renderer();
 		code_JList.setCellRenderer(renderer);
 
 		panel.add(code_JList);
