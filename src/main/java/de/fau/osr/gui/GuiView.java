@@ -84,7 +84,7 @@ public class GuiView{
 					break;
 			}
 
-			renderer.setText(String.format("%s - %d", value.newPath, value.impact));
+			renderer.setText(String.format("%s - %f", value.newPath, value.impact));
 
 			return renderer;
 		}
