@@ -241,8 +241,7 @@ public class GuiController {
 		guiView.clearAll();
 		
 		commitFile_JList = new JList<CommitFile>(guiModel.getAllFiles(getCommitFileSorting()));
-		guiView.showFiles(commitFile_JList);
-		
+		guiView.showFilesWithoutRendering(commitFile_JList);
 		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
 	}
 

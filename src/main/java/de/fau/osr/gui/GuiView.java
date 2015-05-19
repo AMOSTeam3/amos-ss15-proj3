@@ -54,8 +54,12 @@ public class GuiView{
 			return renderer;
 		}
 	}
-	
-	private class CommitFile_Renderer implements ListCellRenderer<CommitFile>{
+
+
+	/**
+	 * Displays each CommitFile by file name, cell highlighting and impact percentage
+	 */
+	private class CommitFile_ImpactRenderer implements ListCellRenderer<CommitFile> {
 		protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 		
 		@Override
@@ -63,23 +67,42 @@ public class GuiView{
 				JList<? extends CommitFile> list, CommitFile value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			
+
 			switch(value.commitState){
-			case MODIFIED:
-				renderer.setBackground(Color.YELLOW);
-				break;
-			case ADDED:
-				renderer.setBackground(Color.GREEN);
-				break;
-			case DELETED:
-				renderer.setBackground(Color.RED);
-				break;
-			default:
-				renderer.setBackground(Color.WHITE);
-				break;
+				case MODIFIED:
+					renderer.setBackground(Color.YELLOW);
+					break;
+				case ADDED:
+					renderer.setBackground(Color.GREEN);
+					break;
+				case DELETED:
+					renderer.setBackground(Color.RED);
+					break;
+				default:
+					renderer.setBackground(Color.WHITE);
+					break;
 			}
-			renderer.setText(value.newPath.getName().toString() + " - " + value.impact);
-			
+
+			renderer.setText(String.format("%s - %d", value.newPath, value.impact));
+
+			return renderer;
+		}
+	}
+
+	/**
+	 * Displays each CommitFile by just file name.
+	 */
+	private class CommitFile_SimpleFilenameRenderer implements ListCellRenderer<CommitFile> {
+		protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+
+		@Override
+		public Component getListCellRendererComponent(
+				JList<? extends CommitFile> list, CommitFile value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+			renderer.setText(value.newPath.getName());
+
 			return renderer;
 		}
 	}
@@ -236,14 +259,29 @@ public class GuiView{
 
 	/*
 	 * Showing all Elements of the JList parameter in the Files_Scrollpane
+	 * WITH rendering.
 	 * @parameter commitFile_JList containing the Elements to be displayed
 	 */
 	void showFiles(JList<CommitFile> commitFileName_JList) {
-        JPanel panel = new JPanel(new GridLayout());
-		
-        CommitFile_Renderer CommitFile_Renderer = new CommitFile_Renderer();
-        commitFileName_JList.setCellRenderer(CommitFile_Renderer);
-        
+		showFilesByGivenRenderer(commitFileName_JList, new CommitFile_ImpactRenderer());
+	}
+
+	/*
+	 * Showing all Elements of the JList parameter in the Files_Scrollpane
+	 * WITHOUT rendering.
+	 * @parameter commitFile_JList containing the Elements to be displayed
+	 */
+	void showFilesWithoutRendering(JList<CommitFile> commitFileName_JList) {
+		showFilesByGivenRenderer(commitFileName_JList, new CommitFile_SimpleFilenameRenderer());
+	}
+
+	/**
+	 * Will be called by public Methods *showFiles()* and *showFilesNoRendering*
+	 * @author Taleh Didover
+	 */
+	private void showFilesByGivenRenderer(JList<CommitFile> commitFileName_JList, ListCellRenderer<CommitFile> renderer) {
+		JPanel panel = new JPanel(new GridLayout());
+        commitFileName_JList.setCellRenderer(renderer);
 		panel.add(commitFileName_JList);
 		elementHandler.getFiles_scrollPane().setViewportView(panel);
 	}
