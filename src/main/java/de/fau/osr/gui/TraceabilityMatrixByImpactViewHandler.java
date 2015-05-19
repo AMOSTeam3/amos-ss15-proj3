@@ -17,6 +17,8 @@ import javax.swing.border.EmptyBorder;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
+import javax.swing.JLabel;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 
@@ -56,20 +58,39 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
+		JLabel lblRequirements = new JLabel("Requirements");
+		lblRequirements.setFont(new Font("Tahoma", Font.BOLD, 11));
+		
+		JLabel lblNewLabel = new JLabel("Files");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 647, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(21, Short.MAX_VALUE))
+					.addComponent(lblNewLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 617, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(41, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(354, Short.MAX_VALUE)
+					.addComponent(lblRequirements)
+					.addGap(255))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 411, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(17, Short.MAX_VALUE))
+					.addComponent(lblRequirements)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(26)
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(183)
+							.addComponent(lblNewLabel)))
+					.addContainerGap(40, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
