@@ -2,10 +2,9 @@ package de.fau.osr.gui.util;
 
 import javax.swing.table.DefaultTableModel;
 
+import de.fau.osr.bl.RequirementFileImpactValue;
 import de.fau.osr.bl.RequirementFilePair;
-import de.fau.osr.bl.RequirementsRelation;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.util.matrix.MatrixIndex;
 
 public class RequirementsTraceabilityByImpactTableModel extends DefaultTableModel{
 
@@ -42,8 +41,14 @@ public class RequirementsTraceabilityByImpactTableModel extends DefaultTableMode
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		if(requirementsTraceabilityMatrixByImpact != null)
-			return requirementsTraceabilityMatrixByImpact.getImpactValue(new RequirementFilePair(requirementsTraceabilityMatrixByImpact.getFiles().get(rowIndex), requirementsTraceabilityMatrixByImpact.getRequirements().get(columnIndex))).getImpactPercentage();
+		if(requirementsTraceabilityMatrixByImpact != null){
+			RequirementFileImpactValue impactValue = requirementsTraceabilityMatrixByImpact.getImpactValue(new RequirementFilePair( requirementsTraceabilityMatrixByImpact.getRequirements().get(columnIndex),requirementsTraceabilityMatrixByImpact.getFiles().get(rowIndex)));
+			if(impactValue != null)
+				return impactValue.getImpactPercentage();
+			else 
+				return 0.0;
+		}
+			
 		else 
 			return null;
 	}
