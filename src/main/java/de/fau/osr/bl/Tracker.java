@@ -154,7 +154,7 @@ public class Tracker {
      * @throws IOException
      */
 	public SetMultimap<String, String> getAllReqCommitRelations() throws IOException {
-        return dataSource.getCachedAllReqCommitRelations();
+        return dataSource.getAllReqCommitRelations();
     }
 
     /**

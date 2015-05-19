@@ -14,7 +14,26 @@ import java.util.Set;
  * Created by Dmitry Gorelenkov on 03.05.2015.
  */
 public abstract class DataSource {
-    SetMultimap<String, String> cachedReqCommitRelations;
+    protected SetMultimap<String, String> cachedReqCommitRelations;
+
+    /**
+     * perform computing, and gets set of all requirements to commit relations
+     * @return SetMultimap of relations
+     * @throws IOException
+     */
+    public abstract SetMultimap<String, String> doGetAllReqCommitRelations() throws IOException;
+    protected abstract void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException ;
+    protected abstract void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException;
+
+
+    /* default implementations */
+
+    /**
+     * clears the cached data
+     */
+    public void clearCache(){
+        this.cachedReqCommitRelations = null;
+    }
 
     /**
      * adds new relation to data source
@@ -22,7 +41,11 @@ public abstract class DataSource {
      * @param commitId commit part of the relation
      * @throws IOException
      */
-    public abstract void addReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException;
+    public void addReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+        doAddReqCommitRelation(reqId, commitId);
+        clearCache();
+    }
+
 
     /**
      * removes relation from data source
@@ -30,16 +53,10 @@ public abstract class DataSource {
      * @param commitId commit part of the relation
      * @throws IOException
      */
-    public abstract void removeReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException;
-
-    /**
-     * perform computing, and gets set of all requirements to commit relations
-     * @return SetMultimap of relations
-     * @throws IOException
-     */
-    public abstract SetMultimap<String, String> getAllReqCommitRelations() throws IOException;
-
-    /* default implementations */
+    public void removeReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+        doRemoveReqCommitRelation(reqId, commitId);
+        clearCache();
+    }
 
     /**
      * get commit ids by requirement id
@@ -110,16 +127,16 @@ public abstract class DataSource {
      * @return SetMultimap of all requirement to commit relations
      * @throws IOException
      */
-    public SetMultimap<String, String> getCachedAllReqCommitRelations() throws IOException {
+    public SetMultimap<String, String> getAllReqCommitRelations() throws IOException {
         if (!isCachedReqCommitRelations()){
-            doCacheReqCommitRelations(getAllReqCommitRelations());
+            doCacheReqCommitRelations(doGetAllReqCommitRelations());
         }
 
         return doGetCachedReqCommitRelations();
     }
 
     /**
-     * used for default implementation of getCachedAllReqCommitRelations
+     * used for default implementation of getAllReqCommitRelations
      * @param setToCache set should be cached
      */
     protected void doCacheReqCommitRelations(SetMultimap<String, String> setToCache){
@@ -127,7 +144,7 @@ public abstract class DataSource {
     }
 
     /**
-     * used for default implementation of getCachedAllReqCommitRelations
+     * used for default implementation of getAllReqCommitRelations
      * @return cached set of data
      */
     protected SetMultimap<String, String> doGetCachedReqCommitRelations(){
@@ -135,7 +152,7 @@ public abstract class DataSource {
     }
 
     /**
-     * used for default implementation of getCachedAllReqCommitRelations
+     * used for default implementation of getAllReqCommitRelations
      * @return true if ReqCommitRelations set is cached
      */
     protected boolean isCachedReqCommitRelations(){

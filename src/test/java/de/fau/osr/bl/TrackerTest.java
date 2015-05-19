@@ -97,7 +97,7 @@ public class TrackerTest {
         dbReqs.put("3", "commit3");
         dbReqs.put("4", "commit4");
 
-        Mockito.doReturn(dbReqs).when(mockedSource).getCachedAllReqCommitRelations();
+        Mockito.doReturn(dbReqs).when(mockedSource).getAllReqCommitRelations();
 
         //when
         SetMultimap<String, String> reqCommitLinkage = tracker.getAllReqCommitRelations();

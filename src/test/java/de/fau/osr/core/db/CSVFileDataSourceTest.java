@@ -1,6 +1,7 @@
 package de.fau.osr.core.db;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 import com.google.common.io.Files;
 import org.junit.After;
 import org.junit.Before;
@@ -8,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -102,7 +104,7 @@ public class CSVFileDataSourceTest {
     }
 
     @Test
-    public void addAndGetCSVTest() throws IOException {
+    public void addAndGetCSVTest() throws IOException, OperationNotSupportedException {
         csvFileDataSource.addReqCommitRelation("1", "commit 1");
         csvFileDataSource.addReqCommitRelation("1", "commit");
         csvFileDataSource.addReqCommitRelation("1", "commit 1");
@@ -141,7 +143,7 @@ public class CSVFileDataSourceTest {
 
         Files.append(fileContent, sourceFile, cs);
 
-        HashMultimap<String, String> relations = csvFileDataSource.getAllReqCommitRelations();
+        SetMultimap<String, String> relations = csvFileDataSource.getAllReqCommitRelations();
 
         assertEquals(relationsInFile, relations);
     }

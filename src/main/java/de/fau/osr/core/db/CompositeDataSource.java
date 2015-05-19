@@ -33,17 +33,17 @@ public class CompositeDataSource extends DataSource {
 
 
     @Override
-    public void addReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         dataSource.addReqCommitRelation(reqId, commitId);
     }
 
     @Override
-    public void removeReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         dataSource.removeReqCommitRelation(reqId, commitId);
     }
 
     @Override
-    public SetMultimap<String, String> getAllReqCommitRelations() throws IOException {
+    public SetMultimap<String, String> doGetAllReqCommitRelations() throws IOException {
         SetMultimap<String, String> result = HashMultimap.create();
         for (DataSource ds : dataSources){
             result.putAll(ds.getAllReqCommitRelations());
