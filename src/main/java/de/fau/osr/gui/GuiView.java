@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -326,6 +327,7 @@ public class GuiView{
 			TraceabilityMatrixViewHandler trMatrix = new TraceabilityMatrixViewHandler();
 			trMatrix.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrix);
 			trMatrix.initTable();
+			trMatrix.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			trMatrix.setVisible(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -338,6 +340,7 @@ public class GuiView{
 			TraceabilityMatrixByImpactViewHandler trMatrixByImpact = new TraceabilityMatrixByImpactViewHandler();
 			trMatrixByImpact.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrixByImpact);
 			trMatrixByImpact.initTable();
+			trMatrixByImpact.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			trMatrixByImpact.setVisible(true);
 
 	}
