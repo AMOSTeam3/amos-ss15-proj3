@@ -88,8 +88,9 @@ public class Tracker {
 				continue;
 			}
 			int i = 1;
-			int influenced = 0;
-			for(; i<currentBlame.size(); i++){
+			float influenced = 0;
+			int cuurentBlameSize = currentBlame.size();
+			for(; i<cuurentBlameSize; i++){
 				if(currentBlame.get(i).getRequirements().contains(requirementID)){
 					influenced++;
 				}
@@ -112,7 +113,7 @@ public class Tracker {
 			return -1;
 		}
 		int i = 1;
-		int influenced = 0;
+		float influenced = 0;
 		for(; i<currentBlame.size(); i++){
 			if(currentBlame.get(i).getRequirements().contains(requirementID)){
 				influenced++;
@@ -219,9 +220,9 @@ public class Tracker {
                 }
                 Pattern pattern = Pattern.compile("src");
                 Matcher m = pattern.matcher(name);
-                if(m.find()){
+                //if(m.find()){
                     files.add(name);
-                }
+                //}
             }
         }
         return files;

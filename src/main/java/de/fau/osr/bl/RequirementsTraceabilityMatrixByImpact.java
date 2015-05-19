@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import de.fau.osr.core.vcs.base.CommitFile;
 /**
@@ -30,6 +31,11 @@ public class RequirementsTraceabilityMatrixByImpact {
 			for(String requirement : requirements){
 				Collection<CommitFile> requirementCommitFiles = tracker.getCommitFilesForRequirementID(requirement);
 				for(CommitFile requirementCommitFile : requirementCommitFiles){
+					/*RequirementFilePair reqFilePair = new RequirementFilePair(requirement,requirementCommitFile.newPath.getPath());
+					if(requirementTraceabilityByImpactMatrix.containsKey(reqFilePair)){
+						requirementTraceabilityByImpactMatrix.put(reqFilePair,new RequirementFileImpactValue((float)requirementCommitFile.impact + requirementTraceabilityByImpactMatrix.get(reqFilePair).getImpactPercentage()));
+						continue;
+					}*/
 					requirementTraceabilityByImpactMatrix.put(new RequirementFilePair(requirement,requirementCommitFile.newPath.getPath()), new RequirementFileImpactValue((float)requirementCommitFile.impact));
 				}
 			}
@@ -47,12 +53,11 @@ public class RequirementsTraceabilityMatrixByImpact {
 			for(String requirement: requirements){
 				System.out.println(requirement);
 				for(String file : files){
-					if(!tracker.getAllRequirementsForFile(file).contains(requirement)){
-						System.out.println("C:" + file);
+					String unixFormatedFilePath = file.replaceAll(Matcher.quoteReplacement("\\"), "/");
+					if(!tracker.getAllRequirementsForFile(unixFormatedFilePath).contains(requirement)){
 						continue;
 					}
-					System.out.println("P:" + file);
-					requirementTraceabilityByImpactMatrix.put(new RequirementFilePair(requirement,file), new RequirementFileImpactValue(tracker.getImpactPercentageForFileAndRequirement(file, requirement)));
+					requirementTraceabilityByImpactMatrix.put(new RequirementFilePair(requirement,file), new RequirementFileImpactValue(tracker.getImpactPercentageForFileAndRequirement(unixFormatedFilePath, requirement)));
 					
 				}
 			}

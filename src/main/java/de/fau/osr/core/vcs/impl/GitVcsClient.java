@@ -1,10 +1,12 @@
 package de.fau.osr.core.vcs.impl;
 
 import com.beust.jcommander.internal.Lists;
+
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * @author Gayathery
@@ -269,19 +272,21 @@ public class GitVcsClient extends VcsClient{
 	public List<AnnotatedLine> blame(String path, DataSource dataSource) throws IOException, GitAPIException {
 		BlameCommand blameCommand = new BlameCommand(git.getRepository());
 		blameCommand.setFollowFileRenames(true);
-		blameCommand.setFilePath(path);
+		String unixFormatedFilePath = path.replaceAll(Matcher.quoteReplacement("\\"), "/");
+		blameCommand.setFilePath(unixFormatedFilePath);
 		BlameResult blameResult = blameCommand.call();
 		ArrayList<AnnotatedLine> res = new ArrayList<>();
-		if(blameResult == null) throw new FileNotFoundException(path);
+		if(blameResult == null) throw new FileNotFoundException(unixFormatedFilePath);
 		blameResult.computeAll();
 		RawText text = blameResult.getResultContents();
-		for(int i=0; i<text.size(); ++i) {
+		int textSize = text.size();
+		for(int i=0; i<textSize; ++i) {
 			//String commitId = blameResult.getSourceCommit(res.size()).getName();
 			//TODO add abstract linkage source here
 			List<String> annotation;
-			RevCommit commit = blameResult.getSourceCommit(res.size());
+			RevCommit commit = blameResult.getSourceCommit(i);
 			if(commit != null)
-				annotation = Lists.newArrayList(dataSource.getReqRelationByCommit(blameResult.getSourceCommit(res.size()).getName()));
+				annotation = Lists.newArrayList(dataSource.getReqRelationByCommit(commit.getName()));
 			else
 				annotation = Collections.emptyList();
 			res.add(new AnnotatedLine(annotation, text.getString(i)));

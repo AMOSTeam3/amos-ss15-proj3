@@ -17,7 +17,7 @@ public class CommitFile {
 	public File newPath;
 	public String commitID;
 	public String changedData;
-	public int impact;
+	public float impact;
 	
 	/**
 	 * @author Gayathery

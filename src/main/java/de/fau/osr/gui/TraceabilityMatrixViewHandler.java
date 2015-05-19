@@ -1,23 +1,21 @@
 package de.fau.osr.gui;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Pattern;
 
+import javax.swing.AbstractListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListModel;
 import javax.swing.border.EmptyBorder;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
-import de.fau.osr.bl.Tracker;
-import de.fau.osr.core.vcs.impl.GitVcsClient;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.gui.util.MatrixTableModel;
 import de.fau.osr.util.matrix.MatrixIndex;
 
@@ -114,8 +112,28 @@ public class TraceabilityMatrixViewHandler extends JFrame {
 			table.setCellSelectionEnabled(true);
 			Font columnHeaderFont = new Font("Arial",Font.BOLD,10);
 			table.getTableHeader().setFont(columnHeaderFont);
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			scrollPane.setViewportView(table);
+			
+			ListModel listModel = new AbstractListModel() {
+			     
+			      public int getSize() {
+			        return traceabilityMatrix.getOrderedRequirementsArrayForTraceability().size();
+			      }
+
+			      public Object getElementAt(int index) {
+			        return traceabilityMatrix.getOrderedRequirementsArrayForTraceability().get(index);
+			      }
+			    };
+			
+			JList rowHeader = new JList(listModel);
+		    rowHeader.setFixedCellWidth(50);
+
+		    rowHeader.setFixedCellHeight(table.getRowHeight());
+		    rowHeader.setCellRenderer(new RowHeaderRenderer(table));
+		    scrollPane.setRowHeaderView(rowHeader);
 		
 		
 	}
 }
+
