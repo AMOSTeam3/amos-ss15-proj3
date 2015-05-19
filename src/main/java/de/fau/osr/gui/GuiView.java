@@ -323,7 +323,8 @@ public class GuiView{
 	
 	void showTraceabilityMatrix(RequirementsTraceabilityMatrix requirementsTraceabilityMatrix){
 		try {
-			TraceabilityMatrixViewHandler trMatrix = new TraceabilityMatrixViewHandler(requirementsTraceabilityMatrix);
+			TraceabilityMatrixViewHandler trMatrix = new TraceabilityMatrixViewHandler();
+			trMatrix.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrix);
 			trMatrix.initTable();
 			trMatrix.setVisible(true);
 		} catch (IOException e) {
@@ -334,7 +335,8 @@ public class GuiView{
 	
 	void showTraceabilityMatrixByImpact(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
 
-			TraceabilityMatrixByImpactViewHandler trMatrixByImpact = new TraceabilityMatrixByImpactViewHandler(requirementsTraceabilityMatrixByImpact);
+			TraceabilityMatrixByImpactViewHandler trMatrixByImpact = new TraceabilityMatrixByImpactViewHandler();
+			trMatrixByImpact.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrixByImpact);
 			trMatrixByImpact.initTable();
 			trMatrixByImpact.setVisible(true);
 

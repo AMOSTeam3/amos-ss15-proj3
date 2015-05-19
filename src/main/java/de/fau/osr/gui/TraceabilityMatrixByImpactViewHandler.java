@@ -32,7 +32,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TraceabilityMatrixByImpactViewHandler frame = new TraceabilityMatrixByImpactViewHandler(null);
+					TraceabilityMatrixByImpactViewHandler frame = new TraceabilityMatrixByImpactViewHandler();
 					frame.initTable();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -45,7 +45,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TraceabilityMatrixByImpactViewHandler(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact) {
+	public TraceabilityMatrixByImpactViewHandler() {
 		this.requirementsTraceabilityMatrixByImpact = requirementsTraceabilityMatrixByImpact;
 		setTitle("Spice Traceability - Traceability Matrix by Impact");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,6 +72,10 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 					.addContainerGap(17, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	public void setRequirementsTraceabilityMatrix(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
+		this.requirementsTraceabilityMatrixByImpact = requirementsTraceabilityMatrixByImpact;
 	}
 	
 	public void initTable()

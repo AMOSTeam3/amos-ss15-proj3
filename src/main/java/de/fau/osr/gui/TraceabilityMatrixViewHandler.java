@@ -36,7 +36,7 @@ public class TraceabilityMatrixViewHandler extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TraceabilityMatrixViewHandler frame = new TraceabilityMatrixViewHandler(null);
+					TraceabilityMatrixViewHandler frame = new TraceabilityMatrixViewHandler();
 					frame.initTable();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -50,7 +50,7 @@ public class TraceabilityMatrixViewHandler extends JFrame {
 	 * Create the frame.
 	 * @throws IOException 
 	 */
-	public TraceabilityMatrixViewHandler(RequirementsTraceabilityMatrix requirementsTraceabilityMatrix) throws IOException {
+	public TraceabilityMatrixViewHandler() throws IOException {
 		this.requirementsTraceabilityMatrix = requirementsTraceabilityMatrix;
 		setTitle("SpiceTraceability-Requirement Traceability Matrix");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,7 +80,10 @@ public class TraceabilityMatrixViewHandler extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
-	public void initTable()
+	public void setRequirementsTraceabilityMatrix(RequirementsTraceabilityMatrix requirementsTraceabilityMatrix){
+		this.requirementsTraceabilityMatrix = requirementsTraceabilityMatrix;
+	}
+	void initTable()
 	{
 		
 			final RequirementsTraceabilityMatrix traceabilityMatrix = this.requirementsTraceabilityMatrix;
