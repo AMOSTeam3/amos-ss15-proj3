@@ -181,11 +181,19 @@ public class GuiController {
 		}
 		guiView.showCommits(commitMessages_JList);
 	}
-	
-	
 
+	/**
+	 * Navigation: ->Files->Code
+	 * Clear: ImpactPercentage
+	 * Setting: Code
+	 * Using: getChangeDataFromFileIndex
+	 *
+	 * Just displays latest file content.
+	 */
+	void codeFromFile(CommitFile file) {
+		codeFromFile(file, "");
+	}
 
-	
 	/**
 	 * Navigation: ->Files->Code
 	 * Clear: ImpactPercentage
@@ -215,7 +223,7 @@ public class GuiController {
 	 * Clear: Commits
 	 * Setting: Requirements
 	 * Using: getRequirementsForBlame
-	 * @param filesIndex
+	 * @param file
 	 * @param codeIndex
 	 */
 	void requirementsFromCode(CommitFile file, int codeIndex){
@@ -242,7 +250,7 @@ public class GuiController {
 		
 		commitFile_JList = new JList<CommitFile>(guiModel.getAllFiles(getCommitFileSorting()));
 		guiView.showFilesWithoutRendering(commitFile_JList);
-		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.RequirementsAndCommitsFromFile));
+		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.RequirementsAndCommitsAndCodeFromFile));
 	}
 
 	/**

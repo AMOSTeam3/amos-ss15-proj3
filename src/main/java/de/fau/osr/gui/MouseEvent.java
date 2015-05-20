@@ -7,7 +7,7 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
-enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, RequirementsAndCommitsFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit, RequirementsAndFilesFromCommit, CommitsAndCodeFromRequirementAndFile, RequirementToLinkage, CommitToLinkage, RequirmentsFromCode};
+enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, RequirementsAndCommitsAndCodeFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit, RequirementsAndFilesFromCommit, CommitsAndCodeFromRequirementAndFile, RequirementToLinkage, CommitToLinkage, RequirmentsFromCode};
 
 public class MouseEvent implements MouseListener {
 
@@ -44,9 +44,10 @@ public class MouseEvent implements MouseListener {
             case CodeFromFile:
                 guiController.codeFromFile(guiController.commitFile_JList.getSelectedValue(), guiController.requirements_JList.getSelectedValue());
                 break;
-            case RequirementsAndCommitsFromFile:
+            case RequirementsAndCommitsAndCodeFromFile:
                 guiController.requirementsFromFile(guiController.commitFile_JList.getSelectedValue());
                 guiController.commitsFromFile(guiController.commitFile_JList.getSelectedValue());
+                guiController.codeFromFile(guiController.commitFile_JList.getSelectedValue());
                 break;
             case CommitsFromRequirementAndFile:
                 JList<String> theList4 = (JList<String>) guiController.requirements_JList;
