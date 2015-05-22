@@ -71,8 +71,8 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 		JLabel lblRequirements = new JLabel("Requirements");
 		lblRequirements.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JLabel lblNewLabel = new JLabel("Files");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		JLabel lblFiles = new JLabel("Files");
+		lblFiles.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
 		JButton btnToCsv = new JButton("To CSV");
 		btnToCsv.addActionListener(new ActionListener() {
@@ -92,7 +92,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblNewLabel)
+					.addComponent(lblFiles)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
@@ -120,7 +120,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(183)
-							.addComponent(lblNewLabel)))
+							.addComponent(lblFiles)))
 					.addGap(5))
 		);
 		contentPane.setLayout(gl_contentPane);
