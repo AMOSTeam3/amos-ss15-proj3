@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,6 +23,7 @@ import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
+import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
 
 /*
  * View part of the MVC. This Class is responsible for the setting up the UI and interacting with the 
@@ -343,6 +345,45 @@ public class GuiView{
 			trMatrixByImpact.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			trMatrixByImpact.setVisible(true);
 
+	}
+	/*
+	 * method to show progress bar for the processing of traceability matrix by impact values
+	 */
+	void showTraceabilityMatrixByImpactProgressBar(){
+		
+		final SpiceTraceabilityProgressBar progressBar = new SpiceTraceabilityProgressBar();
+		progressBar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		progressBar.setProgressBarContent("Traceability Matrix Generation");
+		progressBar.setVisible(true);
+		
+		class showTraceabilityMatrixByImpactProgressBarThread implements Runnable{
+
+			@Override
+			public void run() {
+				Boolean completion = false;
+				while(RequirementsTraceabilityMatrixByImpact.processProgress<=100){
+					progressBar.setProgressBarValue(RequirementsTraceabilityMatrixByImpact.processProgress);
+					try {
+						Thread.sleep(100);
+					
+						if(completion)
+							break;
+						if(RequirementsTraceabilityMatrixByImpact.processProgress == 100){
+							completion = true;							
+						}
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+						
+				}
+				progressBar.dispatchEvent(new WindowEvent(progressBar, WindowEvent.WINDOW_CLOSING));
+				
+			}
+			
+		}
+		Thread tr = new Thread(new showTraceabilityMatrixByImpactProgressBarThread());
+        tr.start();
 	}
 }
 

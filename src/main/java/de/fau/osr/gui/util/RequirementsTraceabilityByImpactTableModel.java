@@ -5,7 +5,10 @@ import javax.swing.table.DefaultTableModel;
 import de.fau.osr.bl.RequirementFileImpactValue;
 import de.fau.osr.bl.RequirementFilePair;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-
+/**
+ * @author Gayathery Sathya
+ * @desc This class is a customized table generator for Requirement Traceability matrix by impact values
+ */
 public class RequirementsTraceabilityByImpactTableModel extends DefaultTableModel{
 
 	RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact;

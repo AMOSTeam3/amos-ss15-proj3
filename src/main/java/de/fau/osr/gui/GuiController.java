@@ -539,6 +539,7 @@ public class GuiController {
     
     void getTraceabilityMatrixByImpact(){
     	try {
+    		guiView.showTraceabilityMatrixByImpactProgressBar();
 			guiView.showTraceabilityMatrixByImpact(guiModel.getRequirementsTraceabilityByImpact());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

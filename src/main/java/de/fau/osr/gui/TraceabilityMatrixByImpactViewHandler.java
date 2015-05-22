@@ -26,7 +26,10 @@ import javax.swing.border.EmptyBorder;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
 import de.fau.osr.util.matrix.MatrixTools;
-
+/**
+ * @author Gayathery Sathya
+ * @desc This class is the GUI for requirement traceability by impact value
+ */
 public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 
 	private JPanel contentPane;
@@ -57,7 +60,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 	public TraceabilityMatrixByImpactViewHandler() {
 		setTitle("Spice Traceability - Traceability Matrix by Impact");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setBounds(100, 100, 715, 510);
+		setBounds(100, 100, 999, 686);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

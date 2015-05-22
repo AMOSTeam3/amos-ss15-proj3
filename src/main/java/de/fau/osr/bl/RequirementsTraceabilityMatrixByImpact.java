@@ -18,6 +18,7 @@ public class RequirementsTraceabilityMatrixByImpact {
 	List<String> requirements;
 	List<String> files;
 	Tracker tracker;
+	public static int processProgress = 0;
 	Map<RequirementFilePair,RequirementFileImpactValue> requirementTraceabilityByImpactMatrix = new HashMap<RequirementFilePair, RequirementFileImpactValue>();
 	public RequirementsTraceabilityMatrixByImpact(Tracker tracker){
 		this.tracker = tracker;
@@ -30,7 +31,11 @@ public class RequirementsTraceabilityMatrixByImpact {
 			java.util.Collections.sort(requirements);
 			files.addAll(tracker.getAllFilesAsString());
 			java.util.Collections.sort(files);
+			int progressMaxSize = requirements.size();
+			int progressCount = 0;
 			for(String requirement : requirements){
+				progressCount++;
+				processProgress = (progressCount*100)/progressMaxSize;
 				Collection<CommitFile> requirementCommitFiles = tracker.getCommitFilesForRequirementID(requirement);
 				for(CommitFile requirementCommitFile : requirementCommitFiles){
 					/*RequirementFilePair reqFilePair = new RequirementFilePair(requirement,requirementCommitFile.newPath.getPath());

@@ -18,7 +18,10 @@ import javax.swing.border.EmptyBorder;
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.gui.util.MatrixTableModel;
 import de.fau.osr.util.matrix.MatrixIndex;
-
+/**
+ * @author Gayathery Sathya
+ * @desc This class is the GUI for requirement traceability by requirement relations
+ */
 public class TraceabilityMatrixViewHandler extends JFrame {
 	
 
