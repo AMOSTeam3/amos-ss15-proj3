@@ -1,17 +1,31 @@
 package de.fau.osr.gui;
 
-import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
-import de.fau.osr.util.matrix.MatrixTools;
-
-import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
+import javax.swing.AbstractListModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
+import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
+import de.fau.osr.util.matrix.MatrixTools;
 
 public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 
@@ -72,43 +86,39 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-				gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(lblNewLabel)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(btnToCsv)
-												.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addPreferredGap(ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
-																.addComponent(lblRequirements)
-																.addGap(255))
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addGap(18)
-																.addComponent(btnToPdf)
-																.addContainerGap())))
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 617, GroupLayout.PREFERRED_SIZE)
-												.addContainerGap(33, Short.MAX_VALUE))))
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblNewLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(btnToCsv)
+							.addGap(18)
+							.addComponent(btnToPdf)
+							.addGap(158)
+							.addComponent(lblRequirements)
+							.addGap(260))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+							.addGap(33))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(lblRequirements)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(20)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(btnToCsv)
-								.addComponent(btnToPdf))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnToCsv)
+								.addComponent(btnToPdf)
+								.addComponent(lblRequirements))
 							.addGap(18)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE))
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(183)
 							.addComponent(lblNewLabel)))
-					.addContainerGap(25, Short.MAX_VALUE))
+					.addGap(5))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -140,8 +150,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 			    };
 			
 			JList rowHeader = new JList(listModel);
-		    rowHeader.setFixedCellWidth(200);
-
+		    rowHeader.setFixedCellWidth(-1);
 		    rowHeader.setFixedCellHeight(table.getRowHeight());
 
 		    rowHeader.setCellRenderer(new RowHeaderRenderer(table));
@@ -170,3 +179,5 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 
 
 }
+
+

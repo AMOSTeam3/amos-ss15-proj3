@@ -19,6 +19,8 @@ class RowHeaderRenderer extends JLabel implements ListCellRenderer {
 	    setForeground(header.getForeground());
 	    setBackground(header.getBackground());
 	    setFont(header.getFont());
+	    
+	    header.setResizingAllowed(true);
 	  }
 
 	  public Component getListCellRendererComponent(JList list, Object value,

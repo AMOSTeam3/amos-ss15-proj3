@@ -27,7 +27,9 @@ public class RequirementsTraceabilityMatrixByImpact {
 	public void Process(){
 		try {
 			requirements.addAll(tracker.getAllRequirements());
+			java.util.Collections.sort(requirements);
 			files.addAll(tracker.getAllFilesAsString());
+			java.util.Collections.sort(files);
 			for(String requirement : requirements){
 				Collection<CommitFile> requirementCommitFiles = tracker.getCommitFilesForRequirementID(requirement);
 				for(CommitFile requirementCommitFile : requirementCommitFiles){
