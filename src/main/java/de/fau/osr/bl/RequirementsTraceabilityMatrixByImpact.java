@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 
 import de.fau.osr.core.vcs.base.CommitFile;
 /**
+ * This class represents a traceability matrix for requirements based on impact
  * @author Gayathery Sathya
- * @desc This class represents a traceability matrix for requirements based on impact
  */
 public class RequirementsTraceabilityMatrixByImpact {
 
@@ -25,6 +25,9 @@ public class RequirementsTraceabilityMatrixByImpact {
 		requirements = new ArrayList<String>();
 		files = new ArrayList<String>();
 	}
+	/**
+	 * method to process the data behind the generation of traceability matrix
+	 */
 	public void Process(){
 		try {
 			requirements.addAll(tracker.getAllRequirements());
@@ -52,7 +55,9 @@ public class RequirementsTraceabilityMatrixByImpact {
 		}
 		
 	}
-	
+	/**
+	 * method to process the data behind the generation of traceability matrix (alternate way)
+	 */
 	public void ProcessAlternate(){
 		try {
 			requirements.addAll(tracker.getAllRequirements());
@@ -74,13 +79,23 @@ public class RequirementsTraceabilityMatrixByImpact {
 		}
 		
 	}
+	/**
+	 * @return returns the list of requirements
+	 */
 	public List<String> getRequirements(){
 		return requirements;
 	}
 	
+	/**
+	 * @return returns the list of files
+	 */
 	public List<String> getFiles(){
 		return files;
 	}
+	/**
+	 * @param reqFilePair A pair object containing requirement and file
+	 * @return returns the impact value for a requirement file pair
+	 */
 	public RequirementFileImpactValue getImpactValue(RequirementFilePair reqFilePair){
 		return requirementTraceabilityByImpactMatrix.get(reqFilePair);
 	}

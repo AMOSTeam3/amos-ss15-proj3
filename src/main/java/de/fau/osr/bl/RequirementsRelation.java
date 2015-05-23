@@ -3,8 +3,8 @@ package de.fau.osr.bl;
 import java.util.ArrayList;
 import java.util.List;
 /**
+ * This class represents the relationship between requirements
  * @author Gayathery Sathya
- * @desc This class represents the relationship between requirements
  */
 public class RequirementsRelation {
 	
@@ -14,12 +14,21 @@ public class RequirementsRelation {
 	List<String> commonFiles = new ArrayList<String>();
 	
 	
+	/**
+	 * Constructor of the class
+	 */
 	public RequirementsRelation() {
 		super();
 		
 	}
 
 
+	/**
+	 * overloaded constructor with variable setting at construction
+	 * @param requirementX requirement ID x
+	 * @param requirementY requirement ID z
+	 * @param files list of associated files
+	 */
 	public RequirementsRelation(String requirementX, String requirementY,
 			List<String> files) {
 		super();
@@ -29,6 +38,12 @@ public class RequirementsRelation {
 	}
 
 
+	/**
+	 * overloaded constructor with variable setting at construction
+	 * @param requirementX requirement ID x
+	 * @param requirementY requirement ID z
+	 * @param commonFilesCount number of common files for the requirement combination
+	 */
 	public RequirementsRelation(String requirementX, String requirementY,
 			Integer commonFilesCount) {
 		super();

@@ -15,8 +15,8 @@ import java.awt.Color;
 import java.awt.Window.Type;
 
 /**
+ * This class is a generic progress bar that can be utilized for any progress bar functionality
  * @author Gayathery Sathya
- * @desc This class is a generic progress bar that can be utilized for any progress bar functionality
  */
 public class SpiceTraceabilityProgressBar extends JFrame {
 
@@ -87,11 +87,17 @@ public class SpiceTraceabilityProgressBar extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
+	/**
+	 * @param percentage value of the progress
+	 */
 	public void setProgressBarValue(int percentage){
 		progressBar.setValue(percentage);
 		lblPercentage.setText(""+percentage+"%");
 	}
 	
+	/**
+	 * @param content string data to show while progress bar is progressing
+	 */
 	public void setProgressBarContent(String content){
 		lblProgress.setText(content + "...");
 	}

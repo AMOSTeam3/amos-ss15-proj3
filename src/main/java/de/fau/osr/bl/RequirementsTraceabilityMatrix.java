@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import de.fau.osr.util.matrix.MatrixIndex;
 import de.fau.osr.util.matrix.SymmetricMatrix;
 /**
+ * This class represents a traceability matrix for requirements
  * @author Gayathery Sathya
- * @desc This class represents a traceability matrix for requirements
  */
 public class RequirementsTraceabilityMatrix {
 	
@@ -33,24 +33,32 @@ public class RequirementsTraceabilityMatrix {
 
 		
 	}
-	/*
+
+	/**
 	 * method to get the requirements for traceability in an ordered form
+	 * @return
 	 */
 	public List<String> getOrderedRequirementsArrayForTraceability(){
 		final ArrayList<String> OrderedRequirementsArrayForTraceability = requirements;
 		return OrderedRequirementsArrayForTraceability;
 	}
-	/*
+	
+	/**
 	 * method to get the actual traceability matrix with relationships
+	 * @return
 	 */
 	public SymmetricMatrix<RequirementsRelation> getTraceabilityMatrixForRequirements(){
 		final SymmetricMatrix<RequirementsRelation> finalTraceabilityMatrix = traceabilityMatrix;
 		return finalTraceabilityMatrix;
 	}
 
-	/*
+	
+	/**
 	 * method to populate the symmetric matrix with the elements of type "RequirementsRelation"
 	 * based on relationship between Requirements
+	 * @param fileRequirementList
+	 * @param filePath path of the file for which traceability is processed
+	 * @throws IndexOutOfBoundsException
 	 */
 	public void populateMatrix(List<String> fileRequirementList, String filePath) throws IndexOutOfBoundsException{
 		
@@ -84,8 +92,11 @@ public class RequirementsTraceabilityMatrix {
 		}
 		
 	}
-	/*
+
+	/**
 	 * Gets the index of the requirement from the main requirement Arraylist 'requirements'
+	 * @param requirement requirement id
+	 * @return it returns the index of the requirement id in the list
 	 */
 	private int getRequirementIndex(String requirement){
 		

@@ -324,6 +324,10 @@ public class GuiView{
 		elementHandler.switchLinkageButton(buttonState);
 	}
 	
+	/**
+	 * shows the traceability matrix window with filled in data
+	 * @param requirementsTraceabilityMatrix
+	 */
 	void showTraceabilityMatrix(RequirementsTraceabilityMatrix requirementsTraceabilityMatrix){
 		try {
 			TraceabilityMatrixViewHandler trMatrix = new TraceabilityMatrixViewHandler();
@@ -337,6 +341,10 @@ public class GuiView{
 		}
 	}
 	
+	/**
+	 * shows the traceability matrix (by impact) window with filled in data
+	 * @param requirementsTraceabilityMatrixByImpact the matrix which contains the info for traceability
+	 */
 	void showTraceabilityMatrixByImpact(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
 
 			TraceabilityMatrixByImpactViewHandler trMatrixByImpact = new TraceabilityMatrixByImpactViewHandler();

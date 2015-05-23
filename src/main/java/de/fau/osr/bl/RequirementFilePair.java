@@ -1,22 +1,32 @@
 package de.fau.osr.bl;
 /**
+ * This class represents file requirement pair
  * @author Gayathery Sathya
- * @desc This class represents file requirement pair
  */
 public class RequirementFilePair {
 
 	String fileName;
 	String requirement;
 	
+	/**
+	 * @param requirement Requirement ID
+	 * @param fileName filename with path
+	 */
 	public RequirementFilePair(String requirement,String fileName){
 		this.fileName = fileName;
 		this.requirement = requirement;
 	}
 
+	/**
+	 * @return returns the filename of the pair
+	 */
 	public String getFileName(){
 		return fileName;
 	}
 	
+	/**
+	 * @return returns the requirement of the pait
+	 */
 	public String getRequirement(){
 		return requirement;
 	}

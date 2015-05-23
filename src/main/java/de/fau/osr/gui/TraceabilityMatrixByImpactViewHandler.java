@@ -27,8 +27,8 @@ import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
 import de.fau.osr.util.matrix.MatrixTools;
 /**
+ * This class is the GUI for requirement traceability by impact value
  * @author Gayathery Sathya
- * @desc This class is the GUI for requirement traceability by impact value
  */
 public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 
@@ -130,6 +130,9 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 		this.requirementsTraceabilityMatrixByImpact = requirementsTraceabilityMatrixByImpact;
 	}
 	
+	/**
+	 * Method which initialiyes the table with data
+	 */
 	public void initTable()
 	{
 

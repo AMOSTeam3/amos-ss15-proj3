@@ -6,8 +6,8 @@ import de.fau.osr.bl.RequirementFileImpactValue;
 import de.fau.osr.bl.RequirementFilePair;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 /**
+ * This class is a customized table generator for Requirement Traceability matrix by impact values
  * @author Gayathery Sathya
- * @desc This class is a customized table generator for Requirement Traceability matrix by impact values
  */
 public class RequirementsTraceabilityByImpactTableModel extends DefaultTableModel{
 

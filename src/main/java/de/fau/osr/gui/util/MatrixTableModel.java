@@ -14,8 +14,8 @@ import de.fau.osr.util.matrix.MatrixIndex;
 import de.fau.osr.util.matrix.SymmetricMatrix;
 
 /**
+ * This class is a customized table generator for Requirement Traceability matrix by requirement relations
  * @author Gayathery Sathya
- * @desc This class is a customized table generator for Requirement Traceability matrix by requirement relations
  */
 public class MatrixTableModel extends DefaultTableModel{
 	
