@@ -103,7 +103,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 							.addComponent(lblRequirements)
 							.addGap(260))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
 							.addGap(33))))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -113,11 +113,11 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnToCsv)
-								.addComponent(btnToPdf)
+								.addComponent(btnToCsv, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnToPdf, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(lblRequirements))
 							.addGap(18)
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE))
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(183)
 							.addComponent(lblFiles)))

@@ -5,9 +5,8 @@ import java.util.Objects;
 
 
 /**
+ * This entity class holds the properties of a committed file.
  * @author Gayathery
- * @desc This entity class holds the properties of a committed file.
- *
  */
 
 public class CommitFile {

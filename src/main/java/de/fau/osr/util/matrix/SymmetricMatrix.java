@@ -7,8 +7,8 @@ import java.util.Map;
 
 
 /*
+ * class to represent a symmetric matrix with element type T
  * @author Gayathery Sathya
- * @desc class to represent a symmetric matrix with element type T
  */
 public class SymmetricMatrix<T> {
 	
@@ -51,6 +51,11 @@ public class SymmetricMatrix<T> {
 		return matrix;
 	}
 	
+	/**
+	 * method to order the indices of the matrix suitable for a symmetric matrix
+	 * @param matrixIndex
+	 * @return the ordered matrix indices
+	 */
 	private MatrixIndex orderElement(MatrixIndex matrixIndex){
 		Integer temp;
 		if (matrixIndex.getRowIndex() > matrixIndex.getColumnIndex()) {

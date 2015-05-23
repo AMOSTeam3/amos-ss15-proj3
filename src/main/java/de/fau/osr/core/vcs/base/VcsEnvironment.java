@@ -2,9 +2,8 @@ package de.fau.osr.core.vcs.base;
 
 
 /**
+ * this enum holds the list of Version control Software 
  * @author Gayathery
- * @desc this enum holds the list of Version control Software 
- *
  */
 public enum VcsEnvironment {
 GIT

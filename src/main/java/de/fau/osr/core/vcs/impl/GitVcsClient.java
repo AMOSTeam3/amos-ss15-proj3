@@ -41,9 +41,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 /**
+ * VCS Client implementation for Git
  * @author Gayathery
- * @desc VCS Client implementation for Git
- *
  */
 public class GitVcsClient extends VcsClient{
 

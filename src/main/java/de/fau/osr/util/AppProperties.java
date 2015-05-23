@@ -4,8 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 /**
+ * class to query property pages
  * @author Gayathery
- * @desc class to query property pages
  *
  */
 public class AppProperties {
