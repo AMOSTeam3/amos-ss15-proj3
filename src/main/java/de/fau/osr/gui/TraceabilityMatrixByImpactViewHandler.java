@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.GroupLayout;
@@ -25,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
+import de.fau.osr.util.matrix.MatrixIndex;
 import de.fau.osr.util.matrix.MatrixTools;
 /**
  * This class is the GUI for requirement traceability by impact value
@@ -137,7 +139,32 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 	{
 
 			final RequirementsTraceabilityMatrixByImpact traceabilityMatrixByImpact = this.requirementsTraceabilityMatrixByImpact;
-			table = new JTable(new RequirementsTraceabilityByImpactTableModel(traceabilityMatrixByImpact));
+			table = new JTable(new RequirementsTraceabilityByImpactTableModel(traceabilityMatrixByImpact)){
+				public String getToolTipText(java.awt.event.MouseEvent event){
+					String toolTipText = null;
+	                java.awt.Point p = event.getPoint();
+	                int rowIndex = rowAtPoint(p);
+	                int columIndex = columnAtPoint(p);
+
+	                try {
+	                	String requirement = traceabilityMatrixByImpact.getRequirements().get(columIndex);
+	                	String file = traceabilityMatrixByImpact.getFiles().get(rowIndex);
+	                	StringBuilder toolTipTextBuilder = new StringBuilder();
+	                	toolTipTextBuilder.append("<html>");
+	                	toolTipTextBuilder.append("<font size=\"3\" color=\"green\">");
+	                	toolTipTextBuilder.append("Requirement : "+requirement );
+	                	toolTipTextBuilder.append("<br>");
+	                	toolTipTextBuilder.append("File : "+file);
+	                	toolTipTextBuilder.append("</font>");
+	                	toolTipTextBuilder.append("</html>");
+	                	toolTipText = toolTipTextBuilder.toString();
+	                } catch (RuntimeException e1) {
+	                    //catch null pointer exception if mouse is over an empty line
+	                }
+
+	                return toolTipText;
+				}
+			};
 			table.setCellSelectionEnabled(true);
 			Font columnHeaderFont = new Font("Arial",Font.BOLD,10);
 			table.getTableHeader().setFont(columnHeaderFont);
@@ -151,7 +178,8 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 			      }
 
 			      public Object getElementAt(int index) {
-			        return traceabilityMatrixByImpact.getFiles().get(index);
+			    	  File filePath = new File(traceabilityMatrixByImpact.getFiles().get(index));
+			        return filePath.getName();
 			      }
 			    };
 			
