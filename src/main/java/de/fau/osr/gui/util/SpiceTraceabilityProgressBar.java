@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 import java.awt.Window.Type;
+import java.awt.Font;
 
 /**
  * This class is a generic progress bar that can be utilized for any progress bar functionality
@@ -48,7 +49,7 @@ public class SpiceTraceabilityProgressBar extends JFrame {
 		setResizable(false);
 		setTitle("Spice Traceability : Progress");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 444, 217);
+		setBounds(100, 100, 442, 160);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -56,9 +57,11 @@ public class SpiceTraceabilityProgressBar extends JFrame {
 		progressBar = new JProgressBar();
 		
 		lblProgress = new JLabel("Progress...");
+		lblProgress.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblProgress.setForeground(Color.BLUE);
 		
 		lblPercentage = new JLabel("0%");
+		lblPercentage.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblPercentage.setForeground(new Color(205, 92, 92));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -66,23 +69,23 @@ public class SpiceTraceabilityProgressBar extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblProgress)
 							.addGap(34)
-							.addComponent(lblPercentage)))
+							.addComponent(lblPercentage))
+						.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(32)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblProgress)
 						.addComponent(lblPercentage))
-					.addPreferredGap(ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+					.addGap(18)
 					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-					.addGap(20))
+					.addContainerGap(34, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

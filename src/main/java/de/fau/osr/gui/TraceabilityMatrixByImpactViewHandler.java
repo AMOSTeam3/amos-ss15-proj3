@@ -152,9 +152,11 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 	                	StringBuilder toolTipTextBuilder = new StringBuilder();
 	                	toolTipTextBuilder.append("<html>");
 	                	toolTipTextBuilder.append("<font size=\"3\" color=\"green\">");
+	                	toolTipTextBuilder.append("<b>");
 	                	toolTipTextBuilder.append("Requirement : "+requirement );
 	                	toolTipTextBuilder.append("<br>");
 	                	toolTipTextBuilder.append("File : "+file);
+	                	toolTipTextBuilder.append("</b>");
 	                	toolTipTextBuilder.append("</font>");
 	                	toolTipTextBuilder.append("</html>");
 	                	toolTipText = toolTipTextBuilder.toString();

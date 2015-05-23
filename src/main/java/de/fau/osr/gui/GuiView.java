@@ -361,7 +361,7 @@ public class GuiView{
 		
 		final SpiceTraceabilityProgressBar progressBar = new SpiceTraceabilityProgressBar();
 		progressBar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		progressBar.setProgressBarContent("Traceability Matrix Generation");
+		progressBar.setProgressBarContent("Generating Traceability Matrix (by Impact)");
 		progressBar.setVisible(true);
 		
 		class showTraceabilityMatrixByImpactProgressBarThread implements Runnable{
