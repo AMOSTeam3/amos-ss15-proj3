@@ -2,7 +2,6 @@ package de.fau.osr.gui;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
@@ -203,7 +202,21 @@ public class GUITrackerToModelAdapter implements GuiModel {
 		}
 		return hightlightedLines;
 	}
-	
+
+	@Override
+	public Iterable<String[]> getRequirementsForBlame(CommitFile file)
+			throws FileNotFoundException, IOException, GitAPIException {
+		Collection<AnnotatedLine> lines = tracker.getBlame(file.newPath.getPath());
+		Collection<String[]> reqIdsByLines = new ArrayList<String[]>();
+
+		for(AnnotatedLine line: lines){
+			reqIdsByLines.add( convertCollectionToArray(line.getRequirements()) );
+		}
+
+		return reqIdsByLines;
+	}
+
+	@Override
 	public String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException{
 		Collection<AnnotatedLine> lines = tracker.getBlame(file.newPath.getPath());
 		int i = 0;

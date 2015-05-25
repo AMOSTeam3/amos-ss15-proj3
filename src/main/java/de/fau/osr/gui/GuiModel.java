@@ -55,7 +55,9 @@ public interface GuiModel {
 	void addRequirementCommitLinkage(String requirementID, int commitIndex) throws FileNotFoundException;
 
 	HighlightedLine[] getBlame(CommitFile file, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
-	
+
+    Iterable<String[]> getRequirementsForBlame(CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
+
 	String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
 	
 	public RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
