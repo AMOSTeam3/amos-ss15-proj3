@@ -34,6 +34,7 @@ public class GuiViewElementHandler extends JFrame {
 	private GuiController guiController;
 
 	private JLabel RequirementID_label = new JLabel("RequirementID");
+	private JLabel ReqIdsByLines_label = new JLabel("#");
 	private JLabel Code_label = new JLabel("Code");
 	private JLabel ImpactPercentage_label = new JLabel("Impact Percentage");
 	private JLabel Commit_label = new JLabel("Commit");
@@ -66,6 +67,7 @@ public class GuiViewElementHandler extends JFrame {
 	private JScrollPane Commit_scrollPane = new JScrollPane();
 	private JScrollPane Files_scrollPane = new JScrollPane();
 	private JScrollPane Code_scrollPane = new JScrollPane();
+	private JScrollPane ReqIdsByLines_scrollPane = new JScrollPane();
 	private JScrollPane ImpactPercentage_scrollPane = new JScrollPane();
 
 
@@ -106,6 +108,9 @@ public class GuiViewElementHandler extends JFrame {
 	public JScrollPane getFiles_scrollPane() {
 		return Files_scrollPane;
 	}
+	public JScrollPane getReqIdsByLines_scrollPane() {
+		return ReqIdsByLines_scrollPane;
+	}
 
 	public JScrollPane getCode_scrollPane() {
 		return Code_scrollPane;
@@ -131,31 +136,34 @@ public class GuiViewElementHandler extends JFrame {
 		layout.setHorizontalGroup(
 			layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						//here follow the columns of the UI
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(RequirementID_textField)
-								.addComponent(RequirementID_button)
-								.addComponent(RequirementID_label)
-								.addComponent(RequirementSearch_textField)
-								.addComponent(RequirementID_scrollPane))
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(Commit_textField)
-								.addComponent(Commit_button)
-								.addComponent(Commit_label)
-								.addComponent(Commit_scrollPane, 10, 100, Short.MAX_VALUE))
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(Linkage_button)
+								//here follow the columns of the UI
 								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(Files_button)
-										.addComponent(FilesSort_combobox)
-										.addComponent(Files_label)
-										.addComponent(Files_scrollPane, 10, 100, Short.MAX_VALUE)
-										)
+										.addComponent(RequirementID_textField)
+										.addComponent(RequirementID_button)
+										.addComponent(RequirementID_label)
+										.addComponent(RequirementSearch_textField)
+										.addComponent(RequirementID_scrollPane))
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+										.addComponent(Commit_textField)
+										.addComponent(Commit_button)
+										.addComponent(Commit_label)
+										.addComponent(Commit_scrollPane, 10, 100, Short.MAX_VALUE))
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addComponent(Linkage_button)
+												.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+																.addComponent(Files_button)
+																.addComponent(FilesSort_combobox)
+																.addComponent(Files_label)
+																.addComponent(Files_scrollPane, 10, 100, Short.MAX_VALUE)
+												)
 								)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(Code_label)
-								.addComponent(Code_scrollPane, 10, 400, Short.MAX_VALUE))
-						)
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+										.addComponent(ReqIdsByLines_label)
+										.addComponent(ReqIdsByLines_scrollPane, 10, 30, 30))
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+										.addComponent(Code_label)
+										.addComponent(Code_scrollPane, 10, 400, Short.MAX_VALUE))
+				)
 		);
 		
 		layout.setVerticalGroup(
@@ -183,6 +191,9 @@ public class GuiViewElementHandler extends JFrame {
 										.addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(Files_label)
 										.addComponent(Files_scrollPane))
+                                .addGroup(layout.createSequentialGroup()
+										.addComponent(ReqIdsByLines_label)
+										.addComponent(ReqIdsByLines_scrollPane))
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(Code_label)
 										.addComponent(Code_scrollPane))
