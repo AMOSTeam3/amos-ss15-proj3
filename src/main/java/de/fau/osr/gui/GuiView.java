@@ -96,7 +96,7 @@ public class GuiView{
 				int index, boolean isSelected, boolean cellHasFocus) {
 			JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			renderer.setText(value.newPath.getName());
+			renderer.setText(value.newPath.getPath());
 
 			return renderer;
 		}
