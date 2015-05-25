@@ -214,6 +214,11 @@ public class GuiController {
 			guiView.showErrorDialog("Internal storing Error" + e);
 			return;
 		}
+
+		//define fixed cell height to keep each code line and req2line entry at same level
+		code_JList.setFixedCellHeight(12);
+		requirements2Lines_JList.setFixedCellHeight(12);
+
 		guiView.showCode(code_JList);
 		guiView.showRequirementIdsByLines(requirements2Lines_JList);
 		

@@ -212,10 +212,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
 		for(AnnotatedLine line: lines){
 			final Collection<String> requirements = line.getRequirements();
-			if (!requirements.isEmpty())
-				reqIdsByLines.add(Joiner.on(",").join(requirements));
-			else
-				reqIdsByLines.add("-");
+            reqIdsByLines.add(Joiner.on(",").join(requirements));
 		}
 
 		return convertCollectionToArray(reqIdsByLines);

@@ -303,11 +303,9 @@ public class GuiView{
 		elementHandler.getCode_scrollPane().setViewportView(panel);
 	}
 
-	/*
-	 * Showing the parameter String in the Code_Scrollpane.
-	 * Until now. There is no further processing of the data. This will probably change
-	 * with Req-11
-	 * @parameter changeData String to be presented
+	/**
+	 * Show requirement ids for each code line.
+	 * @author Taleh Didover
 	 */
 	void showRequirementIdsByLines(JList<String> requirements2Lines_JList) {
 		JPanel panel = new JPanel(new GridLayout());

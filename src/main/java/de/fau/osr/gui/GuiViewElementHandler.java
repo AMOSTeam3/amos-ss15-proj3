@@ -199,7 +199,6 @@ public class GuiViewElementHandler extends JFrame {
 		JScrollBar req2lineVertiScrollbar = Requirements2Lines_scrollPane.getVerticalScrollBar();
 		codeVertiSrollbar.setModel(req2lineVertiScrollbar.getModel());
 
-
 		//make the requirement column non-resizable and have all elements with the same horizontal size
 		layout.linkSize(SwingConstants.HORIZONTAL, RequirementID_button, RequirementID_scrollPane, RequirementID_textField, RequirementSearch_textField);
 		
