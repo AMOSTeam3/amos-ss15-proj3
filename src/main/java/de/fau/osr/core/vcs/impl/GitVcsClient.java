@@ -271,6 +271,8 @@ public class GitVcsClient extends VcsClient{
 	public List<AnnotatedLine> blame(String path, DataSource dataSource) throws IOException, GitAPIException {
 		BlameCommand blameCommand = new BlameCommand(git.getRepository());
 		blameCommand.setFollowFileRenames(true);
+		ObjectId commitID = git.getRepository().resolve("HEAD");
+		blameCommand.setStartCommit(commitID);
 		String unixFormatedFilePath = path.replaceAll(Matcher.quoteReplacement("\\"), "/");
 		blameCommand.setFilePath(unixFormatedFilePath);
 		BlameResult blameResult = blameCommand.call();
