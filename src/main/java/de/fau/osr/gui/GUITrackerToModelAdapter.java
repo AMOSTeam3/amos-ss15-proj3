@@ -1,8 +1,8 @@
 package de.fau.osr.gui;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
@@ -203,7 +203,22 @@ public class GUITrackerToModelAdapter implements GuiModel {
 		}
 		return hightlightedLines;
 	}
-	
+
+	@Override
+	public String[] getRequirementsForBlame(CommitFile file)
+			throws FileNotFoundException, IOException, GitAPIException {
+		Collection<AnnotatedLine> lines = tracker.getBlame(file.newPath.getPath());
+		Collection<String> reqIdsByLines = new ArrayList<String>();
+
+		for(AnnotatedLine line: lines){
+			final Collection<String> requirements = line.getRequirements();
+            reqIdsByLines.add(Joiner.on(",").join(requirements));
+		}
+
+		return convertCollectionToArray(reqIdsByLines);
+	}
+
+	@Override
 	public String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException{
 		Collection<AnnotatedLine> lines = tracker.getBlame(file.newPath.getPath());
 		int i = 0;
