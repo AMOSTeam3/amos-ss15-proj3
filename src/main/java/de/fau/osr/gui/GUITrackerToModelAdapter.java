@@ -216,7 +216,6 @@ public class GUITrackerToModelAdapter implements GuiModel {
 				reqIdsByLines.add(Joiner.on(",").join(requirements));
 			else
 				reqIdsByLines.add("-");
-
 		}
 
 		return convertCollectionToArray(reqIdsByLines);

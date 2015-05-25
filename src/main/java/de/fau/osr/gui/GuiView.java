@@ -9,15 +9,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
@@ -197,7 +189,7 @@ public class GuiView{
 		clearFiles();
 		
 		clearCode();
-		
+
 		clearImpactPercentage();
 		
 		elementHandler.getCommit_textField().setText("");
@@ -233,9 +225,14 @@ public class GuiView{
 	}
 
 	void clearCode() {
-		JPanel panelcode = new JPanel(new GridLayout());
-		panelcode.setBackground(Color.WHITE);
-		elementHandler.getCode_scrollPane().setViewportView(panelcode);
+		JPanel panel = new JPanel(new GridLayout());
+		panel.setBackground(Color.WHITE);
+		elementHandler.getCode_scrollPane().setViewportView(panel);
+
+		panel = new JPanel(new GridLayout());
+//		panel.setBackground(UIManager.getColor("Panel.background"));
+		panel.setBackground(UIManager.getColor(Color.WHITE));
+		elementHandler.getRequirements2Lines_scrollPane().setViewportView(panel);
 	}
 
 	/*
@@ -314,7 +311,6 @@ public class GuiView{
 	 */
 	void showRequirementIdsByLines(JList<String> requirements2Lines_JList) {
 		JPanel panel = new JPanel(new GridLayout());
-
 		panel.add(requirements2Lines_JList);
 		elementHandler.getRequirements2Lines_scrollPane().setViewportView(panel);
 	}
