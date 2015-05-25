@@ -42,6 +42,7 @@ public class GuiController {
 	JList<String> requirements_JList;
 	JList<String> commitMessages_JList;
 	JList<CommitFile> commitFile_JList;
+	JList<String> requirements2Lines_JList;
 	JList<HighlightedLine> code_JList;
 
 	// sorting algorithm for commitFile_JList
@@ -202,9 +203,10 @@ public class GuiController {
 	 */
 	void codeFromFile(CommitFile file, String requirementID) {
 		guiView.clearImpactPercentage();
-		
+
 		try {
 			code_JList = new JList<HighlightedLine>(guiModel.getBlame(file, requirementID));
+			requirements2Lines_JList = new JList<String>(guiModel.getRequirementsForBlame(file));
 		}catch(FileNotFoundException e){
 			guiView.showInformationDialog("Can only be displayed if file is up-to-date!");
 			return;
@@ -212,8 +214,8 @@ public class GuiController {
 			guiView.showErrorDialog("Internal storing Error" + e);
 			return;
 		}
-		
 		guiView.showCode(code_JList);
+		guiView.showRequirementIdsByLines(requirements2Lines_JList);
 		
 		guiView.addMouseListener(code_JList, new MouseEvent(this, Action.RequirmentsFromCode));
 	}

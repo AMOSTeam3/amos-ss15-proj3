@@ -216,6 +216,7 @@ public class GuiView{
 		JPanel panelfiles = new JPanel(new GridLayout());
 		panelfiles.setBackground(Color.WHITE);
 		elementHandler.getFiles_scrollPane().setViewportView(panelfiles);
+//  	elementHandler.getReqIdsByLines_scrollPane().setViewportView(panelfiles);
 	}
 
 	
@@ -304,7 +305,20 @@ public class GuiView{
 		panel.add(code_JList);
 		elementHandler.getCode_scrollPane().setViewportView(panel);
 	}
-	
+
+	/*
+	 * Showing the parameter String in the Code_Scrollpane.
+	 * Until now. There is no further processing of the data. This will probably change
+	 * with Req-11
+	 * @parameter changeData String to be presented
+	 */
+	void showRequirementIdsByLines(JList<String> requirements2Lines_JList) {
+		JPanel panel = new JPanel(new GridLayout());
+
+		panel.add(requirements2Lines_JList);
+		elementHandler.getRequirements2Lines_scrollPane().setViewportView(panel);
+	}
+
 	/*
 	 * Adding a Mouselistener to the passed component 
 	 */

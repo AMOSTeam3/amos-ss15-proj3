@@ -1,5 +1,6 @@
 package de.fau.osr.gui;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -204,16 +205,21 @@ public class GUITrackerToModelAdapter implements GuiModel {
 	}
 
 	@Override
-	public Iterable<String[]> getRequirementsForBlame(CommitFile file)
+	public String[] getRequirementsForBlame(CommitFile file)
 			throws FileNotFoundException, IOException, GitAPIException {
 		Collection<AnnotatedLine> lines = tracker.getBlame(file.newPath.getPath());
-		Collection<String[]> reqIdsByLines = new ArrayList<String[]>();
+		Collection<String> reqIdsByLines = new ArrayList<String>();
 
 		for(AnnotatedLine line: lines){
-			reqIdsByLines.add( convertCollectionToArray(line.getRequirements()) );
+			final Collection<String> requirements = line.getRequirements();
+			if (!requirements.isEmpty())
+				reqIdsByLines.add(Joiner.on(",").join(requirements));
+			else
+				reqIdsByLines.add("-");
+
 		}
 
-		return reqIdsByLines;
+		return convertCollectionToArray(reqIdsByLines);
 	}
 
 	@Override

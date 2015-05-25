@@ -56,7 +56,7 @@ public interface GuiModel {
 
 	HighlightedLine[] getBlame(CommitFile file, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
 
-    Iterable<String[]> getRequirementsForBlame(CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
+    String[] getRequirementsForBlame(CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
 
 	String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
 	

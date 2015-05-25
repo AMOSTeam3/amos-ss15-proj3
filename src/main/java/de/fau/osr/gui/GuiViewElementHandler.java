@@ -34,7 +34,7 @@ public class GuiViewElementHandler extends JFrame {
 	private GuiController guiController;
 
 	private JLabel RequirementID_label = new JLabel("RequirementID");
-	private JLabel ReqIdsByLines_label = new JLabel("#");
+	private JLabel Requirements2Lines_label = new JLabel("#");
 	private JLabel Code_label = new JLabel("Code");
 	private JLabel ImpactPercentage_label = new JLabel("Impact Percentage");
 	private JLabel Commit_label = new JLabel("Commit");
@@ -67,7 +67,7 @@ public class GuiViewElementHandler extends JFrame {
 	private JScrollPane Commit_scrollPane = new JScrollPane();
 	private JScrollPane Files_scrollPane = new JScrollPane();
 	private JScrollPane Code_scrollPane = new JScrollPane();
-	private JScrollPane ReqIdsByLines_scrollPane = new JScrollPane();
+	private JScrollPane Requirements2Lines_scrollPane = new JScrollPane();
 	private JScrollPane ImpactPercentage_scrollPane = new JScrollPane();
 
 
@@ -108,8 +108,8 @@ public class GuiViewElementHandler extends JFrame {
 	public JScrollPane getFiles_scrollPane() {
 		return Files_scrollPane;
 	}
-	public JScrollPane getReqIdsByLines_scrollPane() {
-		return ReqIdsByLines_scrollPane;
+	public JScrollPane getRequirements2Lines_scrollPane() {
+		return Requirements2Lines_scrollPane;
 	}
 
 	public JScrollPane getCode_scrollPane() {
@@ -158,8 +158,8 @@ public class GuiViewElementHandler extends JFrame {
 												)
 								)
 								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(ReqIdsByLines_label)
-										.addComponent(ReqIdsByLines_scrollPane, 10, 30, 30))
+										.addComponent(Requirements2Lines_label)
+										.addComponent(Requirements2Lines_scrollPane, 10, 30, 30))
 								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 										.addComponent(Code_label)
 										.addComponent(Code_scrollPane, 10, 400, Short.MAX_VALUE))
@@ -192,8 +192,8 @@ public class GuiViewElementHandler extends JFrame {
 										.addComponent(Files_label)
 										.addComponent(Files_scrollPane))
                                 .addGroup(layout.createSequentialGroup()
-										.addComponent(ReqIdsByLines_label)
-										.addComponent(ReqIdsByLines_scrollPane))
+										.addComponent(Requirements2Lines_label)
+										.addComponent(Requirements2Lines_scrollPane))
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(Code_label)
 										.addComponent(Code_scrollPane))
