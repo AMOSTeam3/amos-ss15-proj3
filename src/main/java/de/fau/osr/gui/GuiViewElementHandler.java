@@ -42,7 +42,7 @@ public class GuiViewElementHandler extends JFrame {
 	private JMenu mnTools = menuBar.add(new JMenu("Tools"));
 	private JMenuItem mntmConfigure = mnTools.add(new JMenuItem("Configure"));
 	private JMenuItem mntmTraceabilityMatrixByImpact = mnTools.add(new JMenuItem("Traceability Matrix By Impact"));
-	//private JMenuItem mntmTraceabilityMatrixByOtherData = mnTools.add(new JMenuItem("Traceability Matrix By Other Data"));
+	//DONOTREMOVE private JMenuItem mntmTraceabilityMatrixByOtherData = mnTools.add(new JMenuItem("Traceability Matrix By Other Data"));
 	private JMenu mnTraceabilityMatrix = new JMenu("TraceabilityMatrix");
 	final private String[] SORT_COMBOBOX_CHOICES = {
 			"sort by chronic", "sort by filename"
@@ -261,7 +261,7 @@ public class GuiViewElementHandler extends JFrame {
 					
 			}
 		});
-		/*
+		/*DONOTREMOVE
 		mntmTraceabilityMatrixByOtherData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 
@@ -346,7 +346,7 @@ public class GuiViewElementHandler extends JFrame {
 	
 	void linkMenuItems(){
 		mnTraceabilityMatrix.add(mntmTraceabilityMatrixByImpact);
-		//mnTraceabilityMatrix.add(mntmTraceabilityMatrixByOtherData);
+		//DONOTREMOVE mnTraceabilityMatrix.add(mntmTraceabilityMatrixByOtherData);
 		mnTools.add(mnTraceabilityMatrix);
 	}
 	
