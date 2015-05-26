@@ -87,7 +87,7 @@ public class Tracker {
 			} catch (GitAPIException | IOException e) {
 				continue;
 			}
-			int i = 1;
+			int i = 0;
 			float influenced = 0;
 			int cuurentBlameSize = currentBlame.size();
 			for(; i<cuurentBlameSize; i++){
@@ -95,7 +95,7 @@ public class Tracker {
 					influenced++;
 				}
 			}
-			file.impact = (influenced/(i-1))*100;
+			file.impact = (influenced/cuurentBlameSize)*100;
 		}
 
 		logger.info("End call :: getCommitFilesForRequirementID() Time: "+ (System.currentTimeMillis() - startTime) );
@@ -112,14 +112,15 @@ public class Tracker {
 		} catch (GitAPIException | IOException e) {
 			return -1;
 		}
-		int i = 1;
+		int i = 0;
 		float influenced = 0;
-		for(; i<currentBlame.size(); i++){
+		int cuurentBlameSize = currentBlame.size();
+		for(; i<cuurentBlameSize; i++){
 			if(currentBlame.get(i).getRequirements().contains(requirementID)){
 				influenced++;
 			}
 		}
-		float impact = (influenced/(i-1))*100;
+		float impact = (influenced/cuurentBlameSize)*100;
 		return impact;
 	}
 	
