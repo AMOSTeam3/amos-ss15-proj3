@@ -1,8 +1,10 @@
 package de.fau.osr.bl;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +35,7 @@ public class RequirementsTraceabilityMatrixByImpact {
 			requirements.addAll(tracker.getAllRequirements());
 			java.util.Collections.sort(requirements);
 			files.addAll(tracker.getAllFilesAsString());
-			java.util.Collections.sort(files);
+			java.util.Collections.sort(files,new FileComparator());
 			int progressMaxSize = requirements.size();
 			int progressCount = 0;
 			for(String requirement : requirements){
@@ -101,4 +103,12 @@ public class RequirementsTraceabilityMatrixByImpact {
 	}
 	
 	
+}
+
+class FileComparator implements Comparator<String>{
+	 
+	@Override
+	public int compare(String s1, String s2) {
+		return (new File(s1).getName()).compareTo(new File(s2).getName());
+	}
 }
