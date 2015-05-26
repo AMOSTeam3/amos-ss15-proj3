@@ -95,7 +95,7 @@ public class Tracker {
 					influenced++;
 				}
 			}
-			file.impact = (influenced/i)*100;
+			file.impact = (influenced/(i-1))*100;
 		}
 
 		logger.info("End call :: getCommitFilesForRequirementID() Time: "+ (System.currentTimeMillis() - startTime) );
@@ -119,7 +119,7 @@ public class Tracker {
 				influenced++;
 			}
 		}
-		float impact = (influenced/i)*100;
+		float impact = (influenced/(i-1))*100;
 		return impact;
 	}
 	
