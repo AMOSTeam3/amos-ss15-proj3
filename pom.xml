@@ -33,10 +33,10 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
-            			<manifest>
-              				<mainClass>de.fau.osr.gui.Application</mainClass>
-            			</manifest>
-          			</archive>
+                        <manifest>
+                              <mainClass>de.fau.osr.gui.Application</mainClass>
+                        </manifest>
+                      </archive>
                 </configuration>
                 <executions>
                     <execution>
@@ -47,21 +47,21 @@
                         </goals>
                     </execution>
                 </executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<id>default-jar</id>
-						<phase>never</phase>
-						<configuration>
-							<finalName>unwanted</finalName>
-							<classifier>unwanted</classifier>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>never</phase>
+                        <configuration>
+                            <finalName>unwanted</finalName>
+                            <classifier>unwanted</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>

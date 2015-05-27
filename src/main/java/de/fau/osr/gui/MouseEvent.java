@@ -11,23 +11,23 @@ enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, Requ
 
 public class MouseEvent implements MouseListener {
 
-	GuiController guiController;
-	Action action;
+    GuiController guiController;
+    Action action;
 
-	public MouseEvent(GuiController guiController, Action action) {
-		this.guiController = guiController;
-		this.action = action;
-	}
+    public MouseEvent(GuiController guiController, Action action) {
+        this.guiController = guiController;
+        this.action = action;
+    }
 
-	@Override
-	public void mouseClicked(java.awt.event.MouseEvent e) {
-		// TODO Auto-generated method stub
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void mousePressed(java.awt.event.MouseEvent e) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public void mousePressed(java.awt.event.MouseEvent e) {
         try {
             switch (action) {
             case CommitsAndFilesFromRequirement:
@@ -69,43 +69,43 @@ public class MouseEvent implements MouseListener {
                 int value4 = theList6.getSelectedIndex();
                 guiController.filesFromCommit(value4);
                 guiController.requirementsFromCommit(value4);
-				break;
-			case RequirementToLinkage:
-				JList<String> theList11 = (JList<String>) e.getSource();
-				String value9 = (String) theList11.getSelectedValue();
-				guiController.RequirementToLinkage(value9);
-				break;
-			case CommitToLinkage:
-				JList<String> theList13 = (JList<String>) e.getSource();
-				String value10 = (String) theList13.getSelectedValue();
-				guiController.CommitToLinkage(value10);
-				break;
-			case RequirmentsFromCode:
-				guiController.requirementsFromCode(getSelectedCommitFile(), guiController.code_JList.getSelectedIndex());
-				break;
+                break;
+            case RequirementToLinkage:
+                JList<String> theList11 = (JList<String>) e.getSource();
+                String value9 = (String) theList11.getSelectedValue();
+                guiController.RequirementToLinkage(value9);
+                break;
+            case CommitToLinkage:
+                JList<String> theList13 = (JList<String>) e.getSource();
+                String value10 = (String) theList13.getSelectedValue();
+                guiController.CommitToLinkage(value10);
+                break;
+            case RequirmentsFromCode:
+                guiController.requirementsFromCode(getSelectedCommitFile(), guiController.code_JList.getSelectedIndex());
+                break;
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-	}
+    }
 
-	@Override
-	public void mouseReleased(java.awt.event.MouseEvent e) {
-		// TODO Auto-generated method stub
+    @Override
+    public void mouseReleased(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void mouseEntered(java.awt.event.MouseEvent e) {
-		// TODO Auto-generated method stub
+    @Override
+    public void mouseEntered(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void mouseExited(java.awt.event.MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void mouseExited(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
+
+    }
 
 
     /**

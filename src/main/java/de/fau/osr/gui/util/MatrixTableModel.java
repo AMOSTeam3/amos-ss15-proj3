@@ -14,84 +14,84 @@ import java.util.List;
  * @author Gayathery Sathya
  */
 public class MatrixTableModel extends DefaultTableModel{
-	
-	private SymmetricMatrix<RequirementsRelation>  matrix;
-	
-	private List<String> columns;
-	
-	/**
-	 * @param requirementsMatrix
-	 */
-	public MatrixTableModel(RequirementsTraceabilityMatrix requirementsMatrix) {
-		super();
-	    Preconditions.checkNotNull(requirementsMatrix, "RequirementsTraceabilityMatrix cannot be null.");
-		this.matrix = requirementsMatrix.getTraceabilityMatrixForRequirements();
-		this.columns= requirementsMatrix.getOrderedRequirementsArrayForTraceability();
-	}
 
-	@Override
-	public int getRowCount() {
-		if(columns != null)
-			return columns.size();
-		else 
-			return 0;
-	}
+    private SymmetricMatrix<RequirementsRelation>  matrix;
 
-	@Override
-	public int getColumnCount() {
-		return getRowCount();
-	}
+    private List<String> columns;
 
-	@Override
-	public String getColumnName(int columnIndex) {
-	
-		if(columns != null || !columns.isEmpty())
-			return columns.get(columnIndex);
-		return null;
-	}
-	/*
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * @param requirementsMatrix
+     */
+    public MatrixTableModel(RequirementsTraceabilityMatrix requirementsMatrix) {
+        super();
+        Preconditions.checkNotNull(requirementsMatrix, "RequirementsTraceabilityMatrix cannot be null.");
+        this.matrix = requirementsMatrix.getTraceabilityMatrixForRequirements();
+        this.columns= requirementsMatrix.getOrderedRequirementsArrayForTraceability();
+    }
 
-	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		return false;
-	}*/
+    @Override
+    public int getRowCount() {
+        if(columns != null)
+            return columns.size();
+        else
+            return 0;
+    }
 
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		if(matrix == null)
-			return null;	
-		MatrixIndex matrixIndex = new MatrixIndex(rowIndex, columnIndex);
-		RequirementsRelation relation =  matrix.getAt(matrixIndex);
-		if(relation == null)
-			return 0;
-		return matrix.getAt(matrixIndex).getCommonFilesCount();
-	}
+    @Override
+    public int getColumnCount() {
+        return getRowCount();
+    }
 
-	/*
-	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public String getColumnName(int columnIndex) {
 
-	@Override
-	public void addTableModelListener(TableModelListener l) {
-		// TODO Auto-generated method stub
-		
-	}
+        if(columns != null || !columns.isEmpty())
+            return columns.get(columnIndex);
+        return null;
+    }
+    /*
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void removeTableModelListener(TableModelListener l) {
-		// TODO Auto-generated method stub
-		
-	}
-	*/
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        // TODO Auto-generated method stub
+        return false;
+    }*/
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+
+        if(matrix == null)
+            return null;
+        MatrixIndex matrixIndex = new MatrixIndex(rowIndex, columnIndex);
+        RequirementsRelation relation =  matrix.getAt(matrixIndex);
+        if(relation == null)
+            return 0;
+        return matrix.getAt(matrixIndex).getCommonFilesCount();
+    }
+
+    /*
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void addTableModelListener(TableModelListener l) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void removeTableModelListener(TableModelListener l) {
+        // TODO Auto-generated method stub
+
+    }
+    */
 
 }

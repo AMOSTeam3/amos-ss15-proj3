@@ -8,9 +8,9 @@ package de.fau.osr.core.vcs.base;
  */
 public enum CommitState {
 
-	ADDED,
-	MODIFIED,
-	DELETED,
-	RENAMED,
-	COPIED
+    ADDED,
+    MODIFIED,
+    DELETED,
+    RENAMED,
+    COPIED
 }

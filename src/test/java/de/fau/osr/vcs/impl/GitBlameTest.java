@@ -18,22 +18,22 @@ import java.util.regex.Pattern;
 import static org.junit.Assert.assertEquals;
 
 public class GitBlameTest {
-	GitVcsClient client;
-	
-	public GitBlameTest() throws IOException {
-		client =  new GitVcsClient(PublicTestData.getGitTestRepo());
-	}
-	
-	@Test
-	public void getBlame() throws Exception {
-		CommitMessageParser cmparser =  new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
-		DataSource ds =  new VCSDataSource(client,cmparser);
+    GitVcsClient client;
 
-		List<AnnotatedLine> blame = client.blame("TestFile4", ds);
+    public GitBlameTest() throws IOException {
+        client =  new GitVcsClient(PublicTestData.getGitTestRepo());
+    }
+
+    @Test
+    public void getBlame() throws Exception {
+        CommitMessageParser cmparser =  new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
+        DataSource ds =  new VCSDataSource(client,cmparser);
+
+        List<AnnotatedLine> blame = client.blame("TestFile4", ds);
         assertEquals(client.new AnnotatedLine(Lists.newArrayList("1"), "File 4"), blame.get(0));
-		blame = client.blame("LICENSE", ds);
-		for(AnnotatedLine line : blame) {
-			assertEquals(Collections.emptyList(), line.getRequirements());
-		}
-	}
+        blame = client.blame("LICENSE", ds);
+        for(AnnotatedLine line : blame) {
+            assertEquals(Collections.emptyList(), line.getRequirements());
+        }
+    }
 }

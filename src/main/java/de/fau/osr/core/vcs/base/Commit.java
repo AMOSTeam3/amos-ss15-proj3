@@ -7,16 +7,16 @@ import java.util.List;
  * @author: Florian Gerdes
  */
 public class Commit {
-	public List<String> requirements;
-	public String id;
-	public String message;
-	public List<CommitFile> files;
-	
-	public Commit(String id, String message, List<String> requirements, List<CommitFile> files) {
-		this.id = id;
-		this.message = message;
-		this.requirements = requirements;
-		this.files = files;
-	}
+    public List<String> requirements;
+    public String id;
+    public String message;
+    public List<CommitFile> files;
+
+    public Commit(String id, String message, List<String> requirements, List<CommitFile> files) {
+        this.id = id;
+        this.message = message;
+        this.requirements = requirements;
+        this.files = files;
+    }
 
 }
