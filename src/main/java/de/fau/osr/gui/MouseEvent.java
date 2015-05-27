@@ -1,9 +1,9 @@
 package de.fau.osr.gui;
 
-import javax.swing.*;
-
 import de.fau.osr.core.vcs.base.CommitFile;
 
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
@@ -42,30 +42,29 @@ public class MouseEvent implements MouseListener {
                 guiController.filesFromCommit(value0);
                 break;
             case CodeFromFile:
-                guiController.codeFromFile(guiController.commitFile_JList.getSelectedValue(), guiController.requirements_JList.getSelectedValue());
+                guiController.codeFromFile(getSelectedCommitFile(), guiController.requirements_JList.getSelectedValue());
                 break;
             case RequirementsAndCommitsAndCodeFromFile:
-                guiController.requirementsFromFile(guiController.commitFile_JList.getSelectedValue());
-                guiController.commitsFromFile(guiController.commitFile_JList.getSelectedValue());
-                guiController.codeFromFile(guiController.commitFile_JList.getSelectedValue());
+                guiController.requirementsFromFile(getSelectedCommitFile());
+                guiController.commitsFromFile(getSelectedCommitFile());
+                guiController.codeFromFile(getSelectedCommitFile());
                 break;
             case CommitsFromRequirementAndFile:
                 JList<String> theList4 = (JList<String>) guiController.requirements_JList;
                 String value2 = (String) theList4.getSelectedValue();
-                JList<CommitFile> theList7 = (JList<CommitFile>) guiController.commitFile_JList;
-                CommitFile value5 = (CommitFile) theList7.getSelectedValue();
+                CommitFile value5 = getSelectedCommitFile();
                 guiController.commitsFromRequirementAndFile(value2, value5);
                 break;
             case CommitsAndCodeFromRequirementAndFile:
-                guiController.commitsFromRequirementAndFile(guiController.requirements_JList.getSelectedValue(), guiController.commitFile_JList.getSelectedValue());
-                guiController.codeFromFile(guiController.commitFile_JList.getSelectedValue(), guiController.requirements_JList.getSelectedValue());
+                guiController.commitsFromRequirementAndFile(guiController.requirements_JList.getSelectedValue(), getSelectedCommitFile());
+                guiController.codeFromFile(getSelectedCommitFile(), guiController.requirements_JList.getSelectedValue());
                 break;
             case RequirementsFromFileAndCommit:
                 JList<String> theList5 = (JList<String>) e.getSource();
                 int value3 = theList5.getSelectedIndex();
-                guiController.requirementsFromFileAndCommit(value3, guiController.commitFile_JList.getSelectedValue());
+                guiController.requirementsFromFileAndCommit(value3, getSelectedCommitFile());
                 break;
-            case RequirementsAndFilesFromCommit:
+                case RequirementsAndFilesFromCommit:
                 JList<String> theList6 = (JList<String>) e.getSource();
                 int value4 = theList6.getSelectedIndex();
                 guiController.filesFromCommit(value4);
@@ -82,7 +81,7 @@ public class MouseEvent implements MouseListener {
 				guiController.CommitToLinkage(value10);
 				break;
 			case RequirmentsFromCode:
-				guiController.requirementsFromCode(guiController.commitFile_JList.getSelectedValue(), guiController.code_JList.getSelectedIndex());
+				guiController.requirementsFromCode(getSelectedCommitFile(), guiController.code_JList.getSelectedIndex());
 				break;
             }
         } catch (IOException ex) {
@@ -107,5 +106,19 @@ public class MouseEvent implements MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+    /**
+     * Gets selected path of file as CommitFile
+     * @return selected <tt>CommitFile</tt> or null if directory selected
+     */
+    private CommitFile getSelectedCommitFile(){
+        Object selectedObject = ((DefaultMutableTreeNode)guiController.commitFilesJTree.getLastSelectedPathComponent()).getUserObject();
+        if (selectedObject instanceof CommitFile){
+            return (CommitFile)selectedObject;
+        }
+        
+        return null;
+    }
 
 }

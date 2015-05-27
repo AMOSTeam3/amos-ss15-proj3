@@ -8,6 +8,7 @@ import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.gui.Components.CommitFilesJTree;
 import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
@@ -41,11 +42,16 @@ public class GuiController {
 
 	JList<String> requirements_JList;
 	JList<String> commitMessages_JList;
-	JList<CommitFile> commitFile_JList;
+
+    /**
+     * <tt>CommitFile</tt>'s in a tree component
+     */
+	CommitFilesJTree commitFilesJTree;
+
 	JList<String> requirements2Lines_JList;
 	JList<HighlightedLine> code_JList;
 
-	// sorting algorithm for commitFile_JList
+	// sorting algorithm for commitFilesJTree
 	Comparator<CommitFile> commitFileSorting;
 	// filtering/finding a specific reqiurementID
 	Predicate requirementIDFiltering;
@@ -159,10 +165,10 @@ public class GuiController {
 		guiView.clearCode();
 		guiView.clearImpactPercentage();
 
-		commitFile_JList = new JList<CommitFile>(guiModel.getFilesFromRequirement(requirementID, commitFileSorting));
-		guiView.showFiles(commitFile_JList);
+		commitFilesJTree = new CommitFilesJTree(guiModel.getFilesFromRequirement(requirementID, commitFileSorting));
+		guiView.showFiles(commitFilesJTree);
 		
-		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
+		guiView.addMouseListener(commitFilesJTree, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
 		
 	}
 	
@@ -255,9 +261,9 @@ public class GuiController {
 	void filesFromDB() {
 		guiView.clearAll();
 		
-		commitFile_JList = new JList<CommitFile>(guiModel.getAllFiles(getCommitFileSorting()));
-		guiView.showFilesWithoutRendering(commitFile_JList);
-		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.RequirementsAndCommitsAndCodeFromFile));
+		commitFilesJTree = new CommitFilesJTree(guiModel.getAllFiles(getCommitFileSorting()));
+		guiView.showFilesWithoutRendering(commitFilesJTree);
+		guiView.addMouseListener(commitFilesJTree, new MouseEvent(this, Action.RequirementsAndCommitsAndCodeFromFile));
 	}
 
 	/**
@@ -334,14 +340,14 @@ public class GuiController {
 		guiView.clearImpactPercentage();
 
 		try {
-			commitFile_JList = new JList<CommitFile>(guiModel.getFilesFromCommit(commitIndex, commitFileSorting));
+			commitFilesJTree = new CommitFilesJTree(guiModel.getFilesFromCommit(commitIndex, commitFileSorting));
 		} catch (FileNotFoundException e) {
 			guiView.showErrorDialog("Internal storing Error");
 			return;
 		}
-		guiView.showFiles(commitFile_JList);
+		guiView.showFiles(commitFilesJTree);
 		
-		guiView.addMouseListener(commitFile_JList, new MouseEvent(this, Action.CodeFromFile));
+		guiView.addMouseListener(commitFilesJTree, new MouseEvent(this, Action.CodeFromFile));
 	}
 
 	/**
