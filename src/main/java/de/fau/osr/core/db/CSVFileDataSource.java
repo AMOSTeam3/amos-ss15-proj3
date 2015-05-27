@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
+ * This <tt>DataSource</tt> is based on CSV file
  * Created by Dmitry Gorelenkov on 03.05.2015.
  */
 public class CSVFileDataSource extends DataSource {

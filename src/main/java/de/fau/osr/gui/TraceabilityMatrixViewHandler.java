@@ -46,9 +46,8 @@ public class TraceabilityMatrixViewHandler extends JFrame {
      * @throws IOException
      */
     public TraceabilityMatrixViewHandler() throws IOException {
-        this.requirementsTraceabilityMatrix = requirementsTraceabilityMatrix;
         setTitle("SpiceTraceability-Requirement Traceability Matrix");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 1157, 679);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -113,22 +112,22 @@ public class TraceabilityMatrixViewHandler extends JFrame {
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             scrollPane.setViewportView(table);
 
-            ListModel listModel = new AbstractListModel() {
+            ListModel<String> listModel = new AbstractListModel<String>() {
 
                   public int getSize() {
                     return traceabilityMatrix.getOrderedRequirementsArrayForTraceability().size();
                   }
 
-                  public Object getElementAt(int index) {
+                  public String getElementAt(int index) {
                     return traceabilityMatrix.getOrderedRequirementsArrayForTraceability().get(index);
                   }
                 };
 
-            JList rowHeader = new JList(listModel);
+            JList<String> rowHeader = new JList<>(listModel);
             rowHeader.setFixedCellWidth(50);
 
             rowHeader.setFixedCellHeight(table.getRowHeight());
-            rowHeader.setCellRenderer(new RowHeaderRenderer(table));
+            rowHeader.setCellRenderer(new RowHeaderRenderer<String>(table));
             scrollPane.setRowHeaderView(rowHeader);
 
 

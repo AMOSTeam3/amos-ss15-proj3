@@ -20,7 +20,7 @@ public class RequirementsTraceabilityMatrix {
 
     SymmetricMatrix<RequirementsRelation> traceabilityMatrix;
 
-    private  Object lockObject = new Object();
+    private final Object lockObject = new Object();
 
     public RequirementsTraceabilityMatrix(Collection<String> requirements) {
 

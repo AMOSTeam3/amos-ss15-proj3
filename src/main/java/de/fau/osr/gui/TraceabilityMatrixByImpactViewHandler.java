@@ -117,13 +117,14 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
     }
 
     /**
-     * Method which initialiyes the table with data
+     * Method which initialises the table with data
      */
     public void initTable()
     {
 
             final RequirementsTraceabilityMatrixByImpact traceabilityMatrixByImpact = this.requirementsTraceabilityMatrixByImpact;
             table = new JTable(new RequirementsTraceabilityByImpactTableModel(traceabilityMatrixByImpact)){
+                @Override
                 public String getToolTipText(java.awt.event.MouseEvent event){
                     String toolTipText = null;
                     java.awt.Point p = event.getPoint();
@@ -157,23 +158,23 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             scrollPane.setViewportView(table);
 
-            ListModel listModel = new AbstractListModel() {
+            ListModel<String> listModel = new AbstractListModel<String>() {
 
                   public int getSize() {
                     return traceabilityMatrixByImpact.getFiles().size();
                   }
 
-                  public Object getElementAt(int index) {
+                  public String getElementAt(int index) {
                       File filePath = new File(traceabilityMatrixByImpact.getFiles().get(index));
                     return filePath.getName();
                   }
                 };
 
-            JList rowHeader = new JList(listModel);
+            JList<String> rowHeader = new JList<>(listModel);
             rowHeader.setFixedCellWidth(-1);
             rowHeader.setFixedCellHeight(table.getRowHeight());
 
-            rowHeader.setCellRenderer(new RowHeaderRenderer(table));
+            rowHeader.setCellRenderer(new RowHeaderRenderer<String>(table));
 
             scrollPane.setRowHeaderView(rowHeader);
 

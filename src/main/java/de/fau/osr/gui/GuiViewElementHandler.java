@@ -72,7 +72,7 @@ public class GuiViewElementHandler extends JFrame {
         initializeButtonActions();
         initializeComboboxActions();
         setTitle("Spice Traceability");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setBackground(Color.WHITE);
         setJMenuBar(menuBar);

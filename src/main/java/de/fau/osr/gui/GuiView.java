@@ -110,7 +110,7 @@ public class GuiView{
 
     /**
      * Showing an Dialog to the User. Marked as Error dialog.
-     * @parameter message to be presented to the user
+     * @param message to be presented to the user
      */
     void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(null, message, "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -118,7 +118,7 @@ public class GuiView{
 
     /**
      * Showing a dialog to the user. Marked as Information dialog
-     * @parameter message to be presented to the user
+     * @param message to be presented to the user
      */
     void showInformationDialog(String message) {
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.INFORMATION_MESSAGE);
@@ -185,7 +185,7 @@ public class GuiView{
 
     /**
      * Showing all Elements of the JList parameter in the RequirementsID_Scrollpane
-     * @parameter requirements_JList containing the Elements to be displayed
+     * @param requirements_JList containing the Elements to be displayed
      */
     void showRequirements(JList<String> requirements_JList) {
         JPanel panel = new JPanel(new GridLayout());
@@ -197,7 +197,7 @@ public class GuiView{
 
     /**
      * Showing all Elements of the JList parameter in the Commit_Scrollpane
-     * @parameter commitMessage_JList containing the Elements to be displayed
+     * @param commitMessage_JList containing the Elements to be displayed
      */
     void showCommits(JList<String> commitMessages_JList) {
         JPanel panel = new JPanel(new GridLayout());
@@ -209,7 +209,7 @@ public class GuiView{
     /**
      * Showing all Elements of the JList parameter in the Files_Scrollpane
      * WITH rendering.
-     * @parameter commitFilesJTree containing the Elements to be displayed
+     * @param commitFilesTree containing the Elements to be displayed
      */
     void showFiles(JTree commitFilesTree) {
         showFilesByGivenRenderer(commitFilesTree, new CommitFile_ImpactTreeFilenameRenderer());
@@ -218,7 +218,7 @@ public class GuiView{
     /**
      * Showing all Elements of the JList parameter in the Files_Scrollpane
      * WITHOUT rendering.
-     * @parameter commitFilesJTree containing the Elements to be displayed
+     * @param commitFilesTree containing the Elements to be displayed
      */
     void showFilesWithoutRendering(JTree commitFilesTree) {
         showFilesByGivenRenderer(commitFilesTree, new CommitFile_SimpleTreeFilenameRenderer());
@@ -242,10 +242,8 @@ public class GuiView{
     }
 
     /**
-     * Showing the parameter String in the Code_Scrollpane.
-     * Until now. There is no further processing of the data. This will probably change
-     * with Req-11
-     * @parameter changeData String to be presented
+     * Showing <tt>HighlightedLine</tt>'s in the Code_Scrollpane.
+     * @param code_JList list of lines to show
      */
     void showCode(JList<HighlightedLine> code_JList) {
         JPanel panel = new JPanel(new GridLayout());
@@ -268,7 +266,7 @@ public class GuiView{
     }
 
     /**
-     * Adding a Mouselistener to the passed component
+     * Adding a MouseListener to the passed component
      */
     void addMouseListener(JComponent component, MouseListener actListener){
         component.addMouseListener(actListener);
@@ -288,7 +286,7 @@ public class GuiView{
 
     /**
      * shows the traceability matrix window with filled in data
-     * @param requirementsTraceabilityMatrix
+     * @param requirementsTraceabilityMatrix matrix to show
      */
     void showTraceabilityMatrix(RequirementsTraceabilityMatrix requirementsTraceabilityMatrix){
         try {

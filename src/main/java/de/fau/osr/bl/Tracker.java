@@ -83,7 +83,7 @@ public class Tracker {
         for(CommitFile file: commitFilesList){
             List<AnnotatedLine> currentBlame;
             try {
-                currentBlame = this.getBlame(file.newPath.getPath().toString());
+                currentBlame = this.getBlame(file.newPath.getPath());
             } catch (GitAPIException | IOException e) {
                 continue;
             }
@@ -219,8 +219,8 @@ public class Tracker {
                 }else{
                     name = commitfile.newPath.getPath();
                 }
-                Pattern pattern = Pattern.compile("src");
-                Matcher m = pattern.matcher(name);
+                //Pattern pattern = Pattern.compile("src");
+                //Matcher m = pattern.matcher(name);
                 //if(m.find()){
                     files.add(name);
                 //}
@@ -272,7 +272,6 @@ public class Tracker {
     /**
      * add Linkage between Requirement and Commit
      * @param commitID and requirementId to be linked
-     * @return 
      */
     public void addRequirementCommitRelation(String requirementID,
             String commitID) throws Exception {
@@ -356,7 +355,7 @@ class TraceabilityMatrixThread implements Runnable{
         try {
             String unixFormatedFilePath = filePath.replaceAll(Matcher.quoteReplacement("\\"), "/");
             fileRequirements = new ArrayList<String>( tracker.getAllRequirementsForFile(unixFormatedFilePath));
-            if(fileRequirements !=null && !fileRequirements.isEmpty())
+            if(!fileRequirements.isEmpty())
                 requirementsTraceabilityMatrixWorker.populateMatrix(fileRequirements,unixFormatedFilePath);
         } catch(IndexOutOfBoundsException e){
             throw e;

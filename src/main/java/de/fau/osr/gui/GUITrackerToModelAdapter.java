@@ -69,7 +69,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
     @Override
     public String[] getRequirementsFromFile(CommitFile file) throws IOException {
-        String filePathTransformed = file.newPath.getPath().toString().replace("\\", "/");
+        String filePathTransformed = file.newPath.getPath().replace("\\", "/");
         Collection<String> requirements = tracker
                 .getAllRequirementsForFile(filePathTransformed);
         return convertCollectionToArray(requirements);
@@ -78,7 +78,7 @@ public class GUITrackerToModelAdapter implements GuiModel {
 
     @Override
     public String[] getCommitsFromFile(CommitFile file) {
-        String filePathTransformed = file.newPath.getPath().toString().replace("\\", "/");
+        String filePathTransformed = file.newPath.getPath().replace("\\", "/");
         commits = tracker.getCommitsFromFile(filePathTransformed);
         return getMessagesFromCommits();
     }

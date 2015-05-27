@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
+ * Abstract <tt>DataSource</tt> to use persistent information
  * Created by Dmitry Gorelenkov on 03.05.2015.
  */
 public abstract class DataSource {

@@ -6,5 +6,5 @@ package de.fau.osr.core.vcs.base;
  * @author Gayathery
  */
 public enum VcsEnvironment {
-GIT
+    GIT
 }

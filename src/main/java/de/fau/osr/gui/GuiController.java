@@ -54,7 +54,7 @@ public class GuiController {
     // sorting algorithm for commitFilesJTree
     Comparator<CommitFile> commitFileSorting;
     // filtering/finding a specific reqiurementID
-    Predicate requirementIDFiltering;
+    Predicate<String> requirementIDFiltering;
 
 
     /**
@@ -111,11 +111,11 @@ public class GuiController {
         System.out.format("Commit file sorting selected: %s%n", commitFileSorting);
     }
 
-    public Predicate getRequirementIDFiltering() {
+    public Predicate<String> getRequirementIDFiltering() {
         return requirementIDFiltering;
     }
 
-    public void setRequirementIDFiltering(Predicate requirementIDFiltering) {
+    public void setRequirementIDFiltering(Predicate<String> requirementIDFiltering) {
         this.requirementIDFiltering = requirementIDFiltering;
     }
 

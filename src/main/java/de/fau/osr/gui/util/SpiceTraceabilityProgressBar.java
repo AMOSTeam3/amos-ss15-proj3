@@ -38,7 +38,7 @@ public class SpiceTraceabilityProgressBar extends JFrame {
         setType(Type.POPUP);
         setResizable(false);
         setTitle("Spice Traceability : Progress");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 442, 160);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
