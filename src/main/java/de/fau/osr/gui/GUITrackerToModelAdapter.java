@@ -3,7 +3,6 @@ package de.fau.osr.gui;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.bl.Tracker;
@@ -13,7 +12,6 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.gui.GuiView.HighlightedLine;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
@@ -22,7 +20,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-/*
+/**
  * Adapter class. Providing the correct formatted input for the Library Facade and transforming
  * the output to match the needed Interface.
  */

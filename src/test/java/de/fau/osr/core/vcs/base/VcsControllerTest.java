@@ -3,22 +3,20 @@
  */
 package de.fau.osr.core.vcs.base;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import de.fau.osr.PublicTestData;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
-import de.fau.osr.PublicTestData;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Gayathery
@@ -30,7 +28,7 @@ public class VcsControllerTest {
 	private Commit expectedCommit;
 	VcsClient client = VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
 	
-	/*
+	/**
 	 * @return Collection<Object[]> Each Collection Element represents one set of test data required by one test class execution.
 	 * Each Element itself is an array containing the different parameters. In this paticular case the array contains one Entry:
 	 * the expected Commit

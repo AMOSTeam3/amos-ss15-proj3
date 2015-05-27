@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 
-/*
+/**
  * class to represent a symmetric matrix with element type T
  * @author Gayathery Sathya
  */
@@ -28,7 +28,7 @@ public class SymmetricMatrix<T> {
 		this.hasDiagonalElements = hasDiagonalElements;
 		
 	}
-	/*
+	/**
 	 * method to initialize the matrix elements (to null)
 	 */
 	public void initMatrix(){
@@ -67,7 +67,7 @@ public class SymmetricMatrix<T> {
 		return matrixIndex;
 		    
 	}
-	/*
+	/**
 	 * method to generate the elements of the symmetric matrix where data can be stored
 	 */
 	private List<MatrixIndex> generateElement(int size){

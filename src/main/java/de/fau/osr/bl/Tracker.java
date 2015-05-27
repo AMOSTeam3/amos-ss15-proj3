@@ -287,7 +287,7 @@ public class Tracker {
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
     	return vcsClient.blame(path, dataSource);
     }
- /*
+ /**
   * Method which performs the complete processing of Requirement Traceability
   */
     public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
@@ -317,7 +317,7 @@ public class Tracker {
     	return null;
     	
     }
-    /*
+    /**
      * Method which performs the complete processing of Requirement Traceability by Impact
      */
     public RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact(){
@@ -326,7 +326,7 @@ public class Tracker {
     	return requirementsTraceabilityMatrixByImpact;
     }
 }
-/*
+/**
  * class for Thread of Traceability Matrix processing
  */
 class TraceabilityMatrixThread implements Runnable{

@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * This Class handles all Testdata. If u want to get any Path related to a Test Repository or any other Test file,
  * you might want to use this class. Beside providing access to the TestData via Paths, the functions contained in @category Repository Data
  * can be used to get immediate access to the TestData itself.
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class PublicTestData {
 	
-	/*
+	/**
 	 * @category Path Management
 	 */
 	private static final String CSV_FILE_PATH = "/TestRepositoryData.csv";
@@ -50,7 +50,7 @@ public class PublicTestData {
 		return "TestFile4";
 	}
 	
-	/*
+	/**
 	 * @category Repository Data
 	 */
 	private List<Commit> commits  = new ArrayList<Commit>();
@@ -66,7 +66,7 @@ public class PublicTestData {
 	
 	
 	
-	/*
+	/**
 	 * @return All Commits containing in the CSVFile, which at least have one requirements linked in the message
 	 */
 	public List<Commit> getCommitsWithReqIds() {
@@ -80,7 +80,7 @@ public class PublicTestData {
 	}
 	
 	
-	/*
+	/**
 	 * @category Internal
 	 */
 	private void parseCsvFile(){

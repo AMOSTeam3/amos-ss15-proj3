@@ -2,7 +2,7 @@ package de.fau.osr.core.vcs.base;
 
 import java.util.List;
 
-/*
+/**
  * This Class is a Container within the test framework for all information related to one commit.
  * @author: Florian Gerdes
  */

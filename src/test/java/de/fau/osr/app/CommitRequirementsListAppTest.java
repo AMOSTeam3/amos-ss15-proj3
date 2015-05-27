@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
  * @author Florian Gerdes
  */
 public class CommitRequirementsListAppTest {
-	/*
+	/**
 	 * outContent: The Outputstream for our tested Class CommitFileListingApp is redirected to this ByteArrayOutputStream; so that we can compare.
 	 * testData: To get direct access to the commits in the test data repository. Please note, that the commits are created from the related CSVFile
 	 * not from the repository itself.

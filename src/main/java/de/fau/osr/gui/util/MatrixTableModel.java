@@ -1,17 +1,13 @@
 package de.fau.osr.gui.util;
 
-import java.util.List;
-
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import com.google.common.base.Preconditions;
-
 import de.fau.osr.bl.RequirementsRelation;
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.util.matrix.MatrixIndex;
 import de.fau.osr.util.matrix.SymmetricMatrix;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 /**
  * This class is a customized table generator for Requirement Traceability matrix by requirement relations
@@ -53,7 +49,7 @@ public class MatrixTableModel extends DefaultTableModel{
 			return columns.get(columnIndex);
 		return null;
 	}
-/*
+	/*
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		// TODO Auto-generated method stub
@@ -78,7 +74,8 @@ public class MatrixTableModel extends DefaultTableModel{
 		return matrix.getAt(matrixIndex).getCommonFilesCount();
 	}
 
-	/*@Override
+	/*
+	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
 		

@@ -1,19 +1,17 @@
 package de.fau.osr.gui;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Comparator;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-
 import com.google.common.base.Predicate;
-
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.gui.GuiView.HighlightedLine;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
-/*
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Comparator;
+
+/**
  * Adapter Pattern used. Since the Functionlibrary itself
  * can not simply provide the given return types correlating to
  * the specific formatted input, this class defines the Interface

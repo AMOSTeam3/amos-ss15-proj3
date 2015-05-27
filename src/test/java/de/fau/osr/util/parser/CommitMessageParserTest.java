@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -24,7 +23,7 @@ public class CommitMessageParserTest extends TestCase {
 	private static PublicTestData testData = new PublicTestData();
 	private Commit expectedCommit;
 
-	/*
+	/**
 	 * @return Collection<Object[]> Each Collection Element represents one set of test data required by one test class execution.
 	 * Each Element itself is an array containing the different parameters. In this paticular case the array contains one Entry:
 	 * the expected Commit

@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-/*
+/**
  * View part of the MVC. This Class is responsible for the setting up the UI and interacting with the 
  * Elements. Whenever the texts or functionality of UI-Elements are changed, this class must be called.
  */
@@ -57,7 +57,7 @@ public class GuiView{
 		elementHandler = new GuiViewElementHandler(guiController);
 	}
 	
-	/*
+	/**
 	 * Setting up the initial Dialog to choose the Repository.
 	 * @return File to the chosen directory. Keep in mind, that the file is not checked yet.
 	 * @throws IOException whenever the user cancels the Dialog.
@@ -78,7 +78,7 @@ public class GuiView{
 		}
 	}
 	
-	/*
+	/**
 	 * Opening the initial Dialog to choose a Pattern for searching for requirements in commit messages
 	 * or external sources.
 	 * @return String containing the directly the user input. Not yet checked whether it's a proper pattern
@@ -90,7 +90,7 @@ public class GuiView{
 		return JOptionPane.showInputDialog(msg, currentPattern);
 	}
 	
-	/*
+	/**
 	 * Method to open a option dialog for configuration where user can select which 
 	 * configuration needs to be modified
 	 * @return integer containing the option selected for configuration (TODO int to be converted to 
@@ -101,14 +101,14 @@ public class GuiView{
 		return JOptionPane.showOptionDialog(null, "Choose to Configure", "SpiceTraceability Configuration", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 	}
 
-	/*
+	/**
 	 * Creating the UI. Frame + Elements
 	 */
 	void showView() {
 		elementHandler.setVisible(true);
 	}
 
-	/*
+	/**
 	 * Showing an Dialog to the User. Marked as Error dialog.
 	 * @parameter message to be presented to the user
 	 */
@@ -116,7 +116,7 @@ public class GuiView{
 		JOptionPane.showMessageDialog(null, message, "Fehler", JOptionPane.ERROR_MESSAGE);
 	}
 	
-	/*
+	/**
 	 * Showing a dialog to the user. Marked as Information dialog
 	 * @parameter message to be presented to the user
 	 */
@@ -124,7 +124,7 @@ public class GuiView{
 		JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	/*
+	/**
 	 * Clearing all scrollpanes. Containing the Code_ScrollPane. And clearing all Textfields.
 	 * Deactivating Linkage_Button
 	 * Color is set to the initial white.
@@ -183,7 +183,7 @@ public class GuiView{
 		elementHandler.getRequirements2Lines_scrollPane().setViewportView(panel);
 	}
 
-	/*
+	/**
 	 * Showing all Elements of the JList parameter in the RequirementsID_Scrollpane
 	 * @parameter requirements_JList containing the Elements to be displayed
 	 */
@@ -195,7 +195,7 @@ public class GuiView{
 		
 	}
 
-	/*
+	/**
 	 * Showing all Elements of the JList parameter in the Commit_Scrollpane
 	 * @parameter commitMessage_JList containing the Elements to be displayed
 	 */
@@ -206,7 +206,7 @@ public class GuiView{
 		elementHandler.getCommit_scrollPane().setViewportView(panel);
 	}
 
-	/*
+	/**
 	 * Showing all Elements of the JList parameter in the Files_Scrollpane
 	 * WITH rendering.
 	 * @parameter commitFilesJTree containing the Elements to be displayed
@@ -215,7 +215,7 @@ public class GuiView{
 		showFilesByGivenRenderer(commitFilesTree, new CommitFile_ImpactTreeFilenameRenderer());
 	}
 
-	/*
+	/**
 	 * Showing all Elements of the JList parameter in the Files_Scrollpane
 	 * WITHOUT rendering.
 	 * @parameter commitFilesJTree containing the Elements to be displayed
@@ -241,7 +241,7 @@ public class GuiView{
 		elementHandler.getFiles_scrollPane().setViewportView(commitFilesTree);
 	}
 
-	/*
+	/**
 	 * Showing the parameter String in the Code_Scrollpane.
 	 * Until now. There is no further processing of the data. This will probably change
 	 * with Req-11
@@ -267,7 +267,7 @@ public class GuiView{
 		elementHandler.getRequirements2Lines_scrollPane().setViewportView(panel);
 	}
 
-	/*
+	/**
 	 * Adding a Mouselistener to the passed component 
 	 */
 	void addMouseListener(JComponent component, MouseListener actListener){
@@ -316,7 +316,7 @@ public class GuiView{
 			trMatrixByImpact.setVisible(true);
 
 	}
-	/*
+	/**
 	 * method to show progress bar for the processing of traceability matrix by impact values
 	 */
 	void showTraceabilityMatrixByImpactProgressBar(){
