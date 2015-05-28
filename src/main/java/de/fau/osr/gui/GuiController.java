@@ -16,6 +16,11 @@ import de.fau.osr.util.parser.CommitMessageParser;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -168,7 +173,13 @@ public class GuiController {
         commitFilesJTree = new CommitFilesJTree(guiModel.getFilesFromRequirement(requirementID, commitFileSorting));
         guiView.showFiles(commitFilesJTree);
 
-        guiView.addMouseListener(commitFilesJTree, new MouseEvent(this, Action.CommitsAndCodeFromRequirementAndFile));
+        commitFilesJTree.addSelectionListener(new CommitFile_SelectionListener(commitFilesJTree, ()->{
+            DefaultMutableTreeNode element = (DefaultMutableTreeNode) commitFilesJTree
+                    .getLastSelectedPathComponent();
+            CommitFile commitFile = (CommitFile) element.getUserObject();
+            this.commitsFromRequirementAndFile(this.requirements_JList.getSelectedValue(), commitFile);
+            this.codeFromFile(commitFile, this.requirements_JList.getSelectedValue());
+        }));
 
     }
 
@@ -262,8 +273,15 @@ public class GuiController {
         guiView.clearAll();
 
         commitFilesJTree = new CommitFilesJTree(guiModel.getAllFiles(getCommitFileSorting()));
-        guiView.showFilesWithoutRendering(commitFilesJTree);
-        guiView.addMouseListener(commitFilesJTree, new MouseEvent(this, Action.RequirementsAndCommitsAndCodeFromFile));
+        guiView.showFiles(commitFilesJTree);
+		commitFilesJTree.addSelectionListener(new CommitFile_SelectionListener(commitFilesJTree, ()->{
+		    DefaultMutableTreeNode element = (DefaultMutableTreeNode) commitFilesJTree
+                    .getLastSelectedPathComponent();
+            CommitFile commitFile = (CommitFile) element.getUserObject();
+		    this.requirementsFromFile(commitFile);
+		    this.commitsFromFile(commitFile);
+		    this.codeFromFile(commitFile);
+		}));
     }
 
     /**
@@ -272,8 +290,12 @@ public class GuiController {
      * Setting: Requirement
      * Using: getRequirementsFromFile
      */
-    void requirementsFromFile(CommitFile file) throws IOException {
-        requirements_JList = new JList<String>(guiModel.getRequirementsFromFile(file));
+    void requirementsFromFile(CommitFile file){
+        try{
+	        requirements_JList = new JList<String>(guiModel.getRequirementsFromFile(file));
+	    } catch(IOException e){
+	        guiView.showErrorDialog("File not found!");
+	    }
         guiView.showRequirements(requirements_JList);
 
         guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.CommitsFromRequirementAndFile));
@@ -347,7 +369,12 @@ public class GuiController {
         }
         guiView.showFiles(commitFilesJTree);
 
-        guiView.addMouseListener(commitFilesJTree, new MouseEvent(this, Action.CodeFromFile));
+        commitFilesJTree.addSelectionListener(new CommitFile_SelectionListener(commitFilesJTree, ()->{
+		    DefaultMutableTreeNode element = (DefaultMutableTreeNode) commitFilesJTree
+	                .getLastSelectedPathComponent();
+	        CommitFile commitFile = (CommitFile) element.getUserObject();
+	        this.codeFromFile(commitFile, this.requirements_JList.getSelectedValue());
+		}));
     }
 
     /**
