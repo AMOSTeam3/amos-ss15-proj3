@@ -4,6 +4,7 @@ import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 
@@ -21,6 +22,7 @@ public abstract class VcsClient {
 
 	public abstract Iterator<String> getBranchList();
 	public abstract Iterator<String> getCommitList();
+	public abstract String getRepositoryName();
 	public abstract ArrayList<CommitFile> getCommitFiles(String commitID);
 	public abstract String getCommitMessage(String commitID);
 	public abstract Iterator<String> getCommitListForFileodification(String filePath);
@@ -117,4 +119,6 @@ public abstract class VcsClient {
 			return line;
 		}
 	}
+
+	
 }
