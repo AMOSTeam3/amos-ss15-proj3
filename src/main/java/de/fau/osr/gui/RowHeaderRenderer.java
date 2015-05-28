@@ -10,7 +10,7 @@ class RowHeaderRenderer<E> extends JLabel implements ListCellRenderer<E> {
         JTableHeader header = table.getTableHeader();
         setOpaque(true);
         setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-        setHorizontalAlignment(RIGHT);
+        setHorizontalAlignment(LEFT);
         setForeground(header.getForeground());
         setBackground(header.getBackground());
         setFont(header.getFont());
