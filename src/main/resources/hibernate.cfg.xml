@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<!-- >hibernate-configuration>
+ <session-factory >
+  <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+  <property name="hibernate.connection.password">light123</property>
+  <property name="hibernate.connection.url">jdbc:postgresql:Test</property>
+  <property name="hibernate.connection.username">postgres</property>
+  <property name="hibernate.default_schema">amos</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
+  <property name="hibernate.current_session_context_class">thread</property> 
+  
+   <mapping class="de.fau.osr.core.db.domain.RequirementCommitMap"/>
+ </session-factory>
+</hibernate-configuration>  -->
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.password">at2NvZzZvVaO0e0X</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://osr-amos.cs.fau.de:15432/amos-ss15-proj3</property>
+        <property name="hibernate.connection.username">amos-ss15-proj3</property>
+        <property name="hibernate.default_schema">traceability</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+        <mapping class="de.fau.osr.core.db.domain.Requirement"/>
+    </session-factory>
+    
+</hibernate-configuration>
