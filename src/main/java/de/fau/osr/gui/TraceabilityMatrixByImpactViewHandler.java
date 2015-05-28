@@ -15,7 +15,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,10 +26,10 @@ import javax.swing.border.EmptyBorder;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
-import de.fau.osr.gui.util.UiTools;
+import de.fau.osr.util.matrix.MatrixIndex;
 import de.fau.osr.util.matrix.MatrixTools;
 /**
- * This class is the GUI for showing the requirement traceability by impact value
+ * This class is the GUI for requirement traceability by impact value
  * @author Gayathery Sathya
  */
 public class TraceabilityMatrixByImpactViewHandler extends JFrame {
@@ -61,9 +60,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 	 * Create the frame.
 	 */
 	public TraceabilityMatrixByImpactViewHandler() {
-		
-		final String title = "Spice Traceability - Traceability Matrix by Impact";
-		setTitle(title);
+		setTitle("Spice Traceability - Traceability Matrix by Impact");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 999, 686);
 		contentPane = new JPanel();
@@ -82,23 +79,14 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 		JButton btnToCsv = new JButton("To CSV");
 		btnToCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String filename = getFileName(MatrixTools.ExportType.CSV);
-				boolean result = MatrixTools.SaveMatrixToCsv(requirementsTraceabilityMatrixByImpact, 
-										UiTools.chooseFile(filename));
-				UiTools.dialogStatusMessage(result, filename);
+				MatrixTools.SaveMatrixToCsv(requirementsTraceabilityMatrixByImpact, chooseFile("result.csv"));
 			}
 		});
 		
 		JButton btnToPdf = new JButton("To PDF");
 		btnToPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String filename = getFileName(MatrixTools.ExportType.PDF);
-				
-				boolean result = MatrixTools.SaveMatrixToPdf(requirementsTraceabilityMatrixByImpact, 
-						UiTools.chooseFile(filename),title);
-				UiTools.dialogStatusMessage(result, filename);
-				
-					
+				MatrixTools.SaveMatrixToPdf(requirementsTraceabilityMatrixByImpact, chooseFile("result.pdf"));
 			}
 		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -208,11 +196,23 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
 		
 	}
 
-	public String getFileName(MatrixTools.ExportType exportType){
-		String prefix = "TraceabilityMatrix";
-		return MatrixTools.generateFileName(exportType,prefix,
-					requirementsTraceabilityMatrixByImpact.getRepositoryName(),'_');
+
+	//todo move to gui utils?
+	private File chooseFile(String filename) {
+//		final String ext = extension;
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Specify a file to save");
+		fileChooser.setSelectedFile(new File(filename));
+
+		int userSelection = fileChooser.showSaveDialog(this);
+
+		if (userSelection == JFileChooser.APPROVE_OPTION) {
+			return fileChooser.getSelectedFile();
+		}
+		return null;
 	}
+
+
 
 }
 

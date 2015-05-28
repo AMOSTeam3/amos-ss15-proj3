@@ -19,7 +19,6 @@ import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revplot.PlotCommit;
 import org.eclipse.jgit.revplot.PlotCommitList;
 import org.eclipse.jgit.revplot.PlotLane;
@@ -294,25 +293,5 @@ public class GitVcsClient extends VcsClient{
 			res.add(new AnnotatedLine(annotation, text.getString(i)));
 		}
 		return res;
-	}
-	
-	
-	/**
-	 * This method returns the current repository name.This method is used in setting the file name for file export options.
-	 * @return
-	 */
-	@Override
-	public String getRepositoryName(){
-		StoredConfig c = repo.getConfig();
-		try{
-			String url = c.getString("remote", "origin","url");
-			if(url!= null && !url.isEmpty()){
-				return url.substring(url.lastIndexOf('/') +1);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			
-		}
-		return ".git";
 	}
 }

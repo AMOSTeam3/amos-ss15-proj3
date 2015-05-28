@@ -22,13 +22,10 @@ public class RequirementsTraceabilityMatrixByImpact {
 	Tracker tracker;
 	public static int processProgress = 0;
 	Map<RequirementFilePair,RequirementFileImpactValue> requirementTraceabilityByImpactMatrix = new HashMap<RequirementFilePair, RequirementFileImpactValue>();
-	
-	
 	public RequirementsTraceabilityMatrixByImpact(Tracker tracker){
 		this.tracker = tracker;
 		requirements = new ArrayList<String>();
 		files = new ArrayList<String>();
-		
 	}
 	/**
 	 * method to process the data behind the generation of traceability matrix
@@ -106,10 +103,6 @@ public class RequirementsTraceabilityMatrixByImpact {
 	}
 	
 	
-	public String getRepositoryName() {
-		return  tracker.getRepostoryName();
-	}
-
 }
 
 class FileComparator implements Comparator<String>{
