@@ -3,13 +3,21 @@ package de.fau.osr.gui;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
+import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.gui.Components.Renderer.CommitFile_ImpactTreeFilenameRenderer;
 import de.fau.osr.gui.Components.Renderer.CommitFile_SimpleTreeFilenameRenderer;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
+
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -49,8 +57,7 @@ public class GuiView{
 		}
 	}
 
-
-    //The UI-Elements themselves are handled by the Element Handler.
+	//The UI-Elements themselves are handled by the Element Handler. 
 	private GuiViewElementHandler elementHandler;
 	
 	GuiView(GuiController guiController) {
@@ -229,7 +236,6 @@ public class GuiView{
 	 * @author Taleh Didover
 	 */
 	private void showFilesByGivenRenderer(JTree commitFilesTree, TreeCellRenderer renderer) {
-
         commitFilesTree.setCellRenderer(renderer);
 
         //expand all nodes

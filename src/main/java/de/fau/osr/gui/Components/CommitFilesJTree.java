@@ -4,8 +4,10 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.gui.util.UiTools;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * <tt>JTree</tt> with ability to be built by array of commit files
@@ -15,6 +17,12 @@ public class CommitFilesJTree extends JTree {
 
     public CommitFilesJTree(CommitFile[] filesFromRequirement) {
         super(CommitFilesToTree(filesFromRequirement));
+        this.getSelectionModel().setSelectionMode
+        (TreeSelectionModel.SINGLE_TREE_SELECTION);
+    }
+    
+    public void addSelectionListener(TreeSelectionListener listener){
+        this.addTreeSelectionListener(listener);
     }
 
     /**
