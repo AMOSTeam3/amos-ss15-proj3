@@ -7,101 +7,101 @@ import java.util.List;
  * @author Gayathery Sathya
  */
 public class RequirementsRelation {
-	
-	String requirementX;
-	String requirementY;
-	Integer commonFilesCount = 0;
-	List<String> commonFiles = new ArrayList<String>();
-	
-	
-	/**
-	 * Constructor of the class
-	 */
-	public RequirementsRelation() {
-		super();
-		
-	}
+
+    String requirementX;
+    String requirementY;
+    Integer commonFilesCount = 0;
+    List<String> commonFiles = new ArrayList<String>();
 
 
-	/**
-	 * overloaded constructor with variable setting at construction
-	 * @param requirementX requirement ID x
-	 * @param requirementY requirement ID z
-	 * @param files list of associated files
-	 */
-	public RequirementsRelation(String requirementX, String requirementY,
-			List<String> files) {
-		super();
-		this.requirementX = requirementX;
-		this.requirementY = requirementY;
-		this.commonFiles = files;
-	}
+    /**
+     * Constructor of the class
+     */
+    public RequirementsRelation() {
+        super();
+
+    }
 
 
-	/**
-	 * overloaded constructor with variable setting at construction
-	 * @param requirementX requirement ID x
-	 * @param requirementY requirement ID z
-	 * @param commonFilesCount number of common files for the requirement combination
-	 */
-	public RequirementsRelation(String requirementX, String requirementY,
-			Integer commonFilesCount) {
-		super();
-		this.requirementX = requirementX;
-		this.requirementY = requirementY;
-		this.commonFilesCount = commonFilesCount;
-	}
+    /**
+     * overloaded constructor with variable setting at construction
+     * @param requirementX requirement ID x
+     * @param requirementY requirement ID z
+     * @param files list of associated files
+     */
+    public RequirementsRelation(String requirementX, String requirementY,
+            List<String> files) {
+        super();
+        this.requirementX = requirementX;
+        this.requirementY = requirementY;
+        this.commonFiles = files;
+    }
 
 
-	public String getRequirementX() {
-		return requirementX;
-	}
+    /**
+     * overloaded constructor with variable setting at construction
+     * @param requirementX requirement ID x
+     * @param requirementY requirement ID z
+     * @param commonFilesCount number of common files for the requirement combination
+     */
+    public RequirementsRelation(String requirementX, String requirementY,
+            Integer commonFilesCount) {
+        super();
+        this.requirementX = requirementX;
+        this.requirementY = requirementY;
+        this.commonFilesCount = commonFilesCount;
+    }
 
 
-	public void setRequirementX(String requirementX) {
-		this.requirementX = requirementX;
-	}
+    public String getRequirementX() {
+        return requirementX;
+    }
 
 
-	public String getRequirementY() {
-		return requirementY;
-	}
+    public void setRequirementX(String requirementX) {
+        this.requirementX = requirementX;
+    }
 
 
-	public void setRequirementY(String requirementY) {
-		this.requirementY = requirementY;
-	}
+    public String getRequirementY() {
+        return requirementY;
+    }
 
 
-	public Integer getCommonFilesCount() {
-		return commonFilesCount;
-	}
+    public void setRequirementY(String requirementY) {
+        this.requirementY = requirementY;
+    }
 
 
-	public void setCommonFilesCount(Integer commonFilesCount) {
-		commonFilesCount = commonFilesCount;
-	}
+    public Integer getCommonFilesCount() {
+        return commonFilesCount;
+    }
 
 
-	public List<String> getFiles() {
-		return commonFiles;
-	}
+    public void setCommonFilesCount(Integer commonFilesCount) {
+        commonFilesCount = commonFilesCount;
+    }
 
 
-	public void setFiles(List<String> files) {
-		this.commonFiles = files;
-	}
-	
-	public void incrementRelations(int commonFilesCount, List<String> commonFiles)	{
-		this.commonFilesCount += commonFilesCount;
-		if(commonFiles != null)
-			this.commonFiles.addAll(commonFiles);
-	}
-	
-	public void decrementRelations(int commonFilesCount, List<String> commonFiles)	{
-		this.commonFilesCount -= commonFilesCount;
-		if(commonFiles != null)
-			this.commonFiles.removeAll(commonFiles);
-	}
+    public List<String> getFiles() {
+        return commonFiles;
+    }
+
+
+    public void setFiles(List<String> files) {
+        this.commonFiles = files;
+    }
+
+    public void incrementRelations(int commonFilesCount, List<String> commonFiles)    {
+        this.commonFilesCount += commonFilesCount;
+        if(commonFiles != null)
+            this.commonFiles.addAll(commonFiles);
+    }
+
+    public void decrementRelations(int commonFilesCount, List<String> commonFiles)    {
+        this.commonFilesCount -= commonFilesCount;
+        if(commonFiles != null)
+            this.commonFiles.removeAll(commonFiles);
+    }
 
 }

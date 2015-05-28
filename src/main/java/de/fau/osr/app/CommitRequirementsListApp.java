@@ -19,27 +19,27 @@ import java.util.regex.Pattern;
  */
 public class CommitRequirementsListApp {
 
-	private static class CliOptions {
-		@Parameter(names = "-repo", required = true)
-		String repoURL;
-	}
+    private static class CliOptions {
+        @Parameter(names = "-repo", required = true)
+        String repoURL;
+    }
 
-	public static void main(String[] args) {
-		CliOptions cli = new CliOptions();
-		new JCommander(cli, args);
-		final VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
-		Parser parser = new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
-		for(String commitId : new Iterable<String>(){
-			@Override
-			public Iterator<String> iterator() {
-				return client.getCommitList();
-			}}) {
-			String commitMsg = client.getCommitMessage(commitId);
-			List<String> reqs = parser.parse(commitMsg);
-			for(String req : reqs) {
-				System.out.println("commit " + commitId + " references Req-" + req);
-			}
-		}
-	}
+    public static void main(String[] args) {
+        CliOptions cli = new CliOptions();
+        new JCommander(cli, args);
+        final VcsClient client = VcsClient.connect(VcsEnvironment.GIT, cli.repoURL);
+        Parser parser = new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
+        for(String commitId : new Iterable<String>(){
+            @Override
+            public Iterator<String> iterator() {
+                return client.getCommitList();
+            }}) {
+            String commitMsg = client.getCommitMessage(commitId);
+            List<String> reqs = parser.parse(commitMsg);
+            for(String req : reqs) {
+                System.out.println("commit " + commitId + " references Req-" + req);
+            }
+        }
+    }
 
 }

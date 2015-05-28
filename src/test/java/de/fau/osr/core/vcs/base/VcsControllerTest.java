@@ -24,79 +24,79 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(Parameterized.class)
 public class VcsControllerTest {
-	private static PublicTestData testData = new PublicTestData();
-	private Commit expectedCommit;
-	VcsClient client = VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
-	
-	/**
-	 * @return Collection<Object[]> Each Collection Element represents one set of test data required by one test class execution.
-	 * Each Element itself is an array containing the different parameters. In this paticular case the array contains one Entry:
-	 * the expected Commit
-	 */
-	@Parameters
+    private static PublicTestData testData = new PublicTestData();
+    private Commit expectedCommit;
+    VcsClient client = VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
+
+    /**
+     * @return Collection<Object[]> Each Collection Element represents one set of test data required by one test class execution.
+     * Each Element itself is an array containing the different parameters. In this paticular case the array contains one Entry:
+     * the expected Commit
+     */
+    @Parameters
     public static Collection<Object[]> data() {
-    	List<Object[]> parameters = new ArrayList<Object[]>();
-    	for(Commit commit: testData.getCommits()){
-    		parameters.add(new Object[] {commit});
-    	}
-    	return parameters;
+        List<Object[]> parameters = new ArrayList<Object[]>();
+        for(Commit commit: testData.getCommits()){
+            parameters.add(new Object[] {commit});
+        }
+        return parameters;
     }
-	
-	public VcsControllerTest(Commit commit) {
-		expectedCommit = commit;
-	}
+
+    public VcsControllerTest(Commit commit) {
+        expectedCommit = commit;
+    }
     
-	/**
-	 * Test method for {@link org.amos.core.vcs.base.VcsController#getBranchList()}.
-	 */
-	@Test
-	public void testGetBranchList() {
-		Iterator<String> branchList = null;
-		 branchList = client.getBranchList();
-		
-		assertNotNull(branchList);
-		assertTrue(branchList.hasNext());
-	}
+    /**
+     * Test method for {@link org.amos.core.vcs.base.VcsController#getBranchList()}.
+     */
+    @Test
+    public void testGetBranchList() {
+        Iterator<String> branchList = null;
+         branchList = client.getBranchList();
 
-	/**
-	 * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitList()}.
-	 */
-	@Test
-	public void testGetCommitList() {
-		Iterator<String> commitList = null;
-		commitList = client.getCommitList();
-		assertNotNull(commitList);
-		assertTrue(commitList.hasNext());
-	}
+        assertNotNull(branchList);
+        assertTrue(branchList.hasNext());
+    }
 
-	/**
-	 * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitFiles(java.lang.String)}.
-	 */
-	@Test
-	public void testGetCommitFiles() {
-		Iterator<CommitFile> commitFileList = null;
-		Iterator<String> commitList = null;
-		commitList = client.getCommitList();
-		if(commitList.hasNext()){
-			commitFileList = client.getCommitFiles(commitList.next()).iterator();
-		}
-		assertNotNull(commitFileList);
-		assertTrue(commitFileList.hasNext());
-	}
-	
-	/**
-	 * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitMessage(java.lang.String)}.
-	 */
-	@Test
-	public void getCommitMessageSimpleTest() {
-		String commitMessage = null;
-		Iterator<String> commitList = null;
-		commitList = client.getCommitList();
-		if(commitList.hasNext()){
-			commitMessage = client.getCommitMessage(commitList.next());
-		}
+    /**
+     * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitList()}.
+     */
+    @Test
+    public void testGetCommitList() {
+        Iterator<String> commitList = null;
+        commitList = client.getCommitList();
+        assertNotNull(commitList);
+        assertTrue(commitList.hasNext());
+    }
 
-		assertNotNull(commitMessage);
-	}
+    /**
+     * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitFiles(java.lang.String)}.
+     */
+    @Test
+    public void testGetCommitFiles() {
+        Iterator<CommitFile> commitFileList = null;
+        Iterator<String> commitList = null;
+        commitList = client.getCommitList();
+        if(commitList.hasNext()){
+            commitFileList = client.getCommitFiles(commitList.next()).iterator();
+        }
+        assertNotNull(commitFileList);
+        assertTrue(commitFileList.hasNext());
+    }
+
+    /**
+     * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitMessage(java.lang.String)}.
+     */
+    @Test
+    public void getCommitMessageSimpleTest() {
+        String commitMessage = null;
+        Iterator<String> commitList = null;
+        commitList = client.getCommitList();
+        if(commitList.hasNext()){
+            commitMessage = client.getCommitMessage(commitList.next());
+        }
+
+        assertNotNull(commitMessage);
+    }
 
 }

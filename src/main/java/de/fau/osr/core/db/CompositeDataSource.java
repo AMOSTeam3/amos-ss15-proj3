@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ * This <tt>DataSource</tt> uses multiple <tt>DataSource</tt>'s
  * Created by Dmitry Gorelenkov on 13.05.2015.
  */
 public class CompositeDataSource extends DataSource {
@@ -16,6 +17,11 @@ public class CompositeDataSource extends DataSource {
     private DataSource dataSource;
     private ArrayList<DataSource> dataSources;
 
+    /**
+     * <tt>DataSource</tt>, that uses many <tt>DataSource</tt>'s for query data, but only one for update
+     * @param mainSource source to use modifying methods like addSource()
+     * @param otherSources other source, to query information
+     */
     public CompositeDataSource(DataSource mainSource, DataSource ...otherSources ) {
         dataSources = new ArrayList<>();
         dataSource = mainSource;

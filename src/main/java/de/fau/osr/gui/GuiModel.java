@@ -20,46 +20,46 @@ import java.util.Comparator;
 
 public interface GuiModel {
 
-	String[] getAllRequirements(Predicate<String> filtering) throws IOException;
+    String[] getAllRequirements(Predicate<String> filtering) throws IOException;
 
-	String[] getCommitsFromRequirementID(String requirement) throws IOException;
+    String[] getCommitsFromRequirementID(String requirement) throws IOException;
 
-	CommitFile[] getAllFiles(Comparator<CommitFile> sorting);
+    CommitFile[] getAllFiles(Comparator<CommitFile> sorting);
 
-	String[] getRequirementsFromFile(CommitFile file) throws IOException;
+    String[] getRequirementsFromFile(CommitFile file) throws IOException;
 
-	String[] getCommitsFromFile(CommitFile file);
+    String[] getCommitsFromFile(CommitFile file);
 
-	CommitFile[] getFilesFromCommit(int commitIndex, Comparator<CommitFile> sorting) throws FileNotFoundException;
+    CommitFile[] getFilesFromCommit(int commitIndex, Comparator<CommitFile> sorting) throws FileNotFoundException;
 
-	String getChangeDataFromFileIndex(CommitFile file) throws FileNotFoundException;
-	
-	String getCurrentRequirementPatternString();
-	
-	String getCurrentRepositoryPath();
+    String getChangeDataFromFileIndex(CommitFile file) throws FileNotFoundException;
 
-	String[] getCommitsFromDB();
+    String getCurrentRequirementPatternString();
 
-	String[] getRequirementsFromCommit(int commitIndex) throws IOException;
+    String getCurrentRepositoryPath();
 
-	String[] commitsFromRequirementAndFile(String requirementID,
-			CommitFile file) throws IOException;
+    String[] getCommitsFromDB();
 
-	String[] getRequirementsFromFileAndCommit(int commitIndex,
-			CommitFile file) throws IOException;
+    String[] getRequirementsFromCommit(int commitIndex) throws IOException;
 
-	CommitFile[] getFilesFromRequirement(String requirementID, Comparator<CommitFile> sorting) throws IOException;
-	
-	void addRequirementCommitLinkage(String requirementID, int commitIndex) throws FileNotFoundException;
+    String[] commitsFromRequirementAndFile(String requirementID,
+            CommitFile file) throws IOException;
 
-	HighlightedLine[] getBlame(CommitFile file, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
+    String[] getRequirementsFromFileAndCommit(int commitIndex,
+            CommitFile file) throws IOException;
+
+    CommitFile[] getFilesFromRequirement(String requirementID, Comparator<CommitFile> sorting) throws IOException;
+
+    void addRequirementCommitLinkage(String requirementID, int commitIndex) throws FileNotFoundException;
+
+    HighlightedLine[] getBlame(CommitFile file, String requirementID) throws FileNotFoundException, IOException, GitAPIException ;
 
     String[] getRequirementsForBlame(CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
 
-	String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
-	
-	public RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
-	
-	public RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
+    String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
+
+    public RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
+
+    public RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
 
 }

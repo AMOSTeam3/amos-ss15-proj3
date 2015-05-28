@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <tt>DataSource</tt> object for VCS
  * Created by Dmitry Gorelenkov on 14.05.2015.
  */
 public class VCSDataSource extends DataSource {
@@ -18,6 +19,12 @@ public class VCSDataSource extends DataSource {
     private VcsClient vcsClient;
     private CommitMessageParser msgParser;
 
+    /**
+     * <tt>DataSource</tt> object for VCS
+     * Can only query information.
+     * @param vcs vcs client to use
+     * @param parser parser for messages in vcs client commits
+     */
     public VCSDataSource(VcsClient vcs, CommitMessageParser parser) {
         vcsClient = vcs;
         msgParser = parser;

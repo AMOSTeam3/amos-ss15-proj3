@@ -29,22 +29,22 @@ import static org.mockito.Mockito.mock;
  *
  */
 public class TrackerTest {
-	
+
     static VcsClient client;
     static Tracker interpreter;
 
 
-	@BeforeClass
-	public static void prepare() throws IOException {
+    @BeforeClass
+    public static void prepare() throws IOException {
         client =  VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
         interpreter = new Tracker(client, null, null);
-	}
+    }
 
-	/**
-	 * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.
-	 */
-	@Test
-	public void testGetCommitFilesForRequirementID() throws IOException {
+    /**
+     * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.
+     */
+    @Test
+    public void testGetCommitFilesForRequirementID() throws IOException {
         //refault pattern Req-(\\d+)
         List<CommitFile> commitFileList = interpreter.getCommitFilesForRequirementID("1");
         assertTrue(commitFileList.size() == 1);
@@ -65,23 +65,23 @@ public class TrackerTest {
         assertTrue(fileNames.contains("TestFile1"));
         assertTrue(fileNames.contains("TestFile2"));
 
-	}
-	
-	/**
-	 * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.
-	 */
-	@Test
-	public void testGetRequirementListforAFile() throws IOException {
-		
-			Iterator<String> reqList = interpreter.getAllRequirementsForFile(PublicTestData.getSampleFilePathFromTestRepository()).iterator();
-			boolean isCommitAvailable = false;
-			while(reqList.hasNext()){
-				if("1".equals(reqList.next()))
-					isCommitAvailable = true;
-			}
-			assertTrue(isCommitAvailable);
-		
-	}
+    }
+
+    /**
+     * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.
+     */
+    @Test
+    public void testGetRequirementListforAFile() throws IOException {
+
+            Iterator<String> reqList = interpreter.getAllRequirementsForFile(PublicTestData.getSampleFilePathFromTestRepository()).iterator();
+            boolean isCommitAvailable = false;
+            while(reqList.hasNext()){
+                if("1".equals(reqList.next()))
+                    isCommitAvailable = true;
+            }
+            assertTrue(isCommitAvailable);
+
+    }
 
     @Test
     public void getTotalReqLinkageTest() throws Exception {
