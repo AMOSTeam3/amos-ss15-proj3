@@ -1,7 +1,11 @@
 package de.fau.osr.gui.util;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import java.io.File;
 import java.nio.file.Path;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * Some useful functions for UI
@@ -62,5 +66,32 @@ public class UiTools {
         //recursively add the node
         AddToTreeByPath(dir, restPath, object);
     }
+    
+    /**
+	 * This method is a utility method to open a File chooser.
+	 * @param filename
+	 * @return
+	 */
+	public static File chooseFile(String filename) {
+		JFileChooser fileChooser = new JFileChooser();
+  		fileChooser.setDialogTitle("Spice Traceability -Save As");
+  		fileChooser.setSelectedFile(new File(filename));
+
+  		int userSelection = fileChooser.showSaveDialog(null);
+
+  		if (userSelection == JFileChooser.APPROVE_OPTION) {
+  			return fileChooser.getSelectedFile();
+  		}
+  		return null;
+	}
+	
+	public static void dialogStatusMessage(Boolean result, String text){
+		String message;
+		if(result)
+			message= text + " saved successfully";
+		else
+			message= text + " save failed!";
+		JOptionPane.showMessageDialog(null, message);
+	}
 }
 

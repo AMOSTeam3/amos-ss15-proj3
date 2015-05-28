@@ -324,6 +324,13 @@ public class Tracker {
         requirementsTraceabilityMatrixByImpact.Process();
         return requirementsTraceabilityMatrixByImpact;
     }
+    /**
+     * This method return the current repository name.
+     * @return
+     */
+    public String getRepostoryName(){
+        return vcsClient.getRepositoryName();
+	}
 }
 /**
  * class for Thread of Traceability Matrix processing

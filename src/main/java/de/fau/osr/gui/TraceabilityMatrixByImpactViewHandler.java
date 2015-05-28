@@ -1,19 +1,33 @@
 package de.fau.osr.gui;
 
-import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
-import de.fau.osr.util.matrix.MatrixTools;
-
-import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
+import javax.swing.AbstractListModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
+import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
+import de.fau.osr.gui.util.UiTools;
+import de.fau.osr.util.matrix.MatrixTools;
 /**
- * This class is the GUI for requirement traceability by impact value
+ * This class is the GUI for showing the requirement traceability by impact value
  * @author Gayathery Sathya
  */
 public class TraceabilityMatrixByImpactViewHandler extends JFrame {
@@ -44,7 +58,8 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
      * Create the frame.
      */
     public TraceabilityMatrixByImpactViewHandler() {
-        setTitle("Spice Traceability - Traceability Matrix by Impact");
+        final String title = "Spice Traceability - Traceability Matrix by Impact";
+        setTitle(title);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 999, 686);
         contentPane = new JPanel();
@@ -63,14 +78,20 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
         JButton btnToCsv = new JButton("To CSV");
         btnToCsv.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MatrixTools.SaveMatrixToCsv(requirementsTraceabilityMatrixByImpact, chooseFile("result.csv"));
+            		String filename = getFileName(MatrixTools.ExportType.CSV);
+            		boolean result = MatrixTools.SaveMatrixToCsv(requirementsTraceabilityMatrixByImpact, 
+            				UiTools.chooseFile(filename));
+            		UiTools.dialogStatusMessage(result, filename);
             }
         });
 
         JButton btnToPdf = new JButton("To PDF");
         btnToPdf.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MatrixTools.SaveMatrixToPdf(requirementsTraceabilityMatrixByImpact, chooseFile("result.pdf"));
+            	String filename = getFileName(MatrixTools.ExportType.PDF);
+                boolean result = MatrixTools.SaveMatrixToPdf(requirementsTraceabilityMatrixByImpact, 
+                                 UiTools.chooseFile(filename),title);
+                UiTools.dialogStatusMessage(result, filename);
             }
         });
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -182,20 +203,11 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
     }
 
 
-    //todo move to gui utils?
-    private File chooseFile(String filename) {
-//        final String ext = extension;
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Specify a file to save");
-        fileChooser.setSelectedFile(new File(filename));
-
-        int userSelection = fileChooser.showSaveDialog(this);
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            return fileChooser.getSelectedFile();
-        }
-        return null;
-    }
+    public String getFileName(MatrixTools.ExportType exportType){
+		String prefix = "TraceabilityMatrix";
+		return MatrixTools.generateFileName(exportType,prefix,
+					requirementsTraceabilityMatrixByImpact.getRepositoryName(),'_');
+	}
 
 
 

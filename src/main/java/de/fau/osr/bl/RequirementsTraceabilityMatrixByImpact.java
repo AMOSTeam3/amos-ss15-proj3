@@ -97,6 +97,9 @@ public class RequirementsTraceabilityMatrixByImpact {
         return requirementTraceabilityByImpactMatrix.get(reqFilePair);
     }
 
+    public String getRepositoryName() {
+        return  tracker.getRepostoryName();
+    }
 
 }
 

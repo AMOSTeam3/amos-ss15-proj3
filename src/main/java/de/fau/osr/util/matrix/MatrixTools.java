@@ -1,20 +1,32 @@
 package de.fau.osr.util.matrix;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import de.fau.osr.bl.RequirementFileImpactValue;
-import de.fau.osr.bl.RequirementFilePair;
-import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import au.com.bytecode.opencsv.CSVWriter;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import de.fau.osr.bl.RequirementFileImpactValue;
+import de.fau.osr.bl.RequirementFilePair;
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 
 /**
  * static tools for matrix
@@ -23,19 +35,23 @@ import java.util.List;
  * Created by Dmitry Gorelenkov on 20.05.2015.
  */
 public class MatrixTools {
+	
+	public static enum ExportType {
+		PDF,CSV;
+	}
 
     /**
      * saves matrix to {@code path} in csv format
      * @param matrix matrix to save
      * @param path file where matrix will be saved
      */
-    public static void SaveMatrixToCsv(RequirementsTraceabilityMatrixByImpact matrix, File path) {
+	public static boolean SaveMatrixToCsv(RequirementsTraceabilityMatrixByImpact matrix, File path) {
         OutputStreamWriter writer;
         try {
             writer = new OutputStreamWriter(new FileOutputStream(path, true), Charset.forName("UTF-8"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
 
         try (CSVWriter csvwriter = new CSVWriter(writer, ';')) {
@@ -70,7 +86,7 @@ public class MatrixTools {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return  true;
 
     }
 
@@ -80,12 +96,12 @@ public class MatrixTools {
      * @param matrix matrix to save
      * @param path file where matrix will be saved
      */
-    public static void SaveMatrixToPdf(RequirementsTraceabilityMatrixByImpact matrix, File path) {
+	public static boolean SaveMatrixToPdf(RequirementsTraceabilityMatrixByImpact matrix, File path,String matrixTitle) {
         Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream(path));
             document.open();
-            document.addTitle("Traceability Matrix");
+            document.addTitle(matrixTitle);
 
             Paragraph headerPar = new Paragraph("Traceability Matrix");
             headerPar.add(new Paragraph(" ")); //new line
@@ -145,10 +161,42 @@ public class MatrixTools {
 
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         } finally {
             document.close();
         }
+        return true;
 
+    }
+	
+	/**
+     * This method returns the file name for the generated traceability matrix.
+     * @param Export file type 
+     * @param Prefix for the file name 
+     * @param name of the file Git repository name + timestamp
+     * @param seperator 
+     * @return
+     */
+    public static String generateFileName(ExportType exportType,String prefix,String name,char seperator){
+    	StringBuffer filename = new StringBuffer();
+    	filename.append(prefix);
+    	filename.append(seperator);
+    	filename.append(name);
+    	filename.append(seperator);
+    	filename.append(getCurrentTimestamp());
+    	if(exportType.equals(ExportType.PDF))
+    		filename.append(".pdf");
+    	if(exportType.equals(ExportType.CSV))
+    		filename.append(".csv");
+    	return filename.toString();
+    }
+    
+    /**
+     * This is a utility method to format the date timestamp.
+     * @return
+     */
+    private static String getCurrentTimestamp(){
+    	return new SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(new Date());
     }
 
     /**
