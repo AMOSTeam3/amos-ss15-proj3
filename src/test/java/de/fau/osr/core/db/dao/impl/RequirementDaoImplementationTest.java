@@ -21,10 +21,10 @@ public class RequirementDaoImplementationTest {
 		Requirement r = prepareData();
 		assertTrue(dao.persist(DBOperation.ADD,r));
 		
-		List<Requirement> l = dao.getAllRequirement();
+		/*List<Requirement> l = dao.getAllRequirement();
 		System.out.println(l.size());
 		assertNotNull(l);
-		
+		*/
 		r.setDescription("upd");
 		assertTrue(dao.persist(DBOperation.UPDATE, r));
 		
