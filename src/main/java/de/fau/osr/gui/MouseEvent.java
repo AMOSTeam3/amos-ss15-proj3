@@ -7,7 +7,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
-enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, RequirementsAndCommitsAndCodeFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit, RequirementsAndFilesFromCommit, CommitsAndCodeFromRequirementAndFile, RequirementToLinkage, CommitToLinkage, RequirmentsFromCode};
+enum Action {CommitsAndFilesFromRequirement, FilesFromCommit, CodeFromFile, RequirementsAndCommitsAndCodeFromFile, CommitsFromRequirementAndFile, RequirementsFromFileAndCommit, RequirementsAndFilesFromCommit, CommitsAndCodeFromRequirementAndFile, RequirementToLinkage, CommitToLinkage, RequirmentsFromCode}
 
 public class MouseEvent implements MouseListener {
 

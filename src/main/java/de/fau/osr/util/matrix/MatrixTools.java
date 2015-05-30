@@ -27,7 +27,7 @@ import java.util.List;
 public class MatrixTools {
 
     public static enum ExportType {
-        PDF,CSV;
+        PDF,CSV
     }
 
     /**
@@ -161,8 +161,8 @@ public class MatrixTools {
 
     /**
      * This method returns the file name for the generated traceability matrix.
-     * @param Export file type 
-     * @param Prefix for the file name 
+     * @param exportType file type
+     * @param prefix for the file name
      * @param name of the file Git repository name + timestamp
      * @param seperator 
      * @return
