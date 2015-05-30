@@ -1,31 +1,19 @@
 package de.fau.osr.gui;
 
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.AbstractListModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListModel;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
-
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
+import de.fau.osr.gui.Components.Renderer.RowHeaderRenderer;
 import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
 import de.fau.osr.gui.util.UiTools;
 import de.fau.osr.util.matrix.MatrixTools;
+
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 /**
  * This class is the GUI for showing the requirement traceability by impact value
  * @author Gayathery Sathya
