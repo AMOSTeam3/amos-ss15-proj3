@@ -21,3 +21,4 @@ log/
 #compiled version
 /out/
 dataSource.csv
+/src/main/resources/hibernate.cfg.xml
