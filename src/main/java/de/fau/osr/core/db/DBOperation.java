@@ -7,5 +7,5 @@ package de.fau.osr.core.db;
  *
  */
 public enum DBOperation {
-	ADD,UPDATE,DELETE
+    ADD,UPDATE,DELETE
 }

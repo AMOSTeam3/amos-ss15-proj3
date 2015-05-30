@@ -1,17 +1,10 @@
 package de.fau.osr.core.vcs.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
-
+import com.beust.jcommander.internal.Lists;
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.interfaces.VcsClient;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -38,12 +31,13 @@ import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.internal.Lists;
-
-import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.vcs.base.CommitFile;
-import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.interfaces.VcsClient;
+import java.io.*;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * VCS Client implementation for Git
@@ -301,21 +295,21 @@ public class GitVcsClient extends VcsClient{
     }
     
     /**
-	 * This method returns the current repository name.This method is used in setting the file name for file export options.
-	 * @return
-	 */
-	@Override
-	public String getRepositoryName(){
+     * This method returns the current repository name.This method is used in setting the file name for file export options.
+     * @return
+     */
+    @Override
+    public String getRepositoryName(){
             StoredConfig c = repo.getConfig();
         try{
-        	String url = c.getString("remote", "origin","url");
-        	if(url!= null && !url.isEmpty()){
-				return url.substring(url.lastIndexOf('/') +1);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			
-		}
-		return ".git";
-	}
+            String url = c.getString("remote", "origin","url");
+            if(url!= null && !url.isEmpty()){
+                return url.substring(url.lastIndexOf('/') +1);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+
+        }
+        return ".git";
+    }
 }

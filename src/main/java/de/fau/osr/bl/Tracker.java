@@ -330,7 +330,7 @@ public class Tracker {
      */
     public String getRepostoryName(){
         return vcsClient.getRepositoryName();
-	}
+    }
 }
 /**
  * class for Thread of Traceability Matrix processing

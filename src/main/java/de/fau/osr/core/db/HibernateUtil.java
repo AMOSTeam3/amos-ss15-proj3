@@ -15,35 +15,35 @@ import org.slf4j.LoggerFactory;
  */
 public class HibernateUtil {
 
-	static Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
-	
-	private static SessionFactory sessionFactory ;
+    static Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
+
+    private static SessionFactory sessionFactory ;
    
-	static {
-		logger.debug("Static call : getsession factory() start::");
-		
-		Configuration configuration = new Configuration().configure();
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+    static {
+        logger.debug("Static call : getsession factory() start::");
+
+        Configuration configuration = new Configuration().configure();
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
         sessionFactory = configuration.buildSessionFactory(builder.build());
         
         logger.debug("Static call : getsession factory() end::");
     }
   
-	public static SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory() {
        return sessionFactory;
    }
    
-	public static void shutdown() {
-		getSessionFactory().close();
-	}
+    public static void shutdown() {
+        getSessionFactory().close();
+    }
 
-	public static Session getSession() {
-		return sessionFactory.openSession();
-	}
+    public static Session getSession() {
+        return sessionFactory.openSession();
+    }
 
-	public void closeSession(Session session) {
-		session.clear();
-		session.close();
-	}
-	
+    public void closeSession(Session session) {
+        session.clear();
+        session.close();
+    }
+
 }
