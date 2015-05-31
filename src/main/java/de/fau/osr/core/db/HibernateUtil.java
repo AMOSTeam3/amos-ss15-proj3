@@ -21,18 +21,7 @@ public class HibernateUtil {
 
     static Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
 
-    private static SessionFactory sessionFactory ;
-    static {
-        logger.debug("Static call : getsession factory() start::");
-
-        //generate configuration
-        Configuration configuration = getConfiguration();
-
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-        sessionFactory = configuration.buildSessionFactory(builder.build());
-        
-        logger.debug("Static call : getsession factory() end::");
-    }
+    private static SessionFactory sessionFactory;
 
     /**
      * generates configuration from hibernate.cfg.xml and adds all persistent classes to it
@@ -48,16 +37,34 @@ public class HibernateUtil {
         return configuration;
     }
 
+    /**
+     * @return singleton session factory
+     */
     public static SessionFactory getSessionFactory() {
-       return sessionFactory;
+
+        if (sessionFactory == null){
+            logger.debug("Static call : getsession factory() start::");
+
+            //generate configuration
+            Configuration configuration = getConfiguration();
+
+            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+            sessionFactory = configuration.buildSessionFactory(builder.build());
+            logger.debug("Static call : getsession factory() end::");
+        }
+
+
+
+        return sessionFactory;
    }
    
     public static void shutdown() {
         getSessionFactory().close();
+        sessionFactory = null;
     }
 
     public static Session getSession() {
-        return sessionFactory.openSession();
+        return getSessionFactory().openSession();
     }
 
     public void closeSession(Session session) {

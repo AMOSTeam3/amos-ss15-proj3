@@ -33,7 +33,13 @@ public class DBTestHelper {
      */
     public static Configuration createH2Configuration(){
         // get original configuration
-        Configuration configuration = HibernateUtil.getConfiguration();
+        Configuration configuration = new Configuration();
+
+        //add persistent classes
+        for(Class<?> clazz : HibernateUtil.getPersistentClasses())
+        {
+            configuration.addAnnotatedClass(clazz);
+        }
 
         //change connection settings
         configuration.setProperty("hibernate.dialect",
