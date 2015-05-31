@@ -59,7 +59,28 @@ public class Requirement {
         this.storyPoint = storyPoint;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Requirement)) return false;
 
+        Requirement that = (Requirement) o;
+
+        if (storyPoint != that.storyPoint) return false;
+        if (!id.equals(that.id)) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        return !(description != null ? !description.equals(that.description) : that.description != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + storyPoint;
+        return result;
+    }
 
 
 }
