@@ -24,7 +24,15 @@ public class RequirementDaoImplementation implements RequirementDao{
 
     static Logger logger = LoggerFactory.getLogger(RequirementDaoImplementation.class);
 
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    SessionFactory sessionFactory;
+
+    public RequirementDaoImplementation(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public RequirementDaoImplementation() {
+        this.sessionFactory = HibernateUtil.getSessionFactory();
+    }
 
 
     @Override
@@ -50,7 +58,9 @@ public class RequirementDaoImplementation implements RequirementDao{
                    t.commit();
 
                }catch (HibernateException e) {
-                   t.rollback();
+                   if (t != null) {
+                       t.rollback();
+                   }
                    throw e;
                }finally {
                     session.close();
@@ -71,7 +81,7 @@ public class RequirementDaoImplementation implements RequirementDao{
     public List<Requirement> getAllRequirement() {
 
         logger.debug("DB:getAllrequirements() start()");
-        List<Requirement> requirements = new ArrayList<Requirement>();
+        List<Requirement> requirements = new ArrayList<>();
         try {
              Session session=sessionFactory.openSession();
               try{
@@ -93,8 +103,24 @@ public class RequirementDaoImplementation implements RequirementDao{
 
     @Override
     public Requirement getRequirementById(String id) {
-        // TODO Auto-generated method stub
-        return null;
+        Requirement requirement = null;
+        try {
+            Session session=sessionFactory.openSession();
+            try{
+                requirement = (Requirement) session.get(Requirement.class, id);
+            }catch (HibernateException e) {
+                throw e;
+            }finally {
+                session.close();
+            }
+
+        }
+        catch (RuntimeException re) {
+            re.printStackTrace();
+
+        }
+
+        return requirement;
     }
 
 
