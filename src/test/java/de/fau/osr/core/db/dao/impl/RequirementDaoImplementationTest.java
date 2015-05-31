@@ -1,39 +1,147 @@
 package de.fau.osr.core.db.dao.impl;
 
+import de.fau.osr.core.db.DBOperation;
+import de.fau.osr.core.db.DBTestHelper;
 import de.fau.osr.core.db.dao.RequirementDao;
 import de.fau.osr.core.db.domain.Requirement;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class RequirementDaoImplementationTest {
+    RequirementDao dao;
+    private SessionFactory currentSessionFactory;
 
-    RequirementDao dao = new RequirementDaoImplementation();
-
-
-//    @Test
-//    public void testAdd() {
-//        Requirement r = prepareData();
-//        assertTrue(dao.persist(DBOperation.ADD,r));
-//
-//        /*List<Requirement> l = dao.getAllRequirement();
-//        System.out.println(l.size());
-//        assertNotNull(l);
-//        */
-//        r.setDescription("upd");
-//        assertTrue(dao.persist(DBOperation.UPDATE, r));
-//
-//        assertTrue(dao.persist(DBOperation.DELETE, r));
-//    }
-
-
-
-    public Requirement prepareData(){
+    /**
+     * generates some random requirement
+     * @return generated requirement
+     */
+    private Requirement genRandomReq(){
         Requirement r = new Requirement();
         r.setId("Test"+Math.random());
-        r.setTitle("title-test");
-        r.setDescription("desc-test");
-        r.setStoryPoint(1);
+        r.setTitle("title-test"+Math.random());
+        r.setDescription("desc-test"+Math.random());
+        r.setStoryPoint(new Random().nextInt(10));
         return r;
     }
 
 
+    @Before
+    public void before() {
+        currentSessionFactory = DBTestHelper.createH2SessionFactory();
+        dao = new RequirementDaoImplementation(currentSessionFactory);
+    }
 
+
+    @Test
+    public void persist_addedRequirement_shouldExists() throws Exception {
+        //given
+        Session session = currentSessionFactory.openSession();
+        Requirement tempRequirement = genRandomReq();
+
+        //when add temp req
+        dao.persist(DBOperation.ADD, tempRequirement);
+
+        //then same req could be loaded from db
+        Requirement reqFromDb = (Requirement) session.get(tempRequirement.getClass(), tempRequirement.getId());
+        assertEquals(tempRequirement, reqFromDb);
+    }
+
+    @Test
+    public void getAllRequirementTest() throws Exception {
+        //this test expects that persist method works
+
+        //should be empty at beginning
+        assertTrue(dao.getAllRequirement().size() == 0);
+
+        Requirement tempRequirement = genRandomReq();
+        ArrayList<Requirement> addedReqs = new ArrayList<>();
+
+        //when add one
+        addedReqs.add(tempRequirement);
+        dao.persist(DBOperation.ADD, tempRequirement);
+        //then
+        assertEquals(addedReqs, dao.getAllRequirement());
+
+        //when add 1000 more
+        for (int i = 0; i < 1000; i++) {
+            Requirement requirement = genRandomReq();
+            addedReqs.add(requirement);
+            dao.persist(DBOperation.ADD, requirement);
+        }
+        //then
+        assertEquals(addedReqs, dao.getAllRequirement());
+
+        //when remove 1
+        dao.persist(DBOperation.DELETE, tempRequirement);
+        addedReqs.remove(tempRequirement);
+        //then
+        assertEquals(addedReqs, dao.getAllRequirement());
+
+        //when remove all one by one
+        for (Requirement req : dao.getAllRequirement()) {
+            dao.persist(DBOperation.DELETE, req);
+        }
+        //then is empty
+        assertTrue(dao.getAllRequirement().isEmpty());
+    }
+
+    @Test
+    public void getRequirementByIdTest_existsOne_shouldBeReturned() throws Exception {
+        //given
+        Requirement tempRequirement = genRandomReq();
+        dao.persist(DBOperation.ADD, tempRequirement);
+        //when
+        Requirement fromDb = dao.getRequirementById(tempRequirement.getId());
+        //then
+        assertEquals(tempRequirement, fromDb);
+    }
+
+    @Test
+    public void getRequirementByIdTest_existsMany_oneShouldBeReturned() throws Exception {
+        //given
+        Requirement someMiddleAddedReq = null;
+        for (int i = 0; i < 1000; i++) {
+            Requirement reqToAdd = genRandomReq();
+
+            if (i == 815){
+                someMiddleAddedReq = reqToAdd;
+            }
+
+            dao.persist(DBOperation.ADD, reqToAdd);
+        }
+        //when
+        assertNotNull(someMiddleAddedReq); //to be sure
+        Requirement fromDb = dao.getRequirementById(someMiddleAddedReq.getId());
+        //then
+        assertEquals(someMiddleAddedReq, fromDb);
+    }
+
+    @Test
+    public void getRequirementByIdTest_DbIsEmpty_shouldReturnNull() throws Exception {
+        //given
+        Requirement tempRequirement = genRandomReq();
+        //when
+        Requirement fromDb = dao.getRequirementById(tempRequirement.getId());
+        //then
+        assertNull(fromDb);
+    }
+
+    @Test
+    public void getRequirementByIdTest_getNotExistsIdFromFilledDb_shouldReturnNull() throws Exception {
+        //given
+        for (int i = 0; i < 1000; i++) {
+            dao.persist(DBOperation.ADD, genRandomReq());
+        }
+        //when
+        Requirement fromDb = dao.getRequirementById("this id should not exists in db");
+        //then
+        assertNull("queried non existing id, returned some not null object", fromDb);
+    }
 }
