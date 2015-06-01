@@ -1,10 +1,7 @@
 package de.fau.osr.gui;
 
 import com.google.common.base.Predicate;
-import de.fau.osr.core.db.CSVFileDataSource;
-import de.fau.osr.core.db.CompositeDataSource;
-import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.db.VCSDataSource;
+import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
@@ -523,7 +520,8 @@ public class GuiController {
         if (ds == null) {
             CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
             VCSDataSource vcsDs = new VCSDataSource(vcs, new CommitMessageParser(reqPattern));
-            ds = new CompositeDataSource(csvDs, vcsDs);
+            DBDataSource dbDs = new DBDataSource();
+            ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
         }
 
         return new GUITrackerToModelAdapter(vcs, ds, repoFile, reqPattern);

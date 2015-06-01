@@ -14,6 +14,10 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
+/**
+ * This tests are mostly for AbstractDefaultDao class
+ * Created by Dmitry Gorelenkov on 01.06.2015.
+ */
 public class RequirementDaoImplementationTest {
     RequirementDao dao;
     private SessionFactory currentSessionFactory;
@@ -58,7 +62,7 @@ public class RequirementDaoImplementationTest {
         //this test expects that persist method works
 
         //should be empty at beginning
-        assertTrue(dao.getAllRequirement().size() == 0);
+        assertTrue(dao.getAllRequirements().size() == 0);
 
         Requirement tempRequirement = genRandomReq();
         ArrayList<Requirement> addedReqs = new ArrayList<>();
@@ -67,7 +71,7 @@ public class RequirementDaoImplementationTest {
         addedReqs.add(tempRequirement);
         dao.persist(DBOperation.ADD, tempRequirement);
         //then
-        assertEquals(addedReqs, dao.getAllRequirement());
+        assertEquals(addedReqs, dao.getAllRequirements());
 
         //when add 1000 more
         for (int i = 0; i < 1000; i++) {
@@ -76,20 +80,20 @@ public class RequirementDaoImplementationTest {
             dao.persist(DBOperation.ADD, requirement);
         }
         //then
-        assertEquals(addedReqs, dao.getAllRequirement());
+        assertEquals(addedReqs, dao.getAllRequirements());
 
         //when remove 1
         dao.persist(DBOperation.DELETE, tempRequirement);
         addedReqs.remove(tempRequirement);
         //then
-        assertEquals(addedReqs, dao.getAllRequirement());
+        assertEquals(addedReqs, dao.getAllRequirements());
 
         //when remove all one by one
-        for (Requirement req : dao.getAllRequirement()) {
+        for (Requirement req : dao.getAllRequirements()) {
             dao.persist(DBOperation.DELETE, req);
         }
         //then is empty
-        assertTrue(dao.getAllRequirement().isEmpty());
+        assertTrue(dao.getAllRequirements().isEmpty());
     }
 
     @Test
