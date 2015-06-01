@@ -81,7 +81,7 @@ public class MouseEvent implements MouseListener {
                 guiController.CommitToLinkage(value10);
                 break;
             case RequirmentsFromCode:
-                guiController.requirementsFromCode(getSelectedCommitFile(), guiController.code_JList.getSelectedIndex());
+//              guiController.requirementsFromCode(getSelectedCommitFile(), guiController.code_JList.getSelectedIndex());
                 break;
             }
         } catch (IOException ex) {
