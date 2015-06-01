@@ -14,6 +14,10 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
+/**
+ * This tests are mostly for AbstractDefaultDao class
+ * Created by Dmitry Gorelenkov on 01.06.2015.
+ */
 public class RequirementDaoImplementationTest {
     RequirementDao dao;
     private SessionFactory currentSessionFactory;
