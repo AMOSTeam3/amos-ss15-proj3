@@ -78,7 +78,7 @@ public class RequirementDaoImplementation implements RequirementDao{
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Requirement> getAllRequirement() {
+    public List<Requirement> getAllRequirements() {
 
         logger.debug("DB:getAllrequirements() start()");
         List<Requirement> requirements = new ArrayList<>();

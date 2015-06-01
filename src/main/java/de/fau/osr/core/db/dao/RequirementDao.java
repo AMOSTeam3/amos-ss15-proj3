@@ -14,7 +14,7 @@ import java.util.List;
 public interface RequirementDao {
 
     boolean persist(DBOperation dbOperation,Requirement requirement);
-    List<Requirement> getAllRequirement();
+    List<Requirement> getAllRequirements();
     Requirement getRequirementById(String id);
 
 
