@@ -1,5 +1,6 @@
 package de.fau.osr.core.db;
 
+import de.fau.osr.core.db.domain.Commit;
 import de.fau.osr.core.db.domain.Requirement;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -86,6 +87,7 @@ public class HibernateUtil {
         //hardcoded way for now
         Set<Class<?>> classes = new HashSet<>();
         classes.add(Requirement.class);
+        classes.add(Commit.class);
 
         return classes;
     }

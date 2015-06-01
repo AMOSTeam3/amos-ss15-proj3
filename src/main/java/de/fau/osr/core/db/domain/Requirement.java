@@ -1,9 +1,8 @@
 package de.fau.osr.core.db.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Gayathery
@@ -15,7 +14,7 @@ import javax.persistence.Table;
 public class Requirement {
 
     @Id
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     private String id;  
 
     @Column(name="title")
@@ -26,6 +25,17 @@ public class Requirement {
 
     @Column(name="story_point")
     private int storyPoint;
+
+
+    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinTable(name="requirements_commits",
+            joinColumns={@JoinColumn(name="req_id")},
+            inverseJoinColumns={@JoinColumn(name="commit_id")})
+    private Set<Commit> commits = new HashSet<>();
+
+    public Set<Commit> getCommits() {return commits;}
+    public void setCommits(Set<Commit> commits) {this.commits = commits;}
+    
 
     public String getId() {
         return id;
