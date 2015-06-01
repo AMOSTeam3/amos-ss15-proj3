@@ -24,11 +24,26 @@ public class Commit {
     public void setRequirements(Set<Requirement> reqs) {this.reqs = reqs;}
     private Set<Requirement> reqs = new HashSet<>();
 
-//    public Commit(String id) {
-//        this.id = id;
-//    }
+    public Commit() {}
+
+    public Commit(String id) {
+        this.id = id;
+    }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Commit)) return false;
 
+        Commit commit = (Commit) o;
 
+        return id.equals(commit.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
