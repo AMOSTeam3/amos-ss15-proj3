@@ -22,7 +22,7 @@ public abstract class DataSource {
      * @return SetMultimap of relations
      * @throws IOException
      */
-    public abstract SetMultimap<String, String> doGetAllReqCommitRelations() throws IOException;
+    protected abstract SetMultimap<String, String> doGetAllReqCommitRelations() throws IOException;
     protected abstract void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException ;
     protected abstract void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException;
 
