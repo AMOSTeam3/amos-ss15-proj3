@@ -89,6 +89,10 @@ public class GuiController {
                         }
                         guiView.showErrorDialog(e.getMessage());
                         handleError();
+                    } catch (Exception e){
+                        Status = RetryStatus.Exit;
+                        guiView.showErrorDialog("Fatal Error:\n" + e.getMessage());
+                        handleError();
                     }
                 }
 
