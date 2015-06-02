@@ -47,7 +47,7 @@ public class VcsControllerTest {
     }
     
     /**
-     * Test method for {@link org.amos.core.vcs.base.VcsController#getBranchList()}.
+     * Test method for {@link de.fau.osr.core.vcs.interfaces.VcsClient#getBranchList()}.
      */
     @Test
     public void testGetBranchList() {
@@ -59,7 +59,7 @@ public class VcsControllerTest {
     }
 
     /**
-     * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitList()}.
+     * Test method for {@link de.fau.osr.core.vcs.interfaces.VcsClient#getCommitList()}.
      */
     @Test
     public void testGetCommitList() {
@@ -70,7 +70,7 @@ public class VcsControllerTest {
     }
 
     /**
-     * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitFiles(java.lang.String)}.
+     * Test method for {@link de.fau.osr.core.vcs.interfaces.VcsClient#getCommitFiles(java.lang.String)}.
      */
     @Test
     public void testGetCommitFiles() {
@@ -85,7 +85,7 @@ public class VcsControllerTest {
     }
 
     /**
-     * Test method for {@link org.amos.core.vcs.base.VcsController#getCommitMessage(java.lang.String)}.
+     * Test method for {@link de.fau.osr.core.vcs.interfaces.VcsClient#getCommitMessage(java.lang.String)}.
      */
     @Test
     public void getCommitMessageSimpleTest() {

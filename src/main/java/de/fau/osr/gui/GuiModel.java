@@ -58,8 +58,8 @@ public interface GuiModel {
 
     String[] getRequirementsForBlame(int lineIndex, CommitFile file) throws FileNotFoundException, IOException, GitAPIException;
 
-    public RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
+    RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
 
-    public RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
+    RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
 
 }

@@ -197,7 +197,7 @@ public class GuiView{
 
     /**
      * Showing all Elements of the JList parameter in the Commit_Scrollpane
-     * @param commitMessage_JList containing the Elements to be displayed
+     * @param commitMessages_JList containing the Elements to be displayed
      */
     void showCommits(JList<String> commitMessages_JList) {
         JPanel panel = new JPanel(new GridLayout());
