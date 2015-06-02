@@ -21,6 +21,7 @@ public class RequirementsTraceabilityMatrixByImpact {
         this.tracker = tracker;
         requirements = new ArrayList<String>();
         files = new ArrayList<String>();
+        processProgress = 0;
     }
     /**
      * method to process the data behind the generation of traceability matrix
