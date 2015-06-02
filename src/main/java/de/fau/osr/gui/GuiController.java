@@ -1,8 +1,9 @@
 package de.fau.osr.gui;
 
 import com.google.common.base.Predicate;
-
 import de.fau.osr.core.db.*;
+import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
+import de.fau.osr.core.db.domain.Requirement;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
@@ -11,13 +12,12 @@ import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-
 import java.awt.*;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -135,6 +135,21 @@ public class GuiController {
         String[] requirements = guiModel.getAllRequirements(requirementIDFiltering);
         requirements_JList = new JList<String>(requirements);
         guiView.showRequirements(requirements_JList);
+        requirements_JList.addMouseMotionListener(new MouseMotionAdapter() {
+
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                JList l = (JList)e.getSource();
+                ListModel m = l.getModel();
+                int index = l.locationToIndex(e.getPoint());
+                if (index > -1) {
+                    String id = m.getElementAt(index).toString();
+                    Requirement req = new RequirementDaoImplementation().getRequirementById(id);
+                    String tooltip = (req != null) ? req.getTitle() + "<br>" + req.getDescription() : "";
+                    l.setToolTipText("<html><p>" + tooltip + "</p></html>");
+                }
+            }
+        });
 
         guiView.addMouseListener(requirements_JList, new MouseEvent(this, Action.CommitsAndFilesFromRequirement));
     }
