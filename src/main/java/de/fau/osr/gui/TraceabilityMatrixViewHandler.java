@@ -8,6 +8,7 @@ import de.fau.osr.util.matrix.MatrixIndex;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
