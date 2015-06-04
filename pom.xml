@@ -9,5 +9,6 @@
     <modules>
         <module>amos-ss15-proj3-backend</module>
         <module>amos-ss15-proj3-gui</module>
+        <module>amos-ss15-proj3-eclipse</module>
     </modules>
 </project>
