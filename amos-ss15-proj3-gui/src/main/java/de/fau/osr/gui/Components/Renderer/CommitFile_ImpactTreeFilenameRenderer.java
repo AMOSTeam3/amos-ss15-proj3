@@ -39,6 +39,6 @@ public class CommitFile_ImpactTreeFilenameRenderer extends CommitFile_SimpleTree
             }
         }
 
-        element.setText(String.format("%s - %f", commitFile.newPath.toPath().getFileName().toString(), commitFile.impact));
+        element.setText(String.format("%s - %-3.1f", commitFile.newPath.toPath().getFileName().toString(), commitFile.impact));
     }
 }
