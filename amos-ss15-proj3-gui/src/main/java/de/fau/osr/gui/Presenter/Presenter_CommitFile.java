@@ -22,7 +22,7 @@ public class Presenter_CommitFile {
     
     @Override
     public String toString(){
-        return String.format("%s - %-3.1f", commitFile.newPath.toPath().getFileName().toString(), commitFile.impact);
+        return String.format("%s - %-3.1f%%", commitFile.newPath.toPath().getFileName().toString(), commitFile.impact);
     }
     
     public boolean isAvailable(){
