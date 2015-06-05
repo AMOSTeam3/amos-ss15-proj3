@@ -3,7 +3,6 @@ package de.fau.osr.core.db;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.collect.HashMultimap;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -53,7 +52,7 @@ public class CSVFileDataSource extends DataSource {
 
     @Override
     public void doRemoveReqCommitRelation(String reqId, String commit) throws IOException {
-        throw new NotImplementedException(); //TODO
+        throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
