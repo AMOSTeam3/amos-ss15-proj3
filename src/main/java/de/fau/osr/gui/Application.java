@@ -2,6 +2,7 @@ package de.fau.osr.gui;
 
 
 import de.fau.osr.core.db.HibernateUtil;
+import de.fau.osr.gui.Controller.GuiController;
 
 public class Application {
     static GuiController guiController;

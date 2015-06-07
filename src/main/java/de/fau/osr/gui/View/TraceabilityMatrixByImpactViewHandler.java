@@ -1,10 +1,10 @@
-package de.fau.osr.gui;
+package de.fau.osr.gui.View;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.gui.Components.Renderer.RowHeaderRenderer;
 import de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel;
 import de.fau.osr.gui.util.UiTools;
 import de.fau.osr.util.matrix.MatrixTools;
+import de.fau.osr.gui.View.Renderer.RowHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;

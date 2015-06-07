@@ -1,7 +1,7 @@
-package de.fau.osr.gui;
+package de.fau.osr.gui.View;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
-import de.fau.osr.gui.Components.Renderer.RowHeaderRenderer;
+import de.fau.osr.gui.View.Renderer.RowHeaderRenderer;
 import de.fau.osr.gui.util.MatrixTableModel;
 import de.fau.osr.util.matrix.MatrixIndex;
 

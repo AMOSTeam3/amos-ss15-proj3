@@ -1,4 +1,4 @@
-package de.fau.osr.gui.Components.Renderer;
+package de.fau.osr.gui.View.Renderer;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -10,7 +10,7 @@ public class RowHeaderRenderer<E> extends JLabel implements ListCellRenderer<E> 
         JTableHeader header = table.getTableHeader();
         setOpaque(true);
         setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-        setHorizontalAlignment(LEFT);
+        setHorizontalAlignment(RIGHT);
         setForeground(header.getForeground());
         setBackground(header.getBackground());
         setFont(header.getFont());

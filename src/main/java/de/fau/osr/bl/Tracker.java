@@ -3,6 +3,7 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -11,9 +12,11 @@ import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
+import de.fau.osr.gui.Model.I_Model;
+import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +32,7 @@ import java.util.regex.Pattern;
 /**
  * This class is an interpreter for data from Vcs and Database
  */
-public class Tracker {
+public class Tracker implements I_Model{
 
     File repoFile;
 

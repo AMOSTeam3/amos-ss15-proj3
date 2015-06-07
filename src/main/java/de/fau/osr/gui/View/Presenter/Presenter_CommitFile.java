@@ -1,11 +1,17 @@
-package de.fau.osr.gui.Presenter;
+package de.fau.osr.gui.View.Presenter;
 
 import java.awt.Color;
 import java.io.File;
 
-import de.fau.osr.core.vcs.base.CommitFile;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
 
-public class Presenter_CommitFile {
+import de.fau.osr.gui.Controller.Visitor;
+import de.fau.osr.gui.Model.DataElements.CommitFile;
+import de.fau.osr.gui.Model.DataElements.DataElement;
+
+
+public class Presenter_CommitFile extends Presenter{
     private CommitFile commitFile;
 
     public CommitFile getCommitFile() {
@@ -21,7 +27,7 @@ public class Presenter_CommitFile {
     }
     
     @Override
-    public String toString(){
+    public String getText(){
         return String.format("%s - %f", commitFile.newPath.toPath().getFileName().toString(), commitFile.impact);
     }
     
@@ -42,5 +48,22 @@ public class Presenter_CommitFile {
             return Color.WHITE;
         }
     }
+
+    @Override
+    public JLabel present(JLabel defaultLabel) {
+        defaultLabel.setBackground(getColor());
+        defaultLabel.setText(getText());
+        
+        if(!isAvailable()){
+            defaultLabel.setForeground(UIManager
+                    .getColor("Label.disabledForeground"));
+            defaultLabel.setBorder(null);
+        }
+        return defaultLabel;
+    }
     
+    @Override
+    public DataElement visit(Visitor visitor){
+        return visitor.toDataElement(this);
+    }
 }

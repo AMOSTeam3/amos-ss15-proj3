@@ -1,11 +1,13 @@
 package de.fau.osr.util.sorting;
 
-import de.fau.osr.core.vcs.base.CommitFile;
+
 
 import java.util.Comparator;
 
+import de.fau.osr.gui.Model.DataElements.CommitFile;
+
 /**
- * Sort-Strategy for GuiModel to sort files by commit id (=> chronological).
+ * Sort-Strategy for I_Collection_Model to sort files by commit id (=> chronological).
  * @author: Taleh Didover
  */
 public class SortByCommitID implements Comparator<CommitFile> {

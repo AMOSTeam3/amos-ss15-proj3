@@ -1,4 +1,4 @@
-package de.fau.osr.gui;
+package de.fau.osr.gui.View;
 
 import java.io.File;
 

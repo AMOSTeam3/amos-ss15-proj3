@@ -1,10 +1,13 @@
 package de.fau.osr.core.vcs.impl;
 
 import com.beust.jcommander.internal.Lists;
+
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
+
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
