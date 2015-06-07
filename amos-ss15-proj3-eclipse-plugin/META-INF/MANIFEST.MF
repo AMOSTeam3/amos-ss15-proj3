@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: amos-ss15-proj3-eclipse-plugin
+Bundle-SymbolicName: amos-ss15-proj3-eclipse-plugin;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: osr.core.Activator
+Bundle-Vendor: amos
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.workbench,
+ org.eclipse.core.resources;bundle-version="3.9.1",
+ org.eclipse.ui.ide;bundle-version="3.10.2",
+ org.eclipse.jface.text;bundle-version="3.9.2"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: ., lib/amos-ss15-proj3-gui-1.0-SNAPSHOT-jar-with-dependencies.jar
