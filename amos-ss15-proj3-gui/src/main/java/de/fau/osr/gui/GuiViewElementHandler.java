@@ -8,15 +8,77 @@ import de.fau.osr.util.sorting.SortByFilename;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.multi.MultiSplitPaneUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 public class GuiViewElementHandler extends JFrame {
+
+
+    /**
+     * Found on https://gist.github.com/pocket7878/7673893
+     */
+    public class MultiSplitPane extends JPanel {
+        private int orientation;
+        private Boolean needSplit;
+        private Boolean splited;
+        private Component firstChild;
+        private MultiSplitPane private_second_child;
+        private ArrayList<Component> components;
+
+        public MultiSplitPane(int newOrientation) {
+            this.orientation = newOrientation;
+            this.needSplit = false;
+            this.splited = false;
+            this.components = new ArrayList<Component>();
+        }
+
+
+        public Component addComp(Component comp) {
+            this.components.add(comp);
+
+            if(this.splited) {
+                private_second_child.addComp(comp);
+            } else if(this.needSplit) {
+                //Remove first child.
+                this.remove(this.firstChild);
+                //Setup SplitPane
+                this.setLayout(new BorderLayout());
+                JSplitPane splitPane = new JSplitPane(this.orientation);
+                this.add(splitPane,BorderLayout.CENTER);
+                splitPane.setLeftComponent(this.firstChild);
+                this.private_second_child = new MultiSplitPane(this.orientation);
+                this.private_second_child.addComp(comp);
+                splitPane.setRightComponent(this.private_second_child);
+                this.splited = true;
+                splitPane.setContinuousLayout(false);
+            } else {
+                //First child
+                this.firstChild = comp;
+                this.setLayout(new BorderLayout());
+                this.add(comp,BorderLayout.CENTER);
+                //Set flag.
+                this.needSplit = true;
+            }
+            //Validate to redisplay components.
+            this.validate();
+            return comp;
+        }
+
+        public ArrayList<Component> getComps() {
+            return this.components;
+        }
+    }
+
+
+
+
     public enum ButtonState{Deactivate, Activate}
 
     private static final long serialVersionUID = 1L;
@@ -122,6 +184,44 @@ public class GuiViewElementHandler extends JFrame {
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
+        MultiSplitPane p = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        MultiSplitPane v = new MultiSplitPane(JSplitPane.VERTICAL_SPLIT);
+        p.addComp(v);
+        v.addComp(RequirementID_label);
+        v.addComp(RequirementID_scrollPane);
+        v = new MultiSplitPane(JSplitPane.VERTICAL_SPLIT);
+        p.addComp(v);
+        v.addComp(Commit_label);
+        v.addComp(Commit_scrollPane);
+
+//      final String[] Columns_titles = {"ReqId", "Commit", "Files", "#", "Code"};
+//       final String[] Columns_titles = {"ReqId", "Commit"};
+//       Object[][] data = {
+//               {RequirementID_scrollPane},
+//               {Commit_scrollPane},
+//       };
+//       Columns_table = new JTable(data, Columns_titles);
+//
+          layout.setHorizontalGroup(
+                layout.createParallelGroup()
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                                .addComponent(p))
+                        )
+        );
+
+        layout.setVerticalGroup(
+                layout.createParallelGroup()
+                        .addGroup(layout.createSequentialGroup()
+                                        //two rows, one to create linkage, the other one for the rest
+                                        .addGroup(layout.createParallelGroup()
+                                                //GroupLayout.PREFERRED_SIZE in the three arguments prevents the TextFields from scaling to multirow input
+                                                .addComponent(p, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+                        )
+        );
+
+        /*
+
         layout.setHorizontalGroup(
                 layout.createParallelGroup()
                         .addGroup(layout.createSequentialGroup()
@@ -190,7 +290,6 @@ public class GuiViewElementHandler extends JFrame {
                 )
         );
 
-
         //hide vertical scrollbar of req2line
         Requirements2Lines_scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         //synchronize vertical scrolling of code and req2line
@@ -200,8 +299,9 @@ public class GuiViewElementHandler extends JFrame {
 
         //make the requirement column non-resizable and have all elements with the same horizontal size
         layout.linkSize(SwingConstants.HORIZONTAL, RequirementID_button, RequirementID_scrollPane, RequirementID_textField, RequirementSearch_textField);
+        */
 
-        setLayout(layout);
+//        setLayout(layout);
     }
 
     void initializeButtonActions() {
@@ -246,7 +346,7 @@ public class GuiViewElementHandler extends JFrame {
         mntmTraceabilityMatrixByImpact.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
 
-                class TraceabilityMatrixViewerThread implements Runnable{
+                class TraceabilityMatrixViewerThread implements Runnable {
 
                     @Override
                     public void run() {
