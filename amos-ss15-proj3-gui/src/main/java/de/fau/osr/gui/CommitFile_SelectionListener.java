@@ -37,7 +37,7 @@ public class CommitFile_SelectionListener implements TreeSelectionListener {
                     .getLastSelectedPathComponent();
             if (element.getUserObject() instanceof CommitFile) {
                 commitFile = (CommitFile) element.getUserObject();
-                File f = new File(commitFile.newPath.getPath());
+                File f = new File(commitFile.workingCopy, commitFile.newPath.getPath());
                 if (f.exists()) {
                     selectedBefore = element;
 

@@ -109,7 +109,7 @@ public class PublicTestData {
                 if(commitString.length >= 4){
                     String [] filesStrings = commitString[3].split(csvSplitEntriesBy);
                     for(int i = 0; i<filesStrings.length; i = i+3){
-                        files.add(new CommitFile(new File(filesStrings[i]), new File(filesStrings[i+2]), CommitState.valueOf(filesStrings[i+1]),null,""));
+                        files.add(new CommitFile(new File(getGitTestRepo()).getParentFile(), new File(filesStrings[i]), new File(filesStrings[i+2]), CommitState.valueOf(filesStrings[i+1]),null,""));
                     }
                 }
 

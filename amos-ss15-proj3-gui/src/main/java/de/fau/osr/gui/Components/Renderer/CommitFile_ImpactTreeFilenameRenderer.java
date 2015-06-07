@@ -17,7 +17,7 @@ public class CommitFile_ImpactTreeFilenameRenderer extends CommitFile_SimpleTree
     @Override
     protected void changeView(DefaultTreeCellRenderer element, CommitFile commitFile) {
         
-        File f = new File(commitFile.newPath.getPath());
+        File f = new File(commitFile.workingCopy, commitFile.newPath.getPath());
         if (!f.exists()) {
             element.setForeground(UIManager
                     .getColor("Label.disabledForeground"));

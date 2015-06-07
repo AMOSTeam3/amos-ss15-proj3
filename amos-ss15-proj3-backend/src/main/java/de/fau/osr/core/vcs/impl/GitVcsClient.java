@@ -46,7 +46,6 @@ import java.util.regex.Matcher;
 public class GitVcsClient extends VcsClient{
 
     Git git;
-    String repositoryURI;
     Repository repo;
 
     /**
@@ -56,7 +55,7 @@ public class GitVcsClient extends VcsClient{
      */
     public GitVcsClient(String repositoryURI) throws IOException
     {
-        this.repositoryURI = repositoryURI;
+        super(repositoryURI);
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         repo = builder.setGitDir(new File(repositoryURI)).setMustExist(true).build();
         git = new Git(repo);
@@ -161,9 +160,11 @@ public class GitVcsClient extends VcsClient{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            CommitFile commitFile = new CommitFile(new File(diff.getOldPath()),new File(diff.getNewPath()),commitState,commitID,changedData);
-            if(commitFile.commitState == CommitState.DELETED)
-                commitFile.newPath = commitFile.oldPath;
+            File newPath = new File(diff.getNewPath());
+            File oldPath = new File(diff.getOldPath());
+            if(commitState == CommitState.DELETED)
+            	newPath = oldPath;
+            CommitFile commitFile = new CommitFile(getWorkingCopy(), new File(diff.getOldPath()), newPath, commitState, commitID, changedData);
             s.add(commitFile);
             LoggerFactory.getLogger(getClass()).debug(
                     MessageFormat.format("({0} {1} {2})",

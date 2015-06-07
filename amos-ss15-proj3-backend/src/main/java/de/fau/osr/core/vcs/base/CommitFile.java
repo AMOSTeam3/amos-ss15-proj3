@@ -12,21 +12,24 @@ import java.util.Objects;
 public class CommitFile {
 
     public CommitState commitState;
-    public File oldPath;
-    public File newPath;
-    public String commitID;
-    public String changedData;
+    public final File workingCopy;
+    public final File oldPath;
+    public final File newPath;
+    public final String commitID;
+    public final String changedData;
     public float impact;
 
     /**
      * @author Gayathery
+     * @param workingCopy the root directory of the working copy of the vcs
      * @param oldPath
      * @param newPath
      * @param commitState
      * @param commitID
      */
-    public CommitFile(File oldPath, File newPath, CommitState commitState, String commitID,String changedData)
+    public CommitFile(File workingCopy, File oldPath, File newPath, CommitState commitState, String commitID,String changedData)
     {
+    	this.workingCopy = workingCopy;
         this.commitState = commitState;
         this.oldPath = oldPath;
         this.newPath = newPath;

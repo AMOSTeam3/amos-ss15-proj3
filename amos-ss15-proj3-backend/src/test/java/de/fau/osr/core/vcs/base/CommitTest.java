@@ -24,7 +24,7 @@ public class CommitTest {
         reqsList.add("req1");
         reqsList.add("req2");
         commitFileList= (new ArrayList<>());
-        CommitFile commitFile=new CommitFile(new File("."),new File("."),CommitState.RENAMED,"commitID","DataChanged");
+        CommitFile commitFile=new CommitFile(new File("/"), new File("."),new File("."),CommitState.RENAMED,"commitID","DataChanged");
         commitFileList.add(commitFile);
     }
 

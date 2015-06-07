@@ -4,9 +4,11 @@ import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +21,12 @@ import java.util.List;
  */
 public abstract class VcsClient {
 
-    public abstract Iterator<String> getBranchList();
+    protected final String repositoryURI;
+    protected VcsClient(String repositoryURI) {
+    	this.repositoryURI = repositoryURI;
+    }
+
+	public abstract Iterator<String> getBranchList();
     public abstract Iterator<String> getCommitList();
     public abstract String getRepositoryName();
     public abstract ArrayList<CommitFile> getCommitFiles(String commitID);
@@ -53,6 +60,18 @@ public abstract class VcsClient {
      */
     public abstract List<AnnotatedLine> blame(String path,
             DataSource dataSource) throws IOException, GitAPIException;
+    
+    /**
+     * Get the root path of the working copy of this vcs repository.
+     * Does not work with bare repositories.
+     */
+    public File getWorkingCopy() {
+    	/* Currently the assumption that the working copy is always just the
+    	 * parent of the repositoryURI is correct for the only vcs we handle, git.
+    	 * This might have to be changed for other vcses
+    	 */
+    	return new File(repositoryURI).getParentFile(); 
+    }
 
     public class AnnotatedLine {
         /* (non-Javadoc)
