@@ -10,6 +10,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import osr.adapter.PluginSPICETrackerAdaptor;
+
 /**
  * @author Gayathery 
  * 		   This class implements IStartUp interface and performs the
@@ -34,8 +36,10 @@ public class InitClass implements IStartup {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
-            	RegistrySettings.repoURL = UIUtility.inputDialog("Repository Path", "../.git");
-            	RegistrySettings.repoURL = RegistrySettings.repoURL.replaceAll(Matcher.quoteReplacement("\\"), "/");
+                RegistrySettings.repoURL = UIUtility.inputDialog("SPICE Traceability - Preferences : Requirement Path", "../.git","Enter the Git Repository Path");
+                RegistrySettings.repoURL = RegistrySettings.repoURL.replaceAll(Matcher.quoteReplacement("\\"), "/");
+                RegistrySettings.requirementPattern = UIUtility.inputDialog("SPICE Traceability - Preferences : Requirement Pattern", RegistrySettings.requirementPattern,"Enter the Requirement Pattern");
+                PluginSPICETrackerAdaptor.resetInstance();
             }
         });
     }

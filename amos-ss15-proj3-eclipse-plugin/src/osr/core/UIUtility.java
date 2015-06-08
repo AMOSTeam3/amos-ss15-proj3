@@ -31,11 +31,11 @@ public class UIUtility {
 	 * @param presetText
 	 * @return
 	 */
-	public static String inputDialog(String heading, String presetText) {
+	public static String inputDialog(String heading, String presetText,String descText) {
 		String input=null;
 		Display display = PlatformUI.getWorkbench().getDisplay();
 		InputDialog dlg = new InputDialog(display.getActiveShell(), heading,
-				"Enter text", presetText, null);
+		        descText, presetText, null);
 		if (dlg.open() == Window.OK) 
 			input = dlg.getValue();
 		return input;

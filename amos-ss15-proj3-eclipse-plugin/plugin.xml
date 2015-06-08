@@ -20,6 +20,30 @@
             </type>
    </extension>
    <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Spice Config Set"
+            visible="true"
+            id="SpiceTraceabilityConfiguration.actionSet">
+         <menu
+               label="Spice &amp;Traceability"
+               id="spiceMenu">
+            <separator
+                  name="spiceGroup">
+            </separator>
+         </menu>
+         <action
+               label="&amp;Preferences"
+               icon="icons/unnamed.gif"
+               class="osr.core.SpiceTraceabilityConfiguration"
+               tooltip="Preferences"
+               menubarPath="spiceMenu/spiceGroup"
+               toolbarPath="spiceGroup"
+               id="osr.core.SpiceTraceabilityConfiguration">
+         </action>         
+      </actionSet>
+   </extension>
+   <extension
      point="org.eclipse.ui.editors.markerAnnotationSpecification" id="org.amos.requirement.marker.specification">
   <specification
         annotationType="org.amos.requirement.annotationType"

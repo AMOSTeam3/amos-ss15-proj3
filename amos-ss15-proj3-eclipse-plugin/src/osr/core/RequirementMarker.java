@@ -37,6 +37,7 @@ public class RequirementMarker {
 				}
 			}
 		} catch (Exception e) {
+		    //TODO proper handling of exception
 			UIUtility.message("Info","No Traceability info for the File.");
 		}
 	}

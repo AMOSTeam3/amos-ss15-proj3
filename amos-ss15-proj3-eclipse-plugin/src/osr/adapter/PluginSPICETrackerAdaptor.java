@@ -51,6 +51,9 @@ public class PluginSPICETrackerAdaptor {
             return instance;
     }
     
+    public static void resetInstance(){
+        instance = null;
+    }
     /**
      * This method returns the Requirements and the line number markings for the given file served from the backend jar.
      * @param filePath
