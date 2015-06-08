@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="amos-ss15-proj3-eclipse-feature"
-      label="SPICE Traceability IDE Integration"
-      version="1.0.0">
+      label="SPICE Traceability Eclipse IDE Integration"
+      version="1.0.0"
+      provider-name="AMOS SS15 PROJ3">
 
    <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+      A Plugin for Eclipse to Integrate Requirements Traceability to the IDE. This plugin maps source code lines to corresponding source requirements
    </description>
 
    <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+      AMOS SS15 PROJ3
    </copyright>
 
    <license url="http://www.example.com/license">
-      [Enter License Description here.]
+      AMOS SS15 PROJ3
    </license>
 
    <plugin

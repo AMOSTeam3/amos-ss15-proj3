@@ -3,5 +3,9 @@
    <feature url="features/amos-ss15-proj3-eclipse-feature_1.0.0.jar" id="amos-ss15-proj3-eclipse-feature" version="1.0.0.201506071212">
       <category name="SPICE Traceability"/>
    </feature>
-   <category-def name="SPICE Traceability" label="SPICE Traceability"/>
+   <category-def name="SPICE Traceability" label="SPICE Traceability">
+      <description>
+         A Plugin for Eclipse to Integrate Requirements Traceability to the IDE. This plugin maps source code lines to corresponding source requirements
+      </description>
+   </category-def>
 </site>
