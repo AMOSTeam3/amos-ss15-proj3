@@ -13,11 +13,9 @@
     <modules>
         <module>amos-ss15-proj3-backend</module>
         <module>amos-ss15-proj3-gui</module>
-        <module>amos-ss15-proj3-eclipse</module>
-        <module>amos-ss15-proj3-repository</module>
         <module>amos-ss15-proj3-eclipse-plugin</module>
-	<module>amos-ss15-proj3-eclipse-feature</module>
-	<module>amos-ss15-proj3-eclipse-updatesite</module>
+        <module>amos-ss15-proj3-eclipse-feature</module>
+        <module>amos-ss15-proj3-eclipse-updatesite</module>
     </modules>
     <build>
         <plugins>

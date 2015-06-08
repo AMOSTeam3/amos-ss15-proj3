@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Bundle-SymbolicName: amos-ss15-proj3-eclipse
-Bundle-Version: 1.0.0.qualifier
-Bundle-Name: tracability
