@@ -29,11 +29,11 @@ public class RequirementMarker {
 			file = UIUtility.getActiveFile();
 			if (!activeFiles.contains(file)) {
 				activeFiles.add(file);
-				trackerAdaptor = new PluginSPICETrackerAdaptor();
+				trackerAdaptor = PluginSPICETrackerAdaptor.getInstance();
 				String[] lines = trackerAdaptor.getRequirementLineLinkForFile(UIUtility.getGitFilepath());
 				for(int i = 0 ; i < lines.length; i++){
 					if(!lines[i].isEmpty())
-						addResourceMarker(file, lines[i], i+1, true);
+						addResourceMarker(file, "REQ-"+lines[i], i+1, true);
 				}
 			}
 		} catch (Exception e) {

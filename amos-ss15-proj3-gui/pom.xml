@@ -20,7 +20,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <outputDirectory>../amos-ss15-proj3-eclipse-plugin/lib</outputDirectory>
+                    <outputDirectory>${basedir}/target</outputDirectory>
                     <archive>
                         <manifest>
                               <mainClass>de.fau.osr.gui.Application</mainClass>
@@ -64,8 +64,8 @@
 		                </goals>
                         <configuration>
 		                   <target name="copy jar files to output directory">
-		                      <copy todir="${basedir}/target">
-                               <fileset dir="../amos-ss15-proj3-eclipse-plugin/lib/" includes="**/*" />
+		                      <copy todir="../amos-ss15-proj3-eclipse-plugin/lib/">
+                               <fileset dir="${basedir}/target" includes="**/*.jar" />
                                </copy>
 		                       
 		                    </target>
