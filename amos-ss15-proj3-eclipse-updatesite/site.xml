@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/amos-ss15-proj3-eclipse-feature_1.0.0.jar" id="amos-ss15-proj3-eclipse-feature" version="1.0.0.201506071212">
+      <category name="SPICE Traceability"/>
+   </feature>
+   <category-def name="SPICE Traceability" label="SPICE Traceability"/>
+</site>

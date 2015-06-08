@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: amos-ss15-proj3-eclipse-plugin
 Bundle-SymbolicName: amos-ss15-proj3-eclipse-plugin;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-Activator: osr.core.Activator
 Bundle-Vendor: amos
 Require-Bundle: org.eclipse.ui,

@@ -1,8 +1,27 @@
 package de.fau.osr.bl;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -14,17 +33,6 @@ import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class is an interpreter for data from Vcs and Database
@@ -331,6 +339,29 @@ public class Tracker {
     public String getRepostoryName(){
         return vcsClient.getRepositoryName();
     }
+    
+    public String[] getRequirementsLineLinkageForFile(String filePath) throws Exception {
+        Collection<AnnotatedLine> lines;
+       try {
+           lines = this.getBlame(filePath);
+       } catch (IOException | GitAPIException e) {
+           throw new Exception ("Exception in Git");
+       }
+       Collection<String> reqIdsByLines = new ArrayList<String>();
+
+       for(AnnotatedLine line: lines){
+           final Collection<String> requirements = line.getRequirements();
+           reqIdsByLines.add(Joiner.on(",").join(requirements));
+       }
+
+       return convertCollectionToArray(reqIdsByLines);
+   }
+   
+   private String[] convertCollectionToArray(Collection<String> collection) {
+       String[] array = new String[collection.size()];
+       collection.toArray(array);
+       return array;
+   }
 }
 /**
  * class for Thread of Traceability Matrix processing

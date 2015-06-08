@@ -2,10 +2,10 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fau.osr</groupId>
-    <artifactId>amos-ss15-proj3-eclipse-plugin</artifactId>
+    <artifactId>amos-ss15-proj3-eclipse-feature</artifactId>
 	<version>1.0.0</version>
-    <packaging>eclipse-plugin</packaging>
-    <name>amos-ss15-proj3-eclipse-plugin</name>
+    <packaging>eclipse-feature</packaging>
+    <name>amos-ss15-proj3-eclipse-feature</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

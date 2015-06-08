@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="amos-ss15-proj3-eclipse-feature">
+      <category name="SPICE Traceability"/>
+   </feature>
+</site>

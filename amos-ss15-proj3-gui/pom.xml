@@ -20,6 +20,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <outputDirectory>../amos-ss15-proj3-eclipse-plugin/lib</outputDirectory>
                     <archive>
                         <manifest>
                               <mainClass>de.fau.osr.gui.Application</mainClass>
