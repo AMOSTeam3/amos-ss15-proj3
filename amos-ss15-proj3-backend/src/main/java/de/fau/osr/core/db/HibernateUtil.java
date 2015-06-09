@@ -1,7 +1,9 @@
 package de.fau.osr.core.db;
 
-import de.fau.osr.core.db.domain.Commit;
-import de.fau.osr.core.db.domain.Requirement;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.jgit.transport.CredentialItem.Username;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -9,8 +11,8 @@ import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.Set;
+import de.fau.osr.core.db.domain.Commit;
+import de.fau.osr.core.db.domain.Requirement;
 
 
 /**
@@ -23,6 +25,8 @@ public class HibernateUtil {
     static Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
 
     private static SessionFactory sessionFactory;
+    private static String dbUserName;
+    private static String dbPassword;
 
     /**
      * generates configuration from hibernate.cfg.xml and adds all persistent classes to it
@@ -47,7 +51,9 @@ public class HibernateUtil {
             logger.debug("Static call : getsession factory() start::");
 
             //generate configuration
-            Configuration configuration = getConfiguration();
+            org.hibernate.cfg.Configuration configuration = getConfiguration();
+            configuration.setProperty("hibernate.connection.username",HibernateUtil.dbUserName);
+            configuration.setProperty("hibernate.connection.password",HibernateUtil.dbPassword);
 
             StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
             sessionFactory = configuration.buildSessionFactory(builder.build());
@@ -71,6 +77,14 @@ public class HibernateUtil {
     public void closeSession(Session session) {
         session.clear();
         session.close();
+    }
+    
+    public static void setDBUsername(String username){
+        HibernateUtil.dbUserName = username;
+    }
+    
+    public static void setDBPassword(String password){
+        HibernateUtil.dbPassword = password;
     }
 
     /**

@@ -1,20 +1,34 @@
 
 package de.fau.osr.gui;
 
-import de.fau.osr.bl.RequirementsTraceabilityMatrix;
-import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.gui.Components.Renderer.CommitFile_ImpactTreeFilenameRenderer;
-import de.fau.osr.gui.Components.Renderer.CommitFile_SimpleTreeFilenameRenderer;
-import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
-import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
-
-import javax.swing.*;
-import javax.swing.tree.TreeCellRenderer;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
+import javax.swing.tree.TreeCellRenderer;
+
+import de.fau.osr.bl.RequirementsTraceabilityMatrix;
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
+import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
+import de.fau.osr.gui.Authentication.LoginDialog;
+import de.fau.osr.gui.Components.Renderer.CommitFile_ImpactTreeFilenameRenderer;
+import de.fau.osr.gui.Components.Renderer.CommitFile_SimpleTreeFilenameRenderer;
+import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
 
 /**
  * View part of the MVC. This Class is responsible for the setting up the UI and interacting with the 
@@ -55,6 +69,20 @@ public class GuiView{
 
     GuiView(GuiController guiController) {
         elementHandler = new GuiViewElementHandler(guiController);
+    }
+    
+    public boolean Authentication(){
+        final JFrame frame = new JFrame("SPICE Traceability Database Authentication : Login");
+        LoginDialog loginDlg = new LoginDialog(frame,"SPICE Traceability Database Authentication : Login");
+        loginDlg.setVisible(true);
+        if(loginDlg.isSucceeded()){
+            return true;
+        }
+        else{
+            return false;
+        }
+            
+        
     }
 
     /**
