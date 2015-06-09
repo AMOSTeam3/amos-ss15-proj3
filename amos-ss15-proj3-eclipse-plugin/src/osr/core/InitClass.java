@@ -39,6 +39,9 @@ public class InitClass implements IStartup {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
+                if(!new Authentication().Perform()){
+                    return;
+                }
                 RegistrySettings.repoURL = UIUtility.inputDialog("SPICE Traceability - Preferences : Requirement Path", "../.git","Enter the Git Repository Path");
                 RegistrySettings.repoURL = RegistrySettings.repoURL.replaceAll(Matcher.quoteReplacement("\\"), "/");
                 RegistrySettings.requirementPattern = UIUtility.inputDialog("SPICE Traceability - Preferences : Requirement Pattern", RegistrySettings.requirementPattern,"Enter the Requirement Pattern");

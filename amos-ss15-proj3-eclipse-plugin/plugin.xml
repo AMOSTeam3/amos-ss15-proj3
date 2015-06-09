@@ -40,6 +40,15 @@
                menubarPath="spiceMenu/spiceGroup"
                toolbarPath="spiceGroup"
                id="osr.core.SpiceTraceabilityConfiguration">
+         </action>
+         <action
+               label="&amp;Authenticate"
+               icon="icons/unnamed.gif"
+               class="osr.core.SpiceTraceabilityAuthentication"
+               tooltip="Authentication of Spice Traceability Database"
+               menubarPath="spiceMenu/spiceGroup"
+               toolbarPath="spiceGroup"
+               id="osr.core.SpiceTraceabilityAuthentication">
          </action>         
       </actionSet>
    </extension>
