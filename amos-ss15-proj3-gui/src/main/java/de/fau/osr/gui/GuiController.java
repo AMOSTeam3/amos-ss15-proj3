@@ -1,6 +1,7 @@
 package de.fau.osr.gui;
 
 import com.google.common.base.Predicate;
+
 import de.fau.osr.core.db.*;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
 import de.fau.osr.core.db.domain.Requirement;
@@ -12,10 +13,12 @@ import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+
 import java.awt.*;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
@@ -57,6 +60,7 @@ public class GuiController {
     // filtering/finding a specific reqiurementID
     Predicate<String> requirementIDFiltering;
 
+   
 
     /**
      * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
@@ -70,7 +74,12 @@ public class GuiController {
             public void run() {
 
                 guiView = new GuiView(GuiController.this);
-
+                if(!guiView.Authentication()){
+                    Status = RetryStatus.Exit;
+                    handleError();
+                }
+                    
+                   
                 for(int i = 0; true; i++){
                     File repoFile = null;
                     try {
