@@ -132,7 +132,7 @@ public class GuiViewElementHandler extends JFrame {
         */
         // Based on this layout sturcture GUI will be created by using MultiSplinPane
         Component[][] layoutStructure = {
-                {RequirementID_textField, RequirementID_button, RequirementID_label, RequirementID_scrollPane},
+                {RequirementID_textField, RequirementID_button, RequirementID_label, RequirementSearch_textField, RequirementID_scrollPane},
                 {Commit_textField, Commit_button, Commit_label, Commit_scrollPane},
                 {Linkage_button, Files_button, FilesSort_combobox, Files_label, Files_scrollPane},
                 {Requirements2Lines_label, Requirements2Lines_scrollPane},
