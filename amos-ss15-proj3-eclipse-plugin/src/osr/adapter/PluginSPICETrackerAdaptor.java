@@ -26,6 +26,9 @@ public class PluginSPICETrackerAdaptor {
     private static Tracker tracker;
     private static PluginSPICETrackerAdaptor instance= null;
     
+    /**
+     * Constructor of the class
+     */
     private PluginSPICETrackerAdaptor(){
         try{
             Pattern pattern = Pattern.compile(RegistrySettings.requirementPattern);
@@ -44,6 +47,9 @@ public class PluginSPICETrackerAdaptor {
     }
     
     
+    /**
+     * @return the instance of the class 
+     */
     public static PluginSPICETrackerAdaptor  getInstance(){
         if(instance == null)
             return new PluginSPICETrackerAdaptor();
@@ -51,6 +57,9 @@ public class PluginSPICETrackerAdaptor {
             return instance;
     }
     
+    /**
+     * This method is used to reset the instance, so that the next call of the instance triggera a refreshed object
+     */
     public static void resetInstance(){
         instance = null;
     }

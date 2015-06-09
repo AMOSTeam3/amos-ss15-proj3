@@ -21,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gayathery
+ * Utility class for the functionalities of the plugin
  * 
  */
 public class UIUtility {

@@ -25,7 +25,7 @@ public class SpiceTraceabilityConfiguration implements IWorkbenchWindowActionDel
     }
 
     /**
-     * 
+     * Method which is used to get user input for data pertaining to the registry configuration of the plugin
      */
     public void run(IAction action) {
         if(RegistrySettings.repoURL==null || RegistrySettings.repoURL.isEmpty()){

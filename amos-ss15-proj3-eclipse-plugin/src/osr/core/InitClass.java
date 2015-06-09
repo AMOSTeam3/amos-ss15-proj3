@@ -32,6 +32,9 @@ public class InitClass implements IStartup {
 
 	}
 	
+	/**
+	 * Initial startup method of the plugin
+	 */
 	public void exec() {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
@@ -44,6 +47,9 @@ public class InitClass implements IStartup {
         });
     }
 	
+	/**
+	 * Method to add a listener to editor resources of eclipse
+	 */
 	public void addListener() {
 
 		Display.getDefault().asyncExec(new Runnable() {

@@ -2,6 +2,11 @@ package osr.core;
 
 import de.fau.osr.util.AppProperties;
 
+/**
+ * @author Gayathery
+ * Class to hold values related to the session of the plugin
+ *
+ */
 public class RegistrySettings {
 
 	public static String repoURL;

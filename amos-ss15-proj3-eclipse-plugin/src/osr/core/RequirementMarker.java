@@ -42,6 +42,13 @@ public class RequirementMarker {
 		}
 	}
 
+	/**
+	 * This method set the marker on a file at a given line number
+	 * @param fileResource
+	 * @param message
+	 * @param lineNumber
+	 * @param isFirst
+	 */
 	private static void addResourceMarker(IFile fileResource, String message,
 			int lineNumber, boolean isFirst) {
 
