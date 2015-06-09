@@ -1,6 +1,7 @@
 package de.fau.osr.gui;
 
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.gui.util.MultiSplitPane;
 import de.fau.osr.util.filtering.FilterByExactString;
 import de.fau.osr.util.sorting.SortByCommitID;
 import de.fau.osr.util.sorting.SortByFilename;
@@ -118,78 +119,37 @@ public class GuiViewElementHandler extends JFrame {
     }
 
     private void positionElements() {
-        GroupLayout layout = new GroupLayout(getContentPane());
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
+        /* *layoutStructure* explained:
+            2D-Array: 1st dimension ==> Columns, 2nd dimension ==> Rows
 
-        layout.setHorizontalGroup(
-                layout.createParallelGroup()
-                        .addGroup(layout.createSequentialGroup()
-                                        //here follow the columns of the UI
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                                .addComponent(RequirementID_textField)
-                                                .addComponent(RequirementID_button)
-                                                .addComponent(RequirementID_label)
-                                                .addComponent(RequirementSearch_textField)
-                                                .addComponent(RequirementID_scrollPane))
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                                .addComponent(Commit_textField)
-       //                                         .addComponent(Commit_button)
-                                                .addComponent(Commit_label)
-                                                .addComponent(Commit_scrollPane, 10, 100, Short.MAX_VALUE))
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                        .addComponent(Linkage_button)
-                                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                                                        .addComponent(Files_button)
-       //                                                                 .addComponent(FilesSort_combobox)
-                                                                        .addComponent(Files_label)
-                                                                        .addComponent(Files_scrollPane, 10, 100, Short.MAX_VALUE)
-                                                        )
-                                        )
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                                .addComponent(Requirements2Lines_label)
-                                                .addComponent(Requirements2Lines_scrollPane, 10, 30, 30))
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                                .addComponent(Code_label)
-                                                .addComponent(Code_scrollPane, 10, 400, Short.MAX_VALUE))
-                        )
-        );
+            {
+                {Component01, Component02, ... }, # Column
+                {Component11, Component12, ... }, # Column
+            }
 
-        layout.setVerticalGroup(
-            layout.createParallelGroup()
-                .addGroup(layout.createSequentialGroup()
-                                //two rows, one to create linkage, the other one for the rest
-                                .addGroup(layout.createParallelGroup()
-                                                //GroupLayout.PREFERRED_SIZE in the three arguments prevents the TextFields from scaling to multirow input
-                                                .addComponent(RequirementID_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(Commit_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(Linkage_button, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                                )
-                                .addGroup(layout.createParallelGroup()
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(RequirementID_button)
-                                                        .addComponent(RequirementID_label)
-                                                        .addComponent(RequirementSearch_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(RequirementID_scrollPane))
-                                                .addGroup(layout.createSequentialGroup()
-             //                                           .addComponent(Commit_button)
-                                                        .addComponent(Commit_label)
-                                                        .addComponent(Commit_scrollPane))
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(Files_button)
-            //                                            .addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(Files_label)
-                                                        .addComponent(Files_scrollPane))
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(Requirements2Lines_label)
-                                                        .addComponent(Requirements2Lines_scrollPane))
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(Code_label)
-                                                        .addComponent(Code_scrollPane))
-                                )
-                )
-        );
+            ComponentXY: X-->Column-No, Y-->Row-No
+        */
+        // Based on this layout sturcture GUI will be created by using MultiSplinPane
+        Component[][] layoutStructure = {
+                {RequirementID_textField, RequirementID_button, RequirementID_label, RequirementSearch_textField, RequirementID_scrollPane},
+//              {Commit_textField, Commit_button, Commit_label, Commit_scrollPane},
+                {Commit_textField,  Commit_label, Commit_scrollPane},
+//              {Linkage_button, Files_button, FilesSort_combobox, Files_label, Files_scrollPane},
+                {Linkage_button, Files_button, Files_label, Files_scrollPane},
+                {Requirements2Lines_label, Requirements2Lines_scrollPane},
+                {Code_label, Code_scrollPane}
 
+        };
+
+        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        for ( Component[] i: layoutStructure) {
+            MultiSplitPane column = new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false);
+            for (Component j: i)
+                column.addComponent(j);
+            pane.addComponent(column);
+        }
+        setLayout(new BorderLayout());
+        add(pane, BorderLayout.CENTER);
 
         //hide vertical scrollbar of req2line
         Requirements2Lines_scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -198,10 +158,6 @@ public class GuiViewElementHandler extends JFrame {
         JScrollBar req2lineVertiScrollbar = Requirements2Lines_scrollPane.getVerticalScrollBar();
         codeVertiSrollbar.setModel(req2lineVertiScrollbar.getModel());
 
-        //make the requirement column non-resizable and have all elements with the same horizontal size
-        layout.linkSize(SwingConstants.HORIZONTAL, RequirementID_button, RequirementID_scrollPane, RequirementID_textField, RequirementSearch_textField);
-
-        setLayout(layout);
     }
 
     void initializeButtonActions() {
@@ -246,7 +202,7 @@ public class GuiViewElementHandler extends JFrame {
         mntmTraceabilityMatrixByImpact.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
 
-                class TraceabilityMatrixViewerThread implements Runnable{
+                class TraceabilityMatrixViewerThread implements Runnable {
 
                     @Override
                     public void run() {
