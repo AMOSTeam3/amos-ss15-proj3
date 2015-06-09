@@ -60,7 +60,10 @@ public class GuiController {
     // filtering/finding a specific reqiurementID
     Predicate<String> requirementIDFiltering;
 
-   
+    public void finalize(){
+        HibernateUtil.shutdown();
+        
+    }
 
     /**
      * Called to start the initially starts the program. Setting up GUI and displaying the initial data:
