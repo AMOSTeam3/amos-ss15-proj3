@@ -1,6 +1,7 @@
 package de.fau.osr.gui;
 
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.gui.Components.javafx.ReqManagementPanel;
 import de.fau.osr.gui.util.MultiSplitPane;
 import de.fau.osr.util.filtering.FilterByExactString;
 import de.fau.osr.util.sorting.SortByCommitID;
@@ -149,7 +150,10 @@ public class GuiViewElementHandler extends JFrame {
             pane.addComponent(column);
         }
         setLayout(new BorderLayout());
-        add(pane, BorderLayout.CENTER);
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Main", pane);
+        tabbedPane.addTab("Requirements management", new ReqManagementPanel());
+        add(tabbedPane, BorderLayout.CENTER);
 
         //hide vertical scrollbar of req2line
         Requirements2Lines_scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
