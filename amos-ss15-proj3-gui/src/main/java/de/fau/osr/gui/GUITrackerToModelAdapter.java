@@ -240,4 +240,8 @@ public class GUITrackerToModelAdapter implements GuiModel {
             throws IOException {
         return tracker.generateRequirementsTraceabilityByImpact();
     }
+
+    Tracker getTracker(){
+        return tracker;
+    }
 }

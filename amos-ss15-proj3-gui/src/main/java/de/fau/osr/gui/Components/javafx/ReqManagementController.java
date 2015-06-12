@@ -1,12 +1,9 @@
 package de.fau.osr.gui.Components.javafx;
 
 import de.fau.osr.bl.Tracker;
-import de.fau.osr.core.db.*;
+import de.fau.osr.core.db.DBOperation;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
 import de.fau.osr.core.db.domain.Requirement;
-import de.fau.osr.core.vcs.impl.GitVcsClient;
-import de.fau.osr.util.AppProperties;
-import de.fau.osr.util.parser.CommitMessageParser;
 import javafx.animation.ScaleTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,12 +18,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 /**
  * Controller for requirement management tab
@@ -50,8 +45,9 @@ public class ReqManagementController implements Initializable {
     private Tracker tracker;
     private RequirementDaoImplementation reqDao;
 
-    public ReqManagementController() {
-
+    public ReqManagementController(Tracker tracker, RequirementDaoImplementation reqDao) {
+        this.tracker = tracker;
+        this.reqDao = reqDao;
     }
 
     /**
@@ -73,7 +69,7 @@ public class ReqManagementController implements Initializable {
         String textb4 = btn.getText();
         btn.setText(text);
         ScaleTransition scaleTransition =
-                new ScaleTransition(Duration.millis(100), btn);
+                new ScaleTransition(Duration.millis(200), btn);
 
         scaleTransition.setFromX(1);
         scaleTransition.setFromY(1);
@@ -93,7 +89,7 @@ public class ReqManagementController implements Initializable {
         reqDao = new RequirementDaoImplementation();
 
         try {
-            allReqs = getTracker().getAllRequirements();
+            allReqs = tracker.getAllRequirements();
 
             ObservableList<String> items = FXCollections.observableArrayList(allReqs);
 
@@ -113,29 +109,6 @@ public class ReqManagementController implements Initializable {
                 txtDescription.setText(req.getDescription());
             }
         });
-    }
-
-    private Tracker getTracker() {
-        if (tracker != null) return tracker;
-
-        try {
-            File repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
-            GitVcsClient vcs = new GitVcsClient(repoFile.toString());
-
-            Pattern reqPattern = Pattern.compile(AppProperties.GetValue("RequirementPattern"));
-
-            CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), AppProperties.GetValue("DefaultPathToCSVFile")));
-            VCSDataSource vcsDs = new VCSDataSource(vcs, new CommitMessageParser(reqPattern));
-            DBDataSource dbDs = new DBDataSource();
-            CompositeDataSource ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
-
-
-            tracker = new Tracker(vcs, ds, repoFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return tracker;
     }
 
 }

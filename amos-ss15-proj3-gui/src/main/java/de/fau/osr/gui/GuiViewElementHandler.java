@@ -61,6 +61,8 @@ public class GuiViewElementHandler extends JFrame {
     private JScrollPane Requirements2Lines_scrollPane = new JScrollPane();
     private JScrollPane ImpactPercentage_scrollPane = new JScrollPane();
 
+    //javafx req panel
+    ReqManagementPanel reqManagementPanel = new ReqManagementPanel();
 
 
     final private List<Comparator<CommitFile>> SORT_ALGORITHMS = Arrays.asList(
@@ -86,6 +88,13 @@ public class GuiViewElementHandler extends JFrame {
         positionElements();
 
         pack();
+    }
+
+    /**
+     * @return panel for requirement management
+     */
+    public ReqManagementPanel getReqManagementPanel(){
+        return this.reqManagementPanel;
     }
 
     public JScrollPane getRequirementID_scrollPane() {
@@ -152,7 +161,7 @@ public class GuiViewElementHandler extends JFrame {
         setLayout(new BorderLayout());
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Main", pane);
-        tabbedPane.addTab("Requirements management", new ReqManagementPanel());
+        tabbedPane.addTab("Requirements management", reqManagementPanel);
         add(tabbedPane, BorderLayout.CENTER);
 
         //hide vertical scrollbar of req2line

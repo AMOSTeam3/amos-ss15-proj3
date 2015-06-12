@@ -16,22 +16,28 @@ public class ReqManagementPanel extends JFXPanel {
     final ReqManagementPanel thisPanel = this;
 
     public ReqManagementPanel() {
+    }
+
+    //need this method to be able to initialize the content later,
+    //because DB connection setup comes later than gui setup.
+    public void initialize(ReqManagementController controller) {
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Scene scene = createScene();
+                Scene scene = createScene(controller);
                 thisPanel.setScene(scene);
                 thisPanel.setVisible(true);
             }
         });
     }
 
-    private Scene createScene() {
+    private Scene createScene(ReqManagementController controller) {
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/ReqManagement.fxml"));
-
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ReqManagement.fxml"));
+            fxmlLoader.setController(controller);
+            root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,34 +1,22 @@
 
 package de.fau.osr.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridLayout;
+import de.fau.osr.bl.RequirementsTraceabilityMatrix;
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
+import de.fau.osr.gui.Authentication.LoginDialog;
+import de.fau.osr.gui.Components.Renderer.CommitFile_ImpactTreeFilenameRenderer;
+import de.fau.osr.gui.Components.Renderer.CommitFile_SimpleTreeFilenameRenderer;
+import de.fau.osr.gui.Components.javafx.ReqManagementPanel;
+import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
+import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
+
+import javax.swing.*;
+import javax.swing.tree.TreeCellRenderer;
+import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTree;
-import javax.swing.ListCellRenderer;
-import javax.swing.UIManager;
-import javax.swing.tree.TreeCellRenderer;
-
-import de.fau.osr.bl.RequirementsTraceabilityMatrix;
-import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
-import de.fau.osr.gui.Authentication.LoginDialog;
-import de.fau.osr.gui.Components.Renderer.CommitFile_ImpactTreeFilenameRenderer;
-import de.fau.osr.gui.Components.Renderer.CommitFile_SimpleTreeFilenameRenderer;
-import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
 
 /**
  * View part of the MVC. This Class is responsible for the setting up the UI and interacting with the 
@@ -381,5 +369,13 @@ public class GuiView{
         Thread tr = new Thread(new showTraceabilityMatrixByImpactProgressBarThread());
         tr.start();
     }
+
+    /**
+     * @return panel for requirement management
+     */
+    public ReqManagementPanel getReqManagementPanel() {
+        return this.elementHandler.getReqManagementPanel();
+    }
+
 }
 

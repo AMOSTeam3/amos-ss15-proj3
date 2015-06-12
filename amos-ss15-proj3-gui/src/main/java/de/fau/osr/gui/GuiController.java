@@ -1,7 +1,7 @@
 package de.fau.osr.gui;
 
 import com.google.common.base.Predicate;
-
+import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.*;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
 import de.fau.osr.core.db.domain.Requirement;
@@ -9,16 +9,15 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.gui.Components.CommitFilesJTree;
+import de.fau.osr.gui.Components.javafx.ReqManagementController;
 import de.fau.osr.gui.GuiView.HighlightedLine;
 import de.fau.osr.gui.GuiViewElementHandler.ButtonState;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-
 import java.awt.*;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
@@ -111,11 +110,21 @@ public class GuiController {
                 guiView.showView();
                 try {
                     requirementsFromDB();
+                    loadReqManagementTab();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    /**
+     * initializes and loads RequirementManagement tab
+     */
+    private void loadReqManagementTab() {
+        Tracker tracker = ((GUITrackerToModelAdapter)guiModel).getTracker();
+        ReqManagementController controller = new ReqManagementController(tracker, new RequirementDaoImplementation());
+        guiView.getReqManagementPanel().initialize(controller);
     }
 
     public Comparator<CommitFile> getCommitFileSorting() {
