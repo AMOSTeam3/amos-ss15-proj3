@@ -5,12 +5,15 @@ import java.util.regex.Matcher;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import osr.adapter.PluginSPICEAuthenticationAdaptor;
 import osr.adapter.PluginSPICETrackerAdaptor;
+import osr.plugin.ui.RegistrySettingsDialog;
 
 /**
  * @author Gayathery 
@@ -39,14 +42,10 @@ public class InitClass implements IStartup {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
-                if(!new Authentication().Perform()){
+                PluginSPICETrackerAdaptor.resetInstance();
+                if(!RegistrySettings.configure())
                     return;
                 }
-                RegistrySettings.repoURL = UIUtility.inputDialog("SPICE Traceability - Preferences : Requirement Path", "../.git","Enter the Git Repository Path");
-                RegistrySettings.repoURL = RegistrySettings.repoURL.replaceAll(Matcher.quoteReplacement("\\"), "/");
-                RegistrySettings.requirementPattern = UIUtility.inputDialog("SPICE Traceability - Preferences : Requirement Pattern", RegistrySettings.requirementPattern,"Enter the Requirement Pattern");
-                PluginSPICETrackerAdaptor.resetInstance();
-            }
         });
     }
 	
@@ -65,6 +64,5 @@ public class InitClass implements IStartup {
 			}
 		});
 	}
-	
 	
 }

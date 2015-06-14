@@ -25,6 +25,7 @@ import org.eclipse.ui.PlatformUI;
  * 
  */
 public class UIUtility {
+   
 	
 	/**
 	 * This is generic JFace input dialogue for String Input.

@@ -1,5 +1,13 @@
 package osr.core;
 
+import java.util.regex.Matcher;
+
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+
+import osr.adapter.PluginSPICEAuthenticationAdaptor;
+import osr.plugin.ui.RegistrySettingsDialog;
 import de.fau.osr.util.AppProperties;
 
 /**
@@ -9,7 +17,20 @@ import de.fau.osr.util.AppProperties;
  */
 public class RegistrySettings {
 
-	public static String repoURL;
-	//TODO:Need to get it from User at the startup.
+	public static String repoURL="../.git";
 	public static String requirementPattern=AppProperties.GetValue("RequirementPattern");
+	
+	public static boolean configure(){
+	    Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+        RegistrySettingsDialog dialog = new RegistrySettingsDialog(activeShell);
+        dialog.create();
+        if (dialog.open() == Window.OK) {
+          RegistrySettings.repoURL=dialog.getGitURL();
+          RegistrySettings.repoURL = RegistrySettings.repoURL.replaceAll(Matcher.quoteReplacement("\\"), "/");
+          RegistrySettings.requirementPattern=dialog.getRequirementPattern();
+        }
+        if(!new PluginSPICEAuthenticationAdaptor().authenticate(dialog.getDbUsername(), dialog.getDbPassword()))
+            return false;
+        return true;
+	}
 }
