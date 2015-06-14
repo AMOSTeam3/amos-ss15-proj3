@@ -69,6 +69,12 @@ public class PluginSPICETrackerAdaptor {
     public String[] getRequirementLineLinkForFile(String filePath)throws Exception{
         return tracker.getRequirementsLineLinkageForFile(filePath);
     }
+
+
+    public static Tracker getTracker() {
+        return tracker;
+    }
+    
     
     
 }

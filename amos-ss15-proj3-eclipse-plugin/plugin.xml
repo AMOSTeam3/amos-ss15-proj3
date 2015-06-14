@@ -39,7 +39,7 @@
                tooltip="Enable SPICE plugin features"
                menubarPath="spiceMenu/spiceGroup"
                toolbarPath="spiceGroup"
-               id="osr.core.ui.action.PluginManagementAction_0">
+               id="1_osr.core.ui.action.PluginManagementAction">
          </action> 
          <action
                label="Preferences"
@@ -48,8 +48,17 @@
                tooltip="Preferences"
                menubarPath="spiceMenu/spiceGroup"
                toolbarPath="spiceGroup"
-               id="osr.core.ui.action.ConfigurationAction_1">
-         </action>            
+               id="2_osr.core.ui.action.ConfigurationAction">
+         </action> 
+          <action
+               label="Traceability Matrix By Impact"
+               icon="icons/unnamed.gif"
+               class="osr.core.ui.action.TraceabilityMatrixAction"
+               tooltip="Traceability Matrix By Impact"
+               menubarPath="spiceMenu/spiceGroup"
+               toolbarPath="spiceGroup"
+               id="2_osr.core.ui.action.TraceabilityMatrixAction">
+         </action>              
       </actionSet>
    </extension>
    <extension

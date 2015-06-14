@@ -55,7 +55,7 @@ public class GuiView{
     //The UI-Elements themselves are handled by the Element Handler.
     private GuiViewElementHandler elementHandler;
 
-    GuiView(GuiController guiController) {
+    public GuiView(GuiController guiController) {
         elementHandler = new GuiViewElementHandler(guiController);
     }
     
@@ -321,7 +321,7 @@ public class GuiView{
      * shows the traceability matrix (by impact) window with filled in data
      * @param requirementsTraceabilityMatrixByImpact the matrix which contains the info for traceability
      */
-    void showTraceabilityMatrixByImpact(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
+   public void showTraceabilityMatrixByImpact(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
 
             TraceabilityMatrixByImpactViewHandler trMatrixByImpact = new TraceabilityMatrixByImpactViewHandler();
             trMatrixByImpact.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrixByImpact);
@@ -333,7 +333,7 @@ public class GuiView{
     /**
      * method to show progress bar for the processing of traceability matrix by impact values
      */
-    void showTraceabilityMatrixByImpactProgressBar(){
+   public void showTraceabilityMatrixByImpactProgressBar(){
 
         final SpiceTraceabilityProgressBar progressBar = new SpiceTraceabilityProgressBar();
         progressBar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

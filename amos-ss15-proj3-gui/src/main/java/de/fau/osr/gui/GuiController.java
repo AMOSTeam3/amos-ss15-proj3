@@ -614,7 +614,7 @@ public class GuiController {
         }
     }
     
-    void getTraceabilityMatrixByImpact(){
+    public void getTraceabilityMatrixByImpact(){
         try {
             guiView.showTraceabilityMatrixByImpactProgressBar();
             guiView.showTraceabilityMatrixByImpact(guiModel.getRequirementsTraceabilityByImpact());
