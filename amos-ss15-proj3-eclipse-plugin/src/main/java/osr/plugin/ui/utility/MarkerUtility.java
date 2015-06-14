@@ -1,4 +1,4 @@
-package osr.core;
+package osr.plugin.ui.utility;
 
 import java.util.List;
 

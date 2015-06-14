@@ -33,13 +33,22 @@
             </separator>
          </menu>
          <action
-               label="&amp;Preferences"
+               label="Enable SPICE"
                icon="icons/unnamed.gif"
-               class="osr.core.SpiceTraceabilityConfiguration"
+               class="osr.core.ui.action.PluginManagementAction"
+               tooltip="Enable SPICE plugin features"
+               menubarPath="spiceMenu/spiceGroup"
+               toolbarPath="spiceGroup"
+               id="osr.core.ui.action.PluginManagementAction_0">
+         </action> 
+         <action
+               label="Preferences"
+               icon="icons/unnamed.gif"
+               class="osr.core.ui.action.ConfigurationAction"
                tooltip="Preferences"
                menubarPath="spiceMenu/spiceGroup"
                toolbarPath="spiceGroup"
-               id="osr.core.SpiceTraceabilityConfiguration">
+               id="osr.core.ui.action.ConfigurationAction_1">
          </action>            
       </actionSet>
    </extension>

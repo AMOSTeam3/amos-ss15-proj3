@@ -16,9 +16,13 @@ public class PluginSPICEAuthenticationAdaptor {
      * @return
      */
     public boolean authenticate(String username, String password){
+      try{
         if(Login.authenticate(username, password))
             return true;
-        else 
-            return false;
+       
+      }catch(Exception e){
+          e.printStackTrace();
+      }
+      return false;
     }
 }

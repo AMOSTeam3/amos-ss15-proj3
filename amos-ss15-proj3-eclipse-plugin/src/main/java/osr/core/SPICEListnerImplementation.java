@@ -4,9 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
+
+import osr.plugin.ui.utility.UIUtility;
 
 /**
  * @author Gayathery
@@ -14,7 +15,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * This is to attach the necessary markers for the partBroughtToTop
  *
  */
-public class IPartListnerImplementation implements IPartListener{
+public class SPICEListnerImplementation implements IPartListener{
 
 	Set<IFile> activeList = new HashSet<IFile>();
 	
