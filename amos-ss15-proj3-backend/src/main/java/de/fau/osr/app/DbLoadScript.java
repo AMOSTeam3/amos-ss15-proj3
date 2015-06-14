@@ -3,7 +3,7 @@ package de.fau.osr.app;
 import de.fau.osr.core.db.DBOperation;
 import de.fau.osr.core.db.HibernateUtil;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.db.domain.Requirement;
+import de.fau.osr.core.domain.Requirement;
 
 /**
  * loads some data to test to the Database

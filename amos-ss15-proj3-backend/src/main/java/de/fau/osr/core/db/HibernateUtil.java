@@ -1,9 +1,7 @@
 package de.fau.osr.core.db;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.jgit.transport.CredentialItem.Username;
+import de.fau.osr.core.domain.Commit;
+import de.fau.osr.core.domain.Requirement;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -11,8 +9,8 @@ import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fau.osr.core.db.domain.Commit;
-import de.fau.osr.core.db.domain.Requirement;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

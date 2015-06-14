@@ -99,7 +99,7 @@ public class RequirementsTraceabilityMatrixByImpact {
     }
 
     public String getRepositoryName() {
-        return  tracker.getRepostoryName();
+        return  tracker.getRepositoryName();
     }
 
 }

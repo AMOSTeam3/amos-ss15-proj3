@@ -2,7 +2,7 @@ package de.fau.osr.core.db.dao.impl;
 
 import de.fau.osr.core.db.DBOperation;
 import de.fau.osr.core.db.dao.RequirementDao;
-import de.fau.osr.core.db.domain.Requirement;
+import de.fau.osr.core.domain.Requirement;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

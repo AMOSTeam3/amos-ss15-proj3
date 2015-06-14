@@ -3,6 +3,7 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import de.fau.osr.PublicTestData;
+import de.fau.osr.core.db.DBTestHelper;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
@@ -37,7 +38,7 @@ public class TrackerTest {
     @BeforeClass
     public static void prepare() throws IOException {
         client =  VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
-        interpreter = new Tracker(client, null, null);
+        interpreter = new Tracker(client, null, null, DBTestHelper.createH2SessionFactory());
     }
 
     /**
@@ -52,7 +53,7 @@ public class TrackerTest {
 
         //test another pattern, should contain 2 files
         VCSDataSource ds = new VCSDataSource(client, new CommitMessageParser(Pattern.compile("Req\\s(\\d+)")));
-        interpreter = new Tracker(client, ds, null);
+        interpreter = new Tracker(client, ds, null, DBTestHelper.createH2SessionFactory());
         commitFileList = interpreter.getCommitFilesForRequirementID("1");
         assertTrue(commitFileList.size() == 2);
         //get names only
@@ -88,7 +89,7 @@ public class TrackerTest {
         //given
         VcsClient mockedClient = mock(VcsClient.class);
         DataSource mockedSource = mock(DataSource.class);
-        Tracker tracker = Mockito.spy(new Tracker(mockedClient, mockedSource, null));
+        Tracker tracker = Mockito.spy(new Tracker(mockedClient, mockedSource, null, DBTestHelper.createH2SessionFactory()));
         //stub for dataSource.getAllReqCommitRelations()
         SetMultimap<String, String> dbReqs = HashMultimap.create();
         dbReqs.put("1","commit1");

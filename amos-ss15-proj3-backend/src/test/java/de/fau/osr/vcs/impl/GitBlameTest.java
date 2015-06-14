@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import de.fau.osr.PublicTestData;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.db.VCSDataSource;
+import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
-import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class GitBlameTest {
         DataSource ds =  new VCSDataSource(client,cmparser);
 
         List<AnnotatedLine> blame = client.blame("TestFile4", ds);
-        assertEquals(client.new AnnotatedLine(Lists.newArrayList("1"), "File 4"), blame.get(0));
+        assertEquals(new AnnotatedLine(Lists.newArrayList("1"), "File 4"), blame.get(0));
         blame = client.blame("LICENSE", ds);
         for(AnnotatedLine line : blame) {
             assertEquals(Collections.emptyList(), line.getRequirements());

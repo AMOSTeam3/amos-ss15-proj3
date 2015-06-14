@@ -1,57 +1,73 @@
 package de.fau.osr.bl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
-
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.db.VCSDataSource;
+import de.fau.osr.core.db.dao.RequirementDao;
+import de.fau.osr.core.db.dao.impl.CommitDaoImplementation;
+import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
+import de.fau.osr.core.domain.Requirement;
+import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.core.vcs.interfaces.VcsClient.AnnotatedLine;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * This class is an interpreter for data from Vcs and Database
  */
 public class Tracker {
 
-    File repoFile;
+    private File repoFile;
+    private VcsClient vcsClient;
 
-    VcsClient vcsClient;
+    private DataSource dataSource;
 
-    DataSource dataSource;
+    private Logger logger = LoggerFactory.getLogger(Tracker.class);
 
-    Logger logger = LoggerFactory.getLogger(Tracker.class);
+    private RequirementDao reqDao;
+    private CommitDaoImplementation commitDao;
 
     public Tracker(VcsClient vcsClient) throws IOException {
         this(vcsClient, null, null);
     }
 
     public Tracker(VcsClient vcsClient, DataSource ds, File repoFile) throws IOException {
+        init(vcsClient, ds, repoFile);
+
+        this.reqDao = new RequirementDaoImplementation();
+        this.commitDao = new CommitDaoImplementation();
+
+    }
+
+    public Tracker(VcsClient vcsClient, DataSource ds, File repoFile, SessionFactory sessionFactory) throws IOException {
+        init(vcsClient, ds, repoFile);
+        this.reqDao = new RequirementDaoImplementation(sessionFactory);
+        this.commitDao = new CommitDaoImplementation(sessionFactory);
+
+    }
+
+    private void init(VcsClient vcsClient, DataSource ds, File repoFile) throws IOException {
         this.repoFile = repoFile;
         this.vcsClient = vcsClient;
 
@@ -67,7 +83,6 @@ public class Tracker {
         }
 
         this.dataSource = ds;
-
     }
 
     /*
@@ -106,7 +121,7 @@ public class Tracker {
             file.impact = (influenced/cuurentBlameSize)*100;
         }
 
-        logger.info("End call :: getCommitFilesForRequirementID() Time: "+ (System.currentTimeMillis() - startTime) );
+        logger.info("End call :: getCommitFilesForRequirementID() Time: " + (System.currentTimeMillis() - startTime));
 
         return commitFilesList;
 
@@ -142,7 +157,7 @@ public class Tracker {
 
         long startTime = System.currentTimeMillis();
 
-        logger.debug("Start call : getAllRequirementsForFile():filePath = "+filePath);
+        logger.debug("Start call : getAllRequirementsForFile():filePath = " + filePath);
         Set<String> requirementList = new HashSet<>();
 
         Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
@@ -152,7 +167,7 @@ public class Tracker {
                 requirementList.addAll(relations.get(commitIdListIterator.next()));
         }
 
-        logger.debug("End call -getAllRequirementsForFile() Time: "+ (System.currentTimeMillis() - startTime) );
+        logger.debug("End call -getAllRequirementsForFile() Time: " + (System.currentTimeMillis() - startTime));
 
         return requirementList;
 
@@ -278,6 +293,16 @@ public class Tracker {
     }
 
     /**
+     * get reqs by commit id
+     * @param commitID
+     * @return
+     * @throws IOException
+     */
+    public Collection<String> getRequirementsFromCommit(String commitID) throws IOException {
+        return dataSource.getReqRelationByCommit(commitID);
+    }
+
+    /**
      * add Linkage between Requirement and Commit
      * @param commitID and requirementId to be linked
      */
@@ -290,7 +315,7 @@ public class Tracker {
     public String getCurrentRepositoryPath(){
         return repoFile.toString();
     }
-    
+
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
         return vcsClient.blame(path, dataSource);
     }
@@ -336,7 +361,7 @@ public class Tracker {
      * This method return the current repository name.
      * @return
      */
-    public String getRepostoryName(){
+    public String getRepositoryName(){
         return vcsClient.getRepositoryName();
     }
     
@@ -362,7 +387,69 @@ public class Tracker {
        collection.toArray(array);
        return array;
    }
+
+    /**
+     * @return all domain requirement objects from database
+     * @throws IOException
+     */
+    public Collection<Requirement> getAllRequirementObjects() throws IOException {
+
+        return reqDao.getAllRequirements();
+    }
+
+    /**
+     * @param id id of requirement
+     * @return domain requirement by id
+     */
+    public Requirement getRequirementObjectById(String id){
+        return reqDao.getRequirementById(id);
+    }
+
+    /**
+     * @return all known domain commits objects
+     */
+    public Set<de.fau.osr.core.domain.Commit> getAllCommitObjects() throws IOException {
+        Collection<Commit> commits = getCommits();
+        Set<de.fau.osr.core.domain.Commit> commitObjects = new HashSet<>();
+        Collection<Requirement> reqs;
+        reqs = getAllRequirementObjects();
+
+
+
+        HashSet<de.fau.osr.core.domain.Commit> domainCommits = new HashSet<>();
+
+        for (Commit commitSimple : commits) {
+            HashSet<Requirement> reqsForCommit = new HashSet<>(reqs.stream()
+                            .filter(req -> commitSimple.requirements.contains(req.getId()))
+                            .collect(Collectors.toList()));
+
+
+            domainCommits.add(new de.fau.osr.core.domain.Commit(commitSimple.id, commitSimple.message, "", commitSimple.files, reqsForCommit));
+        }
+
+        return domainCommits;
+    }
+
+    /**
+     * create collection of known Requiremen objects, by given set of requirement IDs
+     * @param reqIds set of req ids
+     * @return Collection of Requirement domain objects
+     * @throws IOException
+     */
+    public Collection<Requirement> getReqObjectsByIds(Set<String> reqIds) throws IOException {
+        final Set<String> finalReqs = reqIds;
+
+        Collection<Requirement> reqObjects = getAllRequirementObjects();
+
+        return reqObjects.stream()
+                .filter(req -> finalReqs.contains(req.getId()))
+                .collect(Collectors.toList());
+    }
 }
+
+
+
+
 /**
  * class for Thread of Traceability Matrix processing
  */

@@ -2,6 +2,7 @@ package de.fau.osr.core.vcs.impl;
 
 import com.beust.jcommander.internal.Lists;
 import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;

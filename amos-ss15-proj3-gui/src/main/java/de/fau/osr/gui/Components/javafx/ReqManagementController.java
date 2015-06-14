@@ -3,7 +3,7 @@ package de.fau.osr.gui.Components.javafx;
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.DBOperation;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.db.domain.Requirement;
+import de.fau.osr.core.domain.Requirement;
 import javafx.animation.ScaleTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

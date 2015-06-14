@@ -2,7 +2,7 @@ package de.fau.osr.core.db.dao;
 
 import de.fau.osr.core.db.DBOperation;
 import de.fau.osr.core.db.dao.impl.AbstractDefaultDao;
-import de.fau.osr.core.db.domain.Commit;
+import de.fau.osr.core.domain.Commit;
 
 import java.io.Serializable;
 import java.util.List;
