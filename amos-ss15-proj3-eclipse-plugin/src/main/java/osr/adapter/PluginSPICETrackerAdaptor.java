@@ -1,18 +1,14 @@
 package osr.adapter;
 
-import java.io.File;
-import java.util.regex.Pattern;
-
-import osr.core.RegistrySettings;
 import de.fau.osr.bl.Tracker;
-import de.fau.osr.core.db.CSVFileDataSource;
-import de.fau.osr.core.db.CompositeDataSource;
-import de.fau.osr.core.db.DBDataSource;
-import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.db.VCSDataSource;
+import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.parser.CommitMessageParser;
+import osr.core.RegistrySettings;
+
+import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * @author Gayathery

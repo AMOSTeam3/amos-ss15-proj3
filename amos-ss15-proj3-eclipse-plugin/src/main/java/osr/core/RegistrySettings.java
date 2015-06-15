@@ -1,14 +1,13 @@
 package osr.core;
 
-import java.util.regex.Matcher;
-
+import de.fau.osr.util.AppProperties;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-
 import osr.adapter.PluginSPICEAuthenticationAdaptor;
 import osr.plugin.ui.RegistrySettingsDialog;
-import de.fau.osr.util.AppProperties;
+
+import java.util.regex.Matcher;
 
 /**
  * @author Gayathery Class to hold values related to the session of the plugin

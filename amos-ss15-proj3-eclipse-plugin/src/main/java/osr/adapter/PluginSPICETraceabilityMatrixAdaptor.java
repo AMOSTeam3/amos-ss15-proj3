@@ -1,14 +1,11 @@
 package osr.adapter;
 
-import java.awt.event.WindowEvent;
-
-import javax.swing.JFrame;
-
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.gui.GuiController;
-import de.fau.osr.gui.GuiView;
-import de.fau.osr.gui.TraceabilityMatrixByImpactViewHandler;
+import de.fau.osr.gui.View.TraceabilityMatrixByImpactViewHandler;
 import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
+
+import javax.swing.*;
+import java.awt.event.WindowEvent;
 
 public class PluginSPICETraceabilityMatrixAdaptor {
     
