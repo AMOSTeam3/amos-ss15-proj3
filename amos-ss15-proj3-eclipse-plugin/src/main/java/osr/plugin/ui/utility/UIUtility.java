@@ -1,4 +1,4 @@
-package osr.core;
+package osr.plugin.ui.utility;
 
 import java.util.regex.Matcher;
 
@@ -8,7 +8,6 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.equinox.log.Logger;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -18,6 +17,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import osr.core.RegistrySettings;
+
 
 /**
  * @author Gayathery
@@ -25,6 +26,7 @@ import org.eclipse.ui.PlatformUI;
  * 
  */
 public class UIUtility {
+   
 	
 	/**
 	 * This is generic JFace input dialogue for String Input.

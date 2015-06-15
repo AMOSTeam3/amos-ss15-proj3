@@ -16,13 +16,10 @@ import de.fau.osr.util.parser.CommitMessageParser;
 
 /**
  * @author Gayathery
- *  This is an adaptor class to create all necessary instnace settings to use the backend jar.
+ *  This is an adaptor class to create all necessary instance settings to use the backend jar.
  */
 public class PluginSPICETrackerAdaptor {
-    
-    /**
-     * 
-     */
+   
     private static Tracker tracker;
     private static PluginSPICETrackerAdaptor instance= null;
     
@@ -72,6 +69,12 @@ public class PluginSPICETrackerAdaptor {
     public String[] getRequirementLineLinkForFile(String filePath)throws Exception{
         return tracker.getRequirementsLineLinkageForFile(filePath);
     }
+
+
+    public static Tracker getTracker() {
+        return tracker;
+    }
+    
     
     
 }

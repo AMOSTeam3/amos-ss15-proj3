@@ -33,23 +33,32 @@
             </separator>
          </menu>
          <action
-               label="&amp;Preferences"
+               label="Enable SPICE"
                icon="icons/unnamed.gif"
-               class="osr.core.SpiceTraceabilityConfiguration"
+               class="osr.core.ui.action.PluginManagementAction"
+               tooltip="Enable SPICE plugin features"
+               menubarPath="spiceMenu/spiceGroup"
+               toolbarPath="spiceGroup"
+               id="1_osr.core.ui.action.PluginManagementAction">
+         </action> 
+         <action
+               label="Preferences"
+               icon="icons/unnamed.gif"
+               class="osr.core.ui.action.ConfigurationAction"
                tooltip="Preferences"
                menubarPath="spiceMenu/spiceGroup"
                toolbarPath="spiceGroup"
-               id="osr.core.SpiceTraceabilityConfiguration">
-         </action>
-         <action
-               label="&amp;Authenticate"
+               id="2_osr.core.ui.action.ConfigurationAction">
+         </action> 
+          <action
+               label="Traceability Matrix By Impact"
                icon="icons/unnamed.gif"
-               class="osr.core.SpiceTraceabilityAuthentication"
-               tooltip="Authentication of Spice Traceability Database"
+               class="osr.core.ui.action.TraceabilityMatrixAction"
+               tooltip="Traceability Matrix By Impact"
                menubarPath="spiceMenu/spiceGroup"
                toolbarPath="spiceGroup"
-               id="osr.core.SpiceTraceabilityAuthentication">
-         </action>         
+               id="2_osr.core.ui.action.TraceabilityMatrixAction">
+         </action>              
       </actionSet>
    </extension>
    <extension

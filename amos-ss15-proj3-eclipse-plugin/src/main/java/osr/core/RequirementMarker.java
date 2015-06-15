@@ -8,6 +8,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 
 import osr.adapter.PluginSPICETrackerAdaptor;
+import osr.plugin.ui.utility.MarkerUtility;
+import osr.plugin.ui.utility.UIUtility;
 
 /**
  * @author Gayathery
