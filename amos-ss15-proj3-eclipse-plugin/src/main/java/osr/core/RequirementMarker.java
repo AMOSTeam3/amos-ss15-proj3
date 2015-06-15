@@ -1,6 +1,9 @@
 package osr.core;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,10 +35,10 @@ public class RequirementMarker {
 			if (!activeFiles.contains(file)) {
 				activeFiles.add(file);
 				trackerAdaptor = PluginSPICETrackerAdaptor.getInstance();
-				String[] lines = trackerAdaptor.getRequirementLineLinkForFile(UIUtility.getGitFilepath());
-				for(int i = 0 ; i < lines.length; i++){
-					if(!lines[i].isEmpty())
-						addResourceMarker(file, "REQ-"+lines[i], i+1, true);
+				List<Collection<String>> lines = trackerAdaptor.getRequirementLineLinkForFile(UIUtility.getGitFilepath());
+				for(int i = 0 ; i < lines.size(); i++){
+					for(String req : lines.get(i))
+						addResourceMarker(file, req, i-1, true);
 				}
 			}
 		} catch (Exception e) {
