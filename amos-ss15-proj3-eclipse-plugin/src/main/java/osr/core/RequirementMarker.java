@@ -16,7 +16,8 @@ import osr.plugin.ui.utility.UIUtility;
  *
  */
 public class RequirementMarker {
-	
+
+	final String MARKER_TEXT_TEMPLATE = "Req-#%s / Imp:%f";
 	PluginSPICETrackerAdaptor trackerAdaptor;
 
 	/**
@@ -32,10 +33,19 @@ public class RequirementMarker {
 			if (!activeFiles.contains(file)) {
 				activeFiles.add(file);
 				trackerAdaptor = PluginSPICETrackerAdaptor.getInstance();
-				String[] lines = trackerAdaptor.getRequirementLineLinkForFile(UIUtility.getGitFilepath());
+				String currentFile = UIUtility.getGitFilepath();
+				String[] lines = trackerAdaptor.getRequirementLineLinkForFile(currentFile);
 				for(int i = 0 ; i < lines.length; i++){
-					if(!lines[i].isEmpty())
-						addResourceMarker(file, "REQ-"+lines[i], i+1, true);
+					if(!lines[i].isEmpty()) {
+						String currentReqID = lines[i];
+						float impactToFile = trackerAdaptor.getImpactPercentageForFileAndRequirement(
+								currentFile,
+								currentReqID);
+
+                        String markerText = String.format(MARKER_TEXT_TEMPLATE,
+                                currentReqID, impactToFile);
+						addResourceMarker(file, markerText, i + 1, true);
+					}
 				}
 			}
 		} catch (Exception e) {

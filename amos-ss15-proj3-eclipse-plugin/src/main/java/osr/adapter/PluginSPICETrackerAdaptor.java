@@ -66,6 +66,17 @@ public class PluginSPICETrackerAdaptor {
         return tracker.getRequirementsLineLinkageForFile(filePath);
     }
 
+    /**
+     * Returns impact value of *requirementID* to *filePath*
+     *
+     * @param filePath
+     * @param requirementID
+     * @return Impact percentage
+     * @author: Taleh Didover
+     */
+    public float getImpactPercentageForFileAndRequirement(String filePath, String requirementID) {
+        return tracker.getImpactPercentageForFileAndRequirement(filePath, requirementID);
+    }
 
     public static Tracker getTracker() {
         return tracker;
