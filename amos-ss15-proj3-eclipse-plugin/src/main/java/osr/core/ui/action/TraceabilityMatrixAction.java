@@ -6,13 +6,20 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import osr.adapter.PluginSPICETraceabilityMatrixAdaptor;
+import osr.core.RegistrySettings;
+import osr.plugin.ui.utility.UIUtility;
 
 public class TraceabilityMatrixAction implements IWorkbenchWindowActionDelegate{
 
     @Override
     public void run(IAction action) {
-       PluginSPICETraceabilityMatrixAdaptor matrix = new PluginSPICETraceabilityMatrixAdaptor();
-       matrix.loadTraceabilityMatrixByImpact();
+        if (RegistrySettings.isPluginEnabled){
+            PluginSPICETraceabilityMatrixAdaptor matrix = new PluginSPICETraceabilityMatrixAdaptor();
+            matrix.loadTraceabilityMatrixByImpact(); 
+        }else
+            UIUtility.message("SPICE Inpormation",
+                    "Enable Plugin to have this feature");
+      
         
     }
 

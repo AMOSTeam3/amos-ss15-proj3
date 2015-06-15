@@ -7,11 +7,14 @@ import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 
+/**
+ * @author Gayathery
+ * This class uses the backed Traceability Matrix functionality, the calls are adapted in this class.
+ */
 public class PluginSPICETraceabilityMatrixAdaptor {
     
     public void loadTraceabilityMatrixByImpact(){
         PluginSPICETrackerAdaptor.getInstance(); 
-        //GuiView guiView = new GuiView(new GuiController());    
         class TraceabilityMatrixViewerThread implements Runnable {
 
             @Override
@@ -22,9 +25,7 @@ public class PluginSPICETraceabilityMatrixAdaptor {
                 trMatrixByImpact.initTable();
                 trMatrixByImpact.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 trMatrixByImpact.setVisible(true);
-                //guiView.showTraceabilityMatrixByImpactProgressBar();
-                //guiView.showTraceabilityMatrixByImpact(PluginSPICETrackerAdaptor.getTracker().generateRequirementsTraceabilityByImpact());
-
+                
             }
 
         }
