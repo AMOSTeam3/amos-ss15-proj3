@@ -5,6 +5,7 @@ import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.View.Presenter.Presenter;
 import de.fau.osr.gui.View.Renderer.Tree_Renderer;
+import de.fau.osr.gui.Components.CommitFilesJTree;
 import de.fau.osr.gui.util.sorting.SortByCommitID;
 import de.fau.osr.gui.util.sorting.SortByFilename;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class CommitFile_ElementHandler extends ElementHandler {
     
     private JLabel Files_label = new JLabel("Files");
-    private JTree tree;
+    private CommitFilesJTree tree;
     
     final private String[] SORT_COMBOBOX_CHOICES = {
             "sort by chronic", "sort by filename"
@@ -75,8 +76,8 @@ public class CommitFile_ElementHandler extends ElementHandler {
                 .addComponent(scrollPane);
     }
     
-    public void setScrollPane_Content(JComponent elements){
-        tree  = (JTree) elements;
+    public void setScrollPane_Content(Presenter[] elements){
+        tree  = new CommitFilesJTree(elements);
       //expand all nodes
         for (int i = 0; i < tree.getRowCount(); i++) {
             tree.expandRow(i);

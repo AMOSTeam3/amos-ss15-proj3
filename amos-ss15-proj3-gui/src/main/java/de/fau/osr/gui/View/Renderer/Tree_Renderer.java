@@ -14,6 +14,10 @@ import java.awt.*;
 public class Tree_Renderer extends DefaultTreeCellRenderer {
     private static final long serialVersionUID = 1L;
 
+    public  Tree_Renderer() {
+        setOpaque(true);
+    }
+    
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
                                                   boolean sel,
@@ -21,7 +25,6 @@ public class Tree_Renderer extends DefaultTreeCellRenderer {
                                                   boolean leaf, int row,
                                                   boolean hasFocus) {
         //DefaultTreeCellRenderer.getTreeCellRendererComponent() returns itself
-
         JLabel element = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(
                         tree, value, selected, expanded, leaf, row, hasFocus);
 
@@ -29,6 +32,7 @@ public class Tree_Renderer extends DefaultTreeCellRenderer {
         Object content = ((DefaultMutableTreeNode) value).getUserObject();
 
         //if path, default .toString() method is called
+        element.setOpaque(true);
 
         //if a CommitFile
         if (content instanceof Presenter) {
