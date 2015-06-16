@@ -1,6 +1,7 @@
 package de.fau.osr.gui.View;
 
-import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.gui.View.Presenter.Presenter_CommitFile;
+import de.fau.osr.gui.Model.DataElements.CommitFile;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -27,13 +28,13 @@ public class CommitFile_SelectionListener implements TreeSelectionListener {
         if (commitFilesJTree.getLastSelectedPathComponent() != null) {
             DefaultMutableTreeNode element = (DefaultMutableTreeNode) commitFilesJTree
                     .getLastSelectedPathComponent();
-            if (element.getUserObject() instanceof CommitFile) {
-                commitFile = (CommitFile) element.getUserObject();
+            if (element.getUserObject() instanceof Presenter_CommitFile) {
+                commitFile = ((Presenter_CommitFile) element.getUserObject()).getCommitFile();
                 File f = new File(commitFile.newPath.getPath());
                 if (f.exists()) {
                     selectedBefore = element;
 
-                    commitFile = (CommitFile) selectedBefore.getUserObject();
+                    commitFile = ((Presenter_CommitFile) selectedBefore.getUserObject()).getCommitFile();
                     
                     action.run();
                     

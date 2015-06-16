@@ -9,12 +9,17 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 public class Transformer {
+    private static Visitor visitor = new Visitor_Swing();
+    
+    public static void setVisitor(Visitor visitortmp){
+        visitor = visitortmp;
+    }
     
     public static Presenter[] transformDataElementsToPresenters(Collection<? extends DataElement> dataElements){
         Presenter[] result = new Presenter[dataElements.size()];
         int i = 0;
         for(DataElement dataElement: dataElements){
-            result[i] = dataElement.visit(new Visitor_Swing());
+            result[i] = dataElement.visit(visitor);
             i++;
         }
         

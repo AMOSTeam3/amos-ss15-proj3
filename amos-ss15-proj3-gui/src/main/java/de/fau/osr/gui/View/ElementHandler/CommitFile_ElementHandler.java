@@ -80,6 +80,9 @@ public class CommitFile_ElementHandler extends ElementHandler {
     }
     
     public void setScrollPane_Content(Presenter[] elements, Runnable action){
+        if(elements.length == 0){
+            return;
+        }
         tree  = new CommitFilesJTree(elements);
       //expand all nodes
         for (int i = 0; i < tree.getRowCount(); i++) {
