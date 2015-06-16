@@ -37,16 +37,12 @@ public class Presenter_CommitFile extends Presenter{
     public Color getColor(){
         switch (commitFile.commitState) {
         case MODIFIED:
-            System.out.print("modified ");
             return Color.YELLOW;
         case ADDED:
-            System.out.print("added ");
             return Color.GREEN;
         case DELETED:
-            System.out.print("deleted ");
             return Color.RED;
         default:
-            System.out.print("komisch ");
             return Color.WHITE;
         }
     }
