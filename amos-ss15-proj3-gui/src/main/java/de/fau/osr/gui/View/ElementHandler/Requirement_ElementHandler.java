@@ -2,6 +2,7 @@ package de.fau.osr.gui.View.ElementHandler;
 
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
 import de.fau.osr.core.domain.Requirement;
+import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.View.Presenter.Presenter;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.MouseMotionAdapter;
 import java.util.function.Consumer;
 
@@ -45,7 +47,16 @@ public class Requirement_ElementHandler extends ElementHandler {
                         GroupLayout.PREFERRED_SIZE)
                 .addComponent(scrollPane);
     }
-    
+
+    @Override
+    public Component toComponent() {
+        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
+                .addComponent(button)
+                .addComponent(RequirementID_label)
+                .addComponent(RequirementSearch_textField)
+                .addComponent(scrollPane);
+    }
+
     public void linkSize(GroupLayout layout){
         // make the requirement column non-resizable and have all elements with
         // the same horizontal size
@@ -53,7 +64,7 @@ public class Requirement_ElementHandler extends ElementHandler {
                 scrollPane, RequirementID_textField,
                 RequirementSearch_textField);
     }
-    
+
     public JTextField getTextField(){
         return RequirementID_textField;
     }

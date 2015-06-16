@@ -1,5 +1,6 @@
 package de.fau.osr.gui.View.ElementHandler;
 
+import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.View.Presenter.Presenter;
@@ -64,4 +65,14 @@ public abstract class ElementHandler {
     public abstract ParallelGroup toHorizontalGroup(GroupLayout layout);
     
     public abstract SequentialGroup toVerticalGroup(GroupLayout layout);
+
+    /**
+     * Note: Returned Component will be added as columns to a MultiSplitePane.
+     * @return  a vertically alignmend MultiSplitPane with elements "button" and "scrollpane"
+     */
+    public Component toComponent() {
+        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
+                .addComponent(button)
+                .addComponent(scrollPane);
+    }
 }

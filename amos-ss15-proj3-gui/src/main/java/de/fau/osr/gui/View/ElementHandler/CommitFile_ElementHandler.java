@@ -1,5 +1,6 @@
 package de.fau.osr.gui.View.ElementHandler;
 
+import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
@@ -50,7 +51,7 @@ public class CommitFile_ElementHandler extends ElementHandler {
                 }
         );
     }
-    
+
     public void setComboBoxIndex(int i){
         FilesSort_combobox.setSelectedIndex(i);
     }
@@ -61,7 +62,8 @@ public class CommitFile_ElementHandler extends ElementHandler {
     
     public ParallelGroup toHorizontalGroup(GroupLayout layout) {
         return layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(button).addComponent(FilesSort_combobox)
+                .addComponent(button)
+//               .addComponent(FilesSort_combobox)
                 .addComponent(Files_label)
                 .addComponent(scrollPane, 10, 100, Short.MAX_VALUE);
     }
@@ -70,11 +72,20 @@ public class CommitFile_ElementHandler extends ElementHandler {
     public SequentialGroup toVerticalGroup(GroupLayout layout) {
         return layout.createSequentialGroup()
                 .addComponent(button)
-                .addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+//                .addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addComponent(Files_label)
                 .addComponent(scrollPane);
     }
-    
+
+    @Override
+    public Component toComponent() {
+        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
+                .addComponent(button)
+                .addComponent(Files_label)
+                .addComponent(scrollPane);
+    }
+
+
     public void setScrollPane_Content(JComponent elements){
         tree  = (JTree) elements;
       //expand all nodes

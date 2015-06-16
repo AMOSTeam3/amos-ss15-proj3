@@ -1,5 +1,6 @@
 package de.fau.osr.gui.View.ElementHandler;
 
+import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.View.Presenter.Presenter_Commit;
@@ -8,6 +9,7 @@ import de.fau.osr.gui.View.Presenter.Presenter_Requirement;
 import javax.swing.*;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Consumer;
@@ -28,7 +30,6 @@ public class Linkage_ElementHandler extends ElementHandler {
             textField.setEditable(false);
             textField.setColumns(10);
         }
-        
         button = new JButton("Add Linkage");
     }
 
@@ -45,7 +46,15 @@ public class Linkage_ElementHandler extends ElementHandler {
     public SequentialGroup toVerticalGroup(GroupLayout layout) {
         return null;
     }
-    
+
+    @Override
+    public Component toComponent() {
+        return new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT, false)
+                .addComponent(RequirementID_textField)
+                .addComponent(Commit_textField)
+                .addComponent(button);
+    }
+
     public void setButtonAction(Consumer<ButtonState> action) {
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {

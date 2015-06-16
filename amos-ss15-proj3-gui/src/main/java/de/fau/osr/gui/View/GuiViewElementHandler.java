@@ -1,5 +1,6 @@
 package de.fau.osr.gui.View;
 
+import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Controller.GuiController;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.Requirement;
@@ -80,6 +81,50 @@ public class GuiViewElementHandler extends JFrame {
     }
 
     private void positionElements() {
+        /* *layoutStructure* explained:
+            2D-Array: 1st dimension ==> Columns, 2nd dimension ==> Rows
+
+            {
+                {Component01, Component02, ... }, # Column
+                {Component11, Component12, ... }, # Column
+            }
+
+            ComponentXY: X-->Column-No, Y-->Row-No
+        */
+        // Based on this layout sturcture GUI will be created by using MultiSplinPane
+        /*
+        Component[][] layoutStructure = {
+                {RequirementID_textField, RequirementID_button, RequirementID_label, RequirementSearch_textField, RequirementID_scrollPane},
+//              {Commit_textField, Commit_button, Commit_label, Commit_scrollPane},
+                {Commit_textField,  Commit_label, Commit_scrollPane},
+//              {Linkage_button, Files_button, FilesSort_combobox, Files_label, Files_scrollPane},
+                {Linkage_button, Files_button, Files_label, Files_scrollPane},
+                {Requirements2Lines_label, Requirements2Lines_scrollPane},
+                {Code_label, Code_scrollPane}
+
+        };
+
+        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        for ( Component[] i: layoutStructure) {
+            MultiSplitPane column = new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false);
+            for (Component j: i)
+                column.addComponent(j);
+            pane.addComponent(column);
+        }
+        */
+
+        ElementHandler[] elemHandlers = {
+                Requirement_Handler, Commit_Handler, CommitFile_Handler, Impact_Handler, Code_Handler
+        };
+        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        for ( ElementHandler eachElemHandler: elemHandlers)
+            pane.addComponent(eachElemHandler.toComponent());
+
+        setLayout(new BorderLayout());
+        add(pane, BorderLayout.CENTER);
+
+        /*
+
         GroupLayout layout = new GroupLayout(getContentPane());
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -117,6 +162,7 @@ public class GuiViewElementHandler extends JFrame {
         Requirement_Handler.linkSize(layout);
 
         setLayout(layout);
+        */
     }
 
     void initializeButtonActions() {
@@ -130,16 +176,16 @@ public class GuiViewElementHandler extends JFrame {
 
         Linkage_Handler.setButtonAction(()->guiController.requirementsAndCommitsFromDB());
 
-        Menu_Handler.setConfigureAction(()->{
-                try {
-                    guiController.reConfigure();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            
+        Menu_Handler.setConfigureAction(() -> {
+            try {
+                guiController.reConfigure();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         });
 
-        Menu_Handler.setImpactAction(()->{
+        Menu_Handler.setImpactAction(() -> {
             guiController.getTraceabilityMatrixByImpact();
         });
         
