@@ -279,6 +279,7 @@ public class GuiController {
         cleaner.clearCode();
 
         Supplier<Collection<? extends DataElement>> fetching = () -> {
+            
             Collection<DataElement> files = elementHandler
                     .getCommitFile_ElementHandler().getSelection(
                             new Visitor_Swing());
@@ -289,9 +290,15 @@ public class GuiController {
                 return new ArrayList<DataElement>();
             }
         };
+        
+        Collection<DataElement> requirements = elementHandler
+                .getRequirement_ElementHandler().getSelection(
+                        new Visitor_Swing());
+        
+        Transformer.setVisitor(new Visitor_Swing(requirements));
 
         ElementHandler specificElementHandler = elementHandler
-                .getCommitFile_ElementHandler();
+                .getCode_ElementHandler();
 
         Runnable buttonAction = () -> {
         };
@@ -299,6 +306,7 @@ public class GuiController {
         Transformer.process(specificElementHandler, buttonAction, fetching);
 
         specificElementHandler = elementHandler.getImpact_ElementHandler();
+        Transformer.setVisitor(new Visitor_Swing());
 
         Transformer.process(specificElementHandler, buttonAction, fetching);
     }

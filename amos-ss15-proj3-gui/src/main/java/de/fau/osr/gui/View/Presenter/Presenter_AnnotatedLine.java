@@ -3,13 +3,15 @@ package de.fau.osr.gui.View.Presenter;
 import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
 import de.fau.osr.gui.Model.DataElements.DataElement;
+import de.fau.osr.gui.Model.DataElements.Requirement;
+import java.util.Collection;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Presenter_AnnotatedLine extends Presenter{
     private AnnotatedLine line;
-    private String RequirementID;
+    private Collection<Requirement> RequirementID;
 
     public AnnotatedLine getLine() {
         return line;
@@ -19,7 +21,7 @@ public class Presenter_AnnotatedLine extends Presenter{
         this.line = line;
     }
     
-    public void setRequirementID(String RequirementID){
+    public void setRequirementID(Collection<Requirement> RequirementID){
         this.RequirementID = RequirementID;
     }
     
@@ -32,7 +34,12 @@ public class Presenter_AnnotatedLine extends Presenter{
     }
     
     public boolean isHighlighted(){
-        return line.getRequirements().contains(RequirementID);
+        for(Requirement requirement: RequirementID){
+            if(line.getRequirements().contains(requirement.getID())){
+                return true;
+            }
+        }
+        return false;
     }
     
     @Override

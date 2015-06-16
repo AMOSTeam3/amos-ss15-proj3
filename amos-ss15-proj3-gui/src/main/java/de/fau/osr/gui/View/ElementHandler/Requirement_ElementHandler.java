@@ -96,8 +96,8 @@ public class Requirement_ElementHandler extends ElementHandler {
         RequirementID_textField.setText("");
     }
     
-    public void setScrollPane_Content(Presenter[] presenter){
-        super.setScrollPane_Content(presenter);
+    public void setScrollPane_Content(Presenter[] presenter, Runnable action){
+        super.setScrollPane_Content(presenter, action);
         
         list.addMouseMotionListener(new MouseMotionAdapter() {
 

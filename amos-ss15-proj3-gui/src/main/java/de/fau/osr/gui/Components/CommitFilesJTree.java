@@ -1,6 +1,5 @@
 package de.fau.osr.gui.Components;
 
-import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.gui.util.UiTools;
 
 import javax.swing.*;
@@ -8,6 +7,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreeSelectionModel;
+import de.fau.osr.gui.View.Presenter.Presenter_CommitFile;
+import de.fau.osr.gui.View.Presenter.Presenter;
 
 /**
  * <tt>JTree</tt> with ability to be built by array of commit files
@@ -15,7 +16,7 @@ import javax.swing.tree.TreeSelectionModel;
  */
 public class CommitFilesJTree extends JTree {
 
-    public CommitFilesJTree(CommitFile[] filesFromRequirement) {
+    public CommitFilesJTree(Presenter[] filesFromRequirement) {
         super(CommitFilesToTree(filesFromRequirement));
         this.getSelectionModel().setSelectionMode
         (TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -30,11 +31,11 @@ public class CommitFilesJTree extends JTree {
      * @param filesFromCommit array of CommitFiles
      * @return <tt>TreeNode</tt>, root of the generated tree
      */
-    public static TreeNode CommitFilesToTree(CommitFile[] filesFromCommit) {
+    public static TreeNode CommitFilesToTree(Presenter[] filesFromCommit) {
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-        for (CommitFile commitFile : filesFromCommit){
-            UiTools.AddToTreeByPath(root, commitFile.newPath.toPath(), commitFile);
+        for (Presenter commitFile : filesFromCommit){
+            UiTools.AddToTreeByPath(root, ((Presenter_CommitFile)commitFile).getCommitFile().newPath.toPath(), commitFile);
         }
         return root;
     }
