@@ -5,10 +5,13 @@ import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.View.Presenter.Presenter;
 import de.fau.osr.gui.View.Renderer.Tree_Renderer;
+import de.fau.osr.gui.View.CommitFile_SelectionListener;
 import de.fau.osr.gui.Components.CommitFilesJTree;
 import de.fau.osr.gui.util.sorting.SortByCommitID;
 import de.fau.osr.gui.util.sorting.SortByFilename;
 
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.*;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
@@ -76,7 +79,7 @@ public class CommitFile_ElementHandler extends ElementHandler {
                 .addComponent(scrollPane);
     }
     
-    public void setScrollPane_Content(Presenter[] elements){
+    public void setScrollPane_Content(Presenter[] elements, Runnable action){
         tree  = new CommitFilesJTree(elements);
       //expand all nodes
         for (int i = 0; i < tree.getRowCount(); i++) {
@@ -85,6 +88,8 @@ public class CommitFile_ElementHandler extends ElementHandler {
         
         Tree_Renderer renderer = new Tree_Renderer();
         tree.setCellRenderer(renderer);
+        
+        tree.addTreeSelectionListener(new CommitFile_SelectionListener(tree, action));
         
         JPanel panel = new JPanel(new GridLayout());
         panel.add(tree);

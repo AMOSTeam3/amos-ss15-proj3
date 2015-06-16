@@ -32,8 +32,8 @@ public class Impact_ElementHandler extends ElementHandler {
     }
 
     @Override
-    public void setScrollPane_Content(Presenter[] presenter){
-        super.setScrollPane_Content(presenter);
+    public void setScrollPane_Content(Presenter[] presenter, Runnable action){
+        super.setScrollPane_Content(presenter, action);
         list.setFixedCellHeight(12);
     }
 }

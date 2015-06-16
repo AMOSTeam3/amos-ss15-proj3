@@ -11,6 +11,8 @@ import javax.swing.GroupLayout.SequentialGroup;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -43,10 +45,16 @@ public abstract class ElementHandler {
         });
     }
     
-    public void setScrollPane_Content(Presenter[] presenter){
+    public void setScrollPane_Content(Presenter[] presenter, Runnable action){
         list = new JList<Presenter>(presenter);
         ListCellRenderer<Presenter> renderer = new List_Renderer();
         list.setCellRenderer(renderer);
+        
+        list.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                action.run();
+            }
+        });
         
         JPanel panel = new JPanel(new GridLayout());
         panel.add(list);

@@ -12,16 +12,12 @@ import java.io.File;
 public class CommitFile_SelectionListener implements TreeSelectionListener {
     private DefaultMutableTreeNode selectedBefore = null;
     private JTree commitFilesJTree;
-    private lambda lambda;
-    
-    interface lambda{
-        void doByTrigger();
-    }
+    private Runnable action;
 
-    public CommitFile_SelectionListener(JTree commitFilesJTree, lambda lambda) {
+    public CommitFile_SelectionListener(JTree commitFilesJTree, Runnable action) {
         super();
         this.commitFilesJTree = commitFilesJTree;
-        this.lambda = lambda;
+        this.action = action;
     }
     
     @Override
@@ -39,7 +35,7 @@ public class CommitFile_SelectionListener implements TreeSelectionListener {
 
                     commitFile = (CommitFile) selectedBefore.getUserObject();
                     
-                    lambda.doByTrigger();
+                    action.run();
                     
                     return;
                 }
