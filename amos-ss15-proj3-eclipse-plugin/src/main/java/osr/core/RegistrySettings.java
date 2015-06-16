@@ -1,11 +1,15 @@
 package osr.core;
 
 import de.fau.osr.util.AppProperties;
+
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.PlatformUI;
+
 import osr.adapter.PluginSPICEAuthenticationAdaptor;
 import osr.plugin.ui.RegistrySettingsDialog;
+import osr.plugin.ui.utility.UIUtility;
 
 import java.util.regex.Matcher;
 
@@ -19,6 +23,7 @@ public class RegistrySettings {
     public static String requirementPattern = AppProperties
             .GetValue("RequirementPattern");
     public static boolean isPluginEnabled = false;
+    public static IPartListener listner;
 
     /**
      * This method opens up a user input dialog and the basic plugin
@@ -39,6 +44,7 @@ public class RegistrySettings {
             RegistrySettings.requirementPattern = dialog
                     .getRequirementPattern();
         }
+        UIUtility.message("Configuration", "User Preferences successfully saved.");
         if (!new PluginSPICEAuthenticationAdaptor().authenticate(
                 dialog.getDbUsername(), dialog.getDbPassword()))
             return false;

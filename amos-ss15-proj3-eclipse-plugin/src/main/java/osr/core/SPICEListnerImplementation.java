@@ -6,6 +6,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.hibernate.engine.transaction.jta.platform.internal.ResinJtaPlatform;
 
 import osr.plugin.ui.utility.UIUtility;
 
@@ -27,9 +28,10 @@ public class SPICEListnerImplementation implements IPartListener{
 
 	@Override
 	public void partBroughtToTop(IWorkbenchPart arg0) {
-		RequirementMarker r_marker = new RequirementMarker();
-		r_marker.processActiveFileRequirementMarker(activeList);
-		
+	    if(RegistrySettings.isPluginEnabled){
+    		RequirementMarker r_marker = new RequirementMarker();
+    		r_marker.processActiveFileRequirementMarker(activeList);
+	    }
 	}
 
 	@Override
