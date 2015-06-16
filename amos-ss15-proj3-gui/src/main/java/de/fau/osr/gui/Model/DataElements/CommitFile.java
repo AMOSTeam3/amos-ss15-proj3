@@ -49,6 +49,7 @@ public class CommitFile extends DataElement {
         this.commitID = commitFile.commitID;
         this.changedData = commitFile.changedData;
         this.commitState = commitFile.commitState;
+        this.impact = commitFile.impact;
     }
 
 
