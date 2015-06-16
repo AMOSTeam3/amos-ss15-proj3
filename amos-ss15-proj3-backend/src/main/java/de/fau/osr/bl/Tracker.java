@@ -365,28 +365,32 @@ public class Tracker {
         return vcsClient.getRepositoryName();
     }
     
-    public String[] getRequirementsLineLinkageForFile(String filePath) throws Exception {
-        Collection<AnnotatedLine> lines;
-       try {
-           lines = this.getBlame(filePath);
-       } catch (IOException | GitAPIException e) {
-           throw new Exception ("Exception in Git");
-       }
-       Collection<String> reqIdsByLines = new ArrayList<String>();
+    /**
+     * @param filePath
+     * @return one Collection per line in the file, of formatted requirements
+     * that are impacted by that line  
+     * @throws Exception
+     */
+    public List<Collection<String>> getRequirementsLineLinkageForFile(String filePath) throws IOException, GitAPIException {
+    	Collection<AnnotatedLine> lines = this.getBlame(filePath);
+    	List<Collection<String>> reqIdsByLines = new ArrayList<>();
 
-       for(AnnotatedLine line: lines){
-           final Collection<String> requirements = line.getRequirements();
-           reqIdsByLines.add(Joiner.on(",").join(requirements));
-       }
+    	for(AnnotatedLine line: lines){
+    		final Collection<String> requirements = line.getRequirements();
+    		Collection<String> annotation = new ArrayList<>();
+    		reqIdsByLines.add(annotation);
+    		for(String reqId : requirements) {
+    			//fetch the req data from hibernate
+    			Requirement req = reqDao.getRequirementById(reqId);
+    			if(req != null)
+    				annotation.add("Req " + reqId + ": \"" + req.getTitle() + "\" " + req.getDescription());
+    			else // req is not in the database
+    				annotation.add("Req " + reqId);
+    		}
+    	}
 
-       return convertCollectionToArray(reqIdsByLines);
-   }
-   
-   private String[] convertCollectionToArray(Collection<String> collection) {
-       String[] array = new String[collection.size()];
-       collection.toArray(array);
-       return array;
-   }
+    	return reqIdsByLines;
+    }
 
     /**
      * @return all domain requirement objects from database

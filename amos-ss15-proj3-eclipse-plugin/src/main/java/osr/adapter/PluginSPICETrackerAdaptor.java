@@ -8,6 +8,8 @@ import de.fau.osr.util.parser.CommitMessageParser;
 import osr.core.RegistrySettings;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -62,21 +64,10 @@ public class PluginSPICETrackerAdaptor {
      * @return
      * @throws Exception
      */
-    public String[] getRequirementLineLinkForFile(String filePath)throws Exception{
+    public List<Collection<String>> getRequirementLineLinkForFile(String filePath)throws Exception{
         return tracker.getRequirementsLineLinkageForFile(filePath);
     }
 
-    /**
-     * Returns impact value of *requirementID* to *filePath*
-     *
-     * @param filePath
-     * @param requirementID
-     * @return Impact percentage
-     * @author: Taleh Didover
-     */
-    public float getImpactPercentageForFileAndRequirement(String filePath, String requirementID) {
-        return tracker.getImpactPercentageForFileAndRequirement(filePath, requirementID);
-    }
 
     public static Tracker getTracker() {
         return tracker;
