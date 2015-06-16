@@ -1,4 +1,4 @@
-package de.fau.osr.gui.util;
+package de.fau.osr.gui.Components;
 
 import javax.swing.*;
 import java.awt.*;
