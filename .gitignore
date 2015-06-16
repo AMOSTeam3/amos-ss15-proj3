@@ -21,3 +21,4 @@ log/
 #compiled version
 /out/
 dataSource.csv
+/amos-ss15-proj3-eclipse-plugin/lib/
