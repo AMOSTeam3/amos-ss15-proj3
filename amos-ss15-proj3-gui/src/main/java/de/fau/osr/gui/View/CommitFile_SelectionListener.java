@@ -1,7 +1,7 @@
 package de.fau.osr.gui.View;
 
-import de.fau.osr.gui.View.Presenter.Presenter_CommitFile;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
+import de.fau.osr.gui.View.Presenter.Presenter_CommitFile;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -30,7 +30,7 @@ public class CommitFile_SelectionListener implements TreeSelectionListener {
                     .getLastSelectedPathComponent();
             if (element.getUserObject() instanceof Presenter_CommitFile) {
                 commitFile = ((Presenter_CommitFile) element.getUserObject()).getCommitFile();
-                File f = new File(commitFile.newPath.getPath());
+                File f = new File(commitFile.workingCopy, commitFile.newPath.getPath());
                 if (f.exists()) {
                     selectedBefore = element;
 

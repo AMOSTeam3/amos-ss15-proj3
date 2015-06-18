@@ -30,7 +30,7 @@ public class Presenter_CommitFile extends Presenter{
     }
     
     public boolean isAvailable(){
-        File f = new File(commitFile.newPath.getPath());
+        File f = new File(commitFile.workingCopy, commitFile.newPath.getPath());
         return f.exists();
     }
     
