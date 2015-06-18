@@ -63,23 +63,6 @@ public class CommitFile_ElementHandler extends ElementHandler {
     public Comparator<CommitFile> getComboBoxValue(){
         return SORT_ALGORITHMS.get(FilesSort_combobox.getSelectedIndex());
     }
-    
-    public ParallelGroup toHorizontalGroup(GroupLayout layout) {
-        return layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(button)
-//               .addComponent(FilesSort_combobox)
-                .addComponent(Files_label)
-                .addComponent(scrollPane, 10, 100, Short.MAX_VALUE);
-    }
-
-    @Override
-    public SequentialGroup toVerticalGroup(GroupLayout layout) {
-        return layout.createSequentialGroup()
-                .addComponent(button)
-//                .addComponent(FilesSort_combobox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addComponent(Files_label)
-                .addComponent(scrollPane);
-    }
 
     @Override
     public Component toComponent() {
@@ -90,7 +73,7 @@ public class CommitFile_ElementHandler extends ElementHandler {
     }
 
 
-    public void setScrollPane_Content(Presenter[] elements, Runnable action){
+    public void setScrollPane_Content(Presenter[] elements){
         if(elements.length == 0){
             return;
         }
@@ -103,12 +86,14 @@ public class CommitFile_ElementHandler extends ElementHandler {
         Tree_Renderer renderer = new Tree_Renderer();
         tree.setCellRenderer(renderer);
         
-        tree.addTreeSelectionListener(new CommitFile_SelectionListener(tree, action));
-        
         JPanel panel = new JPanel(new GridLayout());
         panel.add(tree);
         scrollPane.setViewportView(panel);
     }
+    
+    public void setOnClickAction(Runnable action) {
+        tree.addTreeSelectionListener(new CommitFile_SelectionListener(tree, action));
+    };
     
     @Override
     public Collection<DataElement> getSelection(Visitor visitor){

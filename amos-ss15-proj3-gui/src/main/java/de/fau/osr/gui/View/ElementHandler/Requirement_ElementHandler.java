@@ -26,27 +26,6 @@ public class Requirement_ElementHandler extends ElementHandler {
         button = new JButton("Navigate From ID");
         scrollPane = new JScrollPane();
     }
-    
-    public ParallelGroup toHorizontalGroup(GroupLayout layout){
-        return layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-            .addComponent(RequirementID_textField)
-            .addComponent(button)
-            .addComponent(RequirementID_label)
-            .addComponent(RequirementSearch_textField)
-            .addComponent(scrollPane);
-    }
-
-    @Override
-    public SequentialGroup toVerticalGroup(GroupLayout layout) {
-        return layout
-                .createSequentialGroup()
-                .addComponent(button)
-                .addComponent(RequirementID_label)
-                .addComponent(RequirementSearch_textField,
-                        GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-                        GroupLayout.PREFERRED_SIZE)
-                .addComponent(scrollPane);
-    }
 
     @Override
     public Component toComponent() {
@@ -96,8 +75,9 @@ public class Requirement_ElementHandler extends ElementHandler {
         RequirementID_textField.setText("");
     }
     
-    public void setScrollPane_Content(Presenter[] presenter, Runnable action){
-        super.setScrollPane_Content(presenter, action);
+    
+    public void setOnClickAction(Runnable action){
+        super.setOnClickAction(action);
         
         list.addMouseMotionListener(new MouseMotionAdapter() {
 

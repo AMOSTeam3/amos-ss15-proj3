@@ -2,16 +2,25 @@ package de.fau.osr.gui.View;
 
 import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Controller.GuiController;
+import de.fau.osr.gui.Controller.Transformer;
+import de.fau.osr.gui.Controller.Visitor_Swing;
 import de.fau.osr.gui.Model.DataElements.Commit;
+import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.View.ElementHandler.*;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 
+
+
+
+
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 public class GuiViewElementHandler extends JFrame {
     
@@ -26,6 +35,12 @@ public class GuiViewElementHandler extends JFrame {
     private Impact_ElementHandler Impact_Handler = new Impact_ElementHandler();
     private Code_ElementHandler Code_Handler = new Code_ElementHandler(Impact_Handler.getScrollPane());
     private Linkage_ElementHandler Linkage_Handler = new Linkage_ElementHandler(Requirement_Handler.getTextField(), Commit_Handler.getTextField());
+    
+    private Requirement_ElementHandler Requirement_HandlerRequirementTab = new Requirement_ElementHandler();
+    private Requirement_Detail_ElementHandler Requirement_Detail_Handler = new Requirement_Detail_ElementHandler();
+    
+    private JPanel mainNavigationPanel;
+    private JPanel requirementModificationPanel;
 
     public GuiViewElementHandler(GuiController guiController) {
         this.guiController = guiController;
@@ -38,9 +53,11 @@ public class GuiViewElementHandler extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setBackground(Color.WHITE);
         setJMenuBar(Menu_Handler.getMenuBar());
-
-        positionElements();
-
+        
+        createTabs();
+        positionMainPanelElements();
+        positionRequirementPanelElements();
+        
         pack();
         setVisible(true);
     }
@@ -69,6 +86,14 @@ public class GuiViewElementHandler extends JFrame {
         return Linkage_Handler;
     }
     
+    public Requirement_ElementHandler getRequirement_ElementHandlerRequirementTab() {
+        return Requirement_HandlerRequirementTab;
+    }
+    
+    public Requirement_Detail_ElementHandler getRequirement_Detail_ElementHandler() {
+        return Requirement_Detail_Handler;
+    }
+    
     public Collection<ElementHandler> getElementHandlers(){
         ArrayList<ElementHandler> elementHandlers = new ArrayList<ElementHandler>();
         elementHandlers.add(Requirement_Handler);
@@ -79,8 +104,23 @@ public class GuiViewElementHandler extends JFrame {
         elementHandlers.add(Linkage_Handler);
         return elementHandlers;
     }
+    
+    private void createTabs(){
+        mainNavigationPanel = new JPanel();
+        mainNavigationPanel.setLayout(new BorderLayout());
+        requirementModificationPanel = new JPanel();
+        requirementModificationPanel.setLayout(new BorderLayout());
+        
+        JTabbedPane tabpane = new JTabbedPane
+        (JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
+        
+        tabpane.addTab("Navigation", mainNavigationPanel);
+        tabpane.addTab("Requirements", requirementModificationPanel);
+        this.add(tabpane);
+    }
 
-    private void positionElements() {
+    private void positionMainPanelElements() {
+        
         /* *layoutStructure* explained:
             2D-Array: 1st dimension ==> Columns, 2nd dimension ==> Rows
 
@@ -120,8 +160,8 @@ public class GuiViewElementHandler extends JFrame {
         for ( ElementHandler eachElemHandler: elemHandlers)
             pane.addComponent(eachElemHandler.toComponent());
 
-        setLayout(new BorderLayout());
-        add(pane, BorderLayout.CENTER);
+        //setLayout(new BorderLayout());
+        mainNavigationPanel.add(pane, BorderLayout.CENTER);
 
         /*
 
@@ -163,6 +203,23 @@ public class GuiViewElementHandler extends JFrame {
 
         setLayout(layout);
         */
+    }
+    
+    private void positionRequirementPanelElements() {
+        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        
+        Requirement_HandlerRequirementTab = new Requirement_ElementHandler();
+        Requirement_Detail_Handler = new Requirement_Detail_ElementHandler();
+        pane.addComponent(Requirement_HandlerRequirementTab.toComponent());
+        pane.addComponent(Requirement_Detail_Handler.toComponent());
+        
+        guiController.setRequirementIDFiltering(new FilterByExactString());
+        
+        Requirement_HandlerRequirementTab.setButtonAction(()->{
+            guiController.requirementsFromDBForRequirementTab();
+        });
+        
+        requirementModificationPanel.add(pane, BorderLayout.CENTER);
     }
 
     void initializeButtonActions() {

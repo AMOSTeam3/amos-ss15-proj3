@@ -1,6 +1,7 @@
 package de.fau.osr.gui.Controller;
 
 import com.google.common.base.Predicate;
+
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
@@ -24,13 +25,16 @@ import de.fau.osr.gui.View.TracabilityMatrix_View;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -126,8 +130,13 @@ public class GuiController {
                 cleaner = new Cleaner(elementHandler);
                 
                 requirementsFromDB();
+                requirementsFromDBForRequirementTab();
             }
         });
+    }
+    
+    public I_Collection_Model getI_Collection_Model(){
+        return this.i_Collection_Model;
     }
 
     public Comparator<CommitFile> getCommitFileSorting() {
@@ -175,6 +184,26 @@ public class GuiController {
         };
 
         Transformer.process(specificElementHandler, buttonAction, fetching);
+    }
+    
+    public void requirementsFromDBForRequirementTab(){
+        Supplier<Collection<? extends DataElement>> fetching = () -> {
+            try{
+                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+            } catch(IOException e){
+                popupManager.showErrorDialog("Internal Storage Error");
+                return new ArrayList<DataElement>();
+            }
+        };
+
+        Runnable buttonAction = () -> {
+            Collection<DataElement> dataElements = elementHandler.getRequirement_ElementHandlerRequirementTab().getSelection(
+                            new Visitor_Swing());
+            Presenter[] presenters = Transformer.transformDataElementsToPresenters(dataElements);
+            elementHandler.getRequirement_Detail_ElementHandler().setScrollPane_Content(presenters);
+        };
+
+        Transformer.process(elementHandler.getRequirement_ElementHandlerRequirementTab(), buttonAction, fetching);
     }
 
     /**

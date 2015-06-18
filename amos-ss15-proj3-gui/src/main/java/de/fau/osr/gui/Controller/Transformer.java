@@ -29,7 +29,8 @@ public class Transformer {
     public static void process(ElementHandler elementHandler, Runnable buttonAction, Supplier<Collection<? extends DataElement>> fetching){
         Collection<? extends DataElement> dataElements = fetching.get();
         Presenter[] presenter = transformDataElementsToPresenters(dataElements);
-        elementHandler.setScrollPane_Content(presenter, buttonAction);
+        elementHandler.setScrollPane_Content(presenter);
+        elementHandler.setOnClickAction(buttonAction);
     }
     
     public static Collection<Requirement> castToRequirement(Collection<DataElement> dataElement){
