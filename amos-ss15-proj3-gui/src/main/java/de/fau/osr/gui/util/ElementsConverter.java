@@ -48,7 +48,7 @@ public class ElementsConverter {
     public static Collection<Commit> convertCommitsVCSCommits(Set<de.fau.osr.core.vcs.base.Commit> commits) {
         ArrayList<Commit> newCommits = new ArrayList<>();
         for (de.fau.osr.core.vcs.base.Commit commit : commits) {
-            newCommits.add(new Commit(commit.id, commit.message, commit.requirements, Lists.newArrayList(convertCommitFiles(commit.files))));
+            newCommits.add(new Commit(commit.id, commit.message, Lists.newArrayList(convertCommitFiles(commit.files))));
         }
         return newCommits;
     }

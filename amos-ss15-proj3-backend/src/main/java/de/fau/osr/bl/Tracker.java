@@ -1,6 +1,5 @@
 package de.fau.osr.bl;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
@@ -405,8 +404,16 @@ public class Tracker {
      * @param id id of requirement
      * @return domain requirement by id
      */
-    public Requirement getRequirementObjectById(String id){
-        return reqDao.getRequirementById(id);
+    public Requirement getRequirementObjectById(String id) throws IOException {
+        Collection<Commit> commits = this.getCommitsForRequirementID(id);
+
+        Requirement req = reqDao.getRequirementById(id);
+        Set<de.fau.osr.core.domain.Commit> commitsRef = req.getCommits();
+        for (Commit commit : commits) {
+            commitsRef.add(new de.fau.osr.core.domain.Commit(commit.id, commit.message, "", commit.files, new HashSet<>()));
+        }
+
+        return req;
     }
 
     /**

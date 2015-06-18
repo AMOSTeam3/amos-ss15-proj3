@@ -8,7 +8,6 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.IOException;
@@ -47,7 +46,14 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
-        de.fau.osr.core.domain.Requirement req = tracker.getRequirementObjectById(requirement.getID());
+        de.fau.osr.core.domain.Requirement req;
+        try {
+            req = tracker.getRequirementObjectById(requirement.getID());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+
         Set<de.fau.osr.core.domain.Commit> commitsForReq = req.getCommits();
         return ElementsConverter.convertCommits(commitsForReq);
     }
