@@ -34,20 +34,6 @@ public class Linkage_ElementHandler extends ElementHandler {
     }
 
     @Override
-    public ParallelGroup toHorizontalGroup(GroupLayout layout) {
-        return layout.createParallelGroup()
-                //GroupLayout.PREFERRED_SIZE in the three arguments prevents the TextFields from scaling to multirow input
-                .addComponent(RequirementID_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addComponent(Commit_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addComponent(button, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-    }
-
-    @Override
-    public SequentialGroup toVerticalGroup(GroupLayout layout) {
-        return null;
-    }
-
-    @Override
     public Component toComponent() {
         return new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT, false)
                 .addComponent(RequirementID_textField)

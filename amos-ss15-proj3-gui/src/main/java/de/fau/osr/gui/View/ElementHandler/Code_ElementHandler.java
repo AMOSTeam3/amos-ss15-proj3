@@ -21,19 +21,6 @@ public class Code_ElementHandler extends ElementHandler {
                 .getVerticalScrollBar();
         codeVertiSrollbar.setModel(req2lineVertiScrollbar.getModel());
     }
-    
-    @Override
-    public ParallelGroup toHorizontalGroup(GroupLayout layout) {
-        return layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-        .addComponent(Code_label)
-        .addComponent(scrollPane, 10, 400, Short.MAX_VALUE);
-    }
-    @Override
-    public SequentialGroup toVerticalGroup(GroupLayout layout) {
-        return layout.createSequentialGroup()
-                .addComponent(Code_label)
-                .addComponent(scrollPane);
-    }
 
     @Override
     public Component toComponent() {
@@ -44,8 +31,8 @@ public class Code_ElementHandler extends ElementHandler {
     }
 
     @Override
-    public void setScrollPane_Content(Presenter[] presenter, Runnable action){
-        super.setScrollPane_Content(presenter, action);
+    public void setScrollPane_Content(Presenter[] presenter){
+        super.setScrollPane_Content(presenter);
         list.setFixedCellHeight(12);
     }
 }

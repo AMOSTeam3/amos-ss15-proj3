@@ -46,20 +46,22 @@ public abstract class ElementHandler {
         });
     }
     
-    public void setScrollPane_Content(Presenter[] presenter, Runnable action){
+    public void setScrollPane_Content(Presenter[] presenter){
         list = new JList<Presenter>(presenter);
         ListCellRenderer<Presenter> renderer = new List_Renderer();
         list.setCellRenderer(renderer);
         
+        JPanel panel = new JPanel(new GridLayout());
+        panel.add(list);
+        scrollPane.setViewportView(panel);
+    }
+    
+    public void setOnClickAction(Runnable action){
         list.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 action.run();
             }
         });
-        
-        JPanel panel = new JPanel(new GridLayout());
-        panel.add(list);
-        scrollPane.setViewportView(panel);
     }
     
     public Collection<DataElement> getSelection(Visitor visitor){
@@ -69,10 +71,6 @@ public abstract class ElementHandler {
         }
         return dataElements;
     }
-    
-    public abstract ParallelGroup toHorizontalGroup(GroupLayout layout);
-    
-    public abstract SequentialGroup toVerticalGroup(GroupLayout layout);
 
     /**
      * Note: Returned Component will be added as columns to a MultiSplitePane.

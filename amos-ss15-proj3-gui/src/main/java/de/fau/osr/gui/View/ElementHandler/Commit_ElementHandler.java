@@ -20,22 +20,6 @@ public class Commit_ElementHandler extends ElementHandler {
     public JTextField getTextField(){
         return Commit_textField;
     }
-    
-    public ParallelGroup toHorizontalGroup(GroupLayout layout){
-        return layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(Commit_textField)
-//                .addComponent(button)
-                .addComponent(Commit_label)
-                .addComponent(scrollPane, 10, 100, Short.MAX_VALUE);
-    }
-
-    @Override
-    public SequentialGroup toVerticalGroup(GroupLayout layout) {
-        return layout.createSequentialGroup()
-//                .addComponent(button)
-                .addComponent(Commit_label)
-                .addComponent(scrollPane);
-    }
 
     @Override
     public Component toComponent() {
