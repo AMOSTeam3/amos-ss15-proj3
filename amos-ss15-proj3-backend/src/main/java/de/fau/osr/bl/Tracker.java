@@ -3,6 +3,7 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -18,6 +19,7 @@ import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -225,29 +227,26 @@ public class Tracker {
         
         return files;
     }
+   
     
     /**
-     * @return all ever committed file paths
+     * @return all existing ever committed file paths
      */
     public Collection<String> getAllFilesAsString(){
         Set<String> files = new HashSet<String>();
+        Set<String> deletedFiles = new HashSet<String>();
         Iterator<String> allCommits = vcsClient.getCommitList();
         while (allCommits.hasNext()) {
             String currentCommit = allCommits.next();
             for(CommitFile commitfile: vcsClient.getCommitFiles(currentCommit)){
-                String name;
-                if(commitfile.commitState == CommitState.DELETED){
-                    name = commitfile.oldPath.getPath();
-                }else{
-                    name = commitfile.newPath.getPath();
-                }
-                //Pattern pattern = Pattern.compile("src");
-                //Matcher m = pattern.matcher(name);
-                //if(m.find()){
-                    files.add(name);
-                //}
+                if(!(commitfile.commitState == CommitState.DELETED))
+                    files.add(commitfile.newPath.getPath());
+                else 
+                   deletedFiles.add(commitfile.oldPath.getPath());
+              
             }
         }
+        files.removeAll(deletedFiles);
         return files;
     }
 
