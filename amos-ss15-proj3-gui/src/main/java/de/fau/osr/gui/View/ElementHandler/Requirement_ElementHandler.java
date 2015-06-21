@@ -1,7 +1,7 @@
 package de.fau.osr.gui.View.ElementHandler;
 
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.domain.Requirement;
+import de.fau.osr.core.db.domain.Requirement;
 import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.View.Presenter.Presenter;
 

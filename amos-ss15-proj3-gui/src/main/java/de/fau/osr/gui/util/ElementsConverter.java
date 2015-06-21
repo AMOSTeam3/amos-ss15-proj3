@@ -32,9 +32,9 @@ public class ElementsConverter {
      * @param commits collection of domain commits
      * @return collection of UI Commits
      */
-    public static Collection<Commit> convertCommits(Set<de.fau.osr.core.domain.Commit> commits) {
+    public static Collection<Commit> convertCommits(Set<de.fau.osr.core.db.domain.Commit> commits) {
         ArrayList<Commit> newCommits = new ArrayList<>();
-        for (de.fau.osr.core.domain.Commit commit : commits) {
+        for (de.fau.osr.core.db.domain.Commit commit : commits) {
             newCommits.add(new Commit(commit));
         }
         return newCommits;
@@ -58,9 +58,9 @@ public class ElementsConverter {
      * @param reqs collection of domain Requirements
      * @return collection of UI Requirements
      */
-    public static Collection<Requirement> convertRequirements(Collection<de.fau.osr.core.domain.Requirement> reqs) {
+    public static Collection<Requirement> convertRequirements(Collection<de.fau.osr.core.db.domain.Requirement> reqs) {
         ArrayList<Requirement> newReqs = new ArrayList<>();
-        for (de.fau.osr.core.domain.Requirement req : reqs) {
+        for (de.fau.osr.core.db.domain.Requirement req : reqs) {
             newReqs.add(new Requirement(req));
         }
         return newReqs;

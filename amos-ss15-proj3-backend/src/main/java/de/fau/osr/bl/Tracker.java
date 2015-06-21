@@ -3,7 +3,6 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
-
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -11,7 +10,7 @@ import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.db.dao.RequirementDao;
 import de.fau.osr.core.db.dao.impl.CommitDaoImplementation;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.domain.Requirement;
+import de.fau.osr.core.db.domain.Requirement;
 import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
@@ -19,7 +18,6 @@ import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -407,9 +405,9 @@ public class Tracker {
         Collection<Commit> commits = this.getCommitsForRequirementID(id);
 
         Requirement req = reqDao.getRequirementById(id);
-        Set<de.fau.osr.core.domain.Commit> commitsRef = req.getCommits();
+        Set<de.fau.osr.core.db.domain.Commit> commitsRef = req.getCommits();
         for (Commit commit : commits) {
-            commitsRef.add(new de.fau.osr.core.domain.Commit(commit.id, commit.message, "", commit.files, new HashSet<>()));
+            commitsRef.add(new de.fau.osr.core.db.domain.Commit(commit.id, commit.message, "", commit.files, new HashSet<>()));
         }
 
         return req;
@@ -418,15 +416,15 @@ public class Tracker {
     /**
      * @return all known domain commits objects
      */
-    public Set<de.fau.osr.core.domain.Commit> getAllCommitObjects() throws IOException {
+    public Set<de.fau.osr.core.db.domain.Commit> getAllCommitObjects() throws IOException {
         Collection<Commit> commits = getCommits();
-        Set<de.fau.osr.core.domain.Commit> commitObjects = new HashSet<>();
+        Set<de.fau.osr.core.db.domain.Commit> commitObjects = new HashSet<>();
         Collection<Requirement> reqs;
         reqs = getAllRequirementObjects();
 
 
 
-        HashSet<de.fau.osr.core.domain.Commit> domainCommits = new HashSet<>();
+        HashSet<de.fau.osr.core.db.domain.Commit> domainCommits = new HashSet<>();
 
         for (Commit commitSimple : commits) {
             HashSet<Requirement> reqsForCommit = new HashSet<>(reqs.stream()
@@ -434,7 +432,7 @@ public class Tracker {
                             .collect(Collectors.toList()));
 
 
-            domainCommits.add(new de.fau.osr.core.domain.Commit(commitSimple.id, commitSimple.message, "", commitSimple.files, reqsForCommit));
+            domainCommits.add(new de.fau.osr.core.db.domain.Commit(commitSimple.id, commitSimple.message, "", commitSimple.files, reqsForCommit));
         }
 
         return domainCommits;

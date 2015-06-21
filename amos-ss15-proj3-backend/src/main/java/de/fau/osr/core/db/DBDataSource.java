@@ -6,8 +6,8 @@ import de.fau.osr.core.db.dao.CommitDao;
 import de.fau.osr.core.db.dao.RequirementDao;
 import de.fau.osr.core.db.dao.impl.CommitDaoImplementation;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.domain.Commit;
-import de.fau.osr.core.domain.Requirement;
+import de.fau.osr.core.db.domain.Commit;
+import de.fau.osr.core.db.domain.Requirement;
 import org.hibernate.SessionFactory;
 
 import javax.naming.OperationNotSupportedException;

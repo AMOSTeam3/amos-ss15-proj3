@@ -46,7 +46,7 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
-        de.fau.osr.core.domain.Requirement req;
+        de.fau.osr.core.db.domain.Requirement req;
         try {
             req = tracker.getRequirementObjectById(requirement.getID());
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class TrackerAdapter implements I_Model {
             return new ArrayList<>();
         }
 
-        Set<de.fau.osr.core.domain.Commit> commitsForReq = req.getCommits();
+        Set<de.fau.osr.core.db.domain.Commit> commitsForReq = req.getCommits();
         return ElementsConverter.convertCommits(commitsForReq);
     }
 
@@ -69,7 +69,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Requirement> getRequirementsFromFile(CommitFile file) {
         Set<String> reqIds = new HashSet<>();
-        Collection<de.fau.osr.core.domain.Requirement> reqs = new ArrayList<>();
+        Collection<de.fau.osr.core.db.domain.Requirement> reqs = new ArrayList<>();
         try {
 
             reqIds = tracker.getAllRequirementsForFile(file.newPath.getPath());
@@ -116,7 +116,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Requirement> getRequirementsFromCommit(Commit commit) {
         Set<String> reqs;
-        Collection<de.fau.osr.core.domain.Requirement> reqObjects = new ArrayList<>();
+        Collection<de.fau.osr.core.db.domain.Requirement> reqObjects = new ArrayList<>();
 
         try {
             reqs = tracker.getAllCommitReqRelations().get(commit.id);
