@@ -43,8 +43,8 @@ public class CommitRequirementsListAppTest {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         PrintStream stream = new PrintStream(result);
         for(Commit commit: commits){
-            for(String i: commit.requirements){
-                stream.println("commit " + commit.id + " references Req-" + i);
+            for(String i: commit.getRequirements()){
+                stream.println("commit " + commit.getId() + " references Req-" + i);
             }
         }
         return result.toString();

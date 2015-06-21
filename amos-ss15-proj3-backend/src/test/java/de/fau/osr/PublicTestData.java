@@ -72,7 +72,7 @@ public class PublicTestData {
     public List<Commit> getCommitsWithReqIds() {
         List<Commit> commitsWithReqIds = new ArrayList<Commit>();
         for(Commit commit: commits){
-            if(commit.requirements.size() > 0){
+            if(commit.getRequirements().size() > 0){
                 commitsWithReqIds.add(commit);
             }
         }

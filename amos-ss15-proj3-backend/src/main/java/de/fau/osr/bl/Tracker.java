@@ -289,7 +289,7 @@ public class Tracker {
      * todo move to vcsClient?
      */
     public Collection<String> getRequirementsFromCommit(Commit commit) throws IOException {
-        return dataSource.getReqRelationByCommit(commit.id);
+        return dataSource.getReqRelationByCommit(commit.getId());
     }
 
     /**
