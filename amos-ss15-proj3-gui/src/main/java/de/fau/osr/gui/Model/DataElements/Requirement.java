@@ -10,7 +10,7 @@ public class Requirement extends DataElement {
     private String title;
     private String description;
 
-    public Requirement(de.fau.osr.core.db.domain.Requirement requirement) {
+    public Requirement(de.fau.osr.core.Requirement requirement) {
         this.id = requirement.getId();
         this.title = requirement.getTitle();
         this.description = requirement.getDescription();

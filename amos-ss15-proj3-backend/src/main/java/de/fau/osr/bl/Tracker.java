@@ -3,6 +3,7 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+import de.fau.osr.core.Requirement;
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -10,7 +11,6 @@ import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.db.dao.RequirementDao;
 import de.fau.osr.core.db.dao.impl.CommitDaoImplementation;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.db.domain.Requirement;
 import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
@@ -192,14 +192,18 @@ public class Tracker {
         return result;
     }
 
-    public Collection<Commit> getCommitsForRequirementID(String requirementID) throws IOException {
+    /**
+     * @return all commit objects, are related to this requirement id
+     * @throws IOException
+     */
+    public Set<Commit> getCommitsForRequirementID(String requirementID) throws IOException {
         ArrayList<Commit> commits = new ArrayList<Commit>();
 
         for(String commitID: getAllReqCommitRelations().get(requirementID)){
             commits.add(new Commit(commitID, vcsClient.getCommitMessage(commitID), null, vcsClient.getCommitFiles(commitID)));
         }
 
-        return commits;
+        return new HashSet<>(commits);
     }
 
     /**
@@ -377,7 +381,8 @@ public class Tracker {
     		reqIdsByLines.add(annotation);
     		for(String reqId : requirements) {
     			//fetch the req data from hibernate
-    			Requirement req = reqDao.getRequirementById(reqId);
+    			Requirement req = this.getRequirementObjectById(reqId);
+
     			if(req != null)
     				annotation.add("Req " + reqId + ": \"" + req.getTitle() + "\" " + req.getDescription());
     			else // req is not in the database
@@ -394,48 +399,49 @@ public class Tracker {
      */
     public Collection<Requirement> getAllRequirementObjects() throws IOException {
 
-        return reqDao.getAllRequirements();
+        List<de.fau.osr.core.db.domain.Requirement> allRequirementsFromDB = reqDao.getAllRequirements();
+        Set<Requirement> reqs = new HashSet<>();
+        for (de.fau.osr.core.db.domain.Requirement r : allRequirementsFromDB) {
+            //convert commits to IDs only
+            Set<String> commits = new HashSet<>();
+            for (de.fau.osr.core.db.domain.Commit commit : r.getCommits()) {
+                commits.add(commit.getId());
+            }
+
+            //create Core-Req by DB-Req
+            reqs.add(new Requirement(r.getId(), r.getDescription(), r.getTitle(), commits, r.getStoryPoint()));
+        }
+
+        return reqs;
     }
 
     /**
      * @param id id of requirement
-     * @return domain requirement by id
+     * @return data object requirement by id
      */
     public Requirement getRequirementObjectById(String id) throws IOException {
-        Collection<Commit> commits = this.getCommitsForRequirementID(id);
+        Set<String> commitIds = dataSource.getCommitRelationByReq(id);
 
-        Requirement req = reqDao.getRequirementById(id);
-        Set<de.fau.osr.core.db.domain.Commit> commitsRef = req.getCommits();
-        for (Commit commit : commits) {
-            commitsRef.add(new de.fau.osr.core.db.domain.Commit(commit.id, commit.message, "", commit.files, new HashSet<>()));
+        de.fau.osr.core.db.domain.Requirement req = reqDao.getRequirementById(id);
+
+        String description = "";
+        String title = "";
+        int storyPoints = 0;
+
+        if (req != null) {
+            description = req.getDescription();
+            title = req.getTitle();
+            storyPoints = req.getStoryPoint();
         }
 
-        return req;
+        return new Requirement(id, description, title, commitIds, storyPoints);
     }
 
     /**
      * @return all known domain commits objects
      */
-    public Set<de.fau.osr.core.db.domain.Commit> getAllCommitObjects() throws IOException {
-        Collection<Commit> commits = getCommits();
-        Set<de.fau.osr.core.db.domain.Commit> commitObjects = new HashSet<>();
-        Collection<Requirement> reqs;
-        reqs = getAllRequirementObjects();
-
-
-
-        HashSet<de.fau.osr.core.db.domain.Commit> domainCommits = new HashSet<>();
-
-        for (Commit commitSimple : commits) {
-            HashSet<Requirement> reqsForCommit = new HashSet<>(reqs.stream()
-                            .filter(req -> commitSimple.requirements.contains(req.getId()))
-                            .collect(Collectors.toList()));
-
-
-            domainCommits.add(new de.fau.osr.core.db.domain.Commit(commitSimple.id, commitSimple.message, "", commitSimple.files, reqsForCommit));
-        }
-
-        return domainCommits;
+    public Set<Commit> getAllCommitObjects() throws IOException {
+        return new HashSet<>(getCommits());
     }
 
     /**

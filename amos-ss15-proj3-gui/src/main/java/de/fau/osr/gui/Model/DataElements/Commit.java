@@ -21,12 +21,12 @@ public class Commit extends DataElement {
         this.files = files;
     }
 
-    public Commit(de.fau.osr.core.db.domain.Commit commit) {
-        this.id = commit.getId();
-        this.message = commit.getMessage();
+    public Commit(de.fau.osr.core.vcs.base.Commit commit) {
+        this.id = commit.id;
+        this.message = commit.message;
         files = new ArrayList<>();
 
-        List<de.fau.osr.core.vcs.base.CommitFile> commitFilesToCopy = commit.getCommitFiles();
+        List<de.fau.osr.core.vcs.base.CommitFile> commitFilesToCopy = commit.files;
 
         if (commitFilesToCopy != null) {
             for (de.fau.osr.core.vcs.base.CommitFile commitFile : commitFilesToCopy) {
