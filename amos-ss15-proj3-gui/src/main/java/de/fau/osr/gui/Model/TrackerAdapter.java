@@ -88,7 +88,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Commit> getCommitsFromFile(CommitFile file) {
         try {
-            return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
+            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -119,7 +119,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Commit> getAllCommits() {
         try {
-            return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommits()));
+            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommits()));
         } catch (IOException e) {
             e.printStackTrace();
         }

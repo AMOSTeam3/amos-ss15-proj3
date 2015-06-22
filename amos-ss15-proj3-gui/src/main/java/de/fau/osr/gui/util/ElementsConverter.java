@@ -1,6 +1,5 @@
 package de.fau.osr.gui.util;
 
-import com.beust.jcommander.internal.Lists;
 import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
@@ -36,19 +35,6 @@ public class ElementsConverter {
         ArrayList<Commit> newCommits = new ArrayList<>();
         for (de.fau.osr.core.vcs.base.Commit commit : commits) {
             newCommits.add(new Commit(commit));
-        }
-        return newCommits;
-    }
-
-    /**
-     * converts VCS Commits to UI Commits
-     * @param commits collection of VCS Commits
-     * @return collection of UI Commits
-     */
-    public static Collection<Commit> convertCommitsVCSCommits(Set<de.fau.osr.core.vcs.base.Commit> commits) {
-        ArrayList<Commit> newCommits = new ArrayList<>();
-        for (de.fau.osr.core.vcs.base.Commit commit : commits) {
-            newCommits.add(new Commit(commit.getId(), commit.getMessage(), Lists.newArrayList(convertCommitFiles(commit.getCommitFiles()))));
         }
         return newCommits;
     }
