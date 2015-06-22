@@ -1,10 +1,9 @@
-package de.fau.osr.util.filtering;
+package de.fau.osr.gui.util.filtering;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import de.fau.osr.gui.Model.DataElements.Requirement;
-import de.fau.osr.gui.util.filtering.FilterByExactString;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
