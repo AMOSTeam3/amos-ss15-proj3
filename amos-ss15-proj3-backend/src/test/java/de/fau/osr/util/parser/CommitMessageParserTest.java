@@ -72,7 +72,7 @@ public class CommitMessageParserTest extends TestCase {
     @Test
     public void parseAdvancedTest() {
         Parser parser = new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
-        List<String> actual = parser.parse(expectedCommit.message);
-        assertTrue(actual.containsAll(expectedCommit.requirements) && expectedCommit.requirements.containsAll(actual));
+        List<String> actual = parser.parse(expectedCommit.getMessage());
+        assertTrue(actual.containsAll(expectedCommit.getRequirements()) && expectedCommit.getRequirements().containsAll(actual));
     }
 }

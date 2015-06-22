@@ -3,7 +3,8 @@ package de.fau.osr.bl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
-
+import com.google.common.collect.Sets;
+import de.fau.osr.core.Requirement;
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
 import de.fau.osr.core.db.DataSource;
@@ -11,7 +12,6 @@ import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.db.dao.RequirementDao;
 import de.fau.osr.core.db.dao.impl.CommitDaoImplementation;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.domain.Requirement;
 import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
@@ -19,7 +19,6 @@ import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -156,9 +155,6 @@ public class Tracker {
      */
     public Set<String> getAllRequirementsForFile(String filePath) throws IOException {
 
-        long startTime = System.currentTimeMillis();
-
-        logger.debug("Start call : getAllRequirementsForFile():filePath = " + filePath);
         Set<String> requirementList = new HashSet<>();
 
         Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
@@ -167,8 +163,6 @@ public class Tracker {
         while(commitIdListIterator.hasNext()){
                 requirementList.addAll(relations.get(commitIdListIterator.next()));
         }
-
-        logger.debug("End call -getAllRequirementsForFile() Time: " + (System.currentTimeMillis() - startTime));
 
         return requirementList;
 
@@ -194,11 +188,18 @@ public class Tracker {
         return result;
     }
 
-    public Collection<Commit> getCommitsForRequirementID(String requirementID) throws IOException {
-        ArrayList<Commit> commits = new ArrayList<Commit>();
+    /**
+     * @return all commit objects, are related to this requirement id
+     * @throws IOException
+     */
+    public Set<Commit> getCommitsForRequirementID(String requirementID) throws IOException {
+        Set<Commit> commits = new HashSet<Commit>();
 
         for(String commitID: getAllReqCommitRelations().get(requirementID)){
-            commits.add(new Commit(commitID, vcsClient.getCommitMessage(commitID), null, vcsClient.getCommitFiles(commitID)));
+            commits.add(new Commit(commitID,
+                    vcsClient.getCommitMessage(commitID),
+                    dataSource.getCommitRelationByReq(commitID),
+                    vcsClient.getCommitFiles(commitID)));
         }
 
         return commits;
@@ -208,12 +209,19 @@ public class Tracker {
      * @return list of all requirement ids
      */
     public Collection<String> getAllRequirements() throws IOException {
-        return getAllReqCommitRelations().keySet();
+
+        Set<Requirement> allReqs = dataSource.getAllRequirements();
+        HashSet<String> result = new HashSet<>();
+        for (Requirement req : allReqs) {
+            result.add(req.getId());
+        }
+
+        return result;
     }
 
 
     /**
-     * @return all ever committed file paths
+     * @return all ever committed files, as <tt>CommitFiles</tt>
      */
     public Collection<CommitFile> getAllFiles(){
         Set<CommitFile> files = new HashSet<CommitFile>();
@@ -253,15 +261,9 @@ public class Tracker {
     /**
      * @return collection of all commit objects
      */
-    public Collection<Commit> getCommits() {
-        Iterator<String> iterator = vcsClient.getCommitList();
-        ArrayList<Commit> commits = new ArrayList<Commit>();
-        while(iterator.hasNext()){
-            String Id = iterator.next();
-            commits.add(new Commit(Id, vcsClient.getCommitMessage(Id), null, vcsClient.getCommitFiles(Id)));
-
-        }
-        return commits;
+    public Collection<Commit> getCommits() throws IOException {
+        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitList());
+        return getCommitObjectsByIds(ids);
     }
 
     /**
@@ -269,43 +271,16 @@ public class Tracker {
      * @param filePath file to search for
      * @return collection of commit objects
      */
-    public Collection<Commit> getCommitsFromFile(String filePath) {
-        Iterator<String> iterator = vcsClient.getCommitListForFileodification(filePath);
-        ArrayList<Commit> commits = new ArrayList<Commit>();
-        while(iterator.hasNext()){
-            String Id = iterator.next();
-            commits.add(new Commit(Id, vcsClient.getCommitMessage(Id), null, vcsClient.getCommitFiles(Id)));
-
-        }
-        return commits;
-    }
-
-    /**
-     * parses requirements from commit
-     * @param commit commit to read from
-     * @return collection of requirement ids
-     * todo move to vcsClient?
-     */
-    public Collection<String> getRequirementsFromCommit(Commit commit) throws IOException {
-        return dataSource.getReqRelationByCommit(commit.id);
-    }
-
-    /**
-     * get reqs by commit id
-     * @param commitID
-     * @return
-     * @throws IOException
-     */
-    public Collection<String> getRequirementsFromCommit(String commitID) throws IOException {
-        return dataSource.getReqRelationByCommit(commitID);
+    public Collection<Commit> getCommitsFromFile(String filePath) throws IOException {
+        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitListForFileodification(filePath));
+        return getCommitObjectsByIds(ids);
     }
 
     /**
      * add Linkage between Requirement and Commit
      * @param commitID and requirementId to be linked
      */
-    public void addRequirementCommitRelation(String requirementID,
-            String commitID) throws Exception {
+    public void addRequirementCommitRelation(String requirementID, String commitID) throws Exception {
         dataSource.addReqCommitRelation(requirementID, commitID);
     }
 
@@ -317,9 +292,10 @@ public class Tracker {
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
         return vcsClient.blame(path, dataSource);
     }
- /**
-  * Method which performs the complete processing of Requirement Traceability
-  */
+
+    /**
+     * Method which performs the complete processing of Requirement Traceability
+     */
     public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
 
         try{
@@ -373,13 +349,21 @@ public class Tracker {
     	Collection<AnnotatedLine> lines = this.getBlame(filePath);
     	List<Collection<String>> reqIdsByLines = new ArrayList<>();
 
-    	for(AnnotatedLine line: lines){
+        //preload all reqs to ID -> Req IdentityHashMap
+        Collection<Requirement> allReqs = getAllRequirementObjects();
+        IdentityHashMap<String, Requirement> reqsById = new IdentityHashMap<>();
+        for (Requirement req : allReqs) {
+            reqsById.put(req.getId(), req);
+        }
+
+        for(AnnotatedLine line: lines){
     		final Collection<String> requirements = line.getRequirements();
     		Collection<String> annotation = new ArrayList<>();
     		reqIdsByLines.add(annotation);
     		for(String reqId : requirements) {
-    			//fetch the req data from hibernate
-    			Requirement req = reqDao.getRequirementById(reqId);
+    			//fetch the req data from data source
+    			Requirement req = reqsById.get(reqId);
+
     			if(req != null)
     				annotation.add("Req " + reqId + ": \"" + req.getTitle() + "\" " + req.getDescription());
     			else // req is not in the database
@@ -395,49 +379,29 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Requirement> getAllRequirementObjects() throws IOException {
-
-        return reqDao.getAllRequirements();
+        return dataSource.getAllRequirements();
     }
 
     /**
      * @param id id of requirement
-     * @return domain requirement by id
+     * @return data object requirement by id
      */
     public Requirement getRequirementObjectById(String id) throws IOException {
-        Collection<Commit> commits = this.getCommitsForRequirementID(id);
-
-        Requirement req = reqDao.getRequirementById(id);
-        Set<de.fau.osr.core.domain.Commit> commitsRef = req.getCommits();
-        for (Commit commit : commits) {
-            commitsRef.add(new de.fau.osr.core.domain.Commit(commit.id, commit.message, "", commit.files, new HashSet<>()));
+        Collection<Requirement> allReqs = getAllRequirementObjects();
+        for (Requirement req : allReqs) {
+            if (req.getId().equals(id)){
+                return req;
+            }
         }
 
-        return req;
+        throw new NoSuchElementException("Requirement with id " + id + " not found");
     }
 
     /**
      * @return all known domain commits objects
      */
-    public Set<de.fau.osr.core.domain.Commit> getAllCommitObjects() throws IOException {
-        Collection<Commit> commits = getCommits();
-        Set<de.fau.osr.core.domain.Commit> commitObjects = new HashSet<>();
-        Collection<Requirement> reqs;
-        reqs = getAllRequirementObjects();
-
-
-
-        HashSet<de.fau.osr.core.domain.Commit> domainCommits = new HashSet<>();
-
-        for (Commit commitSimple : commits) {
-            HashSet<Requirement> reqsForCommit = new HashSet<>(reqs.stream()
-                            .filter(req -> commitSimple.requirements.contains(req.getId()))
-                            .collect(Collectors.toList()));
-
-
-            domainCommits.add(new de.fau.osr.core.domain.Commit(commitSimple.id, commitSimple.message, "", commitSimple.files, reqsForCommit));
-        }
-
-        return domainCommits;
+    public Set<Commit> getAllCommitObjects() throws IOException {
+        return new HashSet<>(getCommits());
     }
 
     /**
@@ -454,6 +418,21 @@ public class Tracker {
         return reqObjects.stream()
                 .filter(req -> finalReqs.contains(req.getId()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * creates/gets commit objects, by given ids.
+     * @return set of commit objects
+     * @throws IOException
+     */
+    public Set<Commit> getCommitObjectsByIds(Collection<String> commitIds) throws IOException {
+        Set<Commit> commits = new HashSet<>();
+        SetMultimap<String, String> relations = getAllCommitReqRelations();
+        for (String id : commitIds) {
+            commits.add(new Commit(id, vcsClient.getCommitMessage(id), relations.get(id), vcsClient.getCommitFiles(id)));
+        }
+
+        return commits;
     }
 }
 

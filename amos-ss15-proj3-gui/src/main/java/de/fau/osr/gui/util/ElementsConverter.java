@@ -32,9 +32,9 @@ public class ElementsConverter {
      * @param commits collection of domain commits
      * @return collection of UI Commits
      */
-    public static Collection<Commit> convertCommits(Set<de.fau.osr.core.domain.Commit> commits) {
+    public static Collection<Commit> convertCommits(Set<de.fau.osr.core.vcs.base.Commit> commits) {
         ArrayList<Commit> newCommits = new ArrayList<>();
-        for (de.fau.osr.core.domain.Commit commit : commits) {
+        for (de.fau.osr.core.vcs.base.Commit commit : commits) {
             newCommits.add(new Commit(commit));
         }
         return newCommits;
@@ -48,7 +48,7 @@ public class ElementsConverter {
     public static Collection<Commit> convertCommitsVCSCommits(Set<de.fau.osr.core.vcs.base.Commit> commits) {
         ArrayList<Commit> newCommits = new ArrayList<>();
         for (de.fau.osr.core.vcs.base.Commit commit : commits) {
-            newCommits.add(new Commit(commit.id, commit.message, Lists.newArrayList(convertCommitFiles(commit.files))));
+            newCommits.add(new Commit(commit.getId(), commit.getMessage(), Lists.newArrayList(convertCommitFiles(commit.getCommitFiles()))));
         }
         return newCommits;
     }
@@ -58,9 +58,9 @@ public class ElementsConverter {
      * @param reqs collection of domain Requirements
      * @return collection of UI Requirements
      */
-    public static Collection<Requirement> convertRequirements(Collection<de.fau.osr.core.domain.Requirement> reqs) {
+    public static Collection<Requirement> convertRequirements(Collection<de.fau.osr.core.Requirement> reqs) {
         ArrayList<Requirement> newReqs = new ArrayList<>();
-        for (de.fau.osr.core.domain.Requirement req : reqs) {
+        for (de.fau.osr.core.Requirement req : reqs) {
             newReqs.add(new Requirement(req));
         }
         return newReqs;

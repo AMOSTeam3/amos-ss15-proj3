@@ -2,7 +2,7 @@ package de.fau.osr.core.db.dao.impl;
 
 import de.fau.osr.core.db.DBOperation;
 import de.fau.osr.core.db.DBTestHelper;
-import de.fau.osr.core.domain.Commit;
+import de.fau.osr.core.db.domain.Commit;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;

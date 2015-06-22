@@ -60,8 +60,8 @@ public class CommitFileListingAppTest {
 
     @Test
     public void mainTest(){
-        CommitFileListingApp.main(new String [] {"-repo", PublicTestData.getGitTestRepo(), "-commit", expectedCommit.id});
-        String expected = buildOutputString(expectedCommit.id);
+        CommitFileListingApp.main(new String [] {"-repo", PublicTestData.getGitTestRepo(), "-commit", expectedCommit.getId()});
+        String expected = buildOutputString(expectedCommit.getId());
         assertEquals(expected, outContent.toString());
     }
 

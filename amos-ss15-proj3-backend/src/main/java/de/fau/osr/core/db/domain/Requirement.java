@@ -1,4 +1,4 @@
-package de.fau.osr.core.domain;
+package de.fau.osr.core.db.domain;
 
 import javax.persistence.*;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package de.fau.osr.core.domain;
+package de.fau.osr.core.db.domain;
 
 import de.fau.osr.core.vcs.base.CommitFile;
 

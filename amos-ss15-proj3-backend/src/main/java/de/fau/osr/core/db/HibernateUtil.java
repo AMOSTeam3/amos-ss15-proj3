@@ -1,7 +1,7 @@
 package de.fau.osr.core.db;
 
-import de.fau.osr.core.domain.Commit;
-import de.fau.osr.core.domain.Requirement;
+import de.fau.osr.core.db.domain.Commit;
+import de.fau.osr.core.db.domain.Requirement;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;

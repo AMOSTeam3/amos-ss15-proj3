@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
+ * Adapter for Tracker, implements I_Model
  * Created by Dmitry Gorelenkov on 14.06.2015.
  */
 public class TrackerAdapter implements I_Model {
@@ -46,15 +47,16 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
-        de.fau.osr.core.domain.Requirement req;
+        de.fau.osr.core.Requirement req;
+        Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
         try {
             req = tracker.getRequirementObjectById(requirement.getID());
+            commitsForReq = tracker.getCommitsForRequirementID(req.getId());
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
 
-        Set<de.fau.osr.core.domain.Commit> commitsForReq = req.getCommits();
         return ElementsConverter.convertCommits(commitsForReq);
     }
 
@@ -69,7 +71,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Requirement> getRequirementsFromFile(CommitFile file) {
         Set<String> reqIds = new HashSet<>();
-        Collection<de.fau.osr.core.domain.Requirement> reqs = new ArrayList<>();
+        Collection<de.fau.osr.core.Requirement> reqs = new ArrayList<>();
         try {
 
             reqIds = tracker.getAllRequirementsForFile(file.newPath.getPath());
@@ -85,7 +87,13 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromFile(CommitFile file) {
-        return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
+        try {
+            return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 
     @Override
@@ -110,13 +118,19 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getAllCommits() {
-        return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommits()));
+        try {
+            return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommits()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 
     @Override
     public Collection<Requirement> getRequirementsFromCommit(Commit commit) {
         Set<String> reqs;
-        Collection<de.fau.osr.core.domain.Requirement> reqObjects = new ArrayList<>();
+        Collection<de.fau.osr.core.Requirement> reqObjects = new ArrayList<>();
 
         try {
             reqs = tracker.getAllCommitReqRelations().get(commit.id);

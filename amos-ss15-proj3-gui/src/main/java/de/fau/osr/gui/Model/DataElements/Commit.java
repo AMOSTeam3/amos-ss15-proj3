@@ -21,7 +21,7 @@ public class Commit extends DataElement {
         this.files = files;
     }
 
-    public Commit(de.fau.osr.core.domain.Commit commit) {
+    public Commit(de.fau.osr.core.vcs.base.Commit commit) {
         this.id = commit.getId();
         this.message = commit.getMessage();
         files = new ArrayList<>();

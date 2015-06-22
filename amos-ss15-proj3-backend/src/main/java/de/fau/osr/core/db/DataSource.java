@@ -4,10 +4,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+import de.fau.osr.core.Requirement;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,6 +18,7 @@ import java.util.Set;
  */
 public abstract class DataSource {
     protected SetMultimap<String, String> cachedReqCommitRelations;
+    protected Set<Requirement> cachedAllRequirements;
 
     /**
      * perform computing, and gets set of all requirements to commit relations
@@ -34,6 +37,7 @@ public abstract class DataSource {
      */
     public void clearCache(){
         this.cachedReqCommitRelations = null;
+        this.cachedAllRequirements = null;
     }
 
     /**
@@ -85,8 +89,6 @@ public abstract class DataSource {
 
     /**
      * check if relation already exists
-     * @param reqId
-     * @param commitId
      * @return true if relation already exists, false otherwise
      * @throws IOException
      */
@@ -97,10 +99,10 @@ public abstract class DataSource {
 
     /**
      * if relation already exists, changes it, if not, adds it
-     * @param oldReqId
-     * @param oldCommit
-     * @param newReqId
-     * @param newCommit
+     * @param oldReqId old state requirement id
+     * @param oldCommit old state commit id
+     * @param newReqId new state requirement id
+     * @param newCommit new state commit id
      * @throws IOException
      */
     public void setReqCommitRelation(String oldReqId, String oldCommit, String newReqId, String newCommit) throws IOException, OperationNotSupportedException {
@@ -137,6 +139,41 @@ public abstract class DataSource {
     }
 
     /**
+     * try to get cached version of all requirements, creates cached version, if it was was not created before
+     * @return set of all requirements, as data objects
+     * @throws IOException
+     */
+    public Set<Requirement> getAllRequirements() throws IOException {
+        if (!isCachedAllReqs()) {
+            doCacheAllReqs(doGetAllRequirements());
+        }
+
+        return doGetCachedAllRequirements();
+    }
+
+    /**
+     * @return cached requirement or null
+     */
+    protected Set<Requirement> doGetCachedAllRequirements() {
+        return this.cachedAllRequirements;
+    }
+
+    /**
+     * put requirements to cache
+     */
+    protected void doCacheAllReqs(Set<Requirement> requirements) {
+        this.cachedAllRequirements = requirements;
+    }
+
+    /**
+     * check if requirements for getAllRequirements() are cached
+     * @return true if requirements cached
+     */
+    protected boolean isCachedAllReqs() {
+        return cachedAllRequirements != null;
+    }
+
+    /**
      * used for default implementation of getAllReqCommitRelations
      * @param setToCache set should be cached
      */
@@ -158,6 +195,26 @@ public abstract class DataSource {
      */
     protected boolean isCachedReqCommitRelations(){
         return cachedReqCommitRelations != null;
+    }
+
+    /**
+     * default implementation for retrieving all requirements.
+     * {@link DataSource#getAllReqCommitRelations()} is used
+     * @return requirement data objects
+     * @throws IOException
+     */
+    protected Set<Requirement> doGetAllRequirements() throws IOException {
+        SetMultimap<String, String> allRelations = getAllReqCommitRelations();
+
+        Set<String> reqIds = allRelations.keySet();
+        Set<Requirement> result = new HashSet<>();
+
+        for (String reqId : reqIds) {
+            Set<String> commits = getCommitRelationByReq(reqId);
+            result.add(new Requirement(reqId, null, null, commits, 0));
+        }
+
+        return result;
     }
 
 }

@@ -3,7 +3,7 @@ package de.fau.osr.core.db.dao.impl;
 import de.fau.osr.core.db.DBOperation;
 import de.fau.osr.core.db.DBTestHelper;
 import de.fau.osr.core.db.dao.RequirementDao;
-import de.fau.osr.core.domain.Requirement;
+import de.fau.osr.core.db.domain.Requirement;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Before;

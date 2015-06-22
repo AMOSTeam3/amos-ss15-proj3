@@ -2,17 +2,11 @@ package de.fau.osr.bl;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
-
-import de.fau.osr.PublicTestData;
 import de.fau.osr.core.db.DBTestHelper;
 import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
-import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -21,12 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -118,9 +108,9 @@ public class TrackerTest {
         Mockito.doReturn(getSampleCommitFiles()).when(mockedClient).getCommitFiles(commitId);
         
         Collection<String> files = mockedTracker.getAllFilesAsString();
-        System.out.println(files.size());
         assertEquals(files.size(), 1);
-    } 
+        assertTrue(files.contains(getSampleCommitFiles().get(0).newPath.getPath()));
+    }
     
     private List<CommitFile> getSampleCommitFiles(){
         String commitId = "a0b52e890fa0d7fad6563cf91ea6dcca52e9226f";
