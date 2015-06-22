@@ -2,11 +2,11 @@ package de.fau.osr.core.db;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+import de.fau.osr.core.Requirement;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * This <tt>DataSource</tt> uses multiple <tt>DataSource</tt>'s
@@ -46,6 +46,21 @@ public class CompositeDataSource extends DataSource {
     @Override
     protected void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         dataSource.removeReqCommitRelation(reqId, commitId);
+    }
+
+    @Override
+    protected Set<Requirement> doGetAllRequirements() throws IOException {
+        Set<Requirement> result = new HashSet<>();
+
+        //reverse, to make first added data source, overwriting other data sources
+        ArrayList<DataSource> dataSourcesReversed = dataSources;
+        Collections.reverse(dataSourcesReversed);
+
+        for (DataSource ds : dataSourcesReversed) {
+            result.addAll(ds.getAllRequirements());
+        }
+
+        return result;
     }
 
     @Override

@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
+ * Adapter for Tracker, implements I_Model
  * Created by Dmitry Gorelenkov on 14.06.2015.
  */
 public class TrackerAdapter implements I_Model {
@@ -86,7 +87,13 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromFile(CommitFile file) {
-        return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
+        try {
+            return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 
     @Override
@@ -111,7 +118,13 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getAllCommits() {
-        return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommits()));
+        try {
+            return ElementsConverter.convertCommitsVCSCommits(new HashSet<>(tracker.getCommits()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 
     @Override

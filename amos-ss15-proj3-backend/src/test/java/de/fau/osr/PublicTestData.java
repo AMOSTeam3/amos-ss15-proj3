@@ -8,7 +8,9 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This Class handles all Testdata. If u want to get any Path related to a Test Repository or any other Test file,
@@ -96,7 +98,7 @@ public class PublicTestData {
             while ((line = br.readLine()) != null) {
                 String[] commitString = line.split(csvSplitStringsBy);
 
-                List<String> requirements = new ArrayList<String>();
+                Set<String> requirements = new HashSet<>();
                 String [] requirementStrings = commitString[2].split(csvSplitEntriesBy);
                 for(String str: requirementStrings){
                     if(!str.equals("")){

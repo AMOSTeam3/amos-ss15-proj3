@@ -5,7 +5,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,12 +17,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class CommitTest {
 
-    private List<String> reqsList;
+    private Set<String> reqsList;
     private List<CommitFile> commitFileList;
 
     @Before
     public void setUp(){
-        reqsList = new ArrayList<>();
+        reqsList = new HashSet<>();
         reqsList.add("req1");
         reqsList.add("req2");
         commitFileList= (new ArrayList<>());
@@ -59,7 +61,7 @@ public class CommitTest {
 
     @Test
     public void CommitConstructor_requirementsField_Empty_Test() {
-        List<String> req = new ArrayList<>();
+        Set<String> req = new HashSet<>();
         Commit commitToTest = new Commit(null, null, req, null);
         assertEquals("requirements should be equal the initialization requirements", req, commitToTest.getRequirements());
     }

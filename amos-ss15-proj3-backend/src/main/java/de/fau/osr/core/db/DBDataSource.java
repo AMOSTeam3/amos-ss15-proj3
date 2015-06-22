@@ -12,7 +12,9 @@ import org.hibernate.SessionFactory;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * DataSource implementation, that gets data from Database
@@ -81,5 +83,26 @@ public class DBDataSource extends DataSource {
         if (!reqDao.persist(DBOperation.UPDATE, req)){
             throw new IOException("Can not remove requirement - commit relation");
         }
+    }
+
+    @Override
+    protected Set<de.fau.osr.core.Requirement> doGetAllRequirements() throws IOException {
+        List<Requirement> dbReqs = reqDao.getAllRequirements();
+        Set<de.fau.osr.core.Requirement> result = new HashSet<>();
+
+        for (Requirement r : dbReqs) {
+            //convert commits to IDs only
+            Set<String> commits = new HashSet<>();
+            for (de.fau.osr.core.db.domain.Commit commit : r.getCommits()) {
+                commits.add(commit.getId());
+            }
+
+            //create Core-Req by DB-Req
+            result.add(new de.fau.osr.core.Requirement(
+                    r.getId(), r.getDescription(), r.getTitle(), commits, r.getStoryPoint())
+            );
+        }
+
+        return result;
     }
 }

@@ -1,29 +1,30 @@
 package de.fau.osr.core.vcs.base;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * This Class is a Container within the test framework for all information related to one commit.
  * @author: Florian Gerdes
  */
 public class Commit {
-    private List<String> requirements;
+    private Set<String> requirements;
 
     private String id;
     private String message;
     private List<CommitFile> commitFiles;
-    public Commit(String id, String message, List<String> requirements, List<CommitFile> commitFiles) {
+    public Commit(String id, String message, Set<String> requirements, List<CommitFile> commitFiles) {
         this.setId(id);
         this.setMessage(message);
         this.setRequirements(requirements);
         this.setCommitFiles(commitFiles);
     }
 
-    public List<String> getRequirements() {
+    public Set<String> getRequirements() {
         return requirements;
     }
 
-    public void setRequirements(List<String> requirements) {
+    public void setRequirements(Set<String> requirements) {
         this.requirements = requirements;
     }
 
