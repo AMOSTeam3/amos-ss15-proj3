@@ -4,26 +4,20 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import de.fau.osr.gui.Model.DataElements.Requirement;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author Taleh Didover
  */
-public class FilterByExactStringTest extends TestCase {
+public class FilterByExactStringTest {
 
-    public void setUp() throws Exception {
-        super.setUp();
-
-    }
-
-    public void tearDown() throws Exception {
-
-    }
-
+    @Test
     public void test_SimpleFiltering() throws Exception {
         Collection<Requirement> testdatas = new ArrayList<>();
         for (String word : "Java ist auch eine Insel".split(" ")) {
@@ -36,6 +30,7 @@ public class FilterByExactStringTest extends TestCase {
         assertTrue(Iterables.elementsEqual(expected, got));
     }
 
+    @Test
     public void test_NoFiltering() throws Exception {
         Collection<Requirement> testdatas = new ArrayList<>();
 
