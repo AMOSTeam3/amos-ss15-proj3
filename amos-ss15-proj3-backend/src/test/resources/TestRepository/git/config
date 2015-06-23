@@ -5,5 +5,3 @@
 	logallrefupdates = true
 [branch "master"]
     merge = refs/heads/master
-[gitg]
-	mainline = refs/heads/master

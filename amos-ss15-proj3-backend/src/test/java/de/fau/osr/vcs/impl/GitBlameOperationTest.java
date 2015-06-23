@@ -22,7 +22,7 @@ public class GitBlameOperationTest {
     GitVcsClient git;
     
     public GitBlameOperationTest() throws Exception {
-    	git = new GitVcsClient(PublicTestData.getGitTestRepo());
+    	git = new GitVcsClient(getClass().getResource("/TestRepository2/git").getPath());
     }
     
     @SuppressWarnings("unchecked")
