@@ -1,1 +1,6 @@
 0000000000000000000000000000000000000000 b0b5d16e8071c775bdcd1b2d0b1cca464917780b Tobias Polzer <tobias.polzer@fau.de> 1429809298 +0200	clone: from https://github.com/uv48uson/Test_Repository.git
+b0b5d16e8071c775bdcd1b2d0b1cca464917780b 7d976690e23e1f63a5fba276ba5e057c0d12481c Tobias Polzer <tobias.polzer@fau.de> 1434977584 +0200	commit: bar
+7d976690e23e1f63a5fba276ba5e057c0d12481c 5bc1bbc44d181f3e476d616002b7adf0994bac2f Tobias Polzer <tobias.polzer@fau.de> 1434980107 +0200	commit: bar2
+5bc1bbc44d181f3e476d616002b7adf0994bac2f 267a4dbc6f85165bcfcc71ef75de80f17cc8a98a Tobias Polzer <tobias.polzer@fau.de> 1435054858 +0200	commit: bar
+267a4dbc6f85165bcfcc71ef75de80f17cc8a98a 0a69da6463b9fbabd369cef807c51904d1e650b6 Tobias Polzer <tobias.polzer@fau.de> 1435054893 +0200	rebase -i (finish): refs/heads/master onto 7d976690e23e1f63a5fba276ba5e057c0d12481c
+0a69da6463b9fbabd369cef807c51904d1e650b6 55cac0165833e9d0481af957b0b5d41f2ee019c2 Tobias Polzer <tobias.polzer@fau.de> 1435054916 +0200	rebase -i (finish): refs/heads/master onto b0b5d16e8071c775bdcd1b2d0b1cca464917780b

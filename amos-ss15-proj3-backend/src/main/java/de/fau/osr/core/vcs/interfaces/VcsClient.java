@@ -5,6 +5,7 @@ import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.VcsEnvironment;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 
