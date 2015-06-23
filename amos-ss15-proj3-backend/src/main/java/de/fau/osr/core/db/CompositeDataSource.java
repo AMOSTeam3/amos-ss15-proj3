@@ -50,13 +50,9 @@ public class CompositeDataSource extends DataSource {
 
     @Override
     protected Set<Requirement> doGetAllRequirements() throws IOException {
+
         Set<Requirement> result = new HashSet<>();
-
-        //reverse, to make first added data source, overwriting other data sources
-        ArrayList<DataSource> dataSourcesReversed = dataSources;
-        Collections.reverse(dataSourcesReversed);
-
-        for (DataSource ds : dataSourcesReversed) {
+        for (DataSource ds : dataSources) {
             result.addAll(ds.getAllRequirements());
         }
 
