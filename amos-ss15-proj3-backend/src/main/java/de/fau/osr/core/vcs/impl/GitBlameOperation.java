@@ -1,5 +1,6 @@
 package de.fau.osr.core.vcs.impl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -160,7 +161,12 @@ public class GitBlameOperation {
 		ObjectId rootId = repo.resolve("HEAD");
 		RevWalk walker = new RevWalk(repo);
 		RevCommit rootCommit = walker.parseCommit(rootId);
-		String content = client.blobToString(client.fileAtRev(walker, path, rootCommit));
+		String content;
+		try {
+			content = client.blobToString(client.fileAtRev(walker, path, rootCommit));
+		} catch (NullPointerException e1) {
+			throw new FileNotFoundException(path);
+		}
 
 		FlatSource source = FlatSource.flatten(content);
 		@SuppressWarnings("unchecked")

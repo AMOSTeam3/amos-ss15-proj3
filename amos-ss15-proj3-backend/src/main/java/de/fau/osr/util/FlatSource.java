@@ -42,9 +42,15 @@ public class FlatSource {
 
 	    while (end != BreakIterator.DONE) {
 	        String word = source.substring(start,end);
+	        
+	        //replace lines with nothing but spaces by newline
+	        if(word.contains("\n")) word = "\n";
 	        if(!word.equals("\n")) {
 	        	sb.append(word + "\n");
 	        	lineNumbers.add(curLine);
+	        } else {
+	        	//sb.append("\n");
+	        	//lineNumbers.add(curLine);
 	        }
 	        if(word.charAt(0) == '\n') ++curLine;
 	        start = end;
