@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -439,50 +438,5 @@ public class Tracker {
 }
 
 
-
-
-/**
- * class for Thread of Traceability Matrix processing
- */
-class TraceabilityMatrixThread implements Runnable{
-    static Tracker tracker;
-    String filePath;
-    static RequirementsTraceabilityMatrix requirementsTraceabilityMatrixWorker;
-    static void setRequirementTraceabilityMatrix(Tracker trackerObject){
-        try {
-            tracker = trackerObject;
-            requirementsTraceabilityMatrixWorker = new RequirementsTraceabilityMatrix(tracker.getAllRequirements());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    static RequirementsTraceabilityMatrix getRequirementTraceabilityMatrix(){
-        return requirementsTraceabilityMatrixWorker;
-    }
-    TraceabilityMatrixThread(String filePath){
-        this.filePath = filePath;
-    }
-
-    @Override
-    public void run() throws IndexOutOfBoundsException{
-        List<String> fileRequirements;
-        try {
-            String unixFormatedFilePath = filePath.replaceAll(Matcher.quoteReplacement("\\"), "/");
-            fileRequirements = new ArrayList<String>( tracker.getAllRequirementsForFile(unixFormatedFilePath));
-            if(!fileRequirements.isEmpty())
-                requirementsTraceabilityMatrixWorker.populateMatrix(fileRequirements,unixFormatedFilePath);
-        } catch(IndexOutOfBoundsException e){
-            throw e;
-        }catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
-    }
-
-}
 
 
