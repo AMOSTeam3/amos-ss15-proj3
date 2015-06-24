@@ -16,6 +16,7 @@ import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.impl.GitBlameOperation;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
@@ -290,7 +291,8 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-        return vcsClient.blame(path, dataSource);
+        GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
+        return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
     }
 
     /**
