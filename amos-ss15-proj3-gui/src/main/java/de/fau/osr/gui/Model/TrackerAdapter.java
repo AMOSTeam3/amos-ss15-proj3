@@ -10,6 +10,7 @@ import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -191,6 +192,20 @@ public class TrackerAdapter implements I_Model {
     @Override
     public RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact() {
         return tracker.generateRequirementsTraceabilityByImpact();
+    }
+
+    @Override
+    public boolean updateRequirement(String id, String title, String description) {
+        try {
+            tracker.saveOrUpdateRequirement(id, title, description);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (OperationNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 

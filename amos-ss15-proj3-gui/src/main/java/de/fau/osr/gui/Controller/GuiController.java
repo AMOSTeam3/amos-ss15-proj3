@@ -1,6 +1,7 @@
 package de.fau.osr.gui.Controller;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
@@ -15,6 +16,8 @@ import de.fau.osr.gui.Model.I_Collection_Model;
 import de.fau.osr.gui.Model.TrackerAdapter;
 import de.fau.osr.gui.View.Cleaner;
 import de.fau.osr.gui.View.ElementHandler.ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_ElementHandler;
 import de.fau.osr.gui.View.GuiViewElementHandler;
 import de.fau.osr.gui.View.PopupManager;
 import de.fau.osr.gui.View.Presenter.Presenter;
@@ -192,14 +195,35 @@ public class GuiController {
             }
         };
 
+        Requirement_Detail_ElementHandler detail_handler = elementHandler.getRequirement_Detail_ElementHandler();
+        Requirement_ElementHandler tabAndReqsList_elementHandler = elementHandler.getRequirement_ElementHandlerRequirementTab();
+
         Runnable buttonAction = () -> {
-            Collection<DataElement> dataElements = elementHandler.getRequirement_ElementHandlerRequirementTab().getSelection(
-                            new Visitor_Swing());
+            Collection<DataElement> dataElements = tabAndReqsList_elementHandler.getSelection(
+                    new Visitor_Swing());
             Presenter[] presenters = Transformer.transformDataElementsToPresenters(dataElements);
-            elementHandler.getRequirement_Detail_ElementHandler().setScrollPane_Content(presenters);
+
+            detail_handler.setScrollPane_Content(presenters);
         };
 
-        Transformer.process(elementHandler.getRequirement_ElementHandlerRequirementTab(), buttonAction, fetching);
+        Transformer.process(tabAndReqsList_elementHandler, buttonAction, fetching);
+
+        detail_handler.addListenerOnSaveClick(e1 -> {
+                    Requirement lastSelected = (Requirement)Iterables.getLast(tabAndReqsList_elementHandler.getSelection(new Visitor_Swing()));
+
+                    String id = lastSelected.getID();
+                    String title = detail_handler.getTitle().getText();
+                    String description = detail_handler.getDescription().getText();
+
+                    String resultMsg = "Saved!";
+                    if (!getI_Collection_Model().updateRequirement(id, title, description)) {
+                        resultMsg = "Failed!";
+                    }
+                    popupManager.showInformationDialog(resultMsg);
+                }
+
+
+        );
     }
 
     /**

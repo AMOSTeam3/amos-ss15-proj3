@@ -45,4 +45,5 @@ public interface I_Model {
 
     RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact();
 
+    boolean updateRequirement(String id, String title, String description);
 }

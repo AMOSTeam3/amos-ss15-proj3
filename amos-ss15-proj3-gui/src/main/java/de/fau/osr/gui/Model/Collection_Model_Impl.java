@@ -213,4 +213,9 @@ public class Collection_Model_Impl implements I_Collection_Model {
         return model.generateRequirementsTraceabilityByImpact();
     }
 
+    @Override
+    public boolean updateRequirement(String id, String title, String description) {
+        return model.updateRequirement(id, title, description);
+    }
+
 }

@@ -25,6 +25,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -435,6 +436,16 @@ public class Tracker {
         }
 
         return commits;
+    }
+
+    /**
+     * creates or updates requirement in database
+     * @param id id of req to update or create
+     * @param title new title
+     * @param description new description
+     */
+    public void saveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+        dataSource.saveOrUpdateRequirement(id, title, description);
     }
 
 
