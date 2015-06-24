@@ -37,7 +37,7 @@ public class TrackerAdapter implements I_Model {
         Collection<Requirement> reqsUI = new ArrayList<>();
 
         try {
-            reqsUI = ElementsConverter.convertRequirements(tracker.getAllRequirementObjects());
+            reqsUI = ElementsConverter.convertRequirements(tracker.getRequirements());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,7 +50,7 @@ public class TrackerAdapter implements I_Model {
         de.fau.osr.core.Requirement req;
         Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
         try {
-            req = tracker.getRequirementObjectById(requirement.getID());
+            req = tracker.getRequirementById(requirement.getID());
             commitsForReq = tracker.getCommitsForRequirementID(req.getId());
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,7 +64,7 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getAllFiles() {
-        return ElementsConverter.convertCommitFiles(tracker.getAllFiles());
+        return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
     }
 
 
@@ -74,9 +74,9 @@ public class TrackerAdapter implements I_Model {
         Collection<de.fau.osr.core.Requirement> reqs = new ArrayList<>();
         try {
 
-            reqIds = tracker.getAllRequirementsForFile(file.newPath.getPath());
+            reqIds = tracker.getRequirementIdsForFile(file.newPath.getPath());
 
-            reqs = tracker.getReqObjectsByIds(reqIds);
+            reqs = tracker.getRequirementsByIds(reqIds);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Commit> getCommitsFromFile(CommitFile file) {
         try {
-            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
+            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsForFile(file.newPath.getPath())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,7 +135,7 @@ public class TrackerAdapter implements I_Model {
         try {
             reqs = tracker.getAllCommitReqRelations().get(commit.id);
 
-            reqObjects = tracker.getReqObjectsByIds(reqs);
+            reqObjects = tracker.getRequirementsByIds(reqs);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,7 +1,6 @@
 package de.fau.osr.gui.Controller;
 
 import com.google.common.base.Predicate;
-
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
@@ -25,16 +24,13 @@ import de.fau.osr.gui.View.TracabilityMatrix_View;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -369,7 +365,7 @@ public class GuiController {
 //    }
 //
     /**
-     * Navigation: ->Files Clear: All Setting: Files Using: getAllFiles
+     * Navigation: ->Files Clear: All Setting: Files Using: getAllCommitFiles
      */
     public void filesFromDB() {
 

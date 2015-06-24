@@ -15,7 +15,7 @@ class TraceabilityMatrixThread implements Runnable{
     static void setRequirementTraceabilityMatrix(Tracker trackerObject){
         try {
             tracker = trackerObject;
-            requirementsTraceabilityMatrixWorker = new RequirementsTraceabilityMatrix(tracker.getAllRequirements());
+            requirementsTraceabilityMatrixWorker = new RequirementsTraceabilityMatrix(tracker.getRequirementIds());
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -34,7 +34,7 @@ class TraceabilityMatrixThread implements Runnable{
         List<String> fileRequirements;
         try {
             String unixFormatedFilePath = filePath.replaceAll(Matcher.quoteReplacement("\\"), "/");
-            fileRequirements = new ArrayList<String>( tracker.getAllRequirementsForFile(unixFormatedFilePath));
+            fileRequirements = new ArrayList<String>( tracker.getRequirementIdsForFile(unixFormatedFilePath));
             if(!fileRequirements.isEmpty())
                 requirementsTraceabilityMatrixWorker.populateMatrix(fileRequirements,unixFormatedFilePath);
         } catch(IndexOutOfBoundsException e){

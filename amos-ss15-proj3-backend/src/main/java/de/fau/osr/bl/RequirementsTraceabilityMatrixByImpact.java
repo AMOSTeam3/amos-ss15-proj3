@@ -28,7 +28,7 @@ public class RequirementsTraceabilityMatrixByImpact {
      */
     public void Process(){
         try {
-            requirements.addAll(tracker.getAllRequirements());
+            requirements.addAll(tracker.getRequirementIds());
             java.util.Collections.sort(requirements);
             files.addAll(tracker.getAllFilesAsString());
             java.util.Collections.sort(files,new FileComparator());
@@ -58,13 +58,13 @@ public class RequirementsTraceabilityMatrixByImpact {
      */
     public void ProcessAlternate(){
         try {
-            requirements.addAll(tracker.getAllRequirements());
+            requirements.addAll(tracker.getRequirementIds());
             files.addAll(tracker.getAllFilesAsString());
             for(String requirement: requirements){
                 System.out.println(requirement);
                 for(String file : files){
                     String unixFormatedFilePath = file.replaceAll(Matcher.quoteReplacement("\\"), "/");
-                    if(!tracker.getAllRequirementsForFile(unixFormatedFilePath).contains(requirement)){
+                    if(!tracker.getRequirementIdsForFile(unixFormatedFilePath).contains(requirement)){
                         continue;
                     }
                     requirementTraceabilityByImpactMatrix.put(new RequirementFilePair(requirement,file), new RequirementFileImpactValue(tracker.getImpactPercentageForFileAndRequirement(unixFormatedFilePath, requirement)));
