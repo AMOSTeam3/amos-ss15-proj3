@@ -1,6 +1,6 @@
 package de.fau.osr.core.vcs.impl;
 
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.CommitFile;
@@ -16,6 +16,7 @@ import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
@@ -27,6 +28,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
@@ -294,6 +296,35 @@ public class GitVcsClient extends VcsClient{
             res.add(new AnnotatedLine(annotation, text.getString(i)));
         }
         return res;
+    }
+    
+    /**
+     * @param walker
+     * @param path the relative path of the file to fetch
+     * @param commit has to belong to the passed RevWalk
+     * @return null if path does not exist in this revision, its ObjectId otherwise
+     * @throws IOException
+     * @throws GitAPIException
+     */
+    ObjectId fileAtRev(RevWalk walker, String path, RevCommit commit) throws GitAPIException, IOException {
+    	RevTree tree = commit.getTree();
+    	TreeWalk treeWalk = TreeWalk.forPath(git.getRepository(), path, tree);
+    	if(treeWalk == null) return null;
+    	ObjectId file = treeWalk.getObjectId(0);
+    	return file;
+    }
+    
+    /**
+     * Reads object into a String, makes no effort to check if this operations
+     * makes sense.
+     * @param object
+     * @return The bytes of object interpreted as utf8 String
+     * @throws GitAPIException
+     * @throws IOException
+     */
+    String blobToString(ObjectId object) throws GitAPIException, IOException {
+    	ObjectReader reader = git.getRepository().newObjectReader();
+    	return new String(reader.open(object).getBytes(), "utf-8");
     }
     
     /**
