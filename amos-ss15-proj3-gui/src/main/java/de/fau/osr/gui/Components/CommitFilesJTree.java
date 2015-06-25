@@ -35,7 +35,7 @@ public class CommitFilesJTree extends JTree {
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
         for (Presenter commitFile : filesFromCommit){
-            UiTools.AddToTreeByPath(root, ((Presenter_CommitFile)commitFile).getCommitFile().newPath.toPath(), commitFile);
+            UiTools.AddToTreeByPath(root, ((Presenter_CommitFile)commitFile).getCommitFile().get(0).newPath.toPath(), commitFile);
         }
         return root;
     }

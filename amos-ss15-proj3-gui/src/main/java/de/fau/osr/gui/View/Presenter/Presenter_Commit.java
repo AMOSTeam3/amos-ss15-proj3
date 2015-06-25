@@ -1,6 +1,8 @@
 package de.fau.osr.gui.View.Presenter;
 
 
+import java.util.Collection;
+
 import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.DataElement;
@@ -30,7 +32,7 @@ public class Presenter_Commit extends Presenter{
     }
     
     @Override
-    public DataElement visit(Visitor visitor){
+    public Collection<? extends DataElement> visit(Visitor visitor){
         return visitor.toDataElement(this);
     }
 }

@@ -57,7 +57,7 @@ public class Presenter_AnnotatedLine extends Presenter{
     }
     
     @Override
-    public DataElement visit(Visitor visitor){
+    public Collection<? extends DataElement> visit(Visitor visitor){
         return visitor.toDataElement(this);
     }
 }
