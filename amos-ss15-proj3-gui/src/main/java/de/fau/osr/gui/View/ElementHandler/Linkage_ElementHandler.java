@@ -18,27 +18,49 @@ public class Linkage_ElementHandler extends ElementHandler {
     public enum ButtonState{Deactivate, Activate}
     private ButtonState buttonState = ButtonState.Activate;
     
-    private JTextField RequirementID_textField;
-    private JTextField Commit_textField;
+    private JTextField RequirementID_textField = new JTextField();
+    private JTextField Commit_textField = new JTextField();
     private Presenter_Requirement requirement = null;
     private Presenter_Commit commit = null;
     
-    public Linkage_ElementHandler(JTextField RequirementID_textField, JTextField Commit_textField){
-        this.RequirementID_textField = RequirementID_textField;
-        this.Commit_textField = Commit_textField;
+    public Linkage_ElementHandler(){
         for(JTextField textField : new JTextField[]{this.RequirementID_textField, this.Commit_textField}) {
             textField.setEditable(false);
-            textField.setColumns(10);
+            textField.setColumns(50);
         }
         button = new JButton("Add Linkage");
+        button.setPreferredSize(new Dimension(20, 5));
     }
 
     @Override
     public Component toComponent() {
-        return new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT, false)
-                .addComponent(RequirementID_textField)
-                .addComponent(Commit_textField)
-                .addComponent(button);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        panel.add(Box.createRigidArea(new Dimension(0,50)));
+        
+        RequirementID_textField.setAlignmentX(Component.LEFT_ALIGNMENT);
+        RequirementID_textField.setMaximumSize(new Dimension(500, 25));
+        RequirementID_textField.setPreferredSize(new Dimension(500, 25));
+        RequirementID_textField.setMinimumSize(new Dimension(500, 25));
+        RequirementID_textField.setBackground(Color.WHITE);
+        panel.add(RequirementID_textField);
+        
+        panel.add(Box.createRigidArea(new Dimension(0,10)));
+        
+        Commit_textField.setAlignmentX(Component.LEFT_ALIGNMENT);
+        Commit_textField.setMaximumSize(new Dimension(500, 25));
+        Commit_textField.setPreferredSize(new Dimension(500, 25));
+        Commit_textField.setMinimumSize(new Dimension(500, 25));
+        Commit_textField.setBackground(Color.WHITE);
+        panel.add(Commit_textField);
+        
+        panel.add(Box.createRigidArea(new Dimension(0,10)));
+        
+        button.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(button);
+        
+        return panel;
     }
 
     public void setButtonAction(Consumer<ButtonState> action) {

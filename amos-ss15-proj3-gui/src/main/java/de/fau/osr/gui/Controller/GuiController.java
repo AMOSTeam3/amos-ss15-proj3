@@ -130,6 +130,8 @@ public class GuiController {
                 
                 requirementsFromDB();
                 requirementsFromDBForRequirementTab();
+                requirementsFromDBForManagementTab();
+                commitsFromDBForManagementTab();
             }
         });
     }
@@ -224,6 +226,42 @@ public class GuiController {
 
 
         );
+    }
+    
+    public void requirementsFromDBForManagementTab(){
+
+        Supplier<Collection<? extends DataElement>> fetching = () -> {
+            try{
+                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+            } catch(IOException e){
+                popupManager.showErrorDialog("Internal Storage Error");
+                return new ArrayList<DataElement>();
+            }
+        };
+
+        ElementHandler specificElementHandler = elementHandler
+                .getRequirement_Handler_ManagementTab();
+
+        Runnable buttonAction = () -> {
+            
+        };
+
+        Transformer.process(specificElementHandler, buttonAction, fetching);
+    }
+    
+    public void commitsFromDBForManagementTab(){
+        Supplier<Collection<? extends DataElement>> fetching = () -> {
+            return i_Collection_Model.getCommitsFromDB();
+        };
+
+        ElementHandler specificElementHandler = elementHandler
+                .getCommit_Handler_ManagementTab();
+
+        Runnable buttonAction = () -> {
+            
+        };
+
+        Transformer.process(specificElementHandler, buttonAction, fetching);
     }
 
     /**

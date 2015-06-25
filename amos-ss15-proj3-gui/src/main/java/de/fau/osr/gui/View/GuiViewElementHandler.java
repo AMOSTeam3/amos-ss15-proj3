@@ -14,6 +14,7 @@ import de.fau.osr.gui.util.filtering.FilterByExactString;
 
 
 
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -34,13 +35,18 @@ public class GuiViewElementHandler extends JFrame {
     private CommitFile_ElementHandler CommitFile_Handler = new CommitFile_ElementHandler();
     private Impact_ElementHandler Impact_Handler = new Impact_ElementHandler();
     private Code_ElementHandler Code_Handler = new Code_ElementHandler(Impact_Handler.getScrollPane());
-    private Linkage_ElementHandler Linkage_Handler = new Linkage_ElementHandler(Requirement_Handler.getTextField(), Commit_Handler.getTextField());
+    
     
     private Requirement_ElementHandler Requirement_HandlerRequirementTab = new Requirement_ElementHandler();
     private Requirement_Detail_ElementHandler Requirement_Detail_Handler = new Requirement_Detail_ElementHandler();
     
+    private Requirement_ElementHandler Requirement_Handler_ManagementTab = new Requirement_ElementHandler();
+    private Commit_ElementHandler Commit_Handler_ManagementTab = new Commit_ElementHandler();
+    private Linkage_ElementHandler Linkage_Handler = new Linkage_ElementHandler();
+    
     private JPanel mainNavigationPanel;
     private JPanel requirementModificationPanel;
+    private JPanel LinkageManagmentPanel;
 
     public GuiViewElementHandler(GuiController guiController) {
         this.guiController = guiController;
@@ -57,6 +63,7 @@ public class GuiViewElementHandler extends JFrame {
         createTabs();
         positionMainPanelElements();
         positionRequirementPanelElements();
+        positionRequirementManagementPanelElements();
         
         pack();
         setVisible(true);
@@ -94,6 +101,14 @@ public class GuiViewElementHandler extends JFrame {
         return Requirement_Detail_Handler;
     }
     
+    public Requirement_ElementHandler getRequirement_Handler_ManagementTab() {
+        return Requirement_Handler_ManagementTab;
+    }
+    
+    public Commit_ElementHandler getCommit_Handler_ManagementTab() {
+        return Commit_Handler_ManagementTab;
+    }
+    
     public Collection<ElementHandler> getElementHandlers(){
         ArrayList<ElementHandler> elementHandlers = new ArrayList<ElementHandler>();
         elementHandlers.add(Requirement_Handler);
@@ -110,12 +125,15 @@ public class GuiViewElementHandler extends JFrame {
         mainNavigationPanel.setLayout(new BorderLayout());
         requirementModificationPanel = new JPanel();
         requirementModificationPanel.setLayout(new BorderLayout());
+        LinkageManagmentPanel = new JPanel();
+        LinkageManagmentPanel.setLayout(new BorderLayout());
         
         JTabbedPane tabpane = new JTabbedPane
         (JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
         
         tabpane.addTab("Navigation", mainNavigationPanel);
         tabpane.addTab("Requirements", requirementModificationPanel);
+        tabpane.addTab("Linkage Management", LinkageManagmentPanel);
         this.add(tabpane);
     }
 
@@ -220,6 +238,28 @@ public class GuiViewElementHandler extends JFrame {
         });
         
         requirementModificationPanel.add(pane, BorderLayout.CENTER);
+    }
+    
+    private void positionRequirementManagementPanelElements() {
+        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        
+        pane.addComponent(Requirement_Handler_ManagementTab.toComponent());
+        pane.addComponent(Commit_Handler_ManagementTab.toComponent());
+        pane.addComponent(Linkage_Handler.toComponent());
+        
+        Requirement_Handler_ManagementTab.setButtonAction(()->{
+            //guiController.requirementsFromDBForRequirementTab();
+        });
+        
+        Commit_Handler_ManagementTab.setButtonAction(()->{
+            //guiController.requirementsFromDBForRequirementTab();
+        });
+        
+        Linkage_Handler.setButtonAction(()->{
+            //guiController.requirementsFromDBForRequirementTab();
+        });
+        
+        LinkageManagmentPanel.add(pane, BorderLayout.CENTER);
     }
 
     void initializeButtonActions() {
