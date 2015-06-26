@@ -243,7 +243,8 @@ public class GuiController {
                 .getRequirement_Handler_ManagementTab();
 
         Runnable buttonAction = () -> {
-            
+            ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setRequirement((Presenter_Requirement)dataElements.get(dataElements.size()-1).visit(new Visitor_Swing()));
         };
 
         Transformer.process(specificElementHandler, buttonAction, fetching);
@@ -258,7 +259,8 @@ public class GuiController {
                 .getCommit_Handler_ManagementTab();
 
         Runnable buttonAction = () -> {
-            
+            ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setCommit((Presenter_Commit)dataElements.get(dataElements.size()-1).visit(new Visitor_Swing()));
         };
 
         Transformer.process(specificElementHandler, buttonAction, fetching);

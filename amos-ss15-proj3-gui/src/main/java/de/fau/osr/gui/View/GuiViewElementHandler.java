@@ -248,15 +248,11 @@ public class GuiViewElementHandler extends JFrame {
         pane.addComponent(Linkage_Handler.toComponent());
         
         Requirement_Handler_ManagementTab.setButtonAction(()->{
-            //guiController.requirementsFromDBForRequirementTab();
+            guiController.requirementsFromDBForManagementTab();
         });
         
         Commit_Handler_ManagementTab.setButtonAction(()->{
-            //guiController.requirementsFromDBForRequirementTab();
-        });
-        
-        Linkage_Handler.setButtonAction(()->{
-            //guiController.requirementsFromDBForRequirementTab();
+            guiController.commitsFromDBForManagementTab();
         });
         
         LinkageManagmentPanel.add(pane, BorderLayout.CENTER);
@@ -299,18 +295,18 @@ public class GuiViewElementHandler extends JFrame {
         });
         
         Linkage_Handler.setButtonAction((Linkage_ButtonState)->{
-            switch(Linkage_ButtonState){
-            case Deactivate:
-                guiController.requirementsAndCommitsFromDB();
-                break;
-            case Activate: 
-                Requirement requirement = Linkage_Handler.getRequirement();
-                Commit commit = Linkage_Handler.getCommit();
-                if(requirement != null && commit != null){
-                    guiController.addLinkage(requirement, commit);
-                }
-                break;
-            }
+//            switch(Linkage_ButtonState){
+//            case Deactivate:
+//                guiController.requirementsAndCommitsFromDB();
+//                break;
+//            case Activate: 
+//                Requirement requirement = Linkage_Handler.getRequirement();
+//                Commit commit = Linkage_Handler.getCommit();
+//                if(requirement != null && commit != null){
+//                    guiController.addLinkage(requirement, commit);
+//                }
+//                break;
+//            }
         });
     }
 
