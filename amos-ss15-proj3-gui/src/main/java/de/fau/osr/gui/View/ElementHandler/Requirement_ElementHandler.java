@@ -1,13 +1,10 @@
 package de.fau.osr.gui.View.ElementHandler;
 
-import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
-import de.fau.osr.core.db.domain.Requirement;
 import de.fau.osr.gui.Components.MultiSplitPane;
-import de.fau.osr.gui.View.Presenter.Presenter;
+import de.fau.osr.gui.Model.DataElements.Requirement;
+import de.fau.osr.gui.View.Presenter.Presenter_Requirement;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -87,8 +84,7 @@ public class Requirement_ElementHandler extends ElementHandler {
                 ListModel m = l.getModel();
                 int index = l.locationToIndex(e.getPoint());
                 if (index > -1) {
-                    String id = m.getElementAt(index).toString();
-                    Requirement req = new RequirementDaoImplementation().getRequirementById(id);
+                    Requirement req = ((Presenter_Requirement) m.getElementAt(index)).getRequirement();
                     String tooltip = (req != null) ? req.getTitle() + "<br>" + req.getDescription() : "";
                     l.setToolTipText("<html><p>" + tooltip + "</p></html>");
                 }
