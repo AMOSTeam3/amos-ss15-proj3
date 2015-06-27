@@ -13,12 +13,14 @@ import java.util.List;
 public class Commit extends DataElement {
     public String id;
     public String message;
+    public Requirement instanceRequirement;
     public List<CommitFile> files;
 
     public Commit(String id, String message, List<CommitFile> files) {
         this.id = id;
         this.message = message;
         this.files = files;
+        this.instanceRequirement = null;
     }
 
     public Commit(de.fau.osr.core.vcs.base.Commit commit) {
@@ -33,6 +35,7 @@ public class Commit extends DataElement {
                 files.add(new CommitFile(commitFile));
             }
         }
+        this.instanceRequirement = null;
 
     }
 

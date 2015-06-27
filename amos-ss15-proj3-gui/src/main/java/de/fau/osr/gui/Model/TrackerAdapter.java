@@ -8,9 +8,11 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.naming.OperationNotSupportedException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,8 +59,12 @@ public class TrackerAdapter implements I_Model {
             e.printStackTrace();
             return new ArrayList<>();
         }
-
-        return ElementsConverter.convertCommits(commitsForReq);
+        Collection<Commit> commitList = ElementsConverter.convertCommits(commitsForReq);
+        for(Commit commit : commitList)
+        {
+            commit.instanceRequirement = requirement;
+        }
+        return commitList;
     }
 
 
@@ -97,6 +103,14 @@ public class TrackerAdapter implements I_Model {
         return new ArrayList<>();
     }
 
+    
+    @Override
+    public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
+    
+        return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
+    }
+    
+    
     @Override
     public Collection<CommitFile> getFilesFromCommit(Commit commit) {
         return commit.files;
