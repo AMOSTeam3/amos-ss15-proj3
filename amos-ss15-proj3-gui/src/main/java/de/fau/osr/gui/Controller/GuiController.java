@@ -16,6 +16,7 @@ import de.fau.osr.gui.Model.I_Collection_Model;
 import de.fau.osr.gui.Model.TrackerAdapter;
 import de.fau.osr.gui.View.Cleaner;
 import de.fau.osr.gui.View.ElementHandler.ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Linkage_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Requirement_ElementHandler;
 import de.fau.osr.gui.View.GuiViewElementHandler;
@@ -278,22 +279,10 @@ public class GuiController {
         requirementsFromDBForManagementTab();
         commitsFromDBForManagementTab();
 
-        elementHandler.getLinkage_ElementHandler().setOnClickAddLinkage(e -> {
-                    Collection<DataElement> selectedReqs =
-                            elementHandler.getRequirement_Handler_ManagementTab().getSelection(new Visitor_Swing());
+        Linkage_ElementHandler linkageHandler = elementHandler.getLinkage_ElementHandler();
 
-                    Collection<DataElement> selectedCommits =
-                            elementHandler.getCommit_Handler_ManagementTab().getSelection(new Visitor_Swing());
-
-                    if (selectedCommits.size() < 1 ||selectedReqs.size() < 1) {
-                        return;
-                    }
-
-                    Requirement req  = (Requirement) selectedReqs.iterator().next();
-                    Commit commit = (Commit) selectedCommits.iterator().next();
-
-                    addLinkage(req, commit);
-                }
+        linkageHandler.setOnClickAddLinkage(e ->
+                        addLinkage(linkageHandler.getRequirement(), linkageHandler.getCommit())
         );
     }
 
