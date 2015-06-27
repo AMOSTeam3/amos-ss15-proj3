@@ -1,20 +1,20 @@
 package de.fau.osr.gui.View.ElementHandler;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.View.Presenter.Presenter_Commit;
 import de.fau.osr.gui.View.Presenter.Presenter_Requirement;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.function.Consumer;
 
 public class Linkage_ElementHandler extends ElementHandler {
+
+    public void setOnClickAddLinkage(ActionListener action) {
+        button.addActionListener(action);
+    }
+
     public enum ButtonState{Deactivate, Activate}
     private ButtonState buttonState = ButtonState.Activate;
     
@@ -63,12 +63,9 @@ public class Linkage_ElementHandler extends ElementHandler {
         return panel;
     }
 
-    public void setButtonAction(Consumer<ButtonState> action) {
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                action.accept(buttonState);
-            }
-        });
+    @Override
+    public void setButtonAction(Runnable action) {
+        button.addActionListener(e -> action.run());
     }
     
     public void clear(){

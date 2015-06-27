@@ -130,8 +130,7 @@ public class GuiController {
                 
                 requirementsFromDB();
                 requirementsFromDBForRequirementTab();
-                requirementsFromDBForManagementTab();
-                commitsFromDBForManagementTab();
+                initLinkageManagementTab();
             }
         });
     }
@@ -211,7 +210,13 @@ public class GuiController {
         Transformer.process(tabAndReqsList_elementHandler, buttonAction, fetching);
 
         detail_handler.addListenerOnSaveClick(e1 -> {
-                    Requirement lastSelected = (Requirement)Iterables.getLast(tabAndReqsList_elementHandler.getSelection(new Visitor_Swing()));
+                    Collection<DataElement> selectedReqs = tabAndReqsList_elementHandler.getSelection(new Visitor_Swing());
+                    if (selectedReqs.size() < 1) {
+                        popupManager.showErrorDialog("select a requirement");
+                        return;
+                    }
+
+                    Requirement lastSelected = (Requirement) Iterables.getLast(selectedReqs);
 
                     String id = lastSelected.getID();
                     String title = detail_handler.getTitle().getText();
@@ -244,7 +249,7 @@ public class GuiController {
 
         Runnable buttonAction = () -> {
             ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
-            elementHandler.getLinkage_ElementHandler().setRequirement((Presenter_Requirement)dataElements.get(dataElements.size()-1).visit(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setRequirement((Presenter_Requirement) dataElements.get(dataElements.size() - 1).visit(new Visitor_Swing()));
         };
 
         Transformer.process(specificElementHandler, buttonAction, fetching);
@@ -260,10 +265,36 @@ public class GuiController {
 
         Runnable buttonAction = () -> {
             ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
-            elementHandler.getLinkage_ElementHandler().setCommit((Presenter_Commit)dataElements.get(dataElements.size()-1).visit(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setCommit((Presenter_Commit) dataElements.get(dataElements.size() - 1).visit(new Visitor_Swing()));
         };
 
         Transformer.process(specificElementHandler, buttonAction, fetching);
+    }
+
+    /**
+     * initialize linkage management tab
+     */
+    public void initLinkageManagementTab(){
+        requirementsFromDBForManagementTab();
+        commitsFromDBForManagementTab();
+
+        elementHandler.getLinkage_ElementHandler().setOnClickAddLinkage(e -> {
+                    Collection<DataElement> selectedReqs =
+                            elementHandler.getRequirement_Handler_ManagementTab().getSelection(new Visitor_Swing());
+
+                    Collection<DataElement> selectedCommits =
+                            elementHandler.getCommit_Handler_ManagementTab().getSelection(new Visitor_Swing());
+
+                    if (selectedCommits.size() < 1 ||selectedReqs.size() < 1) {
+                        return;
+                    }
+
+                    Requirement req  = (Requirement) selectedReqs.iterator().next();
+                    Commit commit = (Commit) selectedCommits.iterator().next();
+
+                    addLinkage(req, commit);
+                }
+        );
     }
 
     /**

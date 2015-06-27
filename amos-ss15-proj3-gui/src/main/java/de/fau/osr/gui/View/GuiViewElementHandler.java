@@ -2,26 +2,14 @@ package de.fau.osr.gui.View;
 
 import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Controller.GuiController;
-import de.fau.osr.gui.Controller.Transformer;
-import de.fau.osr.gui.Controller.Visitor_Swing;
-import de.fau.osr.gui.Model.DataElements.Commit;
-import de.fau.osr.gui.Model.DataElements.DataElement;
-import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.View.ElementHandler.*;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 
-
-
-
-
-
 import javax.swing.*;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Supplier;
 
 public class GuiViewElementHandler extends JFrame {
     
@@ -293,21 +281,7 @@ public class GuiViewElementHandler extends JFrame {
         Requirement_Handler.setSearchTextFieldAction((RequirementSearch_textField)->{
             guiController.setRequirementIDFiltering(new FilterByExactString(RequirementSearch_textField.getText()));
         });
-        
-        Linkage_Handler.setButtonAction((Linkage_ButtonState)->{
-//            switch(Linkage_ButtonState){
-//            case Deactivate:
-//                guiController.requirementsAndCommitsFromDB();
-//                break;
-//            case Activate: 
-//                Requirement requirement = Linkage_Handler.getRequirement();
-//                Commit commit = Linkage_Handler.getCommit();
-//                if(requirement != null && commit != null){
-//                    guiController.addLinkage(requirement, commit);
-//                }
-//                break;
-//            }
-        });
+
     }
 
     void initializeComboboxActions() {
