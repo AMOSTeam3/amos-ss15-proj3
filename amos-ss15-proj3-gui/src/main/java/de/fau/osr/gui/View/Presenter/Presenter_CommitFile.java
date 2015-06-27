@@ -34,7 +34,7 @@ public class Presenter_CommitFile extends Presenter{
                 impact = commitFile.impact;
             }
         }
-        return String.format("%s - %f", commitFiles.get(0).newPath.toPath().getFileName().toString(), impact);
+        return String.format("%s - %.1f", commitFiles.get(0).newPath.toPath().getFileName().toString(), impact);
     }
     
     public boolean isAvailable(){
