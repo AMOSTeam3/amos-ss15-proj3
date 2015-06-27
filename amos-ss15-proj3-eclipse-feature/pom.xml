@@ -36,6 +36,7 @@
               <plugin>
             <groupId>org.eclipse.tycho.extras</groupId>
             <artifactId>tycho-p2-extras-plugin</artifactId>
+            <version>0.22.0</version>
             <executions>
                 <execution>
                     <id>copy-to-central-site</id>
