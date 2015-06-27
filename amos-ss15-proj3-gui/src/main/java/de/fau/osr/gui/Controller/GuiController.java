@@ -16,6 +16,7 @@ import de.fau.osr.gui.Model.I_Collection_Model;
 import de.fau.osr.gui.Model.TrackerAdapter;
 import de.fau.osr.gui.View.Cleaner;
 import de.fau.osr.gui.View.ElementHandler.ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Linkage_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Requirement_ElementHandler;
 import de.fau.osr.gui.View.GuiViewElementHandler;
@@ -130,6 +131,7 @@ public class GuiController {
                 
                 requirementsFromDB();
                 requirementsFromDBForRequirementTab();
+                initLinkageManagementTab();
             }
         });
     }
@@ -209,7 +211,13 @@ public class GuiController {
         Transformer.process(tabAndReqsList_elementHandler, buttonAction, fetching);
 
         detail_handler.addListenerOnSaveClick(e1 -> {
-                    Requirement lastSelected = (Requirement)Iterables.getLast(tabAndReqsList_elementHandler.getSelection(new Visitor_Swing()));
+                    Collection<DataElement> selectedReqs = tabAndReqsList_elementHandler.getSelection(new Visitor_Swing());
+                    if (selectedReqs.size() < 1) {
+                        popupManager.showErrorDialog("select a requirement");
+                        return;
+                    }
+
+                    Requirement lastSelected = (Requirement) Iterables.getLast(selectedReqs);
 
                     String id = lastSelected.getID();
                     String title = detail_handler.getTitle().getText();
@@ -223,6 +231,58 @@ public class GuiController {
                 }
 
 
+        );
+    }
+    
+    public void requirementsFromDBForManagementTab(){
+
+        Supplier<Collection<? extends DataElement>> fetching = () -> {
+            try{
+                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+            } catch(IOException e){
+                popupManager.showErrorDialog("Internal Storage Error");
+                return new ArrayList<DataElement>();
+            }
+        };
+
+        ElementHandler specificElementHandler = elementHandler
+                .getRequirement_Handler_ManagementTab();
+
+        Runnable buttonAction = () -> {
+            ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setRequirement((Presenter_Requirement) dataElements.get(dataElements.size() - 1).visit(new Visitor_Swing()));
+        };
+
+        Transformer.process(specificElementHandler, buttonAction, fetching);
+    }
+    
+    public void commitsFromDBForManagementTab(){
+        Supplier<Collection<? extends DataElement>> fetching = () -> {
+            return i_Collection_Model.getCommitsFromDB();
+        };
+
+        ElementHandler specificElementHandler = elementHandler
+                .getCommit_Handler_ManagementTab();
+
+        Runnable buttonAction = () -> {
+            ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setCommit((Presenter_Commit) dataElements.get(dataElements.size() - 1).visit(new Visitor_Swing()));
+        };
+
+        Transformer.process(specificElementHandler, buttonAction, fetching);
+    }
+
+    /**
+     * initialize linkage management tab
+     */
+    public void initLinkageManagementTab(){
+        requirementsFromDBForManagementTab();
+        commitsFromDBForManagementTab();
+
+        Linkage_ElementHandler linkageHandler = elementHandler.getLinkage_ElementHandler();
+
+        linkageHandler.setOnClickAddLinkage(e ->
+                        addLinkage(linkageHandler.getRequirement(), linkageHandler.getCommit())
         );
     }
 

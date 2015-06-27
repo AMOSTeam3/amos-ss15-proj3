@@ -14,9 +14,8 @@ import java.util.function.Consumer;
 public class Requirement_ElementHandler extends ElementHandler {
     
     
-    private JLabel RequirementID_label = new JLabel("RequirementID");
-    private JTextField RequirementID_textField = new JTextField();
-    private JTextField RequirementSearch_textField = new JTextField();
+    protected JLabel RequirementID_label = new JLabel("RequirementID");
+    protected JTextField RequirementSearch_textField = new JTextField();
     
     
     public Requirement_ElementHandler(){
@@ -31,18 +30,6 @@ public class Requirement_ElementHandler extends ElementHandler {
                 .addComponent(RequirementID_label)
                 .addComponent(RequirementSearch_textField)
                 .addComponent(scrollPane);
-    }
-
-    public void linkSize(GroupLayout layout){
-        // make the requirement column non-resizable and have all elements with
-        // the same horizontal size
-        layout.linkSize(SwingConstants.HORIZONTAL, button,
-                scrollPane, RequirementID_textField,
-                RequirementSearch_textField);
-    }
-
-    public JTextField getTextField(){
-        return RequirementID_textField;
     }
     
     public void setSearchTextFieldAction(Consumer<JTextField> action) {
@@ -69,7 +56,6 @@ public class Requirement_ElementHandler extends ElementHandler {
     
     public void clear(){
         super.clear();
-        RequirementID_textField.setText("");
     }
     
     
