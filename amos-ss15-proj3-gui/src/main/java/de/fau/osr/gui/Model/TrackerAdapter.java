@@ -46,8 +46,10 @@ public class TrackerAdapter implements I_Model {
 
         }
         if(isIndexingRequired){
-            Thread trackerAdapterWorkerThreadThread = new Thread(new TrackerAdapterWorkerThread());
-            trackerAdapterWorkerThreadThread.start();
+            Thread trackerAdapterWorkerThread = new Thread(new TrackerAdapterWorkerThread());
+            trackerAdapterWorkerThread.setPriority(Thread.MIN_PRIORITY);
+            trackerAdapterWorkerThread.setName("TrackerAdapterWorkerThread");
+            trackerAdapterWorkerThread.start();
         }
     }
 

@@ -49,7 +49,7 @@ public class TrackerAdapterWorker {
     public static Date globalChangeTime;
     private static long CommitCount;
     public static Date getAllRequirements,getImpactPercentageForCommitFileListAndRequirement,getCommitsFromRequirement,getAllFiles,getRequirementsFromFile,getCommitFilesForRequirement;
-    
+    public Boolean isThreadingRequired;
     public TrackerAdapterWorker(Tracker tracker) throws IOException {
         this.tracker = tracker;
         isReadyForTakeOver = false;
@@ -59,10 +59,13 @@ public class TrackerAdapterWorker {
         workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<CommitFile>>();
         workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<CommitFile>>();
         totalCommitFiles = new ArrayList<CommitFile>();
-        
+        isThreadingRequired = false;
         
     }
     
+    public void setThreading(Boolean isRequired){
+        this.isThreadingRequired = isRequired;
+    }
     public Date trackerLastChangeTime(){
         
         return globalChangeTime;
@@ -135,33 +138,37 @@ public class TrackerAdapterWorker {
             
             }
         }
-        
-        ExecutorService executor = Executors.newCachedThreadPool();
-        
-        requirements = getAllRequirements();
-        List<Future<Collector>> futureList = new ArrayList<Future<Collector>>();
-        for(Requirement requirement : requirements){
-            Future<Collector> future = executor.submit(new TrackerAdapterWorkerCallable(requirement));
-            futureList.add(future);
+        if(isThreadingRequired){
+            ExecutorService executor = Executors.newCachedThreadPool();
             
-        }
-        
-        for(Future<Collector> futureElement : futureList){
-            collectFutures(futureElement);
-        }
-        
-        executor.shutdown();
-        /*requirements = getAllRequirements();
-        for(Requirement requirement : requirements){
-            Collection<Commit> commits = getCommitsFromRequirement(requirement);
-            workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
-            workerRepositoryReqCommit.put(requirement,commits);
-            for(Commit commit : commits){
-                Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
-                workerRepositoryCommitCommitFile.put(commit,commitFiles);
-                totalCommitFiles.addAll(commitFiles);
+            requirements = getAllRequirements();
+            List<Future<Collector>> futureList = new ArrayList<Future<Collector>>();
+            for(Requirement requirement : requirements){
+                Future<Collector> future = executor.submit(new TrackerAdapterWorkerCallable(requirement));
+                futureList.add(future);
+                
             }
-        }*/
+            
+            for(Future<Collector> futureElement : futureList){
+                collectFutures(futureElement);
+            }
+            
+            executor.shutdown();
+        }
+        else{
+            
+                requirements = getAllRequirements();
+                for(Requirement requirement : requirements){
+                    Collection<Commit> commits = getCommitsFromRequirement(requirement);
+                    workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
+                    workerRepositoryReqCommit.put(requirement,commits);
+                    for(Commit commit : commits){
+                        Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
+                        workerRepositoryCommitCommitFile.put(commit,commitFiles);
+                        totalCommitFiles.addAll(commitFiles);
+                    }
+                }
+        }
         
         Calendar calc = Calendar.getInstance();
         CommitCount = getAllCommits().size();
@@ -215,6 +222,7 @@ public class TrackerAdapterWorker {
         }
         Thread trackerAdapterWorkerListenerThread = new Thread(new TrackerAdapterWorkerListener());
         trackerAdapterWorkerListenerThread.setName("TrackerAdapterWorkerListenerThread");
+        trackerAdapterWorkerListenerThread.setPriority(Thread.MIN_PRIORITY);
         trackerAdapterWorkerListenerThread.start();
 
     }
