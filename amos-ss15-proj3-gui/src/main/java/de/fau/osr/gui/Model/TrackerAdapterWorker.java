@@ -7,7 +7,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
 import javax.naming.OperationNotSupportedException;
@@ -62,6 +68,40 @@ public class TrackerAdapterWorker {
         return globalChangeTime;
     }
     
+    class Collector{
+        
+        public Collection<CommitFile> totalCommitFiles;
+        public HashMap<Requirement,Collection<Commit>> workerRepositoryReqCommit;
+        public HashMap<Commit,Collection<CommitFile>> workerRepositoryCommitCommitFile;
+        public HashMap<Requirement,Collection<CommitFile>> workerRepositoryReqCommitFile;
+        
+        public Collector(){
+            
+            totalCommitFiles = new ArrayList<CommitFile>();
+            workerRepositoryReqCommit = new HashMap<Requirement, Collection<Commit>>();
+            workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<CommitFile>>();
+            workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<CommitFile>>();
+            
+        }
+    }
+    
+    public void collectFutures(Future<Collector> future){
+        try {
+            Collector collected = future.get();
+            
+            totalCommitFiles.addAll(collected.totalCommitFiles);
+           workerRepositoryReqCommit.putAll(collected.workerRepositoryReqCommit);
+            workerRepositoryCommitCommitFile.putAll(collected.workerRepositoryCommitCommitFile);
+             workerRepositoryReqCommitFile.putAll(collected.workerRepositoryReqCommitFile);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
     /**
      * @author Gayathery
      * This method collects data in a background thread initiated by the actual TrackerAdapter
@@ -71,7 +111,47 @@ public class TrackerAdapterWorker {
     public void prepareData()
     {
         
+        class TrackerAdapterWorkerCallable implements Callable<Collector>{
+            
+            Requirement requirement;
+            public TrackerAdapterWorkerCallable(Requirement requirement){
+                this.requirement = requirement;
+                
+            }
+
+            @Override
+            public Collector call() throws Exception {
+                Collector collectWorker = new Collector();
+                Collection<Commit> commits = getCommitsFromRequirement(requirement);
+                collectWorker.workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
+                collectWorker.workerRepositoryReqCommit.put(requirement,commits);
+                for(Commit commit : commits){
+                    Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
+                    collectWorker.workerRepositoryCommitCommitFile.put(commit,commitFiles);
+                    collectWorker.totalCommitFiles.addAll(commitFiles);
+                
+                }
+                return collectWorker;
+            
+            }
+        }
+        
+        ExecutorService executor = Executors.newCachedThreadPool();
+        
         requirements = getAllRequirements();
+        List<Future<Collector>> futureList = new ArrayList<Future<Collector>>();
+        for(Requirement requirement : requirements){
+            Future<Collector> future = executor.submit(new TrackerAdapterWorkerCallable(requirement));
+            futureList.add(future);
+            
+        }
+        
+        for(Future<Collector> futureElement : futureList){
+            collectFutures(futureElement);
+        }
+        
+        executor.shutdown();
+        /*requirements = getAllRequirements();
         for(Requirement requirement : requirements){
             Collection<Commit> commits = getCommitsFromRequirement(requirement);
             workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
@@ -81,7 +161,7 @@ public class TrackerAdapterWorker {
                 workerRepositoryCommitCommitFile.put(commit,commitFiles);
                 totalCommitFiles.addAll(commitFiles);
             }
-        }
+        }*/
         
         Calendar calc = Calendar.getInstance();
         CommitCount = getAllCommits().size();
@@ -134,6 +214,7 @@ public class TrackerAdapterWorker {
 
         }
         Thread trackerAdapterWorkerListenerThread = new Thread(new TrackerAdapterWorkerListener());
+        trackerAdapterWorkerListenerThread.setName("TrackerAdapterWorkerListenerThread");
         trackerAdapterWorkerListenerThread.start();
 
     }

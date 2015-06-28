@@ -846,7 +846,7 @@ public class GuiController {
             ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
         }
 
-        Collection_Model_Impl model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),true));
+        Collection_Model_Impl model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),false));
         model.setCurrentRequirementPattern(reqPattern);
         return model;
     }
