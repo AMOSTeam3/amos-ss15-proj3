@@ -1,10 +1,10 @@
 package de.fau.osr.gui.Model.DataElements;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.View.Presenter.Presenter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This Class is a Container for all information related to one commit.
@@ -35,10 +35,6 @@ public class Commit extends DataElement {
         if (getClass() != obj.getClass())
             return false;
         Commit other = (Commit) obj;
-
-        if (this.id.equals(other.id))
-            System.out.println(this.id);
-
 
         if (files == null) {
             if (other.files != null)
