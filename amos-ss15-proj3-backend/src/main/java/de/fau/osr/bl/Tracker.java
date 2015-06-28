@@ -151,6 +151,8 @@ public class Tracker {
 
     }
 
+
+    
     public float getImpactPercentageForFileAndRequirement(String file, String requirementID){
         List<AnnotatedLine> currentBlame;
         try {

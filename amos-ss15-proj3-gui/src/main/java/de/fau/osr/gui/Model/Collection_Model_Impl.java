@@ -89,8 +89,13 @@ public class Collection_Model_Impl implements I_Collection_Model {
         
         List<CommitFile> commitsSorted = new ArrayList<CommitFile>();
         for(Commit commit: commits){
-            commitsSorted.addAll(model.getFilesFromCommit(commit));
+            Collection<CommitFile> tempCommits = model.getFilesFromCommit(commit);
+            for(CommitFile commitFile: tempCommits){
+                commitFile.impact = model.getImpactPercentageForCommitFileListAndRequirement(commitFile,commit);
+             }
+            commitsSorted.addAll(tempCommits);
         }
+        
                 
         Collections.sort(commitsSorted, sorting);
         
