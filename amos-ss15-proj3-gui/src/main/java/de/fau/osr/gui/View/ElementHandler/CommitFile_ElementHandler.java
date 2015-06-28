@@ -5,6 +5,7 @@ import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.View.Presenter.Presenter;
+import de.fau.osr.gui.View.Presenter.Presenter_CommitFile;
 import de.fau.osr.gui.View.Renderer.Tree_Renderer;
 import de.fau.osr.gui.View.CommitFile_SelectionListener;
 import de.fau.osr.gui.Components.CommitFilesJTree;
@@ -74,6 +75,9 @@ public class CommitFile_ElementHandler extends ElementHandler {
 
 
     public void setScrollPane_Content(Presenter[] elements){
+        
+        elements = deleteMultiplikations(elements);
+        
         if(elements.length == 0){
             return;
         }
@@ -91,6 +95,41 @@ public class CommitFile_ElementHandler extends ElementHandler {
         scrollPane.setViewportView(panel);
     }
     
+    /**
+     * Collapses multiple CommitFiles into one Presenter, if the newPath of the Files are the same.
+     * @param presenters
+     * @return
+     */
+    private Presenter[] deleteMultiplikations(Presenter[] presenters){
+        ArrayList<Presenter> result = new ArrayList<Presenter>();
+        String path = null;
+        ArrayList<ArrayList<CommitFile>> commitFiles = new ArrayList<ArrayList<CommitFile>>();
+        for(Presenter presenter: presenters){
+            CommitFile commitFile = ((Presenter_CommitFile) presenter).getCommitFile().get(0);
+            boolean different = true;
+            for(ArrayList<CommitFile> bucket: commitFiles){
+                if(commitFile.newPath.equals(bucket.get(0).newPath)){
+                    bucket.add(commitFile);
+                    different = false;
+                    break;
+                }
+            }
+            if(different){
+                ArrayList<CommitFile> newBucket = new ArrayList<CommitFile>();
+                newBucket.add(commitFile);
+                commitFiles.add(newBucket);
+            }
+        }
+        
+        for(ArrayList<CommitFile> bucket: commitFiles){
+            result.add(new Presenter_CommitFile(bucket));
+        }
+        
+        presenters = new Presenter[result.size()];
+        return result.toArray(presenters);
+    }
+    
+    
     public void setOnClickAction(Runnable action) {
         tree.addTreeSelectionListener(new CommitFile_SelectionListener(tree, action));
     };
@@ -100,7 +139,7 @@ public class CommitFile_ElementHandler extends ElementHandler {
         DefaultMutableTreeNode element = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
         Presenter presenter = (Presenter) element.getUserObject();
         ArrayList<DataElement> dataElements = new ArrayList<DataElement>();
-        dataElements.add(presenter.visit(visitor));
+        dataElements.addAll(presenter.visit(visitor));
         return dataElements;
     }
     

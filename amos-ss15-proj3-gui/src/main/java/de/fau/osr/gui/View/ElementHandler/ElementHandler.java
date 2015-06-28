@@ -67,7 +67,7 @@ public abstract class ElementHandler {
     public Collection<DataElement> getSelection(Visitor visitor){
         ArrayList<DataElement> dataElements = new ArrayList<DataElement>();
         for(Presenter presenter: list.getSelectedValuesList()){
-            dataElements.add(presenter.visit(visitor));
+            dataElements.addAll(presenter.visit(visitor));
         }
         return dataElements;
     }

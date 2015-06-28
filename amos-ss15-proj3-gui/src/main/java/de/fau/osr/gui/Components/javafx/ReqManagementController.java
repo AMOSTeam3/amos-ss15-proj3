@@ -89,7 +89,7 @@ public class ReqManagementController implements Initializable {
         reqDao = new RequirementDaoImplementation();
 
         try {
-            allReqs = tracker.getAllRequirements();
+            allReqs = tracker.getRequirementIds();
 
             ObservableList<String> items = FXCollections.observableArrayList(allReqs);
 

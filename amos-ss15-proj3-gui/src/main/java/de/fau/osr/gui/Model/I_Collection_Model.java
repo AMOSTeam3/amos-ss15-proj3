@@ -63,4 +63,5 @@ public interface I_Collection_Model {
 
     RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
 
+    boolean updateRequirement(String id, String title, String description);
 }

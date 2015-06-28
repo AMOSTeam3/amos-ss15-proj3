@@ -16,6 +16,7 @@ import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.Commit;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.impl.GitBlameOperation;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
@@ -24,12 +25,12 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -67,6 +68,10 @@ public class Tracker {
 
     }
 
+    /**
+     * private method to initialize the tracker, uses default values from properties, if parameters are null
+     * @throws IOException
+     */
     private void init(VcsClient vcsClient, DataSource ds, File repoFile) throws IOException {
         this.repoFile = repoFile;
         this.vcsClient = vcsClient;
@@ -85,9 +90,24 @@ public class Tracker {
         this.dataSource = ds;
     }
 
-    /*
-     * @author Gayathery
-     * This method returns a list of FILES for the given requirement ID.
+    /**
+     * @return collection of all commit objects
+     */
+    public Collection<Commit> getCommits() throws IOException {
+        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitList());
+        return getCommitsByIds(ids);
+    }
+
+    /**
+     * @return all requirement objects, if possible filled with data from database
+     * @throws IOException
+     */
+    public Collection<Requirement> getRequirements() throws IOException {
+        return dataSource.getAllRequirements();
+    }
+
+    /**
+     * This method returns a list of <tt>CommitFile</tt>'s for the given requirement ID.
      */
     public List<CommitFile> getCommitFilesForRequirementID(String requirementID) throws IOException {
 
@@ -112,13 +132,16 @@ public class Tracker {
             }
             int i = 0;
             float influenced = 0;
-            int cuurentBlameSize = currentBlame.size();
-            for(; i<cuurentBlameSize; i++){
+            int currentBlameSize = currentBlame.size();
+            for(; i<currentBlameSize; i++){
                 if(currentBlame.get(i).getRequirements().contains(requirementID)){
                     influenced++;
                 }
             }
-            file.impact = (influenced/cuurentBlameSize)*100;
+
+            if (currentBlameSize != 0 ) {
+                file.impact = (influenced/currentBlameSize)*100;
+            }
         }
 
         logger.info("End call :: getCommitFilesForRequirementID() Time: " + (System.currentTimeMillis() - startTime));
@@ -128,6 +151,8 @@ public class Tracker {
 
     }
 
+
+    
     public float getImpactPercentageForFileAndRequirement(String file, String requirementID){
         List<AnnotatedLine> currentBlame;
         try {
@@ -143,17 +168,19 @@ public class Tracker {
                 influenced++;
             }
         }
-        float impact = (influenced/cuurentBlameSize)*100;
+
+        float impact = 0;
+        if (cuurentBlameSize != 0) {
+            impact = (influenced/cuurentBlameSize)*100;
+        }
+
         return impact;
     }
 
-
-    /* (non-Javadoc)
-     * @see de.fau.osr.bl.VcsInterpreter#getCommitFilesForRequirementID(java.lang.String)
-     * @author Gayathery
-     * @desc This method returns all the requirements for the given File.
+    /**
+     * This method returns all the requirements for the given File.
      */
-    public Set<String> getAllRequirementsForFile(String filePath) throws IOException {
+    public Set<String> getRequirementIdsForFile(String filePath) throws IOException {
 
         Set<String> requirementList = new HashSet<>();
 
@@ -161,7 +188,7 @@ public class Tracker {
         SetMultimap<String, String> relations = getAllCommitReqRelations();
 
         while(commitIdListIterator.hasNext()){
-                requirementList.addAll(relations.get(commitIdListIterator.next()));
+            requirementList.addAll(relations.get(commitIdListIterator.next()));
         }
 
         return requirementList;
@@ -193,7 +220,7 @@ public class Tracker {
      * @throws IOException
      */
     public Set<Commit> getCommitsForRequirementID(String requirementID) throws IOException {
-        Set<Commit> commits = new HashSet<Commit>();
+        Set<Commit> commits = new HashSet<>();
 
         for(String commitID: getAllReqCommitRelations().get(requirementID)){
             commits.add(new Commit(commitID,
@@ -208,7 +235,7 @@ public class Tracker {
     /**
      * @return list of all requirement ids
      */
-    public Collection<String> getAllRequirements() throws IOException {
+    public Collection<String> getRequirementIds() throws IOException {
 
         Set<Requirement> allReqs = dataSource.getAllRequirements();
         HashSet<String> result = new HashSet<>();
@@ -223,20 +250,17 @@ public class Tracker {
     /**
      * @return all ever committed files, as <tt>CommitFiles</tt>
      */
-    public Collection<CommitFile> getAllFiles(){
-        Set<CommitFile> files = new HashSet<CommitFile>();
+    public Collection<CommitFile> getAllCommitFiles(){
+        Set<CommitFile> files = new HashSet<>();
         Iterator<String> allCommits = vcsClient.getCommitList();
         while (allCommits.hasNext()) {
             String currentCommit = allCommits.next();
-            for(CommitFile commitfile: vcsClient.getCommitFiles(currentCommit)){
-                files.add(commitfile);
-            }
+            files.addAll(vcsClient.getCommitFiles(currentCommit));
         }
         
         return files;
     }
-   
-    
+
     /**
      * @return all existing ever committed file paths
      */
@@ -258,22 +282,15 @@ public class Tracker {
         return files;
     }
 
-    /**
-     * @return collection of all commit objects
-     */
-    public Collection<Commit> getCommits() throws IOException {
-        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitList());
-        return getCommitObjectsByIds(ids);
-    }
 
     /**
      * get commits that did something with the {@code filePath} file
      * @param filePath file to search for
      * @return collection of commit objects
      */
-    public Collection<Commit> getCommitsFromFile(String filePath) throws IOException {
+    public Collection<Commit> getCommitsForFile(String filePath) throws IOException {
         HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitListForFileodification(filePath));
-        return getCommitObjectsByIds(ids);
+        return getCommitsByIds(ids);
     }
 
     /**
@@ -290,7 +307,8 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-        return vcsClient.blame(path, dataSource);
+        GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
+        return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
     }
 
     /**
@@ -323,6 +341,7 @@ public class Tracker {
         return null;
 
     }
+
     /**
      * Method which performs the complete processing of Requirement Traceability by Impact
      */
@@ -331,9 +350,9 @@ public class Tracker {
         requirementsTraceabilityMatrixByImpact.Process();
         return requirementsTraceabilityMatrixByImpact;
     }
+
     /**
-     * This method return the current repository name.
-     * @return
+     * @return current repository name from VCS
      */
     public String getRepositoryName(){
         return vcsClient.getRepositoryName();
@@ -350,7 +369,7 @@ public class Tracker {
     	List<Collection<String>> reqIdsByLines = new ArrayList<>();
 
         //preload all reqs to ID -> Req IdentityHashMap
-        Collection<Requirement> allReqs = getAllRequirementObjects();
+        Collection<Requirement> allReqs = getRequirements();
         IdentityHashMap<String, Requirement> reqsById = new IdentityHashMap<>();
         for (Requirement req : allReqs) {
             reqsById.put(req.getId(), req);
@@ -374,20 +393,13 @@ public class Tracker {
     	return reqIdsByLines;
     }
 
-    /**
-     * @return all domain requirement objects from database
-     * @throws IOException
-     */
-    public Collection<Requirement> getAllRequirementObjects() throws IOException {
-        return dataSource.getAllRequirements();
-    }
 
     /**
      * @param id id of requirement
      * @return data object requirement by id
      */
-    public Requirement getRequirementObjectById(String id) throws IOException {
-        Collection<Requirement> allReqs = getAllRequirementObjects();
+    public Requirement getRequirementById(String id) throws IOException {
+        Collection<Requirement> allReqs = getRequirements();
         for (Requirement req : allReqs) {
             if (req.getId().equals(id)){
                 return req;
@@ -398,22 +410,15 @@ public class Tracker {
     }
 
     /**
-     * @return all known domain commits objects
-     */
-    public Set<Commit> getAllCommitObjects() throws IOException {
-        return new HashSet<>(getCommits());
-    }
-
-    /**
-     * create collection of known Requiremen objects, by given set of requirement IDs
+     * create collection of known Requirement objects, by given set of requirement IDs
      * @param reqIds set of req ids
      * @return Collection of Requirement domain objects
      * @throws IOException
      */
-    public Collection<Requirement> getReqObjectsByIds(Set<String> reqIds) throws IOException {
+    public Collection<Requirement> getRequirementsByIds(Set<String> reqIds) throws IOException {
         final Set<String> finalReqs = reqIds;
 
-        Collection<Requirement> reqObjects = getAllRequirementObjects();
+        Collection<Requirement> reqObjects = getRequirements();
 
         return reqObjects.stream()
                 .filter(req -> finalReqs.contains(req.getId()))
@@ -425,7 +430,7 @@ public class Tracker {
      * @return set of commit objects
      * @throws IOException
      */
-    public Set<Commit> getCommitObjectsByIds(Collection<String> commitIds) throws IOException {
+    public Set<Commit> getCommitsByIds(Collection<String> commitIds) throws IOException {
         Set<Commit> commits = new HashSet<>();
         SetMultimap<String, String> relations = getAllCommitReqRelations();
         for (String id : commitIds) {
@@ -434,53 +439,88 @@ public class Tracker {
 
         return commits;
     }
+
+    /**
+     * creates or updates requirement in database
+     * @param id id of req to update or create
+     * @param title new title
+     * @param description new description
+     */
+    public void saveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+        dataSource.saveOrUpdateRequirement(id, title, description);
+    }
+
+
+    /*--- deprecated, remove later ---*/
+
+    /**
+     * get commits that did something with the {@code filePath} file
+     * @param filePath file to search for
+     * @return collection of commit objects
+     * @deprecated use getCommitsForFile instead
+     */
+    public Collection<Commit> getCommitsFromFile(String filePath) throws IOException {
+        return getCommitsForFile(filePath);
+    }
+
+    /**
+     * @deprecated use getCommitsByIds()
+     */
+    public Set<Commit> getCommitObjectsByIds(Collection<String> commitIds) throws IOException {
+        return getCommitsByIds(commitIds);
+    }
+
+    /**
+     * @deprecated use getRequirementsByIds()
+     */
+    public Collection<Requirement> getReqObjectsByIds(Set<String> reqIds) throws IOException {
+        return getRequirementsByIds(reqIds);
+    }
+
+    /**
+     * @return all known domain commits objects
+     * @deprecated use getCommits()
+     */
+    public Set<Commit> getAllCommitObjects() throws IOException {
+        return new HashSet<>(getCommits());
+    }
+
+    /**
+     * @deprecated use getRequirementById()
+     */
+    public Requirement getRequirementObjectById(String id) throws IOException {
+        return getRequirementById(id);
+    }
+
+    /**
+     * @deprecated use getRequirements()
+     */
+    public Collection<Requirement> getAllRequirementObjects() throws IOException {
+        return getRequirements();
+    }
+
+    /**
+     * @deprecated use getRequirementIds()
+     */
+    public Collection<String> getAllRequirements() throws IOException {
+        return getRequirementIds();
+    }
+
+    /**
+     * @deprecated use getRequirementIdsForFile()
+     */
+    public Set<String> getAllRequirementsForFile(String filePath) throws IOException {
+        return getRequirementIdsForFile(filePath);
+    }
+
+    /**
+     * @deprecated use getAllCommitFiles()
+     */
+    public Collection<CommitFile> getAllFiles(){
+        return getAllCommitFiles();
+    }
 }
 
 
-
-
-/**
- * class for Thread of Traceability Matrix processing
- */
-class TraceabilityMatrixThread implements Runnable{
-    static Tracker tracker;
-    String filePath;
-    static RequirementsTraceabilityMatrix requirementsTraceabilityMatrixWorker;
-    static void setRequirementTraceabilityMatrix(Tracker trackerObject){
-        try {
-            tracker = trackerObject;
-            requirementsTraceabilityMatrixWorker = new RequirementsTraceabilityMatrix(tracker.getAllRequirements());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    static RequirementsTraceabilityMatrix getRequirementTraceabilityMatrix(){
-        return requirementsTraceabilityMatrixWorker;
-    }
-    TraceabilityMatrixThread(String filePath){
-        this.filePath = filePath;
-    }
-
-    @Override
-    public void run() throws IndexOutOfBoundsException{
-        List<String> fileRequirements;
-        try {
-            String unixFormatedFilePath = filePath.replaceAll(Matcher.quoteReplacement("\\"), "/");
-            fileRequirements = new ArrayList<String>( tracker.getAllRequirementsForFile(unixFormatedFilePath));
-            if(!fileRequirements.isEmpty())
-                requirementsTraceabilityMatrixWorker.populateMatrix(fileRequirements,unixFormatedFilePath);
-        } catch(IndexOutOfBoundsException e){
-            throw e;
-        }catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
-    }
-
-}
 
 

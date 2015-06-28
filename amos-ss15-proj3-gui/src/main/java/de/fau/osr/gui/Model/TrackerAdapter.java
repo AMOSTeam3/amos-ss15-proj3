@@ -1,5 +1,16 @@
 package de.fau.osr.gui.Model;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import javax.naming.OperationNotSupportedException;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.bl.Tracker;
@@ -8,14 +19,6 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
-import org.eclipse.jgit.api.errors.GitAPIException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Adapter for Tracker, implements I_Model
@@ -25,19 +28,40 @@ public class TrackerAdapter implements I_Model {
 
 
     private final Tracker tracker;
+    private TrackerAdapterWorker trackerAdapterWorker;
     private Pattern reqPatternString;
 
-    public TrackerAdapter(Tracker tracker) throws IOException {
+    public TrackerAdapter(Tracker tracker,Boolean isIndexingRequired) throws IOException {
         this.tracker = tracker;
+        trackerAdapterWorker = new TrackerAdapterWorker(tracker);
+        
+        class TrackerAdapterWorkerThread extends Thread {
+
+            public void run() {
+                trackerAdapterWorker.prepareData();
+                trackerAdapterWorker.listen();
+            }
+
+            
+
+        }
+        if(isIndexingRequired){
+            Thread trackerAdapterWorkerThreadThread = new Thread(new TrackerAdapterWorkerThread());
+            trackerAdapterWorkerThreadThread.start();
+        }
     }
 
 
     @Override
     public Collection<Requirement> getAllRequirements() {
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getAllRequirements();
+        }
+            
         Collection<Requirement> reqsUI = new ArrayList<>();
 
         try {
-            reqsUI = ElementsConverter.convertRequirements(tracker.getAllRequirementObjects());
+            reqsUI = ElementsConverter.convertRequirements(tracker.getRequirements());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,24 +71,34 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getCommitsFromRequirement(requirement);
+        }
         de.fau.osr.core.Requirement req;
         Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
         try {
-            req = tracker.getRequirementObjectById(requirement.getID());
+            req = tracker.getRequirementById(requirement.getID());
             commitsForReq = tracker.getCommitsForRequirementID(req.getId());
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
-
-        return ElementsConverter.convertCommits(commitsForReq);
+        Collection<Commit> commitList = ElementsConverter.convertCommits(commitsForReq);
+        for(Commit commit : commitList)
+        {
+            commit.instanceRequirement = requirement;
+        }
+        return commitList;
     }
 
 
 
     @Override
     public Collection<CommitFile> getAllFiles() {
-        return ElementsConverter.convertCommitFiles(tracker.getAllFiles());
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getAllFiles();
+        }
+        return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
     }
 
 
@@ -74,9 +108,9 @@ public class TrackerAdapter implements I_Model {
         Collection<de.fau.osr.core.Requirement> reqs = new ArrayList<>();
         try {
 
-            reqIds = tracker.getAllRequirementsForFile(file.newPath.getPath());
+            reqIds = tracker.getRequirementIdsForFile(file.newPath.getPath());
 
-            reqs = tracker.getReqObjectsByIds(reqIds);
+            reqs = tracker.getRequirementsByIds(reqIds);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +122,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Commit> getCommitsFromFile(CommitFile file) {
         try {
-            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsFromFile(file.newPath.getPath())));
+            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsForFile(file.newPath.getPath())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,6 +130,17 @@ public class TrackerAdapter implements I_Model {
         return new ArrayList<>();
     }
 
+    
+    @Override
+    public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
+        }
+    
+        return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
+    }
+    
+    
     @Override
     public Collection<CommitFile> getFilesFromCommit(Commit commit) {
         return commit.files;
@@ -135,7 +180,7 @@ public class TrackerAdapter implements I_Model {
         try {
             reqs = tracker.getAllCommitReqRelations().get(commit.id);
 
-            reqObjects = tracker.getReqObjectsByIds(reqs);
+            reqObjects = tracker.getRequirementsByIds(reqs);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,6 +192,9 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getCommitFilesForRequirement(requirement);
+        }
         try {
             return ElementsConverter.convertCommitFiles(tracker.getCommitFilesForRequirementID(requirement.getID()));
         } catch (IOException e) {
@@ -191,6 +239,20 @@ public class TrackerAdapter implements I_Model {
     @Override
     public RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact() {
         return tracker.generateRequirementsTraceabilityByImpact();
+    }
+
+    @Override
+    public boolean updateRequirement(String id, String title, String description) {
+        try {
+            tracker.saveOrUpdateRequirement(id, title, description);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (OperationNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 

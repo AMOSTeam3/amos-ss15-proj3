@@ -33,6 +33,9 @@ public interface I_Model {
     Collection<Commit> getAllCommits();
 
     Collection<Requirement> getRequirementsFromCommit(Commit commit);
+    
+    float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit);
+        
 
     Collection<CommitFile> getCommitFilesForRequirement(
             Requirement requirement);
@@ -45,4 +48,5 @@ public interface I_Model {
 
     RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact();
 
+    boolean updateRequirement(String id, String title, String description);
 }

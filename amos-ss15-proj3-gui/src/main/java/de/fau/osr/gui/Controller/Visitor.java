@@ -2,8 +2,8 @@ package de.fau.osr.gui.Controller;
 
 import de.fau.osr.gui.Model.DataElements.*;
 import de.fau.osr.gui.View.Presenter.*;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class Visitor {
@@ -31,30 +31,42 @@ public abstract class Visitor {
     }
     
     public Presenter toPresenter(CommitFile commitFile){
-        return new Presenter_CommitFile(commitFile);
+        ArrayList<CommitFile> commitFiles = new ArrayList<CommitFile>();
+        commitFiles.add(commitFile);
+        return new Presenter_CommitFile(commitFiles);
     }
     
     public Presenter toPresenter(Requirement requirement){
         return new Presenter_Requirement(requirement);
     }
     
-    public DataElement toDataElement(Presenter_AnnotatedLine line){
-        return line.getLine();
+    public Collection<? extends DataElement> toDataElement(Presenter_AnnotatedLine line){
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.add(line.getLine());
+        return result;
     }
     
-    public DataElement toDataElement(Presenter_Commit commit){
-        return commit.getCommit();
+    public Collection<? extends DataElement> toDataElement(Presenter_Commit commit){
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.add(commit.getCommit());
+        return result;
     }
     
-    public DataElement toDataElement(Presenter_CommitFile commitFile){
-        return commitFile.getCommitFile();
+    public Collection<? extends DataElement> toDataElement(Presenter_CommitFile commitFile){
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.addAll(commitFile.getCommitFile());
+        return result;
     }
     
-    public DataElement toDataElement(Presenter_Requirement requirement){
-        return requirement.getRequirement();
+    public Collection<? extends DataElement> toDataElement(Presenter_Requirement requirement){
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.add(requirement.getRequirement());
+        return result;
     }
     
-    public DataElement toDataElement(Presenter_Impact impact){
-        return impact.getLine();
+    public Collection<? extends DataElement> toDataElement(Presenter_Impact impact){
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.add(impact.getLine());
+        return result;
     }
 }

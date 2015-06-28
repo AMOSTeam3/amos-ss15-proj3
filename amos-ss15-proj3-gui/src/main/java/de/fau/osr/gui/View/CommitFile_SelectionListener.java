@@ -29,12 +29,12 @@ public class CommitFile_SelectionListener implements TreeSelectionListener {
             DefaultMutableTreeNode element = (DefaultMutableTreeNode) commitFilesJTree
                     .getLastSelectedPathComponent();
             if (element.getUserObject() instanceof Presenter_CommitFile) {
-                commitFile = ((Presenter_CommitFile) element.getUserObject()).getCommitFile();
+                commitFile = ((Presenter_CommitFile) element.getUserObject()).getCommitFile().get(0);
                 File f = new File(commitFile.workingCopy, commitFile.newPath.getPath());
                 if (f.exists()) {
                     selectedBefore = element;
 
-                    commitFile = ((Presenter_CommitFile) selectedBefore.getUserObject()).getCommitFile();
+                    commitFile = ((Presenter_CommitFile) selectedBefore.getUserObject()).getCommitFile().get(0);
                     
                     action.run();
                     

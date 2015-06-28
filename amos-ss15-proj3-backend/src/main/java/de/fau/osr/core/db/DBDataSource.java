@@ -86,6 +86,27 @@ public class DBDataSource extends DataSource {
     }
 
     @Override
+    protected void doSaveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+        de.fau.osr.core.db.domain.Requirement req = reqDao.getRequirementById(id);
+        DBOperation oper = DBOperation.UPDATE;
+
+        //create if not exists now
+        if (req == null) {
+            req = new de.fau.osr.core.db.domain.Requirement();
+            req.setId(id);
+            oper = DBOperation.ADD;
+        }
+
+        //set values, and save
+        req.setTitle(title);
+        req.setDescription(description);
+
+        if (!reqDao.persist(oper, req)){//todo let DAO throw the exceptions?
+            throw new IOException("Cannot save requirement id: " + id);
+        }
+    }
+
+    @Override
     protected Set<de.fau.osr.core.Requirement> doGetAllRequirements() throws IOException {
         List<Requirement> dbReqs = reqDao.getAllRequirements();
         Set<de.fau.osr.core.Requirement> result = new HashSet<>();

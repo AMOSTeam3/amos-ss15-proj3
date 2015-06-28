@@ -89,8 +89,13 @@ public class Collection_Model_Impl implements I_Collection_Model {
         
         List<CommitFile> commitsSorted = new ArrayList<CommitFile>();
         for(Commit commit: commits){
-            commitsSorted.addAll(model.getFilesFromCommit(commit));
+            Collection<CommitFile> tempCommits = model.getFilesFromCommit(commit);
+            for(CommitFile commitFile: tempCommits){
+                commitFile.impact = model.getImpactPercentageForCommitFileListAndRequirement(commitFile,commit);
+             }
+            commitsSorted.addAll(tempCommits);
         }
+        
                 
         Collections.sort(commitsSorted, sorting);
         
@@ -145,7 +150,7 @@ public class Collection_Model_Impl implements I_Collection_Model {
             Collection<CommitFile> files) throws IOException {
 
         Collection<? extends DataElement> commits1 = this.getCommitsFromRequirementID(requirements);
-        
+
         Collection<? extends DataElement> commits2 = this.getCommitsFromFile(files);
         
         commits1.retainAll(commits2);
@@ -211,6 +216,11 @@ public class Collection_Model_Impl implements I_Collection_Model {
     public RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact()
             throws IOException {
         return model.generateRequirementsTraceabilityByImpact();
+    }
+
+    @Override
+    public boolean updateRequirement(String id, String title, String description) {
+        return model.updateRequirement(id, title, description);
     }
 
 }

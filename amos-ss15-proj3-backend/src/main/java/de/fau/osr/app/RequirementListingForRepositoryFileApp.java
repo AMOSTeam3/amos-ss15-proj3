@@ -31,7 +31,7 @@ public class RequirementListingForRepositoryFileApp {
             @Override
             public Iterator<String> iterator() {
                 try {
-                    return requirementsTracer.getAllRequirementsForFile(filePath).iterator();
+                    return requirementsTracer.getRequirementIdsForFile(filePath).iterator();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

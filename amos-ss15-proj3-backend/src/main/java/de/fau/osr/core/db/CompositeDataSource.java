@@ -6,7 +6,10 @@ import de.fau.osr.core.Requirement;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This <tt>DataSource</tt> uses multiple <tt>DataSource</tt>'s
@@ -46,6 +49,12 @@ public class CompositeDataSource extends DataSource {
     @Override
     protected void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         dataSource.removeReqCommitRelation(reqId, commitId);
+    }
+
+    @Override
+    protected void doSaveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+        //use main data source for update
+        dataSource.saveOrUpdateRequirement(id, title, description);
     }
 
     @Override

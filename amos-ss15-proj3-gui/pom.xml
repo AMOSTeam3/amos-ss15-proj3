@@ -75,7 +75,14 @@
      </plugin>
         </plugins>
     </build>
+    
     <dependencies>
+    <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>de.fau.osr</groupId>
             <artifactId>amos-ss15-proj3-backend</artifactId>
@@ -97,5 +104,11 @@
             <artifactId>jcommander</artifactId>
             <version>1.48</version>
         </dependency>
+        <dependency>
+		    <groupId>com.jgoodies</groupId>
+		    <artifactId>jgoodies-forms</artifactId>
+		    <version>1.6.0</version>
+		</dependency>
     </dependencies>
+    
 </project>

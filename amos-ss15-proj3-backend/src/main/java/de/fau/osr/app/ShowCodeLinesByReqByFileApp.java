@@ -37,7 +37,7 @@ public class ShowCodeLinesByReqByFileApp {
         Tracker tracker = new Tracker(client);
 
         //test if there are any reqs linked to the file
-        Set<String> reqsList = tracker.getAllRequirementsForFile(cli.filePath);
+        Set<String> reqsList = tracker.getRequirementIdsForFile(cli.filePath);
         if (!reqsList.contains(Integer.parseInt(reqId))) {
             System.out.println("No requirement " + reqId + " linked to this file");
             return;

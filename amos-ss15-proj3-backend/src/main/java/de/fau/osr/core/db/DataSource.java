@@ -29,7 +29,6 @@ public abstract class DataSource {
     protected abstract void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException ;
     protected abstract void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException;
 
-
     /* default implementations */
 
     /**
@@ -149,6 +148,28 @@ public abstract class DataSource {
         }
 
         return doGetCachedAllRequirements();
+    }
+
+    /**
+     * saves (creates) or updates requirement object in data source
+     * clears cache and calls doSaveOrUpdateRequirement()
+     * @param id id of requirement
+     * @param title new title
+     * @param description new description
+     * @throws IOException
+     * @throws OperationNotSupportedException
+     */
+    public void saveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+        doSaveOrUpdateRequirement(id, title, description);
+        clearCache();
+    }
+
+    /**
+     * save or update method to override by subclasses
+     * @see DataSource#saveOrUpdateRequirement(String, String, String)
+     */
+    protected void doSaveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+        throw new OperationNotSupportedException("cant update from this data source");
     }
 
     /**

@@ -4,9 +4,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import de.fau.osr.core.db.DBTestHelper;
 import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
+import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -20,6 +23,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -32,7 +36,7 @@ public class TrackerTest {
     static Tracker tracker;
     
     static Tracker mockedTracker;
-    static VcsClient mockedClient;
+    static GitVcsClient mockedClient;
     static DataSource mockedSource;
 
 
@@ -40,7 +44,7 @@ public class TrackerTest {
     public static void prepare() throws IOException {
         tracker = new Tracker(client, null, null, DBTestHelper.createH2SessionFactory());
         
-        mockedClient = mock(VcsClient.class);
+        mockedClient = mock(GitVcsClient.class);
         mockedSource = mock(DataSource.class);
         mockedTracker = Mockito.spy(new Tracker(mockedClient, mockedSource, null, DBTestHelper.createH2SessionFactory()));
         
@@ -50,7 +54,7 @@ public class TrackerTest {
      * Test method for {@link de.fau.osr.bl.Tracker#getCommitFilesForRequirementID(java.lang.String)}.
      */
     @Test
-    public void testGetCommitFilesForRequirementID() throws IOException {
+    public void testGetCommitFilesForRequirementID() throws IOException, GitAPIException {
       
         List<CommitFile> commitFilesList = new ArrayList<>();
         
@@ -60,7 +64,9 @@ public class TrackerTest {
         Mockito.doReturn(commits).when(mockedTracker).getAllCommitReqRelations();
         
         Mockito.doReturn(getSampleCommitFiles()).when(mockedClient).getCommitFiles("commit1");
-        
+        //no need blame here
+        Mockito.doReturn(new ArrayList<AnnotatedLine>()).when(mockedTracker).getBlame(anyString());
+
         
         commitFilesList = mockedTracker.getCommitFilesForRequirementID("1");
         assertEquals(commitFilesList.size(), 2);

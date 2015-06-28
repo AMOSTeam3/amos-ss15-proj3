@@ -1,30 +1,57 @@
 package de.fau.osr.gui.Controller;
 
+import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.JList;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 import de.fau.osr.bl.Tracker;
-import de.fau.osr.core.db.*;
+import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.CompositeDataSource;
+import de.fau.osr.core.db.DBDataSource;
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.db.HibernateUtil;
+import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.gui.Authentication.Login;
 import de.fau.osr.gui.Components.CommitFilesJTree;
 import de.fau.osr.gui.Model.Collection_Model_Impl;
-import de.fau.osr.gui.Model.DataElements.Commit;
-import de.fau.osr.gui.Model.DataElements.CommitFile;
-import de.fau.osr.gui.Model.DataElements.DataElement;
-import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.Model.I_Collection_Model;
 import de.fau.osr.gui.Model.TrackerAdapter;
+import de.fau.osr.gui.Model.DataElements.Commit;
+import de.fau.osr.gui.Model.DataElements.CommitFile;
+import de.fau.osr.gui.Model.DataElements.Configuration;
+import de.fau.osr.gui.Model.DataElements.DataElement;
+import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.View.Cleaner;
-import de.fau.osr.gui.View.ElementHandler.ElementHandler;
 import de.fau.osr.gui.View.GuiViewElementHandler;
 import de.fau.osr.gui.View.PopupManager;
+import de.fau.osr.gui.View.TracabilityMatrix_View;
+import de.fau.osr.gui.View.ElementHandler.ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Linkage_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_ElementHandler;
 import de.fau.osr.gui.View.Presenter.Presenter;
 import de.fau.osr.gui.View.Presenter.Presenter_Commit;
 import de.fau.osr.gui.View.Presenter.Presenter_Requirement;
-import de.fau.osr.gui.View.TracabilityMatrix_View;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -34,13 +61,13 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 
 /**
  * Using a MVC-Pattern for the GUI. The Controller class fetches the data from
@@ -92,7 +119,7 @@ public class GuiController {
 
             public void run() {
 
-                for (int i = 0; true; i++) {
+               /* for (int i = 0; true; i++) {
                     if(!popupManager.Authentication()){
                         Status = RetryStatus.Exit;
                         handleError();
@@ -124,13 +151,11 @@ public class GuiController {
                                 + e.getMessage());
                         handleError();
                     }
-                }
+                }*/
 
                 elementHandler = new GuiViewElementHandler(GuiController.this);
                 cleaner = new Cleaner(elementHandler);
                 
-                requirementsFromDB();
-                requirementsFromDBForRequirementTab();
             }
         });
     }
@@ -196,14 +221,93 @@ public class GuiController {
             }
         };
 
+        Requirement_Detail_ElementHandler detail_handler = elementHandler.getRequirement_Detail_ElementHandler();
+        Requirement_ElementHandler tabAndReqsList_elementHandler = elementHandler.getRequirement_ElementHandlerRequirementTab();
+
         Runnable buttonAction = () -> {
-            Collection<DataElement> dataElements = elementHandler.getRequirement_ElementHandlerRequirementTab().getSelection(
-                            new Visitor_Swing());
+            Collection<DataElement> dataElements = tabAndReqsList_elementHandler.getSelection(
+                    new Visitor_Swing());
             Presenter[] presenters = Transformer.transformDataElementsToPresenters(dataElements);
-            elementHandler.getRequirement_Detail_ElementHandler().setScrollPane_Content(presenters);
+
+            detail_handler.setScrollPane_Content(presenters);
         };
 
-        Transformer.process(elementHandler.getRequirement_ElementHandlerRequirementTab(), buttonAction, fetching);
+        Transformer.process(tabAndReqsList_elementHandler, buttonAction, fetching);
+
+        detail_handler.addListenerOnSaveClick(e1 -> {
+                    Collection<DataElement> selectedReqs = tabAndReqsList_elementHandler.getSelection(new Visitor_Swing());
+                    if (selectedReqs.size() < 1) {
+                        popupManager.showErrorDialog("select a requirement");
+                        return;
+                    }
+
+                    Requirement lastSelected = (Requirement) Iterables.getLast(selectedReqs);
+
+                    String id = lastSelected.getID();
+                    String title = detail_handler.getTitle().getText();
+                    String description = detail_handler.getDescription().getText();
+
+                    String resultMsg = "Saved!";
+                    if (!getI_Collection_Model().updateRequirement(id, title, description)) {
+                        resultMsg = "Failed!";
+                    }
+                    popupManager.showInformationDialog(resultMsg);
+                }
+
+
+        );
+    }
+    
+    public void requirementsFromDBForManagementTab(){
+
+        Supplier<Collection<? extends DataElement>> fetching = () -> {
+            try{
+                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+            } catch(IOException e){
+                popupManager.showErrorDialog("Internal Storage Error");
+                return new ArrayList<DataElement>();
+            }
+        };
+
+        ElementHandler specificElementHandler = elementHandler
+                .getRequirement_Handler_ManagementTab();
+
+        Runnable buttonAction = () -> {
+            ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setRequirement((Presenter_Requirement) dataElements.get(dataElements.size() - 1).visit(new Visitor_Swing()));
+        };
+
+        Transformer.process(specificElementHandler, buttonAction, fetching);
+    }
+    
+    public void commitsFromDBForManagementTab(){
+        Supplier<Collection<? extends DataElement>> fetching = () -> {
+            return i_Collection_Model.getCommitsFromDB();
+        };
+
+        ElementHandler specificElementHandler = elementHandler
+                .getCommit_Handler_ManagementTab();
+
+        Runnable buttonAction = () -> {
+            ArrayList<? extends DataElement> dataElements = new ArrayList<DataElement>(specificElementHandler.getSelection(new Visitor_Swing()));
+            elementHandler.getLinkage_ElementHandler().setCommit((Presenter_Commit) dataElements.get(dataElements.size() - 1).visit(new Visitor_Swing()));
+        };
+
+        Transformer.process(specificElementHandler, buttonAction, fetching);
+    }
+
+    /**
+     * initialize linkage management tab
+     */
+    public void initLinkageManagementTab(){
+        requirementsFromDBForManagementTab();
+        commitsFromDBForManagementTab();
+
+        Linkage_ElementHandler linkageHandler = elementHandler.getLinkage_ElementHandler();
+
+        linkageHandler.setOnClickAddLinkage(e ->
+                        addLinkage(linkageHandler.getRequirement(), linkageHandler.getCommit())
+        );
     }
 
     /**
@@ -369,7 +473,7 @@ public class GuiController {
 //    }
 //
     /**
-     * Navigation: ->Files Clear: All Setting: Files Using: getAllFiles
+     * Navigation: ->Files Clear: All Setting: Files Using: getAllCommitFiles
      */
     public void filesFromDB() {
 
@@ -742,7 +846,7 @@ public class GuiController {
             ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
         }
 
-        Collection_Model_Impl model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile)));
+        Collection_Model_Impl model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),true));
         model.setCurrentRequirementPattern(reqPattern);
         return model;
     }
@@ -782,5 +886,37 @@ public class GuiController {
 
     public void finalize(){
         HibernateUtil.shutdown();
+    }
+    
+    public boolean configureApplication(Configuration configuration ){
+        try {
+            if(!Login.authenticate(configuration.getDbUsername(), configuration.getDbPassword()))
+            popupManager.showErrorDialog("Cannot connect to database.Please check the database credentials");
+        
+            File repoFile = new File(configuration.getRepoPath());
+            Pattern reqPatternString = Pattern.compile(configuration.getReqPattern());
+            i_Collection_Model = reInitModel(null, null, repoFile,reqPatternString);
+            popupManager.showInformationDialog("Configuration successfull");
+            HibernateUtil.shutdown();
+           
+            cleaner = new Cleaner(elementHandler);
+            
+            elementHandler.doInitialization();
+    
+            requirementsFromDB();
+            requirementsFromDBForRequirementTab();
+            initLinkageManagementTab();
+            
+        }catch (PatternSyntaxException  | IOException e){
+            e.printStackTrace();
+            popupManager.showErrorDialog("Some problem in application configuration");
+            return false;
+        }catch(RuntimeException e){
+            popupManager.showErrorDialog("Cannot connect to database.Please check the database credentials");
+            return false;
+        }
+       
+       
+        return true;
     }
 }

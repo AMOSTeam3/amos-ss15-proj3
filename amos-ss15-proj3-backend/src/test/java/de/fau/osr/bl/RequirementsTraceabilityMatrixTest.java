@@ -25,7 +25,7 @@ public class RequirementsTraceabilityMatrixTest {
     public static void setUpBeforeClass() throws Exception {
         VcsClient client =  VcsClient.connect(VcsEnvironment.GIT, PublicTestData.getGitTestRepo());
         tracker = new Tracker(client, null, null, DBTestHelper.createH2SessionFactory());
-        requirements = tracker.getAllRequirements();
+        requirements = tracker.getRequirementIds();
         matrix  = new RequirementsTraceabilityMatrix(requirements);
 
     }
@@ -35,7 +35,7 @@ public class RequirementsTraceabilityMatrixTest {
         List<String> fileRequirements;
         String unixFormatedFilePath = "TestFile2";
         try {
-            fileRequirements = new ArrayList<String>( tracker.getAllRequirementsForFile(unixFormatedFilePath));
+            fileRequirements = new ArrayList<String>( tracker.getRequirementIdsForFile(unixFormatedFilePath));
             if(fileRequirements !=null && !fileRequirements.isEmpty())
                 matrix.populateMatrix(fileRequirements,unixFormatedFilePath);
             RequirementsRelation reqRelation = matrix.traceabilityMatrix.getAt(new MatrixIndex(0,1));
