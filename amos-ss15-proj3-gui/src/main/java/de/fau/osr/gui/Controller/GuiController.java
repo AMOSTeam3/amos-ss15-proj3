@@ -1,36 +1,57 @@
 package de.fau.osr.gui.Controller;
 
+import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.JList;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 import de.fau.osr.bl.Tracker;
-import de.fau.osr.core.db.*;
+import de.fau.osr.core.db.CSVFileDataSource;
+import de.fau.osr.core.db.CompositeDataSource;
+import de.fau.osr.core.db.DBDataSource;
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.db.HibernateUtil;
+import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.gui.Authentication.Login;
 import de.fau.osr.gui.Components.CommitFilesJTree;
 import de.fau.osr.gui.Model.Collection_Model_Impl;
+import de.fau.osr.gui.Model.I_Collection_Model;
+import de.fau.osr.gui.Model.TrackerAdapter;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Configuration;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.Requirement;
-import de.fau.osr.gui.Model.I_Collection_Model;
-import de.fau.osr.gui.Model.TrackerAdapter;
 import de.fau.osr.gui.View.Cleaner;
+import de.fau.osr.gui.View.GuiViewElementHandler;
+import de.fau.osr.gui.View.PopupManager;
+import de.fau.osr.gui.View.TracabilityMatrix_View;
 import de.fau.osr.gui.View.ElementHandler.ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Linkage_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Requirement_ElementHandler;
-import de.fau.osr.gui.View.GuiViewElementHandler;
-import de.fau.osr.gui.View.PopupManager;
 import de.fau.osr.gui.View.Presenter.Presenter;
 import de.fau.osr.gui.View.Presenter.Presenter_Commit;
 import de.fau.osr.gui.View.Presenter.Presenter_Requirement;
-import de.fau.osr.gui.View.TracabilityMatrix_View;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -46,6 +67,7 @@ import java.util.Comparator;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 
 /**
  * Using a MVC-Pattern for the GUI. The Controller class fetches the data from
@@ -824,7 +846,7 @@ public class GuiController {
             ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
         }
 
-        Collection_Model_Impl model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile)));
+        Collection_Model_Impl model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),true));
         model.setCurrentRequirementPattern(reqPattern);
         return model;
     }

@@ -1,5 +1,16 @@
 package de.fau.osr.gui.Model;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import javax.naming.OperationNotSupportedException;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.bl.Tracker;
@@ -9,17 +20,6 @@ import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
 
-import org.eclipse.jgit.api.errors.GitAPIException;
-
-import javax.naming.OperationNotSupportedException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 /**
  * Adapter for Tracker, implements I_Model
  * Created by Dmitry Gorelenkov on 14.06.2015.
@@ -28,15 +28,36 @@ public class TrackerAdapter implements I_Model {
 
 
     private final Tracker tracker;
+    private TrackerAdapterWorker trackerAdapterWorker;
     private Pattern reqPatternString;
 
-    public TrackerAdapter(Tracker tracker) throws IOException {
+    public TrackerAdapter(Tracker tracker,Boolean isIndexingRequired) throws IOException {
         this.tracker = tracker;
+        trackerAdapterWorker = new TrackerAdapterWorker(tracker);
+        
+        class TrackerAdapterWorkerThread extends Thread {
+
+            public void run() {
+                trackerAdapterWorker.prepareData();
+                trackerAdapterWorker.listen();
+            }
+
+            
+
+        }
+        if(isIndexingRequired){
+            Thread trackerAdapterWorkerThreadThread = new Thread(new TrackerAdapterWorkerThread());
+            trackerAdapterWorkerThreadThread.start();
+        }
     }
 
 
     @Override
     public Collection<Requirement> getAllRequirements() {
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getAllRequirements();
+        }
+            
         Collection<Requirement> reqsUI = new ArrayList<>();
 
         try {
@@ -50,6 +71,9 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getCommitsFromRequirement(requirement);
+        }
         de.fau.osr.core.Requirement req;
         Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
         try {
@@ -71,6 +95,9 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getAllFiles() {
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getAllFiles();
+        }
         return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
     }
 
@@ -106,6 +133,9 @@ public class TrackerAdapter implements I_Model {
     
     @Override
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
+        }
     
         return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
     }
@@ -162,6 +192,9 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getCommitFilesForRequirement(requirement);
+        }
         try {
             return ElementsConverter.convertCommitFiles(tracker.getCommitFilesForRequirementID(requirement.getID()));
         } catch (IOException e) {

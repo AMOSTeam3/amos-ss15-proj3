@@ -1,3 +1,4 @@
+
 package de.fau.osr.gui.View.ElementHandler;
 
 import javax.swing.JPanel;
@@ -26,6 +27,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 
 import java.awt.event.ActionListener;
+
+
+
 
 
 /**
@@ -205,3 +209,4 @@ public class Configuration_ElementHandler extends JPanel {
         }
     }
 }
+
