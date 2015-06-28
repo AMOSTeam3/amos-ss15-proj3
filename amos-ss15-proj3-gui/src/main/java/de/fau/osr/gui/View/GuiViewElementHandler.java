@@ -6,6 +6,11 @@ import de.fau.osr.gui.View.ElementHandler.*;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,10 +36,14 @@ public class GuiViewElementHandler extends JFrame {
     private Requirement_ElementHandler Requirement_Handler_ManagementTab = new Requirement_ElementHandler();
     private Commit_ElementHandler Commit_Handler_ManagementTab = new Commit_ElementHandler();
     private Linkage_ElementHandler Linkage_Handler = new Linkage_ElementHandler();
+    private Configuration_ElementHandler configuration_ElementHandler = new Configuration_ElementHandler();
     
     private JPanel mainNavigationPanel;
     private JPanel requirementModificationPanel;
     private JPanel LinkageManagmentPanel;
+    private JPanel homePanel;
+    
+    private JTabbedPane tabpane;
 
     public GuiViewElementHandler(GuiController guiController) {
         this.guiController = guiController;
@@ -52,11 +61,19 @@ public class GuiViewElementHandler extends JFrame {
         positionMainPanelElements();
         positionRequirementPanelElements();
         positionRequirementManagementPanelElements();
+        positionHomePanelElements();
         
         pack();
         setVisible(true);
     }
-
+    
+    public void doInitialization(){
+        initializeButtonActions();
+        initializeComboboxActions();
+        requirementPanelAction();
+        requirementManagementAction();
+    }
+  
     public Requirement_ElementHandler getRequirement_ElementHandler() {
         return Requirement_Handler;
     }
@@ -115,10 +132,13 @@ public class GuiViewElementHandler extends JFrame {
         requirementModificationPanel.setLayout(new BorderLayout());
         LinkageManagmentPanel = new JPanel();
         LinkageManagmentPanel.setLayout(new BorderLayout());
+        homePanel = new JPanel();
+        homePanel.setLayout(new BorderLayout());
         
-        JTabbedPane tabpane = new JTabbedPane
+        tabpane = new JTabbedPane
         (JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
         
+        tabpane.addTab("Home", homePanel);
         tabpane.addTab("Navigation", mainNavigationPanel);
         tabpane.addTab("Requirements", requirementModificationPanel);
         tabpane.addTab("Linkage Management", LinkageManagmentPanel);
@@ -160,7 +180,7 @@ public class GuiViewElementHandler extends JFrame {
         */
 
         ElementHandler[] elemHandlers = {
-                Requirement_Handler, Commit_Handler, CommitFile_Handler, Impact_Handler, Code_Handler
+                Requirement_Handler, Commit_Handler, CommitFile_Handler, Impact_Handler, Code_Handler,
         };
         MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         for ( ElementHandler eachElemHandler: elemHandlers)
@@ -218,14 +238,16 @@ public class GuiViewElementHandler extends JFrame {
         Requirement_Detail_Handler = new Requirement_Detail_ElementHandler();
         pane.addComponent(Requirement_HandlerRequirementTab.toComponent());
         pane.addComponent(Requirement_Detail_Handler.toComponent());
-        
+       
+        requirementModificationPanel.add(pane, BorderLayout.CENTER);
+    }
+    
+    private void requirementPanelAction(){
         guiController.setRequirementIDFiltering(new FilterByExactString());
         
         Requirement_HandlerRequirementTab.setButtonAction(()->{
             guiController.requirementsFromDBForRequirementTab();
         });
-        
-        requirementModificationPanel.add(pane, BorderLayout.CENTER);
     }
     
     private void positionRequirementManagementPanelElements() {
@@ -234,7 +256,11 @@ public class GuiViewElementHandler extends JFrame {
         pane.addComponent(Requirement_Handler_ManagementTab.toComponent());
         pane.addComponent(Commit_Handler_ManagementTab.toComponent());
         pane.addComponent(Linkage_Handler.toComponent());
-        
+   
+        LinkageManagmentPanel.add(pane, BorderLayout.CENTER);
+    }
+    
+    private void requirementManagementAction(){
         Requirement_Handler_ManagementTab.setButtonAction(()->{
             guiController.requirementsFromDBForManagementTab();
         });
@@ -242,8 +268,32 @@ public class GuiViewElementHandler extends JFrame {
         Commit_Handler_ManagementTab.setButtonAction(()->{
             guiController.commitsFromDBForManagementTab();
         });
-        
-        LinkageManagmentPanel.add(pane, BorderLayout.CENTER);
+    }
+   
+    private void positionHomePanelElements() {
+        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        configuration_ElementHandler.setController(guiController,tabpane);
+        pane.addComponent(configuration_ElementHandler);
+        tabpane.setEnabledAt(1, false);
+        tabpane.setEnabledAt(2, false);
+        tabpane.setEnabledAt(3, false);
+        setOnClickAction();
+        homePanel.add(pane, BorderLayout.CENTER);
+    }
+    
+    public void setOnClickAction(){
+        tabpane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                System.out.println("Tab: " + tabpane.getSelectedIndex());
+                
+                if(tabpane.getSelectedIndex() == 0){
+                    tabpane.setEnabledAt(1, false);
+                    tabpane.setEnabledAt(2, false);
+                    tabpane.setEnabledAt(3, false);
+                }
+                
+            }
+        });
     }
 
     void initializeButtonActions() {

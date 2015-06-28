@@ -2,14 +2,17 @@ package de.fau.osr.gui.Controller;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+import de.fau.osr.gui.Authentication.Login;
 import de.fau.osr.gui.Components.CommitFilesJTree;
 import de.fau.osr.gui.Model.Collection_Model_Impl;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
+import de.fau.osr.gui.Model.DataElements.Configuration;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.Model.I_Collection_Model;
@@ -28,9 +31,11 @@ import de.fau.osr.gui.View.TracabilityMatrix_View;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -92,7 +97,7 @@ public class GuiController {
 
             public void run() {
 
-                for (int i = 0; true; i++) {
+               /* for (int i = 0; true; i++) {
                     if(!popupManager.Authentication()){
                         Status = RetryStatus.Exit;
                         handleError();
@@ -124,14 +129,11 @@ public class GuiController {
                                 + e.getMessage());
                         handleError();
                     }
-                }
+                }*/
 
                 elementHandler = new GuiViewElementHandler(GuiController.this);
                 cleaner = new Cleaner(elementHandler);
                 
-                requirementsFromDB();
-                requirementsFromDBForRequirementTab();
-                initLinkageManagementTab();
             }
         });
     }
@@ -862,5 +864,37 @@ public class GuiController {
 
     public void finalize(){
         HibernateUtil.shutdown();
+    }
+    
+    public boolean configureApplication(Configuration configuration ){
+        try {
+            if(!Login.authenticate(configuration.getDbUsername(), configuration.getDbPassword()))
+            popupManager.showErrorDialog("Cannot connect to database.Please check the database credentials");
+        
+            File repoFile = new File(configuration.getRepoPath());
+            Pattern reqPatternString = Pattern.compile(configuration.getReqPattern());
+            i_Collection_Model = reInitModel(null, null, repoFile,reqPatternString);
+            popupManager.showInformationDialog("Configuration successfull");
+            HibernateUtil.shutdown();
+           
+            cleaner = new Cleaner(elementHandler);
+            
+            elementHandler.doInitialization();
+    
+            requirementsFromDB();
+            requirementsFromDBForRequirementTab();
+            initLinkageManagementTab();
+            
+        }catch (PatternSyntaxException  | IOException e){
+            e.printStackTrace();
+            popupManager.showErrorDialog("Some problem in application configuration");
+            return false;
+        }catch(RuntimeException e){
+            popupManager.showErrorDialog("Cannot connect to database.Please check the database credentials");
+            return false;
+        }
+       
+       
+        return true;
     }
 }
