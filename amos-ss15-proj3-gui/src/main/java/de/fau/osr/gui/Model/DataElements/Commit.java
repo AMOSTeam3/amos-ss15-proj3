@@ -11,6 +11,7 @@ import de.fau.osr.gui.View.Presenter.Presenter;
  * @author: Florian Gerdes
  */
 public class Commit extends DataElement {
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -34,6 +35,11 @@ public class Commit extends DataElement {
         if (getClass() != obj.getClass())
             return false;
         Commit other = (Commit) obj;
+
+        if (this.id.equals(other.id))
+            System.out.println(this.id);
+
+
         if (files == null) {
             if (other.files != null)
                 return false;
@@ -44,11 +50,12 @@ public class Commit extends DataElement {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (instanceRequirement == null) {
-            if (other.instanceRequirement != null)
-                return false;
-        } else if (!instanceRequirement.equals(other.instanceRequirement))
-            return false;
+        // TOOD Somehow "instanceRequirement" is not correctly defined.
+//        if (instanceRequirement == null) {
+//            if (other.instanceRequirement != null)
+//                return false;
+//        } else if (!instanceRequirement.equals(other.instanceRequirement))
+//            return false;
         if (message == null) {
             if (other.message != null)
                 return false;
@@ -89,5 +96,4 @@ public class Commit extends DataElement {
     public Presenter visit(Visitor visitor) {
         return visitor.toPresenter(this);
     }
-
 }

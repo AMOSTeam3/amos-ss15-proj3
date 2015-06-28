@@ -150,7 +150,7 @@ public class Collection_Model_Impl implements I_Collection_Model {
             Collection<CommitFile> files) throws IOException {
 
         Collection<? extends DataElement> commits1 = this.getCommitsFromRequirementID(requirements);
-        
+
         Collection<? extends DataElement> commits2 = this.getCommitsFromFile(files);
         
         commits1.retainAll(commits2);
