@@ -856,8 +856,14 @@ public class GuiController {
         }
     }
 
-    public void finalize(){
-        HibernateUtil.shutdown();
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            HibernateUtil.shutdown();
+        }
+        finally {
+            super.finalize();
+        }
     }
     
     public boolean configureApplication(Configuration configuration ){
