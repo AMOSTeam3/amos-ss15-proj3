@@ -4,6 +4,7 @@ package de.fau.osr.gui.View.ElementHandler;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -69,7 +70,7 @@ public class Configuration_ElementHandler extends JPanel {
                 FormSpecs.RELATED_GAP_COLSPEC,
                 FormSpecs.DEFAULT_COLSPEC,
                 FormSpecs.RELATED_GAP_COLSPEC,
-                ColumnSpec.decode("default:grow"),},
+                ColumnSpec.decode("350px"),},
             new RowSpec[] {
                 FormSpecs.RELATED_GAP_ROWSPEC,
                 FormSpecs.DEFAULT_ROWSPEC,
@@ -104,10 +105,11 @@ public class Configuration_ElementHandler extends JPanel {
         
         JLabel lblApplicationConfiguration = new JLabel("Application Configuration");
         lblApplicationConfiguration.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblApplicationConfiguration.setForeground(Color.darkGray);
         add(lblApplicationConfiguration, "2, 2, center, default");
         
         JLabel lblNewLabel = new JLabel("Repository Path");
-        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         add(lblNewLabel, "2, 6");
         
         JButton btnChooseRepository = new JButton("Choose Repository");
@@ -115,13 +117,13 @@ public class Configuration_ElementHandler extends JPanel {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        btnChooseRepository.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnChooseRepository.setFont(new Font("Tahoma", Font.PLAIN, 16));
         btnChooseRepository.setAction(action_1);
         add(btnChooseRepository, "6, 6, 1, 2");
         
         input_repoPath = new JTextField();
         add(input_repoPath, "6, 8, fill, default");
-        input_repoPath.setColumns(10);
+        input_repoPath.setColumns(30);
         
         JTextArea txtrEnterPatternAs = new JTextArea();
         txtrEnterPatternAs.setEditable(false);
@@ -130,38 +132,39 @@ public class Configuration_ElementHandler extends JPanel {
         
        
         JLabel lblNewLabel_1 = new JLabel("Requirement Pattern");
-        lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
         add(lblNewLabel_1, "2, 12");
         
         txtrreqd = new JTextField();
         txtrreqd.setText("[Rr]eq-0*(\\d+)");
         add(txtrreqd, "6, 12, fill, default");
-        txtrreqd.setColumns(10);
+        txtrreqd.setColumns(30);
         
         JLabel lblConfigureDatabase = new JLabel("Configure Database:");
         lblConfigureDatabase.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblConfigureDatabase.setForeground(Color.darkGray);
         add(lblConfigureDatabase, "2, 18");
         
         JLabel lblDatabaseUsername = new JLabel("Database username");
-        lblDatabaseUsername.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblDatabaseUsername.setFont(new Font("Tahoma", Font.PLAIN, 16));
         add(lblDatabaseUsername, "2, 22");
         
         input_dbusername = new JTextField();
         add(input_dbusername, "6, 22, fill, top");
-        input_dbusername.setColumns(10);
+        input_dbusername.setColumns(30);
         
         JLabel lblDatabasePassword = new JLabel("Database Password");
-        lblDatabasePassword.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblDatabasePassword.setFont(new Font("Tahoma", Font.PLAIN, 16));
         add(lblDatabasePassword, "2, 26");
         
         input_dbpassword = new JPasswordField();
         add(input_dbpassword, "6, 26, fill, top");
-        input_dbpassword.setColumns(10);
+        input_dbpassword.setColumns(30);
        
         
         JButton btnConfigure = new JButton("Configure");
         btnConfigure.setAction(action);
-        btnConfigure.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnConfigure.setFont(new Font("Tahoma", Font.PLAIN, 16));
         add(btnConfigure, "6, 30");
 
     }
