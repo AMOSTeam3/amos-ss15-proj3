@@ -68,8 +68,8 @@ public class GuiViewElementHandler extends JFrame {
     }
     
     public void doInitialization(){
-//        initializeButtonActions();
-//        initializeComboboxActions();
+        initializeButtonActions();
+        initializeComboboxActions();
         requirementPanelAction();
         requirementManagementAction();
     }
