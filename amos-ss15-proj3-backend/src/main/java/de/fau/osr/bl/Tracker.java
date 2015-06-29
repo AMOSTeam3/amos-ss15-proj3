@@ -1,5 +1,8 @@
 package de.fau.osr.bl;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
@@ -29,6 +32,7 @@ import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
@@ -48,6 +52,8 @@ public class Tracker {
 
     private RequirementDao reqDao;
     private CommitDaoImplementation commitDao;
+
+    private LoadingCache<String, List<AnnotatedLine>> blameCache;
 
     public Tracker(VcsClient vcsClient) throws IOException {
         this(vcsClient, null, null);
@@ -88,6 +94,27 @@ public class Tracker {
         }
 
         this.dataSource = ds;
+
+
+        blameCache = CacheBuilder.newBuilder()
+                .maximumSize(10000)
+                .build(
+                    new CacheLoader<String, List<AnnotatedLine>>() {
+                        public List<AnnotatedLine> load(String path) throws GitAPIException, IOException {
+                            GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
+                            return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
+                        }
+                    }
+                );
+    }
+
+    /**
+     * purges all caches for repository.
+     * useful to call if repository is updated by new commit
+     */
+    public void purgeRepoCache() {
+        dataSource.clearCache(); //this will purge probably more than just VCS datasource
+        blameCache.cleanUp();
     }
 
     /**
@@ -307,8 +334,11 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-        GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
-        return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
+        try {
+            return blameCache.get(path);
+        } catch (ExecutionException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     /**
