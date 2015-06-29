@@ -35,13 +35,14 @@ public class TrackerAdapter implements I_Model {
     
     public TrackerAdapter(Tracker tracker,Boolean isIndexingRequired) throws IOException {
         this.tracker = tracker;
-        trackerAdapterWorker = new TrackerAdapterWorker(tracker);
+        trackerAdapterWorker = new TrackerAdapterWorker(this);
         
         class TrackerAdapterWorkerThread extends Thread {
 
             public void run() {
-                trackerAdapterWorker.prepareData();
+                if(trackerAdapterWorker.prepareData()){
                 trackerAdapterWorker.listen();
+                }
             }
 
             
@@ -264,7 +265,7 @@ public class TrackerAdapter implements I_Model {
     private void resetWorkerThread(){
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         for ( Thread thread : threadSet ){
-            if ( thread.getName( ).equals( "TrackerAdapterWorkerThread" ) )
+            if ( thread.getName( ).equals( "TrackerAdapterWorkerThread" ) || thread.getName( ).equals( "TrackerAdapterWorkerListenerThread" ))
                 thread.interrupt();
         }
     }

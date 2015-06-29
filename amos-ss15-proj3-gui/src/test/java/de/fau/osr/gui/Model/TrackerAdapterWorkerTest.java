@@ -52,7 +52,7 @@ public class TrackerAdapterWorkerTest {
         mockedTracker = mock(Tracker.class);
        // mockedTracker = Mockito.spy(new Tracker(mockedClient, mockedSource, null, DBTestHelper.createH2SessionFactory()));
         mockedTrackerAdapter = Mockito.spy(new TrackerAdapter(mockedTracker, false));
-        mockedTrackerAdapterWorker = Mockito.spy(new TrackerAdapterWorker(mockedTracker));
+        mockedTrackerAdapterWorker = Mockito.spy(new TrackerAdapterWorker(mockedTrackerAdapter));
         
     }
     /**
@@ -71,13 +71,9 @@ public class TrackerAdapterWorkerTest {
     public void testGetAllRequirements() {     
 
         
-        try {
-            Mockito.doReturn(getSampleRequirements()).when(mockedTracker).getRequirements();
-            ;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
+            Mockito.doReturn(getSampleRequirements()).when(mockedTrackerAdapter).getAllRequirements();
+
         Calendar calc = Calendar.getInstance();
         mockedTrackerAdapterWorker.globalChangeTime = calc.getTime();
         mockedTrackerAdapterWorker.getAllRequirements = mockedTrackerAdapterWorker.globalChangeTime ;
