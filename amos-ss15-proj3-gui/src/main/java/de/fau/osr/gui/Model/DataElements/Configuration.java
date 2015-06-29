@@ -11,6 +11,7 @@ public class Configuration {
     private String reqPattern;
     private String dbUsername;
     private String dbPassword;
+    private boolean enableIndex;
     
     
     public String getRepoPath() {
@@ -36,6 +37,13 @@ public class Configuration {
     }
     public void setDbPassword(String dbPassword) {
         this.dbPassword = dbPassword;
+    }
+    
+    public boolean isEnableIndex() {
+        return enableIndex;
+    }
+    public void setEnableIndex(boolean enableIndex) {
+        this.enableIndex = enableIndex;
     }
     @Override
     public String toString() {

@@ -707,7 +707,7 @@ public class GuiController {
             }
             try {
                 guiModelTrial = reInitModel(null, null, repoFile,
-                        i_Collection_Model.getCurrentRequirementPattern());
+                        i_Collection_Model.getCurrentRequirementPattern(),false);
                 popupManager.showInformationDialog("Repository Path modified to "
                         + repoFile.getPath());
                 break;
@@ -748,7 +748,7 @@ public class GuiController {
             try {
                 guiModelTrial = reInitModel(null, null,
                         new File(i_Collection_Model.getCurrentRepositoryPath()),
-                        reqPattern);
+                        reqPattern,false);
                 popupManager.showInformationDialog("Requirement Pattern modified to "
                         + reqPattern);
                 break;
@@ -793,7 +793,7 @@ public class GuiController {
      * @return model to use
      */
     private Collection_Model_Impl reInitModel(VcsClient vcs, DataSource ds,
-            File repoFile, Pattern reqPattern) throws IOException {
+            File repoFile, Pattern reqPattern, boolean isIndexEnabled) throws IOException {
 
         if (repoFile == null) {
             repoFile = new File(AppProperties.GetValue("DefaultRepoPath"));
@@ -817,8 +817,12 @@ public class GuiController {
             DBDataSource dbDs = new DBDataSource();
             ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
         }
-
-        Collection_Model_Impl model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),false));
+        Collection_Model_Impl model;
+        if(isIndexEnabled)
+            model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),true));
+        else
+            model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),false));
+        
         model.setCurrentRequirementPattern(reqPattern);
         return model;
     }
@@ -876,9 +880,9 @@ public class GuiController {
 
             File repoFile = new File(configuration.getRepoPath());
             Pattern reqPatternString = Pattern.compile(configuration.getReqPattern());
-            i_Collection_Model = reInitModel(null, null, repoFile,reqPatternString);
+            i_Collection_Model = reInitModel(null, null, repoFile,reqPatternString,configuration.isEnableIndex());
             popupManager.showInformationDialog("Configuration successfull");
-
+            
             cleaner = new Cleaner(elementHandler);
             
             elementHandler.doInitialization();
