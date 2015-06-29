@@ -130,7 +130,11 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Requirement> getRequirements() throws IOException {
-        return dataSource.getAllRequirements();
+        ArrayList<Requirement> reqs = new ArrayList<>(dataSource.getAllRequirements());
+
+        Collections.sort(reqs, (o1, o2) -> Integer.parseInt(o1.getId()) - Integer.parseInt(o2.getId()));
+
+        return reqs;
     }
 
     /**
