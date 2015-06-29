@@ -38,12 +38,14 @@ public class MenuHandler {
     }
     
     public void setImpactAction(Runnable action) {
+        if(menuItem_Impact.getActionListeners().length == 0){
         menuItem_Impact.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 Thread tr = new Thread(action);
                 tr.start();
             }
         });
+        }
     }
     
     /*DONOTREMOVE
