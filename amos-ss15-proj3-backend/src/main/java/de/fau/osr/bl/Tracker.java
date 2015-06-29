@@ -22,6 +22,7 @@ import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.impl.GitBlameOperation;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
+import de.fau.osr.util.NaturalOrderComparator;
 import de.fau.osr.util.parser.CommitMessageParser;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
@@ -132,7 +133,9 @@ public class Tracker {
     public Collection<Requirement> getRequirements() throws IOException {
         ArrayList<Requirement> reqs = new ArrayList<>(dataSource.getAllRequirements());
 
-        Collections.sort(reqs, (o1, o2) -> Integer.parseInt(o1.getId()) - Integer.parseInt(o2.getId()));
+        NaturalOrderComparator comparator = new NaturalOrderComparator();
+
+        Collections.sort(reqs, (o1, o2) -> comparator.compare(o1.getId(), o2.getId()));
 
         return reqs;
     }
