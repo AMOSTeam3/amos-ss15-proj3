@@ -315,16 +315,15 @@ public class GitVcsClient extends VcsClient{
     }
     
     /**
-     * Reads object into a String, makes no effort to check if this operations
-     * makes sense.
+     * Reads object into a byte array.
      * @param object
      * @return The bytes of object interpreted as utf8 String
      * @throws GitAPIException
      * @throws IOException
      */
-    String blobToString(ObjectId object) throws GitAPIException, IOException {
+    byte[] readBlob(ObjectId object) throws GitAPIException, IOException {
     	ObjectReader reader = git.getRepository().newObjectReader();
-    	return new String(reader.open(object).getBytes(), "utf-8");
+    	return reader.open(object).getBytes();
     }
     
     /**
