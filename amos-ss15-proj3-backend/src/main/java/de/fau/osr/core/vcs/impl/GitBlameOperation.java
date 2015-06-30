@@ -265,28 +265,48 @@ public class GitBlameOperation {
 					diff.sort(compEdit);
 					
 					BlameItem passedBlame = new BlameItem(parent, new TreeMap<>(), cur.path);
-					entryIterations:
-						for(Map.Entry<Integer, Integer> entry : cur.words.entrySet()) {
-							
-							/*
-							 * Calculate the offset for the line after the
-							 * edits before it. If performance becomes an
-							 * issue, this could be done faster by
-							 * traversing the cur.words and diff simultaneously
-							 * and keeping track of the offset.
-							 */
-							int offset = 0;
-							for(Edit e : diff) {
-								if(e.getBeginB() <= entry.getKey() && entry.getKey() < e.getEndB()) {
-									// entry was inserted by the Edit e
-									continue entryIterations;
-								}
-								if(e.getBeginB() > entry.getKey()) break; //edit after current line
-								offset += (e.getEndA() - e.getBeginA()) - (e.getEndB() - e.getBeginB());
+					
+					Iterator<Map.Entry<Integer, Integer>> entryIterator = cur.words.entrySet().iterator();
+					Iterator<Edit> editIterator = diff.iterator();
+					Map.Entry<Integer, Integer> curEntry = null;
+					if(entryIterator.hasNext())
+						curEntry = entryIterator.next();
+					Edit curEdit = null;
+					if(editIterator.hasNext())
+						curEdit = editIterator.next();
+					int offset = 0;
+					
+					/*
+					 * traverse diff and words simultaneously
+					 */
+					while (curEntry != null || entryIterator.hasNext()) {
+						if (curEntry == null) {
+							curEntry = entryIterator.next();
+						} else if (curEdit == null && editIterator.hasNext()) {
+							curEdit = editIterator.next();
+						} else if (curEdit != null && curEdit.getBeginB() <= curEntry.getKey()) {
+							if(curEdit.getEndB() > curEntry.getKey()) {
+								/*
+								 * curEntry was erased by curEdit
+								 */
+								curEntry = null;
+							} else {
+								/*
+								 * curEdit introduced an offset before curEntry
+								 */
+								offset += (curEdit.getEndA() - curEdit.getBeginA()) -
+										(curEdit.getEndB() - curEdit.getBeginB());
+								curEdit = null;
 							}
-							foundLines.add(entry.getKey());
-							passedBlame.words.put(entry.getKey() + offset, entry.getValue());
+						} else {
+							/*
+							 * push curEntry with key corrected by offset
+							 */
+							foundLines.add(curEntry.getKey());
+							passedBlame.words.put(curEntry.getKey() + offset, curEntry.getValue());
+							curEntry = null;
 						}
+					}
 					/*
 					 * push the lines we found in parent back to queue
 					 */
