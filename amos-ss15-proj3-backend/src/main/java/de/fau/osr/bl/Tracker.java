@@ -167,8 +167,11 @@ public class Tracker {
             int i = 0;
             float influenced = 0;
             int currentBlameSize = currentBlame.size();
-            for(; i<currentBlameSize; i++){
-                if(currentBlame.get(i).getRequirements().contains(requirementID)){
+            for(; i<currentBlame.size(); i++){
+            	if(currentBlame.get(i).getLine().matches("\\s*")) {
+            		// ignore whitespace only lines
+            		--currentBlameSize;
+            	} else if(currentBlame.get(i).getRequirements().contains(requirementID)){
                     influenced++;
                 }
             }
