@@ -59,6 +59,8 @@ public abstract class ElementHandler {
     public void setOnClickAction(Runnable action){
         list.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                if(listSelectionEvent.getValueIsAdjusting() == true)
+                    return;
                 action.run();
             }
         });

@@ -7,7 +7,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
 import javax.naming.OperationNotSupportedException;
@@ -32,7 +38,7 @@ import de.fau.osr.gui.util.ElementsConverter;
  */
 public class TrackerAdapterWorker {
 
-    private final Tracker tracker;
+    private TrackerAdapter trackerAdapter;
     Boolean isReadyForTakeOver;
     private Pattern reqPatternString;
     public Collection<Requirement> requirements;
@@ -43,9 +49,9 @@ public class TrackerAdapterWorker {
     public static Date globalChangeTime;
     private static long CommitCount;
     public static Date getAllRequirements,getImpactPercentageForCommitFileListAndRequirement,getCommitsFromRequirement,getAllFiles,getRequirementsFromFile,getCommitFilesForRequirement;
-    
-    public TrackerAdapterWorker(Tracker tracker) throws IOException {
-        this.tracker = tracker;
+    public Boolean isThreadingRequired;
+    public TrackerAdapterWorker(TrackerAdapter trackerAdapter) throws IOException {
+        this.trackerAdapter = trackerAdapter;
         isReadyForTakeOver = false;
         Calendar calc = Calendar.getInstance();
         globalChangeTime = calc.getTime();
@@ -53,13 +59,54 @@ public class TrackerAdapterWorker {
         workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<CommitFile>>();
         workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<CommitFile>>();
         totalCommitFiles = new ArrayList<CommitFile>();
-        
+        isThreadingRequired = false;
         
     }
     
+    public void setActualTrackerAdapter(TrackerAdapter trackerAdapter){
+        this.trackerAdapter = trackerAdapter;
+    }
+    public void setThreading(Boolean isRequired){
+        this.isThreadingRequired = isRequired;
+    }
     public Date trackerLastChangeTime(){
         
         return globalChangeTime;
+    }
+    
+    class Collector{
+        
+        public Collection<CommitFile> totalCommitFiles;
+        public HashMap<Requirement,Collection<Commit>> workerRepositoryReqCommit;
+        public HashMap<Commit,Collection<CommitFile>> workerRepositoryCommitCommitFile;
+        public HashMap<Requirement,Collection<CommitFile>> workerRepositoryReqCommitFile;
+        
+        public Collector(){
+            
+            totalCommitFiles = new ArrayList<CommitFile>();
+            workerRepositoryReqCommit = new HashMap<Requirement, Collection<Commit>>();
+            workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<CommitFile>>();
+            workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<CommitFile>>();
+            
+        }
+    }
+    
+    public void collectFutures(Future<Collector> future){
+        try {
+            Collector collected = future.get();
+            
+            totalCommitFiles.addAll(collected.totalCommitFiles);
+           workerRepositoryReqCommit.putAll(collected.workerRepositoryReqCommit);
+            workerRepositoryCommitCommitFile.putAll(collected.workerRepositoryCommitCommitFile);
+             workerRepositoryReqCommitFile.putAll(collected.workerRepositoryReqCommitFile);
+        } catch (InterruptedException e) {
+            
+            e.printStackTrace();
+            return;
+        } catch (ExecutionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -68,19 +115,83 @@ public class TrackerAdapterWorker {
      * It has its own datastructure and data is filled into this structure in background
      * This method is called whenever the listener thread finds a change in underlying data
      */
-    public void prepareData()
+    public Boolean prepareData()
     {
         
-        requirements = getAllRequirements();
-        for(Requirement requirement : requirements){
-            Collection<Commit> commits = getCommitsFromRequirement(requirement);
-            workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
-            workerRepositoryReqCommit.put(requirement,commits);
-            for(Commit commit : commits){
-                Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
-                workerRepositoryCommitCommitFile.put(commit,commitFiles);
-                totalCommitFiles.addAll(commitFiles);
+        class TrackerAdapterWorkerCallable implements Callable<Collector>{
+            
+            Requirement requirement;
+            public TrackerAdapterWorkerCallable(Requirement requirement){
+                this.requirement = requirement;
+                
             }
+
+            @Override
+            public Collector call() throws Exception {
+                Collector collectWorker = new Collector();
+                Collection<Commit> commits = getCommitsFromRequirement(requirement);
+                collectWorker.workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
+                collectWorker.workerRepositoryReqCommit.put(requirement,commits);
+                for(Commit commit : commits){
+                    Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
+                    collectWorker.workerRepositoryCommitCommitFile.put(commit,commitFiles);
+                    collectWorker.totalCommitFiles.addAll(commitFiles);
+                
+                }
+                return collectWorker;
+            
+            }
+        }
+        if(isThreadingRequired){
+            ExecutorService executor = Executors.newCachedThreadPool();
+            
+            requirements = getAllRequirements();
+            List<Future<Collector>> futureList = new ArrayList<Future<Collector>>();
+            for(Requirement requirement : requirements){
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {                    
+                    return false;
+                }
+                Future<Collector> future = executor.submit(new TrackerAdapterWorkerCallable(requirement));
+                futureList.add(future);
+                
+            }
+            
+            for(Future<Collector> futureElement : futureList){
+                collectFutures(futureElement);
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {                    
+                    return false;
+                }
+            }
+            
+            executor.shutdown();
+        }
+        else{
+            
+                requirements = getAllRequirements();
+                for(Requirement requirement : requirements){
+                    Collection<Commit> commits = getCommitsFromRequirement(requirement);
+                    workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
+                    workerRepositoryReqCommit.put(requirement,commits);
+                    for(Commit commit : commits){
+                        Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
+                        workerRepositoryCommitCommitFile.put(commit,commitFiles);
+                        totalCommitFiles.addAll(commitFiles);
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {                    
+                            return false;
+                        }
+                    }
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {                    
+                        return false;
+                    }
+                }
         }
         
         Calendar calc = Calendar.getInstance();
@@ -94,6 +205,7 @@ public class TrackerAdapterWorker {
         getImpactPercentageForCommitFileListAndRequirement = globalChangeTime;
         
         isReadyForTakeOver = true;
+        return true;
         
     }
     
@@ -116,16 +228,19 @@ public class TrackerAdapterWorker {
                     try {
 
                         Thread.sleep(5000);
+
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
+                        
                         e.printStackTrace();
+                        return;
                     }
                     continue;
                 }
                     
                 Calendar calc = Calendar.getInstance();
                 globalChangeTime = calc.getTime();
-                prepareData();
+                if(!prepareData())
+                    break;
                 
                 }
             }
@@ -134,6 +249,13 @@ public class TrackerAdapterWorker {
 
         }
         Thread trackerAdapterWorkerListenerThread = new Thread(new TrackerAdapterWorkerListener());
+        trackerAdapterWorkerListenerThread.setName("TrackerAdapterWorkerListenerThread");
+        trackerAdapterWorkerListenerThread.setPriority(Thread.MIN_PRIORITY);
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {                    
+            return;
+        }
         trackerAdapterWorkerListenerThread.start();
 
     }
@@ -145,17 +267,10 @@ public class TrackerAdapterWorker {
     public Collection<Requirement> getAllRequirements() {
         if(getAllRequirements == globalChangeTime){
             return requirements;
-        }
+        }       
         
-        Collection<Requirement> reqsUI = new ArrayList<>();
 
-        try {
-            reqsUI = ElementsConverter.convertRequirements(tracker.getRequirements());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return reqsUI;
+        return trackerAdapter.getAllRequirements();
     }
 
     /**
@@ -168,21 +283,7 @@ public class TrackerAdapterWorker {
         if(getCommitsFromRequirement == globalChangeTime){
             return workerRepositoryReqCommit.get(requirement);
         }
-        de.fau.osr.core.Requirement req;
-        Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
-        try {
-            req = tracker.getRequirementById(requirement.getID());
-            commitsForReq = tracker.getCommitsForRequirementID(req.getId());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-        Collection<Commit> commitList = ElementsConverter.convertCommits(commitsForReq);
-        for(Commit commit : commitList)
-        {
-            commit.instanceRequirement = requirement;
-        }
-        return commitList;
+       return trackerAdapter.getCommitsFromRequirement(requirement);
     }
 
 
@@ -199,7 +300,7 @@ public class TrackerAdapterWorker {
             return commitFiles;
         }
         
-        return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
+        return trackerAdapter.getAllFiles();
     }
 
 
@@ -211,19 +312,9 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public Collection<Requirement> getRequirementsFromFile(CommitFile file) {
-        Set<String> reqIds = new HashSet<>();
-        Collection<de.fau.osr.core.Requirement> reqs = new ArrayList<>();
-        try {
+        
 
-            reqIds = tracker.getRequirementIdsForFile(file.newPath.getPath());
-
-            reqs = tracker.getRequirementsByIds(reqIds);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ElementsConverter.convertRequirements(reqs);
+        return trackerAdapter.getRequirementsFromFile(file);
     }
 
     
@@ -233,13 +324,8 @@ public class TrackerAdapterWorker {
      * @author Gayathery
      */
     public Collection<Commit> getCommitsFromFile(CommitFile file) {
-        try {
-            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsForFile(file.newPath.getPath())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList<>();
+       
+        return trackerAdapter.getCommitsFromFile(file);
     }
 
     
@@ -262,7 +348,7 @@ public class TrackerAdapterWorker {
             return (float)0.0;
         }
     
-        return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
+        return trackerAdapter.getImpactPercentageForCommitFileListAndRequirement(file, commit);
     }
     
     
@@ -274,7 +360,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public Collection<CommitFile> getFilesFromCommit(Commit commit) {
-        return commit.files;
+        return trackerAdapter.getFilesFromCommit(commit);
     }
 
     
@@ -284,7 +370,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public Pattern getCurrentRequirementPattern() {
-        return reqPatternString;
+        return trackerAdapter.getCurrentRequirementPattern();
     }
 
     
@@ -294,7 +380,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public void setReqPatternString(Pattern reqPatternString) {
-        this.reqPatternString = reqPatternString;
+            trackerAdapter.setReqPatternString(reqPatternString);
     }
 
     
@@ -304,7 +390,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public String getCurrentRepositoryPath() {
-        return tracker.getCurrentRepositoryPath();
+        return trackerAdapter.getCurrentRepositoryPath();
     }
 
     
@@ -314,13 +400,9 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public Collection<Commit> getAllCommits() {
-        try {
-            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommits()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
 
-        return new ArrayList<>();
+        return trackerAdapter.getAllCommits();
     }
 
     
@@ -331,20 +413,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public Collection<Requirement> getRequirementsFromCommit(Commit commit) {
-        Set<String> reqs;
-        Collection<de.fau.osr.core.Requirement> reqObjects = new ArrayList<>();
-
-        try {
-            reqs = tracker.getAllCommitReqRelations().get(commit.id);
-
-            reqObjects = tracker.getRequirementsByIds(reqs);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return ElementsConverter.convertRequirements(reqObjects);
+       return trackerAdapter.getRequirementsFromCommit(commit);
     }
 
     
@@ -358,13 +427,9 @@ public class TrackerAdapterWorker {
         if(getCommitFilesForRequirement == globalChangeTime){
             return workerRepositoryReqCommitFile.get(requirement);
         }
-        try {
-            return ElementsConverter.convertCommitFiles(tracker.getCommitFilesForRequirementID(requirement.getID()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
 
-        return new ArrayList<>();
+        return trackerAdapter.getCommitFilesForRequirement(requirement);
     }
 
     
@@ -375,11 +440,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public void addRequirementCommitRelation(Requirement requirement, Commit commit) {
-        try {
-            tracker.addRequirementCommitRelation(requirement.getID(), commit.id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+         trackerAdapter.addRequirementCommitRelation(requirement, commit);
     }
 
     
@@ -390,14 +451,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public Collection<AnnotatedLine> getAnnotatedLines(CommitFile next) {
-        try {
-            return ElementsConverter.convertAnnotatedLines(tracker.getBlame(next.newPath.getPath()));
-
-        } catch (IOException | GitAPIException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList<>();
+        return trackerAdapter.getAnnotatedLines(next);
     }
 
     
@@ -407,13 +461,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public RequirementsTraceabilityMatrix generateRequirementsTraceability() {
-        try {
-            return tracker.generateRequirementsTraceability();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return trackerAdapter.generateRequirementsTraceability();
     }
 
     
@@ -423,7 +471,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact() {
-        return tracker.generateRequirementsTraceabilityByImpact();
+        return trackerAdapter.generateRequirementsTraceabilityByImpact();
     }
 
     
@@ -436,16 +484,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public boolean updateRequirement(String id, String title, String description) {
-        try {
-            tracker.saveOrUpdateRequirement(id, title, description);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (OperationNotSupportedException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return trackerAdapter.updateRequirement(id, title, description);
     }
 
 }

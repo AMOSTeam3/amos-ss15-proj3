@@ -3,6 +3,7 @@ package de.fau.osr.core.vcs.impl;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,6 +32,7 @@ import com.google.common.collect.Iterators;
 import de.fau.osr.core.vcs.AnnotatedWords;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.FlatSource;
+import de.fau.osr.util.StringUtils;
 
 /**
  * @author tobias
@@ -67,7 +69,7 @@ public class GitBlameOperation {
 	private final Repository repo;
 	private final String path;
 	private final BiFunction<String,Integer,? extends Iterator<? extends Object>> putBlame;
-	private final DiffAlgorithm diffAlgorithm = DiffAlgorithm.getAlgorithm(SupportedAlgorithm.MYERS);;
+	private final DiffAlgorithm diffAlgorithm = DiffAlgorithm.getAlgorithm(SupportedAlgorithm.HISTOGRAM);
 
 	/**
 	 * @author tobias
@@ -163,7 +165,9 @@ public class GitBlameOperation {
 		RevCommit rootCommit = walker.parseCommit(rootId);
 		String content;
 		try {
-			content = client.blobToString(client.fileAtRev(walker, path, rootCommit));
+			byte[] byteContent = client.readBlob(client.fileAtRev(walker, path, rootCommit));
+			if(!StringUtils.isValidUtf8(byteContent)) return new AnnotatedWords(FlatSource.flatten(""), new List[0]);
+			content = new String(byteContent);
 		} catch (NullPointerException e1) {
 			throw new FileNotFoundException(path);
 		}
@@ -188,7 +192,8 @@ public class GitBlameOperation {
 			walker.parseCommit(cur.accused);
 
 			ObjectId idAfter = client.fileAtRev(walker, cur.path, cur.accused);
-			FlatSource after = FlatSource.flatten(client.blobToString(idAfter));
+			FlatSource after = FlatSource.flatten(new String(client.readBlob(idAfter)));
+			RawText rawAfter = new RawText(after.source.getBytes());
 			
 			/*
 			 * pull in custom annotations from putBlame on all suspect lines
@@ -251,11 +256,24 @@ public class GitBlameOperation {
 					}
 					//the file is at the same location in parent
 					
-					FlatSource before = FlatSource.flatten(client.blobToString(idBefore));
-					RawText rawBefore, rawAfter;
-					rawBefore = new RawText(before.source.getBytes());
-					rawAfter = new RawText(after.source.getBytes());
-					EditList diff = diffAlgorithm.diff(RawTextComparator.DEFAULT, rawBefore, rawAfter);
+					byte[] byteBefore = client.readBlob(idBefore);
+					EditList diff;
+					if(StringUtils.isValidUtf8(byteBefore)) {
+						FlatSource before = FlatSource.flatten(new String(byteBefore));
+						RawText rawBefore = new RawText(before.source.getBytes());
+						diff = diffAlgorithm.diff(RawTextComparator.DEFAULT, rawBefore, rawAfter);
+					} else {
+						/*
+						 * If a file is not valid utf8, assume it is a
+						 * binary and just blame it all on the more recent commit.
+						 * 
+						 *  Diffs over large binaries make no sense and are very expensive.
+						 */
+						diff = new EditList();
+						diff.add(new Edit(0, 0, 0, rawAfter.size()));
+						System.err.println("skipped diffing " + path);
+					}
+					
 					/*
 					 * The documentation does not state if diff is sorted,
 					 * just that the Edits do not overlap, but it is much
@@ -265,28 +283,48 @@ public class GitBlameOperation {
 					diff.sort(compEdit);
 					
 					BlameItem passedBlame = new BlameItem(parent, new TreeMap<>(), cur.path);
-					entryIterations:
-						for(Map.Entry<Integer, Integer> entry : cur.words.entrySet()) {
-							
-							/*
-							 * Calculate the offset for the line after the
-							 * edits before it. If performance becomes an
-							 * issue, this could be done faster by
-							 * traversing the cur.words and diff simultaneously
-							 * and keeping track of the offset.
-							 */
-							int offset = 0;
-							for(Edit e : diff) {
-								if(e.getBeginB() <= entry.getKey() && entry.getKey() < e.getEndB()) {
-									// entry was inserted by the Edit e
-									continue entryIterations;
-								}
-								if(e.getBeginB() > entry.getKey()) break; //edit after current line
-								offset += (e.getEndA() - e.getBeginA()) - (e.getEndB() - e.getBeginB());
+					
+					Iterator<Map.Entry<Integer, Integer>> entryIterator = cur.words.entrySet().iterator();
+					Iterator<Edit> editIterator = diff.iterator();
+					Map.Entry<Integer, Integer> curEntry = null;
+					if(entryIterator.hasNext())
+						curEntry = entryIterator.next();
+					Edit curEdit = null;
+					if(editIterator.hasNext())
+						curEdit = editIterator.next();
+					int offset = 0;
+					
+					/*
+					 * traverse diff and words simultaneously
+					 */
+					while (curEntry != null || entryIterator.hasNext()) {
+						if (curEntry == null) {
+							curEntry = entryIterator.next();
+						} else if (curEdit == null && editIterator.hasNext()) {
+							curEdit = editIterator.next();
+						} else if (curEdit != null && curEdit.getBeginB() <= curEntry.getKey()) {
+							if(curEdit.getEndB() > curEntry.getKey()) {
+								/*
+								 * curEntry was erased by curEdit
+								 */
+								curEntry = null;
+							} else {
+								/*
+								 * curEdit introduced an offset before curEntry
+								 */
+								offset += (curEdit.getEndA() - curEdit.getBeginA()) -
+										(curEdit.getEndB() - curEdit.getBeginB());
+								curEdit = null;
 							}
-							foundLines.add(entry.getKey());
-							passedBlame.words.put(entry.getKey() + offset, entry.getValue());
+						} else {
+							/*
+							 * push curEntry with key corrected by offset
+							 */
+							foundLines.add(curEntry.getKey());
+							passedBlame.words.put(curEntry.getKey() + offset, curEntry.getValue());
+							curEntry = null;
 						}
+					}
 					/*
 					 * push the lines we found in parent back to queue
 					 */

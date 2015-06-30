@@ -4,6 +4,7 @@ package de.fau.osr.gui.View.ElementHandler;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -13,7 +14,9 @@ import com.jgoodies.forms.layout.FormSpecs;
 
 import de.fau.osr.gui.Controller.GuiController;
 import de.fau.osr.gui.Model.DataElements.Configuration;
+import de.fau.osr.util.AppProperties;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
@@ -28,10 +31,6 @@ import javax.swing.Action;
 
 import java.awt.event.ActionListener;
 
-
-
-
-
 /**
  * @author Gayathery
  * This is a element handler for the Home Screen configurations.
@@ -41,6 +40,7 @@ public class Configuration_ElementHandler extends JPanel {
     private JTextField txtrreqd;
     private JTextField input_dbusername;
     private JTextField input_dbpassword;
+    private JCheckBox enableIndex;
     
     private GuiController guiController;
     private JTabbedPane jpane;
@@ -49,7 +49,8 @@ public class Configuration_ElementHandler extends JPanel {
     
     private final Action action = new SwingAction();
     private final Action action_1 = new FileChooseAction();
-  
+    private Font font_bold = new Font("Tahoma", Font.BOLD, 18);
+    private Font font_plain = new Font("Tahoma", Font.PLAIN, 18);
    
     public void setController(GuiController guiController,JTabbedPane jPane){
         this.guiController = guiController;
@@ -69,8 +70,12 @@ public class Configuration_ElementHandler extends JPanel {
                 FormSpecs.RELATED_GAP_COLSPEC,
                 FormSpecs.DEFAULT_COLSPEC,
                 FormSpecs.RELATED_GAP_COLSPEC,
-                ColumnSpec.decode("default:grow"),},
+                ColumnSpec.decode("350px"),},
             new RowSpec[] {
+                FormSpecs.RELATED_GAP_ROWSPEC,
+                FormSpecs.DEFAULT_ROWSPEC,
+                FormSpecs.RELATED_GAP_ROWSPEC,
+                FormSpecs.DEFAULT_ROWSPEC,
                 FormSpecs.RELATED_GAP_ROWSPEC,
                 FormSpecs.DEFAULT_ROWSPEC,
                 FormSpecs.RELATED_GAP_ROWSPEC,
@@ -103,11 +108,12 @@ public class Configuration_ElementHandler extends JPanel {
                 FormSpecs.DEFAULT_ROWSPEC,}));
         
         JLabel lblApplicationConfiguration = new JLabel("Application Configuration");
-        lblApplicationConfiguration.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblApplicationConfiguration.setFont(font_bold);
+        lblApplicationConfiguration.setForeground(Color.darkGray);
         add(lblApplicationConfiguration, "2, 2, center, default");
         
         JLabel lblNewLabel = new JLabel("Repository Path");
-        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblNewLabel.setFont(font_plain);
         add(lblNewLabel, "2, 6");
         
         JButton btnChooseRepository = new JButton("Choose Repository");
@@ -115,53 +121,65 @@ public class Configuration_ElementHandler extends JPanel {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        btnChooseRepository.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnChooseRepository.setFont(font_plain);
         btnChooseRepository.setAction(action_1);
         add(btnChooseRepository, "6, 6, 1, 2");
         
         input_repoPath = new JTextField();
         add(input_repoPath, "6, 8, fill, default");
-        input_repoPath.setColumns(10);
+        input_repoPath.setColumns(30);
         
         JTextArea txtrEnterPatternAs = new JTextArea();
         txtrEnterPatternAs.setEditable(false);
+        txtrEnterPatternAs.setBackground(Color.lightGray);
         txtrEnterPatternAs.setText("Enter pattern as RegEx.For multiple patters seperate with '|'");
         add(txtrEnterPatternAs, "6, 10, left, center");
         
        
         JLabel lblNewLabel_1 = new JLabel("Requirement Pattern");
-        lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblNewLabel_1.setFont(font_plain);
         add(lblNewLabel_1, "2, 12");
         
         txtrreqd = new JTextField();
-        txtrreqd.setText("[Rr]eq-0*(\\d+)");
+        txtrreqd.setText(AppProperties.GetValue("RequirementPattern"));
+        
         add(txtrreqd, "6, 12, fill, default");
-        txtrreqd.setColumns(10);
+        txtrreqd.setColumns(30);
+        
+        JLabel lblPerformance = new JLabel("Performance Optimization");
+        lblPerformance.setFont(font_plain);
+        add(lblPerformance, "2, 14");
+        
+        enableIndex = new JCheckBox("Enable Indexing");
+        enableIndex.setSelected(false);
+        enableIndex.setFont(font_bold);
+        add(enableIndex, "6, 14, fill, default");
         
         JLabel lblConfigureDatabase = new JLabel("Configure Database:");
-        lblConfigureDatabase.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblConfigureDatabase.setFont(font_bold);
+        lblConfigureDatabase.setForeground(Color.darkGray);
         add(lblConfigureDatabase, "2, 18");
         
         JLabel lblDatabaseUsername = new JLabel("Database username");
-        lblDatabaseUsername.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblDatabaseUsername.setFont(font_plain);
         add(lblDatabaseUsername, "2, 22");
         
         input_dbusername = new JTextField();
         add(input_dbusername, "6, 22, fill, top");
-        input_dbusername.setColumns(10);
+        input_dbusername.setColumns(30);
         
         JLabel lblDatabasePassword = new JLabel("Database Password");
-        lblDatabasePassword.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblDatabasePassword.setFont(font_plain);
         add(lblDatabasePassword, "2, 26");
         
         input_dbpassword = new JPasswordField();
         add(input_dbpassword, "6, 26, fill, top");
-        input_dbpassword.setColumns(10);
-       
+        input_dbpassword.setColumns(30);
+        
         
         JButton btnConfigure = new JButton("Configure");
         btnConfigure.setAction(action);
-        btnConfigure.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnConfigure.setFont(font_plain);
         add(btnConfigure, "6, 30");
 
     }
@@ -178,6 +196,7 @@ public class Configuration_ElementHandler extends JPanel {
             configuration.setDbUsername(input_dbusername.getText());
             configuration.setRepoPath(input_repoPath.getText());
             configuration.setReqPattern(txtrreqd.getText());
+            configuration.setEnableIndex(enableIndex.isSelected());
             System.out.println(configuration.toString());
             if(guiController.configureApplication(configuration)){
                 jpane.setEnabledAt(1, true);
@@ -193,7 +212,7 @@ public class Configuration_ElementHandler extends JPanel {
     private class FileChooseAction extends AbstractAction {
         public FileChooseAction() {
             putValue(NAME, "Choose Repository");
-            putValue(SHORT_DESCRIPTION, "Some short description");
+            putValue(SHORT_DESCRIPTION, "Choose the repository");
         }
         public void actionPerformed(ActionEvent e) {
            
@@ -201,12 +220,14 @@ public class Configuration_ElementHandler extends JPanel {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
             chooser.setFileHidingEnabled(false);
-            int returnValue = chooser.showDialog(null,"Select the Repository");
+            int returnValue = chooser.showDialog(null,"Choose Repository");
 
             if (returnValue == JFileChooser.APPROVE_OPTION) 
                 input_repoPath.setText(chooser.getSelectedFile().getAbsolutePath());
            
         }
     }
+    
+    
 }
 

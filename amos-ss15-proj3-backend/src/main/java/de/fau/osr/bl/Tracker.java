@@ -1,5 +1,8 @@
 package de.fau.osr.bl;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
@@ -19,6 +22,7 @@ import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.impl.GitBlameOperation;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
+import de.fau.osr.util.NaturalOrderComparator;
 import de.fau.osr.util.parser.CommitMessageParser;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
@@ -29,6 +33,7 @@ import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
@@ -48,6 +53,8 @@ public class Tracker {
 
     private RequirementDao reqDao;
     private CommitDaoImplementation commitDao;
+
+    private LoadingCache<String, List<AnnotatedLine>> blameCache;
 
     public Tracker(VcsClient vcsClient) throws IOException {
         this(vcsClient, null, null);
@@ -88,6 +95,27 @@ public class Tracker {
         }
 
         this.dataSource = ds;
+
+
+        blameCache = CacheBuilder.newBuilder()
+                .maximumSize(10000)
+                .build(
+                    new CacheLoader<String, List<AnnotatedLine>>() {
+                        public List<AnnotatedLine> load(String path) throws GitAPIException, IOException {
+                            GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
+                            return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
+                        }
+                    }
+                );
+    }
+
+    /**
+     * purges all caches for repository.
+     * useful to call if repository is updated by new commit
+     */
+    public void purgeRepoCache() {
+        dataSource.clearCache(); //this will purge probably more than just VCS datasource
+        blameCache.cleanUp();
     }
 
     /**
@@ -103,7 +131,13 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Requirement> getRequirements() throws IOException {
-        return dataSource.getAllRequirements();
+        ArrayList<Requirement> reqs = new ArrayList<>(dataSource.getAllRequirements());
+
+        NaturalOrderComparator comparator = new NaturalOrderComparator();
+
+        Collections.sort(reqs, (o1, o2) -> comparator.compare(o1.getId(), o2.getId()));
+
+        return reqs;
     }
 
     /**
@@ -133,8 +167,11 @@ public class Tracker {
             int i = 0;
             float influenced = 0;
             int currentBlameSize = currentBlame.size();
-            for(; i<currentBlameSize; i++){
-                if(currentBlame.get(i).getRequirements().contains(requirementID)){
+            for(; i<currentBlame.size(); i++){
+            	if(currentBlame.get(i).getLine().matches("\\s*")) {
+            		// ignore whitespace only lines
+            		--currentBlameSize;
+            	} else if(currentBlame.get(i).getRequirements().contains(requirementID)){
                     influenced++;
                 }
             }
@@ -307,8 +344,11 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-        GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
-        return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
+        try {
+            return blameCache.get(path);
+        } catch (ExecutionException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     /**

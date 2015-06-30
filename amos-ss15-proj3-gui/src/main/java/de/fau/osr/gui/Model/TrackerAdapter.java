@@ -31,23 +31,30 @@ public class TrackerAdapter implements I_Model {
     private TrackerAdapterWorker trackerAdapterWorker;
     private Pattern reqPatternString;
 
+    private Thread trackerAdapterWorkerThread;
+    
     public TrackerAdapter(Tracker tracker,Boolean isIndexingRequired) throws IOException {
         this.tracker = tracker;
-        trackerAdapterWorker = new TrackerAdapterWorker(tracker);
+        trackerAdapterWorker = new TrackerAdapterWorker(this);
         
         class TrackerAdapterWorkerThread extends Thread {
 
             public void run() {
-                trackerAdapterWorker.prepareData();
+                if(trackerAdapterWorker.prepareData()){
                 trackerAdapterWorker.listen();
+                }
             }
 
             
 
         }
+        resetWorkerThread();
         if(isIndexingRequired){
-            Thread trackerAdapterWorkerThreadThread = new Thread(new TrackerAdapterWorkerThread());
-            trackerAdapterWorkerThreadThread.start();
+           
+            trackerAdapterWorkerThread = new Thread(new TrackerAdapterWorkerThread());
+            trackerAdapterWorkerThread.setPriority(Thread.MIN_PRIORITY);
+            trackerAdapterWorkerThread.setName("TrackerAdapterWorkerThread");
+            trackerAdapterWorkerThread.start();
         }
     }
 
@@ -254,6 +261,13 @@ public class TrackerAdapter implements I_Model {
 
         return false;
     }
-
+    
+    private void resetWorkerThread(){
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        for ( Thread thread : threadSet ){
+            if ( thread.getName( ).equals( "TrackerAdapterWorkerThread" ) || thread.getName( ).equals( "TrackerAdapterWorkerListenerThread" ))
+                thread.interrupt();
+        }
+    }
 
 }

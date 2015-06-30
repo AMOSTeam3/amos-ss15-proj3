@@ -24,7 +24,7 @@ public class Requirement {
     private String description;
 
     @Column(name="story_point")
-    private int storyPoint;
+    private Integer storyPoint;
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
@@ -61,11 +61,11 @@ public class Requirement {
         this.description = description;
     }
 
-    public int getStoryPoint() {
-        return storyPoint;
+    public Integer getStoryPoint() {
+        return (storyPoint != null) ? storyPoint : -1;
     }
 
-    public void setStoryPoint(int storyPoint) {
+    public void setStoryPoint(Integer storyPoint) {
         this.storyPoint = storyPoint;
     }
 
