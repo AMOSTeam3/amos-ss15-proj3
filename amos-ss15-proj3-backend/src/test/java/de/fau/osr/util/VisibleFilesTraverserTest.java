@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import org.junit.BeforeClass;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.function.Consumer;
 public class VisibleFilesTraverserTest extends TestCase {
 
 
-    final String testRepoFilePath = PublicTestData.getGitTestRepo().replace("git", "");
+    final String testRepoFile = PublicTestData.getGitTestRepo().replace("git", "");
     List<String> expectedTestRepoFileContent;
 
     @BeforeClass
@@ -74,19 +76,15 @@ public class VisibleFilesTraverserTest extends TestCase {
                 "git/logs/refs/heads/test2",
                 "git/index"
         );
-
-
-
-
     }
 
     public void testTraversWithoutIgnoring() throws Exception {
         VisibleFilesTraverser filetraverser = VisibleFilesTraverser.Get(
-                testRepoFilePath
+                Paths.get(testRepoFile)
         );
         List<String> got = new ArrayList<>();
-        filetraverser.traverse().forEach((File file) -> {
-            got.add(file.getPath().replace(testRepoFilePath, ""));
+        filetraverser.traverse().forEach((Path file) -> {
+            got.add(file.toString());
         });
         List<String> expected = expectedTestRepoFileContent;
 
@@ -96,18 +94,19 @@ public class VisibleFilesTraverserTest extends TestCase {
 
     public void testTraversWithIgnoring() throws Exception {
         VisibleFilesTraverser filetraverser = VisibleFilesTraverser.Get(
-                testRepoFilePath,
-                "git"
+                Paths.get(testRepoFile),
+                "git",
+                ".txt"
         );
         List<String> got = new ArrayList<>();
-        filetraverser.traverse().forEach((File file) -> {
-            got.add(file.getPath().replace(testRepoFilePath, ""));
+        filetraverser.traverse().forEach((Path file) -> {
+            got.add(file.toString());
         });
         List<String> expected = new ArrayList();
 
         expectedTestRepoFileContent.forEach(new Consumer<String>() {
             public void accept(String filename) {
-                if (!filename.startsWith("git"))
+                if (!(filename.startsWith("git")||filename.endsWith(".txt")))
                     expected.add(filename);
             }
         });

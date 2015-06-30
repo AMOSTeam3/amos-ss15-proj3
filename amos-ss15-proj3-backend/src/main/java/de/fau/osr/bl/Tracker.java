@@ -23,6 +23,7 @@ import de.fau.osr.core.vcs.impl.GitBlameOperation;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.NaturalOrderComparator;
+import de.fau.osr.util.VisibleFilesTraverser;
 import de.fau.osr.util.parser.CommitMessageParser;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -48,6 +50,7 @@ public class Tracker {
     private VcsClient vcsClient;
 
     private DataSource dataSource;
+    private VisibleFilesTraverser projectDirTraverser;
 
     private Logger logger = LoggerFactory.getLogger(Tracker.class);
 
@@ -96,7 +99,6 @@ public class Tracker {
 
         this.dataSource = ds;
 
-
         blameCache = CacheBuilder.newBuilder()
                 .maximumSize(10000)
                 .build(
@@ -107,6 +109,14 @@ public class Tracker {
                         }
                     }
                 );
+
+        this.projectDirTraverser = VisibleFilesTraverser.Get(
+                repoFile.toPath(),
+                "git",
+                ".class"
+        );
+
+        getFilePaths();
     }
 
     /**
@@ -299,6 +309,22 @@ public class Tracker {
     }
 
     /**
+     * Returns existing project file paths, which are in VCS.
+     * @return
+     * @throws IOException
+     */
+    public Collection<Path> getFilePaths() throws IOException {
+        Collection<Path> filePaths = new ArrayList<>();
+
+        for(Path each: projectDirTraverser.traverse())
+            // fname is a known file in VCS (if it returs ReqIds for that filepath)
+            if (this.getRequirementIdsForFile(each.toString()).size()>0)
+                filePaths.add(each);
+
+        return filePaths;
+    }
+
+    /**
      * @return all existing ever committed file paths
      */
     public Collection<String> getAllFilesAsString(){
@@ -357,8 +383,6 @@ public class Tracker {
     public RequirementsTraceabilityMatrix generateRequirementsTraceability() throws IOException{
 
         try{
-
-
             Collection<String> files = getAllFilesAsString() ;
 
             ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(AppProperties.GetValueAsInt("TraceabilityMatrixProcessingThreadPoolCount"));
@@ -560,7 +584,3 @@ public class Tracker {
         return getAllCommitFiles();
     }
 }
-
-
-
-

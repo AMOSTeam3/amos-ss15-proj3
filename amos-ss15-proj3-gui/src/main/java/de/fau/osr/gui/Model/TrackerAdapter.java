@@ -9,15 +9,12 @@ import java.util.regex.Pattern;
 
 import javax.naming.OperationNotSupportedException;
 
+import de.fau.osr.gui.Model.DataElements.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.bl.Tracker;
-import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
-import de.fau.osr.gui.Model.DataElements.Commit;
-import de.fau.osr.gui.Model.DataElements.CommitFile;
-import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
 
 /**
@@ -44,9 +41,6 @@ public class TrackerAdapter implements I_Model {
                 trackerAdapterWorker.listen();
                 }
             }
-
-            
-
         }
         resetWorkerThread();
         if(isIndexingRequired){
@@ -98,6 +92,16 @@ public class TrackerAdapter implements I_Model {
         return commitList;
     }
 
+    @Override
+    public Collection<PathDE> getFilePaths() {
+        try {
+            return ElementsConverter.convertFilePaths(tracker.getFilePaths());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
 
 
     @Override

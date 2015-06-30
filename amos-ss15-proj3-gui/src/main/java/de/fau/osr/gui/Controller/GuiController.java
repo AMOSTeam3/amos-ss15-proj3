@@ -451,9 +451,7 @@ public class GuiController {
 
         cleaner.clearAll();
 
-        Supplier<Collection<? extends DataElement>> fetching = () -> {
-            return i_Collection_Model.getAllFiles(getCommitFileSorting());
-        };
+        Supplier<Collection<? extends DataElement>> fetching = i_Collection_Model::getFilePaths;
 
         ElementHandler specificElementHandler = elementHandler
                 .getCommitFile_ElementHandler();

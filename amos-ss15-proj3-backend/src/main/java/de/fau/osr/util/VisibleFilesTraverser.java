@@ -9,6 +9,7 @@ import org.apache.commons.io.filefilter.HiddenFileFilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -18,8 +19,8 @@ import java.util.*;
  *
  * @author Taleh Didover
  */
-public class VisibleFilesTraverser extends DirectoryWalker<File> {
-    File startDirectory;
+public class VisibleFilesTraverser extends DirectoryWalker<Path> {
+    Path startDirectory;
     String[] ignoreList;
 
     /**
@@ -28,9 +29,9 @@ public class VisibleFilesTraverser extends DirectoryWalker<File> {
      * @param ignoreFileNames
      * @return
      */
-    public static VisibleFilesTraverser Get(String startDirectory, String...ignoreFileNames) {
+    public static VisibleFilesTraverser Get(Path startDirectory, String...ignoreFileNames) {
         return new VisibleFilesTraverser(
-                new File(startDirectory),
+                startDirectory,
                 ignoreFileNames,
                 FileFilterUtils.or(
                         // Show visible directories
@@ -41,16 +42,23 @@ public class VisibleFilesTraverser extends DirectoryWalker<File> {
         );
     }
 
-    private VisibleFilesTraverser(File startDirectory, String[] ignoreFilenames, FileFilter filter) {
+    private VisibleFilesTraverser(Path startDirectory, String[] ignoreFilenames, FileFilter filter) {
         super(filter, -1);
         this.startDirectory = startDirectory;
         this.ignoreList = ignoreFilenames;
 
     }
 
-    public Collection<File> traverse() throws IOException {
-        Collection<File> alreatyFoundFiles = new ArrayList<>();
-        walk(startDirectory, alreatyFoundFiles);
+    /**
+     * Returns paths of all filtered files. Paths are relative to *startDirectory*.
+     *
+     * @return
+     * @throws IOException
+     */
+
+    public Collection<Path> traverse() throws IOException {
+        Collection<Path> alreatyFoundFiles = new ArrayList<>();
+        walk(startDirectory.toFile(), alreatyFoundFiles);
         return alreatyFoundFiles;
     }
 
@@ -58,7 +66,7 @@ public class VisibleFilesTraverser extends DirectoryWalker<File> {
     protected boolean handleDirectory(File dir, int depth, Collection results) {
         String dirname = dir.getName();
         for (String eachIgnore: ignoreList)
-            if (eachIgnore.equals(dirname))
+            if (dirname.contains(eachIgnore))
                 return false;
         return true;
     }
@@ -66,8 +74,8 @@ public class VisibleFilesTraverser extends DirectoryWalker<File> {
     protected void handleFile(File file, int depth, Collection results) {
         String filename = file.getName();
         for (String eachIgnore: ignoreList)
-            if (eachIgnore.equals(filename))
+            if (filename.contains(eachIgnore))
                 return;
-        results.add(file);
+        results.add(startDirectory.relativize(file.toPath()));
     }
 }

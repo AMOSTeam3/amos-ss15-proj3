@@ -29,6 +29,8 @@ public interface I_Collection_Model {
 
     Collection<? extends DataElement> getCommitsFromRequirementID(Collection<Requirement> requirements) throws IOException;
 
+    List<? extends DataElement> getFilePaths();
+
     List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting);
 
     Collection<? extends DataElement> getRequirementsFromFile(Collection<CommitFile> files) throws IOException;

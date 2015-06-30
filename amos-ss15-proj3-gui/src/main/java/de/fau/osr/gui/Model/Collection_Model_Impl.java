@@ -16,7 +16,8 @@ public class Collection_Model_Impl implements I_Collection_Model {
     private Collection<Commit> commits = null;
     private Collection<Requirement> requirements = null;
     private Collection<CommitFile> files = null;
-    
+    private Collection<PathDE> filePaths = null;
+
     private I_Model model;
 
     public Collection_Model_Impl(I_Model model) {
@@ -43,6 +44,18 @@ public class Collection_Model_Impl implements I_Collection_Model {
         }
         
         return commits;
+    }
+
+    @Override
+    public List<? extends DataElement> getFilePaths() {
+        if(filePaths == null){
+            filePaths = model.getFilePaths();
+        }
+
+        List<PathDE> commitsSorted = new ArrayList<>(filePaths);
+        commitsSorted.sort((lhs,rhs) -> lhs.FilePath.compareTo(rhs.FilePath));
+
+        return commitsSorted;
     }
 
     @Override

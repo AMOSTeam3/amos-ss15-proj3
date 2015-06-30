@@ -1,10 +1,8 @@
 package de.fau.osr.gui.util;
 
-import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
-import de.fau.osr.gui.Model.DataElements.Commit;
-import de.fau.osr.gui.Model.DataElements.CommitFile;
-import de.fau.osr.gui.Model.DataElements.Requirement;
+import de.fau.osr.gui.Model.DataElements.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -24,6 +22,16 @@ public class ElementsConverter {
         ArrayList<CommitFile> newCommitFiles = new ArrayList<>();
         newCommitFiles.addAll(commitFiles.stream().map(CommitFile::new).collect(Collectors.toList()));
         return newCommitFiles;
+    }
+
+    /**
+     * converts collection of vcs Paths to UI Paths
+     * @return collection of UI CommitFiles
+     */
+    public static Collection<PathDE> convertFilePaths(Collection<Path> filePaths) {
+        ArrayList<PathDE> convertedFilePaths = new ArrayList<>();
+        convertedFilePaths.addAll(filePaths.stream().map(PathDE::new).collect(Collectors.toList()));
+        return convertedFilePaths;
     }
 
     /**
