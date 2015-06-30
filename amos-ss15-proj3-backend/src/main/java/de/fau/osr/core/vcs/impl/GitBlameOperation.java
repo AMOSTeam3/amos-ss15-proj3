@@ -67,7 +67,7 @@ public class GitBlameOperation {
 	private final Repository repo;
 	private final String path;
 	private final BiFunction<String,Integer,? extends Iterator<? extends Object>> putBlame;
-	private final DiffAlgorithm diffAlgorithm = DiffAlgorithm.getAlgorithm(SupportedAlgorithm.MYERS);;
+	private final DiffAlgorithm diffAlgorithm = DiffAlgorithm.getAlgorithm(SupportedAlgorithm.HISTOGRAM);
 
 	/**
 	 * @author tobias
