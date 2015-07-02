@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Collection_Model_Impl implements I_Collection_Model {
     private Collection<Commit> commits = null;
@@ -149,11 +150,11 @@ public class Collection_Model_Impl implements I_Collection_Model {
             Collection<Requirement> requirements,
             Collection<CommitFile> files) throws IOException {
 
-        Collection<? extends DataElement> commits1 = this.getCommitsFromRequirementID(requirements);
+        Collection<Commit> commits1 = (Collection<Commit>) this.getCommitsFromRequirementID(requirements);
+        Collection<Commit> commits2 = (Collection<Commit>) this.getCommitsFromFile(files);
 
-        Collection<? extends DataElement> commits2 = this.getCommitsFromFile(files);
-        
-        commits1.retainAll(commits2);
+        commits1.removeAll(commits2);
+
         return commits1;
     }
 
