@@ -7,6 +7,7 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.Requirement;
+import de.fau.osr.gui.Model.DataElements.PathDE;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.FileNotFoundException;
@@ -66,4 +67,6 @@ public interface I_Collection_Model {
     RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
 
     boolean updateRequirement(String id, String title, String description);
+    
+    List<DataElement> getImpactFromRequirementAndPath(Collection<Requirement> requirements, PathDE path);
 }
