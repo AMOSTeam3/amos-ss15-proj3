@@ -141,6 +141,15 @@ public class TrackerAdapter implements I_Model {
         return new ArrayList<>();
     }
 
+    @Override
+    public float getImpactForRequirementAndPath(Requirement requ, PathDE path) {
+//        if(trackerAdapterWorker.isReadyForTakeOver){
+//            return trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
+//        }
+
+        return tracker.getImpactPercentageForFileAndRequirement(path.toString(), requ.getID());
+    }
+
     
     @Override
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){

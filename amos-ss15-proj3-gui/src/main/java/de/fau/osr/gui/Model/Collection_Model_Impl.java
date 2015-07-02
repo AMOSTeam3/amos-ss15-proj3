@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Collection_Model_Impl implements I_Collection_Model {
     private Collection<Commit> commits = null;
@@ -95,6 +96,7 @@ public class Collection_Model_Impl implements I_Collection_Model {
         return commits;
     }
 
+    @Deprecated
     @Override
     public Collection<? extends DataElement> getFilesFromCommit(
             Collection<Commit> commits, Comparator<CommitFile> sorting)
@@ -234,6 +236,13 @@ public class Collection_Model_Impl implements I_Collection_Model {
     @Override
     public boolean updateRequirement(String id, String title, String description) {
         return model.updateRequirement(id, title, description);
+    }
+
+    @Override
+    public List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, PathDE path) {
+        return requirements.stream()
+                .map(req -> new ImpactDE(model.getImpactForRequirementAndPath(req, path)))
+                .collect(Collectors.toList());
     }
 
 }

@@ -32,6 +32,7 @@ public interface I_Collection_Model {
 
     List<? extends DataElement> getFilePaths();
 
+    @Deprecated
     List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting);
 
     Collection<? extends DataElement> getRequirementsFromFile(Collection<CommitFile> files) throws IOException;
@@ -68,5 +69,5 @@ public interface I_Collection_Model {
 
     boolean updateRequirement(String id, String title, String description);
     
-    List<DataElement> getImpactFromRequirementAndPath(Collection<Requirement> requirements, PathDE path);
+    List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, PathDE path);
 }

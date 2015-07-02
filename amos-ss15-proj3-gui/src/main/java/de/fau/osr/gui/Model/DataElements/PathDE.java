@@ -14,7 +14,7 @@ import java.nio.file.Path;
  */
 public class PathDE extends DataElement {
 
-    public Path FilePath;
+    final public Path FilePath;
 
     /**
      */
