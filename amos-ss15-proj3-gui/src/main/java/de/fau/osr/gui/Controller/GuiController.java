@@ -2,6 +2,8 @@ package de.fau.osr.gui.Controller;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+
+import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.bl.Tracker;
 import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
@@ -26,9 +28,11 @@ import de.fau.osr.gui.View.TracabilityMatrix_View;
 import de.fau.osr.gui.util.filtering.FilterByExactString;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -851,9 +855,10 @@ public class GuiController {
 
     public void getTraceabilityMatrixByImpact() {
         try {
-            tracability_view.showTraceabilityMatrixByImpactProgressBar();
-            tracability_view.showTraceabilityMatrixByImpact(i_Collection_Model
-                    .getRequirementsTraceabilityByImpact());
+        	RequirementsTraceabilityMatrixByImpact tr = i_Collection_Model.getRequirementsTraceabilityByImpact();
+            tracability_view.showTraceabilityMatrixByImpactProgressBar(tr);
+            tr.Process();
+            tracability_view.showTraceabilityMatrixByImpact(tr);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

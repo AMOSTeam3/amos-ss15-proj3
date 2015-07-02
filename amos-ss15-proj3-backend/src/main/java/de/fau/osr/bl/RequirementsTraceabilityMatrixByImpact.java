@@ -1,6 +1,7 @@
 package de.fau.osr.bl;
 
 import de.fau.osr.core.vcs.base.CommitFile;
+import de.fau.osr.util.ProgressBarInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,8 @@ public class RequirementsTraceabilityMatrixByImpact {
     List<String> requirements;
     List<String> files;
     Tracker tracker;
-    public static int processProgress = 0;
+    private int processProgress = 0;
+    private ProgressBarInterface progressBar;
     Map<RequirementFilePair,RequirementFileImpactValue> requirementTraceabilityByImpactMatrix = new HashMap<RequirementFilePair, RequirementFileImpactValue>();
     public RequirementsTraceabilityMatrixByImpact(Tracker tracker){
         this.tracker = tracker;
@@ -36,7 +38,10 @@ public class RequirementsTraceabilityMatrixByImpact {
             int progressCount = 0;
             for(String requirement : requirements){
                 progressCount++;
-                processProgress = (progressCount*100)/progressMaxSize;
+                int nextProcessProgress = (progressCount*100)/progressMaxSize;
+                if(nextProcessProgress != processProgress && progressBar != null) {
+                	progressBar.setProgressBarValue(nextProcessProgress);
+                }
                 Collection<CommitFile> requirementCommitFiles = tracker.getCommitFilesForRequirementID(requirement);
                 for(CommitFile requirementCommitFile : requirementCommitFiles){
                     /*RequirementFilePair reqFilePair = new RequirementFilePair(requirement,requirementCommitFile.newPath.getPath());
@@ -101,6 +106,12 @@ public class RequirementsTraceabilityMatrixByImpact {
     public String getRepositoryName() {
         return  tracker.getRepositoryName();
     }
+	/**
+	 * @param progressBar the progressBar to set
+	 */
+	public void setProgressBar(ProgressBarInterface progressBar) {
+		this.progressBar = progressBar;
+	}
 
 }
 

@@ -387,7 +387,6 @@ public class Tracker {
      */
     public RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact(){
         RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact = new RequirementsTraceabilityMatrixByImpact(this);
-        requirementsTraceabilityMatrixByImpact.Process();
         return requirementsTraceabilityMatrixByImpact;
     }
 
