@@ -1,6 +1,7 @@
 package de.fau.osr.gui.util;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class FileUtil {
         String lineSeparator = System.getProperty("line.separator");
         String userHomePath = System.getProperty("user.home");
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(userHomePath+"\\"+AppProperties.GetValue("DefaultConfigFilePath")), "utf-8"))) {
+                    new FileOutputStream(new File(userHomePath,AppProperties.GetValue("DefaultConfigFilePath"))), "utf-8"))) {
          writer.write(String.join(lineSeparator, configInfo));
          writer.close();
          return true;
@@ -57,7 +58,7 @@ public class FileUtil {
  
        
        try {
-           Path configFilePath = Paths.get(userHomePath+"\\"+AppProperties.GetValue("DefaultConfigFilePath"));
+           Path configFilePath = Paths.get(userHomePath, AppProperties.GetValue("DefaultConfigFilePath"));
            List<String> configList = Files.readAllLines(configFilePath);
            if(configList.isEmpty() || configList.size()  != Integer.valueOf(AppProperties.GetValue("ConfigCount"))){
                return new ArrayList<String>();
