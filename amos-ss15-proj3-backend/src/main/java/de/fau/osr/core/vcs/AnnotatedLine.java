@@ -64,25 +64,33 @@ public class AnnotatedLine {
         this.line = line;
     }
     
+    /**
+     * Convert AnnotatedWords to a list of AnnotatedLines.
+     * Currently all annotations of a type that is different from ObjectID are
+     * silently discarded. All annotations that are of type ObjectId are looked
+     * up and converted via dataSource.
+     * @param words
+     * @param dataSource
+     * @return
+     * @throws IOException
+     */
     public static List<AnnotatedLine> wordsToLine(AnnotatedWords words, DataSource dataSource) throws IOException {
-    	List<AnnotatedLine> res = new ArrayList<>();
-    	String[] splitWords = words.source.source.split("\n");
-    	if(words.annotations.length == 0) return Collections.emptyList();
-    	StringBuilder line = new StringBuilder();
-    	List<String> requirements = new ArrayList<>();
-    	int curLine = 0;
-    	for(int i=0; i<splitWords.length; ++i) {
-    		while(curLine < words.source.lineNumbers[i]) {
-    			res.add(new AnnotatedLine(new HashSet<>(requirements), line.toString()));
-    			requirements = new ArrayList<>();
-    			line.setLength(0);
-    			++curLine;
-    		}
-    		line.append(splitWords[i]);;
+    	List<AnnotatedLine> res = new ArrayList<>(words.source.realLines.size());
+		HashSet<String> requirements = new HashSet<>();
+		int curLine = 0;
+    	for(int i=0; i<words.source.size(); ++i) {
     		for(Object o : words.annotations[i]) {
     			if(o instanceof ObjectId) {
     				requirements.addAll(dataSource.getReqRelationByCommit(((ObjectId) o).getName()));
     			}
+    		}
+    		if(i + 1 == words.source.size() ||
+    				words.source.getLineByWord(i) != words.source.getLineByWord(i+1)) {
+    			AnnotatedLine line = new AnnotatedLine(new ArrayList<>(requirements), words.source.getLine(curLine));
+    			++curLine;
+	    		res.add(line);
+	    		if(i + 1 != words.source.size())
+	    			requirements = new HashSet<>();
     		}
     	}
     	return res;

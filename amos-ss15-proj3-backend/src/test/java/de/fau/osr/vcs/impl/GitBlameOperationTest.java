@@ -3,17 +3,24 @@ package de.fau.osr.vcs.impl;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
 
 import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.ImmutableSetMultimap;
+import com.google.common.collect.SetMultimap;
 
 import de.fau.osr.PublicTestData;
+import de.fau.osr.core.db.DataSource;
+import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.AnnotatedWords;
 import de.fau.osr.core.vcs.impl.GitBlameOperation;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
@@ -47,5 +54,36 @@ public class GitBlameOperationTest {
     		Collections.singletonList(commit3),
     		Collections.singletonList(commit3),
     	}, w.annotations);
+    	DataSource testDataSource = new DataSource() {
+
+			@Override
+			protected SetMultimap<String, String> doGetAllReqCommitRelations()
+					throws IOException {
+				return ImmutableSetMultimap.of(
+						"a", commit1.name(),
+						"42", commit2.name(),
+						"ßäµ", commit3.name()
+				);
+			}
+
+			@Override
+			protected void doAddReqCommitRelation(String reqId, String commitId)
+					throws IOException, OperationNotSupportedException {
+				fail("add relation may not be called for lookup");
+			}
+
+			@Override
+			protected void doRemoveReqCommitRelation(String reqId,
+					String commitId) throws IOException,
+					OperationNotSupportedException {
+				fail("remove relation may not be called for lookup");
+			}
+    		
+    	};
+    	List<AnnotatedLine> lines = AnnotatedLine.wordsToLine(w, testDataSource);
+    	assertEquals(Lists.newArrayList(
+    			new AnnotatedLine(Lists.newArrayList("a", "42"), "1 3"),
+    			new AnnotatedLine(Lists.newArrayList("ßäµ", "42"), "Test 2 100"))
+    	, lines);
     }
 }
