@@ -6,9 +6,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -16,18 +14,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
-import javax.naming.OperationNotSupportedException;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.bl.Tracker;
 import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
-import de.fau.osr.gui.util.ElementsConverter;
+import de.fau.osr.gui.util.GenericLock;
 
 /**
  * @author Gayathery
@@ -46,6 +39,7 @@ public class TrackerAdapterWorker {
     private HashMap<Requirement,Collection<Commit>> workerRepositoryReqCommit;
     private HashMap<Commit,Collection<CommitFile>> workerRepositoryCommitCommitFile;
     private HashMap<Requirement,Collection<CommitFile>> workerRepositoryReqCommitFile;
+    public GenericLock lock;
     public static Date globalChangeTime;
     private static long CommitCount;
     public static Date getAllRequirements,getImpactPercentageForCommitFileListAndRequirement,getCommitsFromRequirement,getAllFiles,getRequirementsFromFile,getCommitFilesForRequirement;
@@ -60,6 +54,7 @@ public class TrackerAdapterWorker {
         workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<CommitFile>>();
         totalCommitFiles = new ArrayList<CommitFile>();
         isThreadingRequired = false;
+        lock = new GenericLock();
         
     }
     
@@ -196,6 +191,7 @@ public class TrackerAdapterWorker {
         
         Calendar calc = Calendar.getInstance();
         CommitCount = getAllCommits().size();
+        lock.lock();
         globalChangeTime = calc.getTime();
         getAllRequirements = globalChangeTime;
         getCommitsFromRequirement = globalChangeTime;
@@ -203,8 +199,11 @@ public class TrackerAdapterWorker {
         getRequirementsFromFile = globalChangeTime;
         getCommitFilesForRequirement = globalChangeTime;
         getImpactPercentageForCommitFileListAndRequirement = globalChangeTime;
+        lock.unlock();
         
+        trackerAdapter.lock.lock();
         isReadyForTakeOver = true;
+        trackerAdapter.lock.unlock();
         return true;
         
     }
@@ -238,7 +237,9 @@ public class TrackerAdapterWorker {
                 }
                     
                 Calendar calc = Calendar.getInstance();
+                lock.lock();
                 globalChangeTime = calc.getTime();
+                lock.unlock();
                 if(!prepareData())
                     break;
                 
@@ -265,7 +266,9 @@ public class TrackerAdapterWorker {
      * @author Gayathery
      */
     public Collection<Requirement> getAllRequirements() {
+        lock.lock();
         if(getAllRequirements == globalChangeTime){
+            lock.unlock();
             return requirements;
         }       
         
@@ -280,9 +283,14 @@ public class TrackerAdapterWorker {
      * @author Gayathery
      */
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
+        lock.lock();
         if(getCommitsFromRequirement == globalChangeTime){
-            return workerRepositoryReqCommit.get(requirement);
+            
+            Collection<Commit> colCommit =  workerRepositoryReqCommit.get(requirement);            
+            lock.unlock();
+            return colCommit;
         }
+        lock.unlock();
        return trackerAdapter.getCommitsFromRequirement(requirement);
     }
 
@@ -294,9 +302,11 @@ public class TrackerAdapterWorker {
      * This method masks the getAllFiles method of TrackerAdapter after successful data preparation     
      */
     public Collection<CommitFile> getAllFiles() {
+        lock.lock();
         if(getAllFiles == globalChangeTime){
             Collection<CommitFile> commitFiles = new ArrayList<CommitFile>(); 
             workerRepositoryCommitCommitFile.forEach((k,v) -> commitFiles.addAll(v));
+            lock.unlock();
             return commitFiles;
         }
         
@@ -338,13 +348,16 @@ public class TrackerAdapterWorker {
      */
  
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
+        lock.lock();
         if(getImpactPercentageForCommitFileListAndRequirement == globalChangeTime){
             Collection<CommitFile> commitFiles = workerRepositoryReqCommitFile.get(commit.instanceRequirement);
             for(CommitFile commitFile : commitFiles){
                 if(commitFile.newPath.getPath().equals(file.newPath.getPath()))
+                    lock.unlock();
                     return commitFile.impact;
                
             }
+            lock.unlock();
             return (float)0.0;
         }
     
@@ -424,8 +437,11 @@ public class TrackerAdapterWorker {
      * @author Gayathery
      */
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
+        lock.lock();
         if(getCommitFilesForRequirement == globalChangeTime){
-            return workerRepositoryReqCommitFile.get(requirement);
+            Collection<CommitFile> colCommitFile =  workerRepositoryReqCommitFile.get(requirement);
+            lock.unlock();
+            return colCommitFile;
         }
         
 

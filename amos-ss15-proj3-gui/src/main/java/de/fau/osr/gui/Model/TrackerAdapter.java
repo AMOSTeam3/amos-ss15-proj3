@@ -19,6 +19,7 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
+import de.fau.osr.gui.util.GenericLock;
 
 /**
  * Adapter for Tracker, implements I_Model
@@ -30,11 +31,12 @@ public class TrackerAdapter implements I_Model {
     private final Tracker tracker;
     private TrackerAdapterWorker trackerAdapterWorker;
     private Pattern reqPatternString;
-
+    public GenericLock lock;
     private Thread trackerAdapterWorkerThread;
     
     public TrackerAdapter(Tracker tracker,Boolean isIndexingRequired) throws IOException {
         this.tracker = tracker;
+        lock = new GenericLock();
         trackerAdapterWorker = new TrackerAdapterWorker(this);
         
         class TrackerAdapterWorkerThread extends Thread {
@@ -61,9 +63,13 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Requirement> getAllRequirements() {
+        lock.lock();
         if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getAllRequirements();
+            Collection<Requirement> collectionOfRequirements = trackerAdapterWorker.getAllRequirements();
+            lock.unlock();
+            return collectionOfRequirements;
         }
+        lock.unlock();
             
         Collection<Requirement> reqsUI = new ArrayList<>();
 
@@ -78,9 +84,13 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
+        lock.lock();
         if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getCommitsFromRequirement(requirement);
+            Collection<Commit> collectionOfCommit =  trackerAdapterWorker.getCommitsFromRequirement(requirement);
+            lock.unlock();
+            return collectionOfCommit;
         }
+        lock.unlock();
         de.fau.osr.core.Requirement req;
         Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
         try {
@@ -102,9 +112,14 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getAllFiles() {
+        lock.lock();
         if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getAllFiles();
+            Collection<CommitFile> collectionOfCommitFile =  trackerAdapterWorker.getAllFiles();
+            lock.unlock();
+            return collectionOfCommitFile;
+            
         }
+        lock.unlock();
         return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
     }
 
@@ -140,10 +155,13 @@ public class TrackerAdapter implements I_Model {
     
     @Override
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
+        lock.lock();
         if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
+            float impact = trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
+            lock.unlock();
+            return impact;
         }
-    
+    lock.unlock();
         return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
     }
     
@@ -199,9 +217,13 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
+        lock.lock();
         if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getCommitFilesForRequirement(requirement);
+            Collection<CommitFile> collectionOfCommitFiles =  trackerAdapterWorker.getCommitFilesForRequirement(requirement);
+            lock.unlock();
+            return collectionOfCommitFiles;
         }
+        lock.unlock();
         try {
             return ElementsConverter.convertCommitFiles(tracker.getCommitFilesForRequirementID(requirement.getID()));
         } catch (IOException e) {
