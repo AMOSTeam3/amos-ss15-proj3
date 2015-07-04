@@ -158,27 +158,7 @@ public class Tracker {
         }
         
         for(CommitFile file: commitFilesList){
-            List<AnnotatedLine> currentBlame;
-            try {
-                currentBlame = this.getBlame(file.newPath.getPath());
-            } catch (GitAPIException | IOException e) {
-                continue;
-            }
-            int i = 0;
-            float influenced = 0;
-            int currentBlameSize = currentBlame.size();
-            for(; i<currentBlame.size(); i++){
-            	if(currentBlame.get(i).getLine().matches("\\s*")) {
-            		// ignore whitespace only lines
-            		--currentBlameSize;
-            	} else if(currentBlame.get(i).getRequirements().contains(requirementID)){
-                    influenced++;
-                }
-            }
-
-            if (currentBlameSize != 0 ) {
-                file.impact = (influenced/currentBlameSize)*100;
-            }
+                file.impact = getImpactPercentageForFileAndRequirement(file.newPath.getPath(), requirementID);
         }
 
         logger.info("End call :: getCommitFilesForRequirementID() Time: " + (System.currentTimeMillis() - startTime));
@@ -197,18 +177,20 @@ public class Tracker {
         } catch (GitAPIException | IOException e) {
             return -1;
         }
-        int i = 0;
-        float influenced = 0;
-        int cuurentBlameSize = currentBlame.size();
-        for(; i<cuurentBlameSize; i++){
-            if(currentBlame.get(i).getRequirements().contains(requirementID)){
-                influenced++;
+        double influenced = 0;
+        double currentBlameSize = currentBlame.size();
+        for(int i = 0; i<currentBlame.size(); i++){
+        	if(currentBlame.get(i).getLine().matches("\\s*")) {
+        		// ignore whitespace only lines
+        		--currentBlameSize;
+        	} else if(currentBlame.get(i).getRequirements().contains(requirementID)){
+                influenced += 1./currentBlame.get(i).getRequirements().size();
             }
         }
 
         float impact = 0;
-        if (cuurentBlameSize != 0) {
-            impact = (influenced/cuurentBlameSize)*100;
+        if (currentBlameSize != 0 ) {
+            impact = (float) ((influenced/currentBlameSize)*100);
         }
 
         return impact;
