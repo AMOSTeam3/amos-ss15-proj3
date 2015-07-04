@@ -1,35 +1,35 @@
 
 package de.fau.osr.gui.View.ElementHandler;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-
-import de.fau.osr.gui.Controller.GuiController;
-import de.fau.osr.gui.Model.DataElements.Configuration;
-import de.fau.osr.util.AppProperties;
-
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.AbstractAction;
 
-import java.awt.event.ActionEvent;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
 
-import javax.swing.Action;
-
-import java.awt.event.ActionListener;
+import de.fau.osr.gui.Controller.GuiController;
+import de.fau.osr.gui.Model.DataElements.Configuration;
+import de.fau.osr.gui.View.PopupManager;
+import de.fau.osr.gui.util.FileUtil;
+import de.fau.osr.util.AppProperties;
 
 /**
  * @author Gayathery
@@ -181,7 +181,30 @@ public class Configuration_ElementHandler extends JPanel {
         btnConfigure.setAction(action);
         btnConfigure.setFont(font_plain);
         add(btnConfigure, "6, 30");
+        setInitData();
 
+    }
+    
+    public void setInitData(){
+        FileUtil fileUtil = new FileUtil();
+        List<String> configInfo = fileUtil.readConfigFile();
+        if(configInfo.size() > 0){
+            input_repoPath.setText(configInfo.get(0));
+            txtrreqd.setText(configInfo.get(1));
+            if(configInfo.get(2).equals("true")){
+                enableIndex.setSelected(true);
+            }
+            else{
+                enableIndex.setSelected(false);
+            }
+            input_dbusername.setText(configInfo.get(3));
+            input_dbpassword.setText(configInfo.get(4));
+                
+        }
+        else{
+           /* PopupManager popupManager = new PopupManager();
+            popupManager.showErrorDialog("Could not read from config file");*/
+        }
     }
 
     class SwingAction extends AbstractAction {
@@ -191,17 +214,37 @@ public class Configuration_ElementHandler extends JPanel {
             putValue(SHORT_DESCRIPTION, "perform configuration");
         }
         public void actionPerformed(ActionEvent e) {
+            String dbPassword = input_dbpassword.getText();
+            String dbUsername = input_dbusername.getText();
+            String repoPath = input_repoPath.getText();
+            String reqPattern = txtrreqd.getText();
+            String enableIndexingValue = "false";
+            if(enableIndex.isSelected())
+                enableIndexingValue = "true";
+           
             Configuration configuration = new Configuration();
-            configuration.setDbPassword(input_dbpassword.getText());
-            configuration.setDbUsername(input_dbusername.getText());
-            configuration.setRepoPath(input_repoPath.getText());
-            configuration.setReqPattern(txtrreqd.getText());
+            configuration.setDbPassword(dbPassword);
+            configuration.setDbUsername(dbUsername);
+            configuration.setRepoPath(repoPath);
+            configuration.setReqPattern(reqPattern);
             configuration.setEnableIndex(enableIndex.isSelected());
-            System.out.println(configuration.toString());
-            if(guiController.configureApplication(configuration)){
-                jpane.setEnabledAt(1, true);
+            List<String> configData = new ArrayList<String>();
+            configData.add(repoPath);
+            configData.add(reqPattern);
+            configData.add(enableIndexingValue);
+            configData.add(dbUsername);
+            configData.add(dbPassword);
+            
+            if(guiController.configureApplication(configuration)){        
+                FileUtil fileUtil = new FileUtil();
+                if(!fileUtil.writeConfigFile(configData)){
+                   /* PopupManager popupManager = new PopupManager();
+                    popupManager.showErrorDialog("Could not write to config file");*/
+                }
+                jpane.setEnabledAt(1, true);                
                 jpane.setEnabledAt(2,true);
                 jpane.setEnabledAt(3, true);
+                jpane.setSelectedIndex(1);
                 
             }
                

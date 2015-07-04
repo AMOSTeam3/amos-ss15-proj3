@@ -32,10 +32,8 @@ import com.google.common.collect.Iterators;
 import de.fau.osr.core.vcs.AnnotatedWords;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.FlatSource;
-import de.fau.osr.util.StringUtils;
 
 /**
- * @author tobias
  * Similar to a git blame, this operation traverses history from the
  * current HEAD and looks for modifications of the file at the given path.
  * It annotates each word with its source commit(s) (plural in case of
@@ -45,6 +43,7 @@ import de.fau.osr.util.StringUtils;
  * annotations to lines in commits.
  * All annotations are either {@link ObjectId}s of commit objects or
  * Objects returned by putBlame.
+ * @author tobias
  */
 public class GitBlameOperation {
 
@@ -163,18 +162,16 @@ public class GitBlameOperation {
 		ObjectId rootId = repo.resolve("HEAD");
 		RevWalk walker = new RevWalk(repo);
 		RevCommit rootCommit = walker.parseCommit(rootId);
-		String content;
+		byte[] content;
 		try {
-			byte[] byteContent = client.readBlob(client.fileAtRev(walker, path, rootCommit));
-			if(!StringUtils.isValidUtf8(byteContent)) return new AnnotatedWords(FlatSource.flatten(""), new List[0]);
-			content = new String(byteContent);
+			content = client.readBlob(client.fileAtRev(walker, path, rootCommit));
 		} catch (NullPointerException e1) {
 			throw new FileNotFoundException(path);
 		}
 
 		FlatSource source = FlatSource.flatten(content);
 		@SuppressWarnings("unchecked")
-		List<Object>[] currentBlame = new List[source.lineNumbers.length];
+		List<Object>[] currentBlame = new List[source.size()];
 		BlameItem topBlame = new BlameItem(rootCommit, new TreeMap<>(), path);
 
 		/*
@@ -192,16 +189,15 @@ public class GitBlameOperation {
 			walker.parseCommit(cur.accused);
 
 			ObjectId idAfter = client.fileAtRev(walker, cur.path, cur.accused);
-			FlatSource after = FlatSource.flatten(new String(client.readBlob(idAfter)));
-			RawText rawAfter = new RawText(after.source.getBytes());
+			FlatSource after = FlatSource.flatten(client.readBlob(idAfter));
 			
 			/*
 			 * pull in custom annotations from putBlame on all suspect lines
 			 */
-			{
+			if(putBlame != null) {
 				String nameOfAccused = cur.accused.name();
 				for(Map.Entry<Integer,Integer> entry : cur.words.entrySet()) {
-					Iterator<? extends Object> iterator = putBlame.apply(nameOfAccused, after.lineNumbers[entry.getKey()]);
+					Iterator<? extends Object> iterator = putBlame.apply(nameOfAccused, after.getLineByWord(entry.getKey()));
 					if(iterator != null)
 						Iterators.addAll(currentBlame[entry.getValue()], iterator);
 				}
@@ -258,22 +254,9 @@ public class GitBlameOperation {
 					
 					byte[] byteBefore = client.readBlob(idBefore);
 					EditList diff;
-					if(StringUtils.isValidUtf8(byteBefore)) {
-						FlatSource before = FlatSource.flatten(new String(byteBefore));
-						RawText rawBefore = new RawText(before.source.getBytes());
-						diff = diffAlgorithm.diff(RawTextComparator.DEFAULT, rawBefore, rawAfter);
-					} else {
-						/*
-						 * If a file is not valid utf8, assume it is a
-						 * binary and just blame it all on the more recent commit.
-						 * 
-						 *  Diffs over large binaries make no sense and are very expensive.
-						 */
-						diff = new EditList();
-						diff.add(new Edit(0, 0, 0, rawAfter.size()));
-						System.err.println("skipped diffing " + path);
-					}
-					
+					FlatSource before = FlatSource.flatten(byteBefore);
+					diff = diffAlgorithm.diff(RawTextComparator.DEFAULT, before, after);
+
 					/*
 					 * The documentation does not state if diff is sorted,
 					 * just that the Edits do not overlap, but it is much

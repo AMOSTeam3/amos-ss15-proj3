@@ -5,8 +5,13 @@ import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.util.SpiceTraceabilityProgressBar;
 
 import javax.swing.*;
+
+import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 public class TracabilityMatrix_View {
 
@@ -42,41 +47,23 @@ public class TracabilityMatrix_View {
     }
     /**
      * method to show progress bar for the processing of traceability matrix by impact values
+     * @param tr 
      */
-    public void showTraceabilityMatrixByImpactProgressBar(){
+    public void showTraceabilityMatrixByImpactProgressBar(RequirementsTraceabilityMatrixByImpact tr){
 
-        final SpiceTraceabilityProgressBar progressBar = new SpiceTraceabilityProgressBar();
-        progressBar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        progressBar.setProgressBarContent("Generating Traceability Matrix (by Impact)");
-        progressBar.setVisible(true);
+        final FutureTask<SpiceTraceabilityProgressBar> progressBarTask = new FutureTask<>( () -> {
+        	SpiceTraceabilityProgressBar result = new SpiceTraceabilityProgressBar();
+            result.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            result.setProgressBarContent("Generating Traceability Matrix (by Impact)");
+            result.setVisible(true);
+            return result;
+        }); 
 
-        class showTraceabilityMatrixByImpactProgressBarThread implements Runnable{
-
-            @Override
-            public void run() {
-                Boolean completion = false;
-                while(RequirementsTraceabilityMatrixByImpact.processProgress<=100){
-                    progressBar.setProgressBarValue(RequirementsTraceabilityMatrixByImpact.processProgress);
-                    try {
-                        Thread.sleep(100);
-
-                        if(completion)
-                            break;
-                        if(RequirementsTraceabilityMatrixByImpact.processProgress == 100){
-                            completion = true;
-                        }
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                }
-                progressBar.dispatchEvent(new WindowEvent(progressBar, WindowEvent.WINDOW_CLOSING));
-
-            }
-
-        }
-        Thread tr = new Thread(new showTraceabilityMatrixByImpactProgressBarThread());
-        tr.start();
+        EventQueue.invokeLater(progressBarTask);
+		try {
+			tr.setProgressBar(progressBarTask.get());
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
     }
 }
