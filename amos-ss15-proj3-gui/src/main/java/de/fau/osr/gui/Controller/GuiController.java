@@ -7,7 +7,7 @@ import de.fau.osr.core.db.*;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.gui.Authentication.Login;
-import de.fau.osr.gui.Components.CommitFilesJTree;
+import de.fau.osr.gui.Components.PathDEsJTree;
 import de.fau.osr.gui.Model.Collection_Model_Impl;
 import de.fau.osr.gui.Model.DataElements.*;
 import de.fau.osr.gui.Model.I_Collection_Model;
@@ -67,15 +67,13 @@ public class GuiController {
     JList<Presenter> commitMessages_JList;
 
     /**
-     * <tt>CommitFile</tt>'s in a tree component
+     * <tt>PathDE</tt>'s in a tree component
      */
-    CommitFilesJTree commitFilesJTree;
+    PathDEsJTree PathDEsJTree;
 
     JList<Presenter> requirements2Lines_JList;
     JList<Presenter> code_JList;
 
-    // sorting algorithm for commitFilesJTree
-    Comparator<CommitFile> commitFileSorting;
     // filtering/finding a specific reqiurementID
     Predicate<Requirement> requirementIDFiltering;
 
@@ -91,7 +89,7 @@ public class GuiController {
 
             public void run() {
 
-               /* for (int i = 0; true; i++) {
+                for (int i = 0; true; i++) {
                     if(!popupManager.Authentication()){
                         Status = RetryStatus.Exit;
                         handleError();
@@ -123,7 +121,7 @@ public class GuiController {
                                 + e.getMessage());
                         handleError();
                     }
-                }*/
+                }
 
                 elementHandler = new GuiViewElementHandler(GuiController.this);
                 cleaner = new Cleaner(elementHandler);
@@ -134,17 +132,6 @@ public class GuiController {
     
     public I_Collection_Model getI_Collection_Model(){
         return this.i_Collection_Model;
-    }
-
-    public Comparator<CommitFile> getCommitFileSorting() {
-        return commitFileSorting;
-    }
-
-    public void setCommitFileSorting(Comparator<CommitFile> commitFileSorting) {
-        this.commitFileSorting = commitFileSorting;
-        // TODO we need a refresh method
-        System.out.format("Commit file sorting selected: %s%n",
-                commitFileSorting);
     }
 
     public Predicate<Requirement> getRequirementIDFiltering() {
@@ -324,8 +311,8 @@ public class GuiController {
                     .getRequirement_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
-                return i_Collection_Model.getFilesFromRequirement(
-                        (Collection) dataElements, commitFileSorting);
+                return i_Collection_Model.getFilesByRequirement(
+                        (Collection) dataElements);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
@@ -333,7 +320,7 @@ public class GuiController {
         };
 
         ElementHandler specificElementHandler = elementHandler
-                .getCommitFile_ElementHandler();
+                .getPathDE_ElementHandler();
 
         Runnable buttonAction = () -> {
             this.commitsFromRequirementAndFile();
@@ -354,7 +341,7 @@ public class GuiController {
                     .getRequirement_ElementHandler().getSelection(
                             new Visitor_Swing());
             Collection<DataElement> files = elementHandler
-                    .getCommitFile_ElementHandler().getSelection(
+                    .getPathDE_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
                 return i_Collection_Model.commitsFromRequirementAndFile(
@@ -386,7 +373,7 @@ public class GuiController {
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             
             Collection<DataElement> files = elementHandler
-                    .getCommitFile_ElementHandler().getSelection(
+                    .getPathDE_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
                 return i_Collection_Model.AnnotatedLinesFromFile((Collection) files);
@@ -445,7 +432,7 @@ public class GuiController {
 //    }
 //
     /**
-     * Navigation: ->Files Clear: All Setting: Files Using: getAllCommitFiles
+     * Navigation: ->Files Clear: All Setting: Files Using: getAllPathDEs
      */
     public void filesFromDB() {
 
@@ -454,7 +441,7 @@ public class GuiController {
         Supplier<Collection<? extends DataElement>> fetching = i_Collection_Model::getFilePaths;
 
         ElementHandler specificElementHandler = elementHandler
-                .getCommitFile_ElementHandler();
+                .getPathDE_ElementHandler();
 
         Runnable buttonAction = () -> {
             requirementsFromFile();
@@ -472,15 +459,15 @@ public class GuiController {
     void requirementsFromFile() {
 
         Supplier<Collection<? extends DataElement>> fetching = () -> {
-            Collection<DataElement> files = elementHandler.getCommitFile_ElementHandler().getSelection(new Visitor_Swing());
-            //cast collection of DataElements to CommitFiles
-            ArrayList<CommitFile> commitFiles = new ArrayList<>();
+            Collection<DataElement> files = elementHandler.getPathDE_ElementHandler().getSelection(new Visitor_Swing());
+            //cast collection of DataElements to PathDEs
+            ArrayList<PathDE> PathDEs = new ArrayList<>();
             for (DataElement de : files) {
-                commitFiles.add((CommitFile) de);
+                PathDEs.add((PathDE) de);
             }
 
             try{
-                return i_Collection_Model.getRequirementsFromFile(commitFiles);
+                return i_Collection_Model.getRequirementsFromFile(PathDEs);
             } catch (IOException e) {
                 popupManager.showErrorDialog("File not found!");
                 return new ArrayList<DataElement>();
@@ -504,7 +491,7 @@ public class GuiController {
     void commitsFromFile() {
         
         Supplier<Collection<? extends DataElement>> fetching = () -> {
-            Collection<DataElement> files = elementHandler.getCommitFile_ElementHandler().getSelection(new Visitor_Swing());
+            Collection<DataElement> files = elementHandler.getPathDE_ElementHandler().getSelection(new Visitor_Swing());
             return i_Collection_Model.getCommitsFromFile((Collection)files);
         };
 
@@ -525,7 +512,7 @@ public class GuiController {
     void requirementsFromFileAndCommit() {
 
         Supplier<Collection<? extends DataElement>> fetching = () -> {
-            Collection<DataElement> files = elementHandler.getCommitFile_ElementHandler().getSelection(new Visitor_Swing());
+            Collection<DataElement> files = elementHandler.getPathDE_ElementHandler().getSelection(new Visitor_Swing());
             Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
             try{
                 return i_Collection_Model.getRequirementsFromFileAndCommit((Collection)commits, (Collection)files);
@@ -575,7 +562,7 @@ public class GuiController {
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
             try{
-                return i_Collection_Model.getFilesFromCommit((Collection)commits, commitFileSorting);
+                return i_Collection_Model.getFilesByCommit((Collection)commits);
             } catch (FileNotFoundException e) {
                 popupManager.showErrorDialog("Internal storing Error");
                 return new ArrayList<DataElement>();
@@ -583,7 +570,7 @@ public class GuiController {
         };
 
         ElementHandler specificElementHandler = elementHandler
-                .getCommitFile_ElementHandler();
+                .getPathDE_ElementHandler();
 
         Runnable buttonAction = () -> {
             codeFromFile();

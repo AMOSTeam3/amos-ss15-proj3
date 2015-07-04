@@ -38,7 +38,7 @@ public interface I_Collection_Model {
 
     Collection<? extends DataElement> getCommitsFromFile(Collection<CommitFile> files);
 
-    Collection<? extends DataElement> getFilesFromCommit(Collection<Commit> commits, Comparator<CommitFile> sorting) throws FileNotFoundException;
+    List<? extends DataElement> getFilesByommit(Collection<Commit> commits) throws FileNotFoundException;
 
     String getChangeDataFromFileIndex(CommitFile file) throws FileNotFoundException;
 
@@ -56,7 +56,7 @@ public interface I_Collection_Model {
 
     Collection<? extends DataElement> getRequirementsFromFileAndCommit(Collection<Commit> commits, Collection<CommitFile> files) throws IOException;
 
-    Collection<? extends DataElement> getFilesFromRequirement(Collection<Requirement> requirements, Comparator<CommitFile> sorting) throws IOException;
+    List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements) throws IOException;
 
     void addRequirementCommitLinkage(Requirement requirement, Commit commit) throws FileNotFoundException;
 
@@ -68,5 +68,5 @@ public interface I_Collection_Model {
 
     boolean updateRequirement(String id, String title, String description);
     
-    List<DataElement> getImpactFromRequirementAndPath(Collection<Requirement> requirements, PathDE path);
+    List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, PathDE path);
 }

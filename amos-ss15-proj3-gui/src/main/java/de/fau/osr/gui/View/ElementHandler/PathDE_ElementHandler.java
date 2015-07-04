@@ -1,0 +1,119 @@
+package de.fau.osr.gui.View.ElementHandler;
+
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import de.fau.osr.gui.Components.MultiSplitPane;
+import de.fau.osr.gui.Components.PathDEsJTree;
+import de.fau.osr.gui.Controller.Visitor;
+import de.fau.osr.gui.Model.DataElements.DataElement;
+import de.fau.osr.gui.Model.DataElements.PathDE;
+import de.fau.osr.gui.View.Presenter.Presenter;
+import de.fau.osr.gui.View.Presenter.Presenter_Path;
+import de.fau.osr.gui.View.Renderer.Tree_Renderer;
+
+public class PathDE_ElementHandler extends ElementHandler {
+    
+    private JLabel Files_label = new JLabel("Files");
+    private PathDEsJTree tree;
+    
+    public PathDE_ElementHandler(){
+        button = new JButton("Navigate From File");
+        scrollPane = new JScrollPane();
+    }
+
+    @Override
+    public Component toComponent() {
+        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
+                .addComponent(button)
+                .addComponent(Files_label)
+                .addComponent(scrollPane);
+    }
+
+
+    public void setScrollPane_Content(Presenter[] elements){
+        
+        elements = deleteMultiplikations(elements);
+        
+        if(elements.length == 0){
+            return;
+        }
+        tree  = new PathDEsJTree(elements);
+      //expand all nodes
+        for (int i = 0; i < tree.getRowCount(); i++) {
+            tree.expandRow(i);
+        }
+        
+        Tree_Renderer renderer = new Tree_Renderer();
+        tree.setCellRenderer(renderer);
+        
+        JPanel panel = new JPanel(new GridLayout());
+        panel.add(tree);
+        scrollPane.setViewportView(panel);
+    }
+    
+    /**
+     * Collapses multiple PathDEs into one Presenter, if the newPath of the Files are the same.
+     * @param presenters
+     * @return
+     */
+    private Presenter[] deleteMultiplikations(Presenter[] presenters){
+        ArrayList<Presenter> result = new ArrayList<Presenter>();
+        String path = null;
+        ArrayList<ArrayList<PathDE>> PathDEs = new ArrayList<ArrayList<PathDE>>();
+        for(Presenter presenter: presenters){
+            PathDE pathDE = ((Presenter_Path) presenter).getPathDE().get(0);
+            boolean different = true;
+            for(ArrayList<PathDE> bucket: PathDEs){
+                if(pathDE.FilePath.equals(bucket.get(0).FilePath)){
+                    bucket.add(pathDE);
+                    different = false;
+                    break;
+                }
+            }
+            if(different){
+                ArrayList<PathDE> newBucket = new ArrayList<PathDE>();
+                newBucket.add(pathDE);
+                PathDEs.add(newBucket);
+            }
+        }
+        
+        for(ArrayList<PathDE> bucket: PathDEs){
+            result.add(new Presenter_Path(bucket));
+        }
+        
+        presenters = new Presenter[result.size()];
+        return result.toArray(presenters);
+    }
+    
+    
+    public void setOnClickAction(Runnable action) {
+        tree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent arg0) {
+                action.run();
+            }
+        });
+    };
+    
+    @Override
+    public Collection<DataElement> getSelection(Visitor visitor){
+        DefaultMutableTreeNode element = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+        Presenter presenter = (Presenter) element.getUserObject();
+        ArrayList<DataElement> dataElements = new ArrayList<DataElement>();
+        dataElements.addAll(presenter.visit(visitor));
+        return dataElements;
+    }
+    
+}
