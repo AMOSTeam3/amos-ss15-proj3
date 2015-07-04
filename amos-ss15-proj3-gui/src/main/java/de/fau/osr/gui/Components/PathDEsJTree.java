@@ -8,6 +8,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import de.fau.osr.gui.View.Presenter.Presenter_Path;
+import de.fau.osr.gui.View.Presenter.Presenter_PathImpact;
 import de.fau.osr.gui.View.Presenter.Presenter;
 
 /**
@@ -35,7 +36,11 @@ public class PathDEsJTree extends JTree {
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
         for (Presenter pathDE : filesFromCommit){
-            UiTools.AddToTreeByPath(root, ((Presenter_Path)pathDE).getPathDE().get(0).FilePath, pathDE);
+            if(pathDE instanceof Presenter_Path){
+                UiTools.AddToTreeByPath(root, ((Presenter_Path)pathDE).getPathDE().get(0).FilePath, pathDE);                
+            }else{
+                UiTools.AddToTreeByPath(root, ((Presenter_PathImpact)pathDE).getPathDE().get(0).FilePath, pathDE);
+            }
         }
         return root;
     }

@@ -69,5 +69,5 @@ public interface I_Collection_Model {
 
     boolean updateRequirement(String id, String title, String description);
     
-    List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, PathDE path);
+    List<? extends DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, List<PathDE> path);
 }

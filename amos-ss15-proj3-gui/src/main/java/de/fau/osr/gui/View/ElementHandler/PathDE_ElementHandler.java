@@ -19,8 +19,10 @@ import de.fau.osr.gui.Components.PathDEsJTree;
 import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.PathDE;
+import de.fau.osr.gui.Model.DataElements.ImpactDE;
 import de.fau.osr.gui.View.Presenter.Presenter;
 import de.fau.osr.gui.View.Presenter.Presenter_Path;
+import de.fau.osr.gui.View.Presenter.Presenter_PathImpact;
 import de.fau.osr.gui.View.Renderer.Tree_Renderer;
 
 public class PathDE_ElementHandler extends ElementHandler {
@@ -71,9 +73,20 @@ public class PathDE_ElementHandler extends ElementHandler {
     private Presenter[] deleteMultiplikations(Presenter[] presenters){
         ArrayList<Presenter> result = new ArrayList<Presenter>();
         String path = null;
+        int type = -1; // 0 = Presenter_Path 1 = Presenter_PathImpact
         ArrayList<ArrayList<PathDE>> PathDEs = new ArrayList<ArrayList<PathDE>>();
+        ArrayList<ImpactDE> ImpactDEs = new ArrayList<ImpactDE>();
         for(Presenter presenter: presenters){
-            PathDE pathDE = ((Presenter_Path) presenter).getPathDE().get(0);
+            
+            PathDE pathDE;
+            if(presenter instanceof Presenter_Path){
+                type = 0;
+                pathDE = ((Presenter_Path) presenter).getPathDE().get(0);
+            }else{
+                type = 1;
+                pathDE = ((Presenter_PathImpact) presenter).getPathDE().get(0);
+            }
+            
             boolean different = true;
             for(ArrayList<PathDE> bucket: PathDEs){
                 if(pathDE.FilePath.equals(bucket.get(0).FilePath)){
@@ -86,11 +99,22 @@ public class PathDE_ElementHandler extends ElementHandler {
                 ArrayList<PathDE> newBucket = new ArrayList<PathDE>();
                 newBucket.add(pathDE);
                 PathDEs.add(newBucket);
+                if(type == 1){
+                    ImpactDEs.add(((Presenter_PathImpact) presenter).getImpact());
+                }
             }
         }
         
+        int i = 0;
         for(ArrayList<PathDE> bucket: PathDEs){
-            result.add(new Presenter_Path(bucket));
+            if(type == 0){
+                result.add(new Presenter_Path(bucket));                
+            }else if(type == 1){
+                result.add(new Presenter_PathImpact(bucket, ImpactDEs.get(i)));
+            }else{
+                break;
+            }
+            i++;
         }
         
         presenters = new Presenter[result.size()];

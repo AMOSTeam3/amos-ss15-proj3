@@ -9,6 +9,8 @@ import java.util.Collection;
 
 public abstract class Visitor {
     Collection<Requirement> requirements = null;
+    ArrayList<PathDE> filePaths = null;
+
     
     public void setRequirements(Collection<DataElement> dataelements){
         requirements = new ArrayList<Requirement>();
@@ -38,15 +40,12 @@ public abstract class Visitor {
     }
 
     public Presenter toPresenter(ImpactDE impact) {
-        ArrayList<ImpactDE> impacts = new ArrayList<>();
-        impacts.add(impact);
-        // TODO@Flo please return corresponding Presenter class.
-        // return new Presenter_Impact(impacts);
-        return null;
+        Presenter_PathImpact presenter = new Presenter_PathImpact(filePaths, impact);
+        return presenter;
     }
 
     public Presenter toPresenter(PathDE filePath) {
-        ArrayList<PathDE> filePaths = new ArrayList<>();
+        filePaths = new ArrayList<>();
         filePaths.add(filePath);
         return new Presenter_Path(filePaths);
     }
@@ -68,6 +67,12 @@ public abstract class Visitor {
     }
 
     public Collection<? extends DataElement> toDataElement(Presenter_Path filePath){
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.addAll(filePath.getPathDE());
+        return result;
+    }
+    
+    public Collection<? extends DataElement> toDataElement(Presenter_PathImpact filePath){
         ArrayList<DataElement> result = new ArrayList<DataElement>();
         result.addAll(filePath.getPathDE());
         return result;

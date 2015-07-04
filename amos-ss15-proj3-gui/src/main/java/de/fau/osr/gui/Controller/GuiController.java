@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Supplier;
@@ -107,7 +108,7 @@ public class GuiController {
                                 .Pattern_OpeningDialog(AppProperties
                                         .GetValue("RequirementPattern")));
                         i_Collection_Model = reInitModel(null, null, repoFile,
-                                reqPatternString);
+                                reqPatternString, false);
                         break;
                     } catch (PatternSyntaxException | IOException e) {
                         if (i >= MAX_RETRIES) {
@@ -311,8 +312,9 @@ public class GuiController {
                     .getRequirement_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
-                return i_Collection_Model.getFilesByRequirement(
+                List<? extends DataElement> paths =  i_Collection_Model.getFilesByRequirement(
                         (Collection) dataElements);
+                return i_Collection_Model.getImpactByRequirementAndPath((Collection) dataElements, (List)paths);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
@@ -344,7 +346,7 @@ public class GuiController {
                     .getPathDE_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
-                return i_Collection_Model.commitsFromRequirementAndFile(
+                return i_Collection_Model.commitsByRequirementAndFile(
                         (Collection) requirements, (Collection) files);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal storing Error");
@@ -376,7 +378,7 @@ public class GuiController {
                     .getPathDE_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
-                return i_Collection_Model.AnnotatedLinesFromFile((Collection) files);
+                return i_Collection_Model.AnnotatedLinesByFile((Collection) files);
             } catch (IOException | GitAPIException e) {
                 popupManager.showErrorDialog("Internal storing Error" + e);
                 return new ArrayList<DataElement>();
@@ -467,7 +469,7 @@ public class GuiController {
             }
 
             try{
-                return i_Collection_Model.getRequirementsFromFile(PathDEs);
+                return i_Collection_Model.getRequirementsByFile(PathDEs);
             } catch (IOException e) {
                 popupManager.showErrorDialog("File not found!");
                 return new ArrayList<DataElement>();
@@ -492,7 +494,7 @@ public class GuiController {
         
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             Collection<DataElement> files = elementHandler.getPathDE_ElementHandler().getSelection(new Visitor_Swing());
-            return i_Collection_Model.getCommitsFromFile((Collection)files);
+            return i_Collection_Model.getCommitsByFile((Collection)files);
         };
 
         ElementHandler specificElementHandler = elementHandler
@@ -515,7 +517,7 @@ public class GuiController {
             Collection<DataElement> files = elementHandler.getPathDE_ElementHandler().getSelection(new Visitor_Swing());
             Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
             try{
-                return i_Collection_Model.getRequirementsFromFileAndCommit((Collection)commits, (Collection)files);
+                return i_Collection_Model.getRequirementsByFileAndCommit((Collection)commits, (Collection)files);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal storing Error");
                 return new ArrayList<DataElement>();
