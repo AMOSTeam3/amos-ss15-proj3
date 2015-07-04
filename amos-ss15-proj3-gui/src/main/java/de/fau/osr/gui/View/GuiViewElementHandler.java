@@ -286,11 +286,11 @@ public class GuiViewElementHandler extends JFrame {
             public void stateChanged(ChangeEvent e) {
                 System.out.println("Tab: " + tabpane.getSelectedIndex());
                 
-                if(tabpane.getSelectedIndex() == 0){
+                /*if(tabpane.getSelectedIndex() == 0){
                     tabpane.setEnabledAt(1, false);
                     tabpane.setEnabledAt(2, false);
                     tabpane.setEnabledAt(3, false);
-                }
+                }*/
                 
             }
         });
