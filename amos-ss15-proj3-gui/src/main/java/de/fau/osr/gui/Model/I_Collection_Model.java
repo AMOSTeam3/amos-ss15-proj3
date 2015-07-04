@@ -35,13 +35,13 @@ public interface I_Collection_Model {
     @Deprecated
     List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting);
 
-    Collection<? extends DataElement> getRequirementsFromFile(Collection<CommitFile> files) throws IOException;
+    Collection<? extends DataElement> getRequirementsByFile(Collection<PathDE> files) throws IOException;
 
-    Collection<? extends DataElement> getCommitsFromFile(Collection<CommitFile> files);
+    Collection<? extends DataElement> getCommitsByFile(Collection<PathDE> files);
 
-    List<? extends DataElement> getFilesByommit(Collection<Commit> commits) throws FileNotFoundException;
+    List<? extends DataElement> getFilesByCommit(Collection<Commit> commits) throws FileNotFoundException;
 
-    String getChangeDataFromFileIndex(CommitFile file) throws FileNotFoundException;
+    String getChangeDataFromFileIndex(PathDE file) throws FileNotFoundException;
 
     Pattern getCurrentRequirementPattern();
 
@@ -53,15 +53,15 @@ public interface I_Collection_Model {
 
     Collection<? extends DataElement> getRequirementsFromCommit(Collection<Commit> commits) throws IOException;
 
-    Collection<? extends DataElement> commitsFromRequirementAndFile(Collection<Requirement> requirements, Collection<CommitFile> commitFile) throws IOException;
+    Collection<? extends DataElement> commitsByRequirementAndFile(Collection<Requirement> requirements, Collection<PathDE> pathDE) throws IOException;
 
-    Collection<? extends DataElement> getRequirementsFromFileAndCommit(Collection<Commit> commits, Collection<CommitFile> files) throws IOException;
+    Collection<? extends DataElement> getRequirementsByFileAndCommit(Collection<Commit> commits, Collection<PathDE> files) throws IOException;
 
     List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements) throws IOException;
 
     void addRequirementCommitLinkage(Requirement requirement, Commit commit) throws FileNotFoundException;
 
-    Collection<? extends DataElement> AnnotatedLinesFromFile(Collection<CommitFile> files) throws FileNotFoundException, IOException, GitAPIException ;
+    Collection<? extends DataElement> AnnotatedLinesByFile(Collection<PathDE> files) throws FileNotFoundException, IOException, GitAPIException ;
 
     RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
 
