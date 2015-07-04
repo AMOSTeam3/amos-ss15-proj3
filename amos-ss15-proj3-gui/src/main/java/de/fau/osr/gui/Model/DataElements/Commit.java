@@ -76,14 +76,6 @@ public class Commit extends DataElement {
         this.id = commit.getId();
         this.message = commit.getMessage();
         files = new ArrayList<>();
-
-        List<de.fau.osr.core.vcs.base.CommitFile> commitFilesToCopy = commit.getCommitFiles();
-
-        if (commitFilesToCopy != null) {
-            for (de.fau.osr.core.vcs.base.CommitFile commitFile : commitFilesToCopy) {
-                files.add(new CommitFile(commitFile));
-            }
-        }
         this.instanceRequirement = null;
 
     }

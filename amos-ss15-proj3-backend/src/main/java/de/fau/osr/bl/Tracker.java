@@ -272,8 +272,7 @@ public class Tracker {
         for(String commitID: getAllReqCommitRelations().get(requirementID)){
             commits.add(new Commit(commitID,
                     vcsClient.getCommitMessage(commitID),
-                    dataSource.getCommitRelationByReq(commitID),
-                    vcsClient.getCommitFiles(commitID)));
+                    dataSource.getCommitRelationByReq(commitID)));
         }
 
         return commits;
@@ -497,7 +496,7 @@ public class Tracker {
         Set<Commit> commits = new HashSet<>();
         SetMultimap<String, String> relations = getAllCommitReqRelations();
         for (String id : commitIds) {
-            commits.add(new Commit(id, vcsClient.getCommitMessage(id), relations.get(id), vcsClient.getCommitFiles(id)));
+            commits.add(new Commit(id, vcsClient.getCommitMessage(id), relations.get(id)));
         }
 
         return commits;
