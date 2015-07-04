@@ -32,6 +32,7 @@ public interface I_Collection_Model {
 
     List<? extends DataElement> getFilePaths();
 
+    @Deprecated
     List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting);
 
     Collection<? extends DataElement> getRequirementsFromFile(Collection<CommitFile> files) throws IOException;

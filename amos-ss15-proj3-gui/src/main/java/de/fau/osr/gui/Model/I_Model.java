@@ -32,7 +32,10 @@ public interface I_Model {
     Collection<Commit> getAllCommits();
 
     Collection<Requirement> getRequirementsFromCommit(Commit commit);
-    
+
+    float getImpactForRequirementAndPath(Requirement requ, PathDE path);
+
+    @Deprecated
     float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit);
         
 

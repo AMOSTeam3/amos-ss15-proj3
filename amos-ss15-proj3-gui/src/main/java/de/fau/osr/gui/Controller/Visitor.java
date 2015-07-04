@@ -31,12 +31,18 @@ public abstract class Visitor {
         return new Presenter_Commit(commit);
     }
 
-
-
     public Presenter toPresenter(CommitFile commitFile){
         ArrayList<CommitFile> commitFiles = new ArrayList<CommitFile>();
         commitFiles.add(commitFile);
         return new Presenter_CommitFile(commitFiles);
+    }
+
+    public Presenter toPresenter(ImpactDE impact) {
+        ArrayList<ImpactDE> impacts = new ArrayList<>();
+        impacts.add(impact);
+        // TODO@Flo please return corresponding Presenter class.
+        // return new Presenter_Impact(impacts);
+        return null;
     }
 
     public Presenter toPresenter(PathDE filePath) {
