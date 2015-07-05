@@ -30,7 +30,7 @@
          </menu>
          <action
                label="Enable SPICE"
-               icon="icons/unnamed.gif"
+               icon="icons/stopstart.gif"
                class="osr.core.ui.action.PluginManagementAction"
                tooltip="Enable SPICE plugin features"
                menubarPath="spiceMenu/spiceGroup"
@@ -39,7 +39,7 @@
          </action> 
          <action
                label="Preferences"
-               icon="icons/unnamed.gif"
+               icon="icons/preferences.gif"
                class="osr.core.ui.action.ConfigurationAction"
                tooltip="Preferences"
                menubarPath="spiceMenu/spiceGroup"
@@ -48,7 +48,7 @@
          </action> 
           <action
                label="Traceability Matrix By Impact"
-               icon="icons/unnamed.gif"
+               icon="icons/marker.gif"
                class="osr.core.ui.action.TraceabilityMatrixAction"
                tooltip="Traceability Matrix By Impact"
                menubarPath="spiceMenu/spiceGroup"
@@ -68,7 +68,7 @@
         highlightPreferenceValue="true"
         includeOnPreferencePage="true"
         label="SPICE Marker"
-        icon="icons/unnamed.gif"
+        icon="icons/marker.gif"
         overviewRulerPreferenceValue="true"
         overviewRulerPreferenceKey="clruler"
         presentationLayer="0"

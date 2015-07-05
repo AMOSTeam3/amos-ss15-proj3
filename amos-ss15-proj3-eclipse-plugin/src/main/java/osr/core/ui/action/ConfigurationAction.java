@@ -31,7 +31,7 @@ public class ConfigurationAction implements IWorkbenchWindowActionDelegate {
         if (RegistrySettings.isPluginEnabled)
             RegistrySettings.configure();
         else
-            UIUtility.message("SPICE Inpormation",
+            UIUtility.message("SPICE Information",
                     "Enable Plugin to have this feature");
 
     }
