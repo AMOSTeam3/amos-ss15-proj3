@@ -12,6 +12,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -296,7 +297,7 @@ public class GuiViewElementHandler extends JFrame {
         });
     }
 
-    void initializeButtonActions() {
+	void initializeButtonActions() {
         CommitFile_Handler.setButtonAction(()->guiController.filesFromDB());
 
         Requirement_Handler.setButtonAction(()->{
@@ -331,7 +332,17 @@ public class GuiViewElementHandler extends JFrame {
         Requirement_Handler.setSearchTextFieldAction((RequirementSearch_textField)->{
             guiController.setRequirementIDFiltering(new FilterByExactString(RequirementSearch_textField.getText()));
         });
-
+        
+        for(Requirement_ElementHandler column :
+        	new Requirement_ElementHandler[] {Requirement_Handler, Requirement_HandlerRequirementTab, Requirement_Handler_ManagementTab}) {
+        	 column.setRefreshAction(new AbstractAction("refresh linkage") {
+     			@Override
+     			public void actionPerformed(ActionEvent arg0) {
+     				guiController.refresh();
+     			}
+             });
+        }
+       
     }
 
     void initializeComboboxActions() {

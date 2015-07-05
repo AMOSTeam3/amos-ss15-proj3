@@ -91,6 +91,7 @@ public class GuiController {
     Comparator<CommitFile> commitFileSorting;
     // filtering/finding a specific reqiurementID
     Predicate<Requirement> requirementIDFiltering;
+    private Configuration configuration = null;
 
     /**
      * Called to start the initially starts the program. Setting up GUI and
@@ -464,9 +465,7 @@ public class GuiController {
 
         cleaner.clearAll();
 
-        Supplier<Collection<? extends DataElement>> fetching = () -> {
-            return i_Collection_Model.getAllFiles(getCommitFileSorting());
-        };
+        Supplier<Collection<? extends DataElement>> fetching = i_Collection_Model::getFilePaths;
 
         ElementHandler specificElementHandler = elementHandler
                 .getCommitFile_ElementHandler();
@@ -904,7 +903,7 @@ public class GuiController {
             requirementsFromDB();
             requirementsFromDBForRequirementTab();
             initLinkageManagementTab();
-            
+            this.configuration = configuration;
         }catch (PatternSyntaxException  | IOException e){
             e.printStackTrace();
             popupManager.showErrorDialog("Some problem in application configuration");
@@ -916,5 +915,20 @@ public class GuiController {
        
        
         return true;
+    }
+    
+    public void refresh() {
+    	try {
+    		File repoFile = new File(configuration.getRepoPath());
+    		Pattern reqPatternString = Pattern.compile(configuration.getReqPattern());
+    		i_Collection_Model = reInitModel(null, null, repoFile,reqPatternString,configuration.isEnableIndex());
+		} catch (IOException e) {
+			popupManager.showErrorDialog("Could not refresh linkage: " + e.getMessage());
+			return;
+		}
+    	elementHandler.doInitialization();
+    	requirementsFromDB();
+        requirementsFromDBForRequirementTab();
+        initLinkageManagementTab();
     }
 }

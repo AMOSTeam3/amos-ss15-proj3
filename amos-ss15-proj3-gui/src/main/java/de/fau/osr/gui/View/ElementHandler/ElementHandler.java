@@ -39,6 +39,9 @@ public abstract class ElementHandler {
     }
 
     public void setButtonAction(Runnable buttonAction) {
+    	for(ActionListener a : button.getActionListeners()) {
+    		button.removeActionListener(a);
+    	}
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 buttonAction.run();

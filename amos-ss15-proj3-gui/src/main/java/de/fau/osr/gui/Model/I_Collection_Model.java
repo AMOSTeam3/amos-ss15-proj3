@@ -7,6 +7,7 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.Requirement;
+import de.fau.osr.gui.Model.DataElements.PathDE;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.FileNotFoundException;
@@ -29,6 +30,9 @@ public interface I_Collection_Model {
 
     Collection<? extends DataElement> getCommitsFromRequirementID(Collection<Requirement> requirements) throws IOException;
 
+    List<? extends DataElement> getFilePaths();
+
+    @Deprecated
     List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting);
 
     Collection<? extends DataElement> getRequirementsFromFile(Collection<CommitFile> files) throws IOException;
@@ -64,4 +68,6 @@ public interface I_Collection_Model {
     RequirementsTraceabilityMatrixByImpact getRequirementsTraceabilityByImpact() throws IOException;
 
     boolean updateRequirement(String id, String title, String description);
+    
+    List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, PathDE path);
 }

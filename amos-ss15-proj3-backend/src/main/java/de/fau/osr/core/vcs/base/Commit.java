@@ -12,12 +12,10 @@ public class Commit {
 
     private String id;
     private String message;
-    private List<CommitFile> commitFiles;
-    public Commit(String id, String message, Set<String> requirements, List<CommitFile> commitFiles) {
+    public Commit(String id, String message, Set<String> requirements) {
         this.setId(id);
         this.setMessage(message);
         this.setRequirements(requirements);
-        this.setCommitFiles(commitFiles);
     }
 
     public Set<String> getRequirements() {
@@ -42,14 +40,6 @@ public class Commit {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public List<CommitFile> getCommitFiles() {
-        return commitFiles;
-    }
-
-    public void setCommitFiles(List<CommitFile> commitFiles) {
-        this.commitFiles = commitFiles;
     }
 
 }
