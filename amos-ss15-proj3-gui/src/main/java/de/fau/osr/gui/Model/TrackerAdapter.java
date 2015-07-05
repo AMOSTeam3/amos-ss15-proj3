@@ -105,6 +105,7 @@ public class TrackerAdapter implements I_Model {
 
 
     @Override
+    @Deprecated
     public Collection<CommitFile> getAllFiles() {
         if(trackerAdapterWorker.isReadyForTakeOver){
             return trackerAdapterWorker.getAllFiles();
@@ -114,15 +115,12 @@ public class TrackerAdapter implements I_Model {
 
 
     @Override
-    public Collection<Requirement> getRequirementsFromFile(CommitFile file) {
+    public Collection<Requirement> getRequirementsByFile(PathDE file) {
         Set<String> reqIds = new HashSet<>();
         Collection<de.fau.osr.core.Requirement> reqs = new ArrayList<>();
         try {
-
-            reqIds = tracker.getRequirementIdsForFile(file.newPath.getPath());
-
+            reqIds = tracker.getRequirementIdsForFile(file.toString());
             reqs = tracker.getRequirementsByIds(reqIds);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,9 +129,9 @@ public class TrackerAdapter implements I_Model {
     }
 
     @Override
-    public Collection<Commit> getCommitsFromFile(CommitFile file) {
+    public Collection<Commit> getCommitsByFile(PathDE file) {
         try {
-            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsForFile(file.newPath.getPath())));
+            return ElementsConverter.convertCommits(new HashSet<>(tracker.getCommitsForFile(file.toString())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,7 +142,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public float getImpactForRequirementAndPath(Requirement requ, PathDE path) {
 //        if(trackerAdapterWorker.isReadyForTakeOver){
-//            return trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
+//            return trackerAdapterWorker.getImpactPercentageForFileAndRequirement(file,commit);
 //        }
 
         return tracker.getImpactPercentageForFileAndRequirement(path.toString(), requ.getID());
@@ -152,6 +150,7 @@ public class TrackerAdapter implements I_Model {
 
     
     @Override
+    @Deprecated
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
         if(trackerAdapterWorker.isReadyForTakeOver){
             return trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
@@ -162,7 +161,8 @@ public class TrackerAdapter implements I_Model {
     
     
     @Override
-    public Collection<CommitFile> getFilesFromCommit(Commit commit) {
+    public Collection<PathDE> getFilesByCommit(Commit commit) {
+        // TODO Commit.files should be changed to PathDE.
         return commit.files;
     }
 
@@ -211,12 +211,13 @@ public class TrackerAdapter implements I_Model {
     }
 
     @Override
-    public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getCommitFilesForRequirement(requirement);
-        }
+    public Collection<PathDE> getFilesByRequirement(Requirement requirement) {
+//      if(trackerAdapterWorker.isReadyForTakeOver){
+//          return trackerAdapterWorker.getCommitFilesForRequirement(requirement);
+//      }
+
         try {
-            return ElementsConverter.convertCommitFiles(tracker.getCommitFilesForRequirementID(requirement.getID()));
+            return ElementsConverter.convertFilePaths(tracker.getFilesByRequirement(requirement.getID()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -234,9 +235,9 @@ public class TrackerAdapter implements I_Model {
     }
 
     @Override
-    public Collection<AnnotatedLine> getAnnotatedLines(CommitFile next) {
+    public Collection<AnnotatedLine> getAnnotatedLines(PathDE file) {
         try {
-            return ElementsConverter.convertAnnotatedLines(tracker.getBlame(next.newPath.getPath()));
+            return ElementsConverter.convertAnnotatedLines(tracker.getBlame(file.toString()));
 
         } catch (IOException | GitAPIException e) {
             e.printStackTrace();

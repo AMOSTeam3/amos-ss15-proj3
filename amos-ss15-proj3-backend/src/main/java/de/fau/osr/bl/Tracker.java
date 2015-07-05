@@ -29,6 +29,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.File;
@@ -151,8 +152,34 @@ public class Tracker {
     }
 
     /**
+     * Returns existing project file paths for given requirement ID.
+     */
+    public Collection<Path> getFilesByRequirement(String requirementID) throws IOException {
+        throw new NotImplementedException();
+
+        /*
+        long startTime = System.currentTimeMillis();
+
+        logger.info("Start call :: getCommitFilesForRequirementID():requirementID = " + requirementID + " Time:" + startTime);
+
+        List<Path> files = new ArrayList<>();
+        getAllReqCommitRelations().get(requirementID).forEach(
+                (String ci) -> {
+                    //TODO vcsClient.getFiles(commit)
+                    files.addAll(null);
+                }
+        );
+
+        logger.info("End call :: getCommitFilesForRequirementID() Time: " + (System.currentTimeMillis() - startTime));
+
+        return files;
+        */
+    }
+
+    /**
      * This method returns a list of <tt>CommitFile</tt>'s for the given requirement ID.
      */
+    @Deprecated
     public List<CommitFile> getCommitFilesForRequirementID(String requirementID) throws IOException {
 
         long startTime = System.currentTimeMillis();
@@ -318,6 +345,7 @@ public class Tracker {
 
         for(Path each: projectDirTraverser.traverse())
             // fname is a known file in VCS (if it returs ReqIds for that filepath)
+            // TODO Maybe we could cache (file->reqIds)
             if (this.getRequirementIdsForFile(each.toString()).size()>0)
                 filePaths.add(each);
 

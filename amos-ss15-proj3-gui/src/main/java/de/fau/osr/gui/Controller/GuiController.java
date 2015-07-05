@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -146,14 +145,14 @@ public class GuiController {
 
     /**
      * Navigation: ->Requirements Clear: All Setting: Requirements Using:
-     * getAllRequirements
+     * getRequirements
      */
     public void requirementsFromDB(){
         cleaner.clearAll();
 
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             try{
-                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+                return i_Collection_Model.getRequirements(requirementIDFiltering);
             } catch(IOException e){
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
@@ -174,7 +173,7 @@ public class GuiController {
     public void requirementsFromDBForRequirementTab(){
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             try{
-                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+                return i_Collection_Model.getRequirements(requirementIDFiltering);
             } catch(IOException e){
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
@@ -222,7 +221,7 @@ public class GuiController {
 
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             try{
-                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+                return i_Collection_Model.getRequirements(requirementIDFiltering);
             } catch(IOException e){
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
@@ -272,7 +271,7 @@ public class GuiController {
 
     /**
      * Navigation: ->Requirements->Commit Clear: Files/Code/ImpactPercentage
-     * Setting: Commits Using: getCommitsFromRequirementID
+     * Setting: Commits Using: getCommitsByRequirement
      */
     void commitsFromRequirement(){
         cleaner.clearFiles();
@@ -283,7 +282,7 @@ public class GuiController {
                     .getRequirement_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
-                return i_Collection_Model.getCommitsFromRequirementID((Collection) dataElements);
+                return i_Collection_Model.getCommitsByRequirement((Collection) dataElements);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
@@ -314,7 +313,7 @@ public class GuiController {
             try {
                 List<? extends DataElement> paths =  i_Collection_Model.getFilesByRequirement(
                         (Collection) dataElements);
-                return i_Collection_Model.getImpactByRequirementAndPath((Collection) dataElements, (List)paths);
+                return i_Collection_Model.getImpactByRequirementAndPath((Collection) dataElements, (List) paths);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
@@ -346,7 +345,7 @@ public class GuiController {
                     .getPathDE_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
-                return i_Collection_Model.commitsByRequirementAndFile(
+                return i_Collection_Model.getCommitsByRequirementAndFile(
                         (Collection) requirements, (Collection) files);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal storing Error");
@@ -378,7 +377,7 @@ public class GuiController {
                     .getPathDE_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
-                return i_Collection_Model.AnnotatedLinesByFile((Collection) files);
+                return i_Collection_Model.getAnnotatedLinesByFile((Collection) files);
             } catch (IOException | GitAPIException e) {
                 popupManager.showErrorDialog("Internal storing Error" + e);
                 return new ArrayList<DataElement>();
@@ -456,7 +455,7 @@ public class GuiController {
 
     /**
      * Navigation: ->File->Requirement Clear: Setting: Requirement Using:
-     * getRequirementsFromFile
+     * getRequirementsByFile
      */
     void requirementsFromFile() {
 
@@ -488,13 +487,13 @@ public class GuiController {
 
     /**
      * Navigation: ->File->Commit Clear: Setting: Commits Using:
-     * getCommitsFromFile
+     * getCommitsByFile
      */
     void commitsFromFile() {
         
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             Collection<DataElement> files = elementHandler.getPathDE_ElementHandler().getSelection(new Visitor_Swing());
-            return i_Collection_Model.getCommitsByFile((Collection)files);
+            return i_Collection_Model.getCommitsByFile((Collection) files);
         };
 
         ElementHandler specificElementHandler = elementHandler
@@ -517,7 +516,7 @@ public class GuiController {
             Collection<DataElement> files = elementHandler.getPathDE_ElementHandler().getSelection(new Visitor_Swing());
             Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
             try{
-                return i_Collection_Model.getRequirementsByFileAndCommit((Collection)commits, (Collection)files);
+                return i_Collection_Model.getRequirementsByFileAndCommit((Collection) commits, (Collection) files);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal storing Error");
                 return new ArrayList<DataElement>();
@@ -556,7 +555,7 @@ public class GuiController {
 
     /**
      * Navigation: ->Commit->Files Clear: Code/ImpactPercentage Setting: Files
-     * Using: getFilesFromCommit
+     * Using: getFilesByCommit
      */
     void filesFromCommit() {
         cleaner.clearCode();
@@ -564,7 +563,7 @@ public class GuiController {
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
             try{
-                return i_Collection_Model.getFilesByCommit((Collection)commits);
+                return i_Collection_Model.getFilesByCommit((Collection) commits);
             } catch (FileNotFoundException e) {
                 popupManager.showErrorDialog("Internal storing Error");
                 return new ArrayList<DataElement>();
@@ -583,14 +582,14 @@ public class GuiController {
 
     /**
      * Navigation: ->Commits->Requirements Clear: Setting: Requirements Using:
-     * getRequirementsFromCommit
+     * getRequirementsByCommit
      */
     void requirementsFromCommit() {
 
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
             try{
-                return i_Collection_Model.getRequirementsFromCommit((Collection)commits);
+                return i_Collection_Model.getRequirementsByCommit((Collection) commits);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal storing Error");
                 return new ArrayList<DataElement>();
@@ -615,7 +614,7 @@ public class GuiController {
         
         Supplier<Collection<? extends DataElement>> fetching = () -> {
             try{
-                return i_Collection_Model.getAllRequirements(requirementIDFiltering);
+                return i_Collection_Model.getRequirements(requirementIDFiltering);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal storing Error");
                 return new ArrayList<DataElement>();
@@ -649,7 +648,7 @@ public class GuiController {
 
     void RequirementToLinkage() {
         DataElement requirement = elementHandler.getRequirement_ElementHandler().getSelection(new Visitor_Swing()).iterator().next();
-        elementHandler.getLinkage_ElementHandler().setRequirement((Presenter_Requirement)requirement.visit(new Visitor_Swing()));
+        elementHandler.getLinkage_ElementHandler().setRequirement((Presenter_Requirement) requirement.visit(new Visitor_Swing()));
     }
 
     void CommitToLinkage() {

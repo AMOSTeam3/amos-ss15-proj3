@@ -6,9 +6,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -16,18 +14,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
-import javax.naming.OperationNotSupportedException;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
-
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.bl.Tracker;
 import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
 import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
-import de.fau.osr.gui.util.ElementsConverter;
 
 /**
  * @author Gayathery
@@ -261,7 +253,7 @@ public class TrackerAdapterWorker {
     }
     /**     
      * @return Collection<Requirement>
-     * This method masks the getAllRequirements method of TrackerAdapter after successful data preparation
+     * This method masks the getRequirements method of TrackerAdapter after successful data preparation
      * @author Gayathery
      */
     public Collection<Requirement> getAllRequirements() {
@@ -296,7 +288,7 @@ public class TrackerAdapterWorker {
     public Collection<CommitFile> getAllFiles() {
         if(getAllFiles == globalChangeTime){
             Collection<CommitFile> commitFiles = new ArrayList<CommitFile>(); 
-            workerRepositoryCommitCommitFile.forEach((k,v) -> commitFiles.addAll(v));
+            workerRepositoryCommitCommitFile.forEach((k, v) -> commitFiles.addAll(v));
             return commitFiles;
         }
         
@@ -314,7 +306,7 @@ public class TrackerAdapterWorker {
     public Collection<Requirement> getRequirementsFromFile(CommitFile file) {
         
 
-        return trackerAdapter.getRequirementsFromFile(file);
+        return trackerAdapter.getRequirementsByFile(file);
     }
 
     
@@ -325,7 +317,7 @@ public class TrackerAdapterWorker {
      */
     public Collection<Commit> getCommitsFromFile(CommitFile file) {
        
-        return trackerAdapter.getCommitsFromFile(file);
+        return trackerAdapter.getCommitsByFile(file);
     }
 
     
@@ -360,7 +352,7 @@ public class TrackerAdapterWorker {
      *  Will be masked in future if performance improvement is required
      */
     public Collection<CommitFile> getFilesFromCommit(Commit commit) {
-        return trackerAdapter.getFilesFromCommit(commit);
+        return trackerAdapter.getFilesByCommit(commit);
     }
 
     
@@ -420,7 +412,7 @@ public class TrackerAdapterWorker {
     /**
      * @param requirement
      * @return Collection<CommitFile>
-     * This method masks the getCommitFilesForRequirement method of TrackerAdapter after successful data preparation
+     * This method masks the getFilesByRequirement method of TrackerAdapter after successful data preparation
      * @author Gayathery
      */
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
@@ -429,7 +421,7 @@ public class TrackerAdapterWorker {
         }
         
 
-        return trackerAdapter.getCommitFilesForRequirement(requirement);
+        return trackerAdapter.getFilesByRequirement(requirement);
     }
 
     

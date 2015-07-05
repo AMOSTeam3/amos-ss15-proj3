@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.Model.DataElements.Commit;
-import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.Model.DataElements.PathDE;
@@ -26,14 +25,11 @@ import java.util.regex.Pattern;
 
 public interface I_Collection_Model {
 
-    Collection<? extends DataElement> getAllRequirements(Predicate<Requirement> requirementIDFiltering) throws IOException;
+    Collection<? extends DataElement> getRequirements(Predicate<Requirement> requirementIDFiltering) throws IOException;
 
-    Collection<? extends DataElement> getCommitsFromRequirementID(Collection<Requirement> requirements) throws IOException;
+    Collection<? extends DataElement> getCommitsByRequirement(Collection<Requirement> requirements) throws IOException;
 
     List<? extends DataElement> getFilePaths();
-
-    @Deprecated
-    List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting);
 
     Collection<? extends DataElement> getRequirementsByFile(Collection<PathDE> files) throws IOException;
 
@@ -51,9 +47,9 @@ public interface I_Collection_Model {
 
     Collection<? extends DataElement> getCommitsFromDB();
 
-    Collection<? extends DataElement> getRequirementsFromCommit(Collection<Commit> commits) throws IOException;
+    Collection<? extends DataElement> getRequirementsByCommit(Collection<Commit> commits) throws IOException;
 
-    Collection<? extends DataElement> commitsByRequirementAndFile(Collection<Requirement> requirements, Collection<PathDE> pathDE) throws IOException;
+    Collection<? extends DataElement> getCommitsByRequirementAndFile(Collection<Requirement> requirements, Collection<PathDE> pathDE) throws IOException;
 
     Collection<? extends DataElement> getRequirementsByFileAndCommit(Collection<Commit> commits, Collection<PathDE> files) throws IOException;
 
@@ -61,7 +57,7 @@ public interface I_Collection_Model {
 
     void addRequirementCommitLinkage(Requirement requirement, Commit commit) throws FileNotFoundException;
 
-    Collection<? extends DataElement> AnnotatedLinesByFile(Collection<PathDE> files) throws FileNotFoundException, IOException, GitAPIException ;
+    Collection<? extends DataElement> getAnnotatedLinesByFile(Collection<PathDE> files) throws FileNotFoundException, IOException, GitAPIException ;
 
     RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
 
