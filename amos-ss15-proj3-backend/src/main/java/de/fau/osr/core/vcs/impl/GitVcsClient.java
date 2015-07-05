@@ -1,25 +1,20 @@
 package de.fau.osr.core.vcs.impl;
 
 import com.google.common.collect.Lists;
-
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.AnnotatedLine;
 import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
-
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
@@ -349,9 +344,4 @@ public class GitVcsClient extends VcsClient{
         }
         return ".git";
     }
-
-	@Override
-	public String getHeadId() throws GitAPIException, IOException {
-		return git.getRepository().resolve("HEAD").name();
-	}
 }

@@ -7,7 +7,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
-
 import de.fau.osr.core.Requirement;
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
@@ -25,14 +24,12 @@ import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.NaturalOrderComparator;
 import de.fau.osr.util.parser.CommitMessageParser;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.OperationNotSupportedException;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -543,10 +540,6 @@ public class Tracker {
     public Collection<CommitFile> getAllFiles(){
         return getAllCommitFiles();
     }
-
-	public String getHeadId() throws GitAPIException, IOException {
-		return vcsClient.getHeadId();
-	}
 }
 
 
