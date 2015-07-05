@@ -47,6 +47,9 @@ public class CommitFile_ElementHandler extends ElementHandler {
     }
     
     public void setComboBoxAction(Runnable action){
+    	for(ActionListener a : FilesSort_combobox.getActionListeners()) {
+    		FilesSort_combobox.removeActionListener(a);
+    	}
         FilesSort_combobox.addActionListener(
                 new ActionListener() {
                     @Override
