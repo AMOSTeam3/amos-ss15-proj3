@@ -2,6 +2,8 @@ package de.fau.osr.core.vcs.base;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * This Class is a Container within the test framework for all information related to one commit.
@@ -12,10 +14,14 @@ public class Commit {
 
     private String id;
     private String message;
-    public Commit(String id, String message, Set<String> requirements) {
+
+	public Supplier<Stream<CommitFile>> commitFiles;
+	
+    public Commit(String id, String message, Set<String> requirements, Supplier<Stream<CommitFile>> commitFiles) {
         this.setId(id);
         this.setMessage(message);
         this.setRequirements(requirements);
+        this.commitFiles = commitFiles;
     }
 
     public Set<String> getRequirements() {

@@ -164,7 +164,7 @@ public class Tracker {
         Set<String> commits = getAllReqCommitRelations().get(requirementID);
 
         for (String commit : commits){
-            commitFilesList.addAll(vcsClient.getCommitFiles(commit));
+        	vcsClient.getCommitFiles(commit).get().forEachOrdered(commitFilesList::add);
         }
         
         for(CommitFile file: commitFilesList){
@@ -254,7 +254,8 @@ public class Tracker {
         for(String commitID: getAllReqCommitRelations().get(requirementID)){
             commits.add(new Commit(commitID,
                     vcsClient.getCommitMessage(commitID),
-                    dataSource.getCommitRelationByReq(commitID)));
+                    dataSource.getCommitRelationByReq(commitID),
+                    vcsClient.getCommitFiles(commitID)));
         }
 
         return commits;
@@ -283,7 +284,7 @@ public class Tracker {
         Iterator<String> allCommits = vcsClient.getCommitList();
         while (allCommits.hasNext()) {
             String currentCommit = allCommits.next();
-            files.addAll(vcsClient.getCommitFiles(currentCommit));
+            vcsClient.getCommitFiles(currentCommit).get().forEachOrdered(files::add);
         }
         
         return files;
@@ -314,7 +315,7 @@ public class Tracker {
         Iterator<String> allCommits = vcsClient.getCommitList();
         while (allCommits.hasNext()) {
             String currentCommit = allCommits.next();
-            for(CommitFile commitfile: vcsClient.getCommitFiles(currentCommit)){
+            for(CommitFile commitfile: (Iterable<CommitFile>)(vcsClient.getCommitFiles(currentCommit).get()::iterator)){
                 if(!(commitfile.commitState == CommitState.DELETED))
                     files.add(commitfile.newPath.getPath());
                 else 
@@ -478,7 +479,7 @@ public class Tracker {
         Set<Commit> commits = new HashSet<>();
         SetMultimap<String, String> relations = getAllCommitReqRelations();
         for (String id : commitIds) {
-            commits.add(new Commit(id, vcsClient.getCommitMessage(id), relations.get(id)));
+            commits.add(new Commit(id, vcsClient.getCommitMessage(id), relations.get(id), vcsClient.getCommitFiles(id)));
         }
 
         return commits;

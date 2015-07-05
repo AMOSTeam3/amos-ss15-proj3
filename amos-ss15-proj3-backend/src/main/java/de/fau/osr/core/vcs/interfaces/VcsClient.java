@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author Gayathery
@@ -29,7 +31,7 @@ public abstract class VcsClient {
 	public abstract Iterator<String> getBranchList();
     public abstract Iterator<String> getCommitList();
     public abstract String getRepositoryName();
-    public abstract ArrayList<CommitFile> getCommitFiles(String commitID);
+    public abstract Supplier<Stream<CommitFile>> getCommitFiles(String commitID);
     public abstract String getCommitMessage(String commitID);
     public abstract Iterator<String> getCommitListForFileodification(String filePath);
     public static VcsClient connect(VcsEnvironment env, String repositoryURI) {

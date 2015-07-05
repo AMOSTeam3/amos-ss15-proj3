@@ -4,7 +4,11 @@ import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.View.Presenter.Presenter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This Class is a Container for all information related to one commit.
@@ -16,7 +20,6 @@ public class Commit extends DataElement {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((files == null) ? 0 : files.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime
                 * result
@@ -36,11 +39,6 @@ public class Commit extends DataElement {
             return false;
         Commit other = (Commit) obj;
 
-        if (files == null) {
-            if (other.files != null)
-                return false;
-        } else if (!files.equals(other.files))
-            return false;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -63,25 +61,25 @@ public class Commit extends DataElement {
     public String id;
     public String message;
     public Requirement instanceRequirement;
-    public List<CommitFile> files;
-
-    public Commit(String id, String message, List<CommitFile> files) {
-        this.id = id;
-        this.message = message;
-        this.files = files;
-        this.instanceRequirement = null;
-    }
+    public Supplier<Stream<CommitFile>> commitFiles;
 
     public Commit(de.fau.osr.core.vcs.base.Commit commit) {
         this.id = commit.getId();
         this.message = commit.getMessage();
-        files = new ArrayList<>();
         this.instanceRequirement = null;
-
+        commitFiles = () -> {
+        	Stream<de.fau.osr.core.vcs.base.CommitFile> originalStream = commit.commitFiles.get();
+        	//convert the commitFiles from the backend
+        	return originalStream.map(commitFile -> new CommitFile(commitFile));
+        };
     }
 
     @Override
     public Presenter visit(Visitor visitor) {
         return visitor.toPresenter(this);
     }
+
+	public Collection<CommitFile> getFiles() {
+		return commitFiles.get().collect(Collectors.toList());
+	}
 }

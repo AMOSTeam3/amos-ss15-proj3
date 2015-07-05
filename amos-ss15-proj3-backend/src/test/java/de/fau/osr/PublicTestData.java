@@ -115,7 +115,7 @@ public class PublicTestData {
                     }
                 }
 
-                Commit commit = new Commit(commitString[0], commitString[1], requirements);
+                Commit commit = new Commit(commitString[0], commitString[1], requirements, ()->files.stream());
                 commits.add(commit);
             }
 

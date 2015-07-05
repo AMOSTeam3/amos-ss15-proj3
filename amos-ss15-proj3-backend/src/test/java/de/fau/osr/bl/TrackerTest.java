@@ -2,6 +2,7 @@ package de.fau.osr.bl;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+
 import de.fau.osr.core.db.DBTestHelper;
 import de.fau.osr.core.db.DataSource;
 import de.fau.osr.core.vcs.AnnotatedLine;
@@ -9,6 +10,7 @@ import de.fau.osr.core.vcs.base.CommitFile;
 import de.fau.osr.core.vcs.base.CommitState;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -64,6 +69,8 @@ public class TrackerTest {
         Mockito.doReturn(commits).when(mockedTracker).getAllCommitReqRelations();
         
         Mockito.doReturn(getSampleCommitFiles()).when(mockedClient).getCommitFiles("commit1");
+        for(int i=2; i<=4; ++i)
+        	Mockito.doReturn(emptyStream()).when(mockedClient).getCommitFiles("commit" + i);
         //no need blame here
         Mockito.doReturn(new ArrayList<AnnotatedLine>()).when(mockedTracker).getBlame(anyString());
 
@@ -115,16 +122,21 @@ public class TrackerTest {
         
         Collection<String> files = mockedTracker.getAllFilesAsString();
         assertEquals(files.size(), 1);
-        assertTrue(files.contains(getSampleCommitFiles().get(0).newPath.getPath()));
+        assertTrue(files.contains(getSampleCommitFiles().get().collect(Collectors.toList()).
+        		get(0).newPath.getPath()));
     }
     
-    private List<CommitFile> getSampleCommitFiles(){
+    private Supplier<Stream<CommitFile>> getSampleCommitFiles(){
         String commitId = "a0b52e890fa0d7fad6563cf91ea6dcca52e9226f";
         List<CommitFile> commitFile = new ArrayList<CommitFile>();
         File testFile = new File("amos-ss15-proj3-gui\\src\\main\\java\\de\\fau\\osr\\gui\\Controller\\GuiController.java");
         commitFile.add(new CommitFile(null, new File("InitClass.java"),testFile, CommitState.DELETED, commitId, null));
         commitFile.add(new CommitFile(null, null,testFile, CommitState.ADDED, commitId, null));
-        return commitFile;
+        return commitFile::stream;
+    }
+    
+    private static <T> Supplier<Stream<T>> emptyStream() {
+    	return Stream::empty;
     }
 
 }

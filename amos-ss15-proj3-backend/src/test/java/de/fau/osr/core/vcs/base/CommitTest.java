@@ -34,7 +34,7 @@ public class CommitTest {
 
     @Test
     public void CommitConstructor_idField_Test(){
-        Commit commitToTest = new Commit("new_id", null, null);
+        Commit commitToTest = new Commit("new_id", null, null, null);
         assertEquals("commit id should be equal the initialization id", "new_id", commitToTest.getId());
     }
 
@@ -42,33 +42,33 @@ public class CommitTest {
     public void CommitConstructor_CommitIdInitializedWithNoUsualChars_allTheCharsReturnedProperly(){
         String[] ids = {"   ", "$&/&$//", "09084§§§", " kl%45$$%$%", "\"\"__ __\"\"", "", null};
         for (String id : ids){
-            Commit commitToTest = new Commit(id, null, null);
+            Commit commitToTest = new Commit(id, null, null, null);
             assertEquals("commit id should be equal the initialization id", id, commitToTest.getId());
         }
     }
 
     @Test
     public void CommitConstructor_messageField_Test(){
-        Commit commitToTest = new Commit(null, "msg ok", null);
+        Commit commitToTest = new Commit(null, "msg ok", null, null);
         assertEquals("message should be equal the initialization message", "msg ok", commitToTest.getMessage());
     }
 
     @Test
     public void CommitConstructor_requirementsField_Test() {
-        Commit commitToTest = new Commit(null, null, reqsList);
+        Commit commitToTest = new Commit(null, null, reqsList, null);
         assertEquals("requirements should be equal the initialization requirements", reqsList, commitToTest.getRequirements());
     }
 
     @Test
     public void CommitConstructor_requirementsField_Empty_Test() {
         Set<String> req = new HashSet<>();
-        Commit commitToTest = new Commit(null, null, req);
+        Commit commitToTest = new Commit(null, null, req, null);
         assertEquals("requirements should be equal the initialization requirements", req, commitToTest.getRequirements());
     }
 
     @Test
     public void CommitConstructor_EverythingInitializedwithNull_EveryPropertyReturnsNull_Test(){
-        Commit commitToTest = new Commit(null, null, null);
+        Commit commitToTest = new Commit(null, null, null, null);
         assertEquals("Initialized with commitId = Null, commitId should return Null", null, commitToTest.getId());
         assertEquals("Initialized with Messages = Null, Messages should return Null", null, commitToTest.getMessage());
         assertEquals("Initialized with Requiremnts = Null, Requirements should return Null", null, commitToTest.getRequirements());
@@ -76,7 +76,7 @@ public class CommitTest {
 
     @Test
     public void CommitConstructor_EverythingInitializedwithObjects_PropertiesReturnsSameObjects_Test(){
-        Commit commitToTest = new Commit("new_id", "Message",reqsList);
+        Commit commitToTest = new Commit("new_id", "Message",reqsList, null);
         assertEquals("Initialized with commitId = \"new_id\", commitId should return \"new_id\"", "new_id", commitToTest.getId());
         assertEquals("Initialized with Messages = \"Message\", Messages should return \"Message\"", "Message", commitToTest.getMessage());
         assertEquals("Initialized with Requiremnts List, The property requirenets should return the same list", reqsList, commitToTest.getRequirements());

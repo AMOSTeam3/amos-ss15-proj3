@@ -181,7 +181,7 @@ public class TrackerAdapter implements I_Model {
     
     @Override
     public Collection<CommitFile> getFilesFromCommit(Commit commit) {
-        return commit.files;
+        return commit.getFiles();
     }
 
     @Override

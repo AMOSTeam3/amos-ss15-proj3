@@ -28,7 +28,7 @@ public class CommitFileListingApp {
 
             @Override
             public Iterator<CommitFile> iterator() {
-                return client.getCommitFiles(commitId).iterator();
+                return client.getCommitFiles(commitId).get().iterator();
             }}) {
             System.out.println(file.oldPath + " " + file.commitState + " " + file.newPath);
         }

@@ -78,7 +78,7 @@ public class VcsControllerTest {
         Iterator<String> commitList = null;
         commitList = client.getCommitList();
         if(commitList.hasNext()){
-            commitFileList = client.getCommitFiles(commitList.next()).iterator();
+            commitFileList = client.getCommitFiles(commitList.next()).get().iterator();
         }
         assertNotNull(commitFileList);
         assertTrue(commitFileList.hasNext());
