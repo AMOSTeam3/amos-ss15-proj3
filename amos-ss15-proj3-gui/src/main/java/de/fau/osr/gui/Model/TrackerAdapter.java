@@ -19,7 +19,6 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.ElementsConverter;
-import de.fau.osr.gui.util.GenericLock;
 
 /**
  * Adapter for Tracker, implements I_Model
@@ -31,29 +30,15 @@ public class TrackerAdapter implements I_Model {
     private final Tracker tracker;
     private TrackerAdapterWorker trackerAdapterWorker;
     private Pattern reqPatternString;
-    public GenericLock lock;
     private Thread trackerAdapterWorkerThread;
     
     public TrackerAdapter(Tracker tracker,Boolean isIndexingRequired) throws IOException {
+
         this.tracker = tracker;
-        lock = new GenericLock();
-        trackerAdapterWorker = new TrackerAdapterWorker(this);
         
-        class TrackerAdapterWorkerThread extends Thread {
-
-            public void run() {
-                if(trackerAdapterWorker.prepareData()){
-                trackerAdapterWorker.listen();
-                }
-            }
-
-            
-
-        }
-        resetWorkerThread();
-        if(isIndexingRequired){
-           
-            trackerAdapterWorkerThread = new Thread(new TrackerAdapterWorkerThread());
+    	if(isIndexingRequired){
+    		trackerAdapterWorker = new TrackerAdapterWorker(this);
+            trackerAdapterWorkerThread = new Thread(trackerAdapterWorker);
             trackerAdapterWorkerThread.setPriority(Thread.MIN_PRIORITY);
             trackerAdapterWorkerThread.setName("TrackerAdapterWorkerThread");
             trackerAdapterWorkerThread.start();
@@ -63,13 +48,10 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Requirement> getAllRequirements() {
-        lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<Requirement> collectionOfRequirements = trackerAdapterWorker.getAllRequirements();
-            lock.unlock();
-            return collectionOfRequirements;
+        if(trackerAdapterWorker != null) {
+        	TrackerAdapterWorker.CachedData data = trackerAdapterWorker.cached.get();
+        	if(data != null) return data.requirements;
         }
-        lock.unlock();
             
         Collection<Requirement> reqsUI = new ArrayList<>();
 
@@ -84,13 +66,11 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
-        lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<Commit> collectionOfCommit =  trackerAdapterWorker.getCommitsFromRequirement(requirement);
-            lock.unlock();
-            return collectionOfCommit;
+    	if(trackerAdapterWorker != null) {
+        	TrackerAdapterWorker.CachedData data = trackerAdapterWorker.cached.get();
+        	if(data != null) return data.reqCommit.get(requirement);
         }
-        lock.unlock();
+    	
         de.fau.osr.core.Requirement req;
         Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
         try {
@@ -112,14 +92,10 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getAllFiles() {
-        lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<CommitFile> collectionOfCommitFile =  trackerAdapterWorker.getAllFiles();
-            lock.unlock();
-            return collectionOfCommitFile;
-            
+    	if(trackerAdapterWorker != null) {
+        	TrackerAdapterWorker.CachedData data = trackerAdapterWorker.cached.get();
+        	if(data != null) return data.totalCommitFiles;
         }
-        lock.unlock();
         return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
     }
 
@@ -155,13 +131,6 @@ public class TrackerAdapter implements I_Model {
     
     @Override
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
-        lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            float impact = trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
-            lock.unlock();
-            return impact;
-        }
-    lock.unlock();
         return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
     }
     
@@ -217,13 +186,10 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
-        lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<CommitFile> collectionOfCommitFiles =  trackerAdapterWorker.getCommitFilesForRequirement(requirement);
-            lock.unlock();
-            return collectionOfCommitFiles;
+    	if(trackerAdapterWorker != null) {
+        	TrackerAdapterWorker.CachedData data = trackerAdapterWorker.cached.get();
+        	if(data != null) return data.reqCommitFile.get(requirement);
         }
-        lock.unlock();
         try {
             return ElementsConverter.convertCommitFiles(tracker.getCommitFilesForRequirementID(requirement.getID()));
         } catch (IOException e) {
@@ -283,13 +249,10 @@ public class TrackerAdapter implements I_Model {
 
         return false;
     }
-    
-    private void resetWorkerThread(){
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        for ( Thread thread : threadSet ){
-            if ( thread.getName( ).equals( "TrackerAdapterWorkerThread" ) || thread.getName( ).equals( "TrackerAdapterWorkerListenerThread" ))
-                thread.interrupt();
-        }
-    }
+
+
+	public String getHeadId() throws GitAPIException, IOException {
+		return tracker.getHeadId();
+	}
 
 }

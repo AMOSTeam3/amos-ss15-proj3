@@ -831,10 +831,7 @@ public class GuiController {
             ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
         }
         Collection_Model_Impl model;
-        if(isIndexEnabled)
-            model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),true));
-        else
-            model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),false));
+        model = new Collection_Model_Impl(new TrackerAdapter(new Tracker(vcs, ds, repoFile),isIndexEnabled));
         
         model.setCurrentRequirementPattern(reqPattern);
         return model;

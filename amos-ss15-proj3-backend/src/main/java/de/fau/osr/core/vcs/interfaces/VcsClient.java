@@ -72,4 +72,11 @@ public abstract class VcsClient {
     	 */
     	return new File(repositoryURI).getParentFile(); 
     }
+
+	/**
+	 * @return a String that uniquely describes the current version, must not be empty
+	 * @throws GitAPIException
+	 * @throws IOException
+	 */
+	public abstract String getHeadId() throws GitAPIException, IOException;
 }
