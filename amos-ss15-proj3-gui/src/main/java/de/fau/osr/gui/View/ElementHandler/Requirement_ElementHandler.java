@@ -7,13 +7,16 @@ import de.fau.osr.gui.View.Presenter.Presenter_Requirement;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.function.Consumer;
 
 public class Requirement_ElementHandler extends ElementHandler {
     
     
+	private JButton refreshButton = new JButton();
     protected JLabel RequirementID_label = new JLabel("RequirementID");
     protected JTextField RequirementSearch_textField = new JTextField();
     
@@ -26,10 +29,15 @@ public class Requirement_ElementHandler extends ElementHandler {
     @Override
     public Component toComponent() {
         return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
+        		.addComponent(refreshButton)
                 .addComponent(button)
                 .addComponent(RequirementID_label)
                 .addComponent(RequirementSearch_textField)
                 .addComponent(scrollPane);
+    }
+    
+    public void setRefreshAction(Action a) {
+    	refreshButton.setAction(a);
     }
     
     public void setSearchTextFieldAction(Consumer<JTextField> action) {
