@@ -2,6 +2,7 @@ package de.fau.osr.util;
 
 import de.fau.osr.PublicTestData;
 import junit.framework.TestCase;
+
 import org.junit.BeforeClass;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -88,6 +90,8 @@ public class VisibleFilesTraverserTest extends TestCase {
         });
         List<String> expected = expectedTestRepoFileContent;
 
+        Collections.sort(expected);
+        Collections.sort(got);
         assertEquals(expected, got);
 
     }
@@ -111,6 +115,8 @@ public class VisibleFilesTraverserTest extends TestCase {
             }
         });
 
+        Collections.sort(expected);
+        Collections.sort(got);
         assertEquals(expected, got);
     }
 }

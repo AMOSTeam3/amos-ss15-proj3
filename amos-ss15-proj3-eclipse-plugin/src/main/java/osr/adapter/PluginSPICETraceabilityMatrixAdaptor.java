@@ -17,10 +17,12 @@ public class PluginSPICETraceabilityMatrixAdaptor {
 
             @Override
             public void run() {
-                matrixView.showTraceabilityMatrixByImpactProgressBar();
                 RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact = PluginSPICETrackerAdaptor
                         .getTracker()
                         .generateRequirementsTraceabilityByImpact();
+
+                matrixView.showTraceabilityMatrixByImpactProgressBar(requirementsTraceabilityMatrixByImpact);
+                requirementsTraceabilityMatrixByImpact.Process();
                 matrixView
                         .showTraceabilityMatrixByImpact(requirementsTraceabilityMatrixByImpact);
 

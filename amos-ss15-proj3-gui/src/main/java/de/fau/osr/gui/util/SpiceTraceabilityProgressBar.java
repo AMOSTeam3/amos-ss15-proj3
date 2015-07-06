@@ -3,39 +3,27 @@ package de.fau.osr.gui.util;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.EmptyBorder;
+
+import de.fau.osr.util.ProgressBarInterface;
+
 import java.awt.*;
 
 /**
  * This class is a generic progress bar that can be utilized for any progress bar functionality
  * @author Gayathery Sathya
  */
-public class SpiceTraceabilityProgressBar extends JFrame {
+public class SpiceTraceabilityProgressBar extends JFrame implements ProgressBarInterface {
 
     private JPanel contentPane;
     private JProgressBar progressBar;
     private JLabel lblPercentage;
     private JLabel lblProgress;
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    SpiceTraceabilityProgressBar frame = new SpiceTraceabilityProgressBar();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     /**
      * Create the frame.
      */
     public SpiceTraceabilityProgressBar() {
-        setType(Type.POPUP);
+        setType(Type.UTILITY);
         setResizable(false);
         setTitle("Spice Traceability : Progress");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -78,21 +66,27 @@ public class SpiceTraceabilityProgressBar extends JFrame {
                     .addContainerGap(34, Short.MAX_VALUE))
         );
         contentPane.setLayout(gl_contentPane);
+        pack();
     }
 
     /**
      * @param percentage value of the progress
      */
     public void setProgressBarValue(int percentage){
-        progressBar.setValue(percentage);
-        lblPercentage.setText(""+percentage+"%");
+    	EventQueue.invokeLater(() -> {
+    		progressBar.setValue(percentage);
+        	lblPercentage.setText(""+percentage+"%");
+        });
+    	if(percentage == 100) {
+    		this.dispose();
+    	}
     }
 
     /**
      * @param content string data to show while progress bar is progressing
      */
     public void setProgressBarContent(String content){
-        lblProgress.setText(content + "...");
+    	lblProgress.setText(content + "...");
     }
 
 }
