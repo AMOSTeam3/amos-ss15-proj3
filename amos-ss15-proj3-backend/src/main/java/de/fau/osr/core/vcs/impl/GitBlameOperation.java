@@ -114,8 +114,13 @@ public class GitBlameOperation {
 					accused.equals(((BlameItem)o).accused) &&
 					path.equals(((BlameItem)o).path);
 		}
-		@Override
-		public BlameItem clone() {
+		
+		/**
+		 * This method copies the fields, but afterwards, both "words" members
+		 * refer to the same object. Be careful!
+		 * @return a shallow copy of this object
+		 */
+		public BlameItem shallowClone() {
 			BlameItem res;
 			try {
 				res = (BlameItem)super.clone();
@@ -123,9 +128,9 @@ public class GitBlameOperation {
 				// should never occur, panic if it does.
 				throw new Error(e);
 			}
-			words = new TreeMap<>(words);
 			return res;
 		}
+		
 	}
 
 	private TreeSet<BlameItem> workQueue = new TreeSet<>();
@@ -219,7 +224,7 @@ public class GitBlameOperation {
 				if(treeWalk.idEqual(0, 1)) {
 					//the file has not changed between parent and accused
 					
-					BlameItem nextItem = cur.clone();
+					BlameItem nextItem = cur.shallowClone();
 					nextItem.accused = parent;
 					push(nextItem);
 					found = true;
@@ -240,7 +245,7 @@ public class GitBlameOperation {
 						while(treeWalk.next()) {
 							if(treeWalk.getObjectId(0).equals(idAfter)) {
 								String pathBefore = treeWalk.getPathString();
-								BlameItem nextItem = cur.clone();
+								BlameItem nextItem = cur.shallowClone();
 								nextItem.accused = parent;
 								nextItem.path = pathBefore;
 								push(nextItem);
