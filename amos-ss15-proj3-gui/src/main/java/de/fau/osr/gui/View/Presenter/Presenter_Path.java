@@ -30,8 +30,8 @@ public class Presenter_Path extends Presenter{
     }
 
     public String getText(){
-        PathDE pathDE = filePaths.get(0);
-        return pathDE.FilePath.toString();
+        String pathDE = filePaths.get(0).FilePath.getFileName().toString();
+        return pathDE;
     }
 
     public boolean isAvailable(){
