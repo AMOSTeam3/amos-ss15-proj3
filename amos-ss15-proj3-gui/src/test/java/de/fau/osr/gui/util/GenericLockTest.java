@@ -6,6 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+/**
+ * Test for the util GenericLock to check for deadlock situation
+ * @author Gayathery
+ *
+ */
 public class GenericLockTest {
 
     @Test

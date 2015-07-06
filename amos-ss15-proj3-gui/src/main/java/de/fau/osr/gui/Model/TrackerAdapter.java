@@ -58,12 +58,19 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Requirement> getAllRequirements() {
         lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<Requirement> collectionOfRequirements = trackerAdapterWorker.getAllRequirements();
-            lock.unlock();
-            return collectionOfRequirements;
+        try{
+            if(trackerAdapterWorker.isReadyForTakeOver){
+                Collection<Requirement> collectionOfRequirements = trackerAdapterWorker.getAllRequirements();                
+                return collectionOfRequirements;
+            }
         }
-        lock.unlock();
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            lock.unlock();    
+        }
+        
             
         Collection<Requirement> reqsUI = new ArrayList<>();
 
@@ -79,12 +86,18 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
         lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<Commit> collectionOfCommit =  trackerAdapterWorker.getCommitsFromRequirement(requirement);
-            lock.unlock();
-            return collectionOfCommit;
+        try{
+            if(trackerAdapterWorker.isReadyForTakeOver){
+                Collection<Commit> collectionOfCommit =  trackerAdapterWorker.getCommitsFromRequirement(requirement);
+                return collectionOfCommit;
+            }
         }
-        lock.unlock();
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            lock.unlock();    
+        }
         de.fau.osr.core.Requirement req;
         Set<de.fau.osr.core.vcs.base.Commit> commitsForReq;
         try {
@@ -117,13 +130,18 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<CommitFile> getAllFiles() {
         lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<CommitFile> collectionOfCommitFile =  trackerAdapterWorker.getAllFiles();
-            lock.unlock();
-            return collectionOfCommitFile;
-            
+        try{
+            if(trackerAdapterWorker.isReadyForTakeOver){
+                Collection<CommitFile> collectionOfCommitFile =  trackerAdapterWorker.getAllFiles();             
+                return collectionOfCommitFile;            
+            }            
         }
-        lock.unlock();
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            lock.unlock();    
+        }
         return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
     }
 
@@ -169,12 +187,18 @@ public class TrackerAdapter implements I_Model {
     @Override
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
         lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            float impact = trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
-            lock.unlock();
-            return impact;
+        try{
+            if(trackerAdapterWorker.isReadyForTakeOver){
+                float impact = trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);                
+                return impact;
+            }
         }
-    lock.unlock();
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            lock.unlock();    
+        }
         return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
     }
     
@@ -231,12 +255,19 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
         lock.lock();
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            Collection<CommitFile> collectionOfCommitFiles =  trackerAdapterWorker.getCommitFilesForRequirement(requirement);
-            lock.unlock();
-            return collectionOfCommitFiles;
+        try{
+            if(trackerAdapterWorker.isReadyForTakeOver){
+                Collection<CommitFile> collectionOfCommitFiles =  trackerAdapterWorker.getCommitFilesForRequirement(requirement);
+             
+                return collectionOfCommitFiles;
+            }
         }
-        lock.unlock();
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            lock.unlock();    
+        }
         try {
             return ElementsConverter.convertCommitFiles(tracker.getCommitFilesForRequirementID(requirement.getID()));
         } catch (IOException e) {

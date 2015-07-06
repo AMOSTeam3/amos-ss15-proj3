@@ -267,10 +267,17 @@ public class TrackerAdapterWorker {
      */
     public Collection<Requirement> getAllRequirements() {
         lock.lock();
-        if(getAllRequirements == globalChangeTime){
+        try{
+            if(getAllRequirements == globalChangeTime){               
+                return requirements;
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
             lock.unlock();
-            return requirements;
-        }       
+        }
         
 
         return trackerAdapter.getAllRequirements();
@@ -284,13 +291,18 @@ public class TrackerAdapterWorker {
      */
     public Collection<Commit> getCommitsFromRequirement(Requirement requirement) {
         lock.lock();
-        if(getCommitsFromRequirement == globalChangeTime){
-            
-            Collection<Commit> colCommit =  workerRepositoryReqCommit.get(requirement);            
-            lock.unlock();
-            return colCommit;
+        try{
+            if(getCommitsFromRequirement == globalChangeTime){                
+                Collection<Commit> colCommit =  workerRepositoryReqCommit.get(requirement);
+                return colCommit;
+            }
         }
-        lock.unlock();
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            lock.unlock();
+        }
        return trackerAdapter.getCommitsFromRequirement(requirement);
     }
 
@@ -303,11 +315,18 @@ public class TrackerAdapterWorker {
      */
     public Collection<CommitFile> getAllFiles() {
         lock.lock();
-        if(getAllFiles == globalChangeTime){
-            Collection<CommitFile> commitFiles = new ArrayList<CommitFile>(); 
-            workerRepositoryCommitCommitFile.forEach((k,v) -> commitFiles.addAll(v));
+        try{
+            if(getAllFiles == globalChangeTime){
+                Collection<CommitFile> commitFiles = new ArrayList<CommitFile>(); 
+                workerRepositoryCommitCommitFile.forEach((k,v) -> commitFiles.addAll(v));               
+                return commitFiles;
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
             lock.unlock();
-            return commitFiles;
         }
         
         return trackerAdapter.getAllFiles();
@@ -349,16 +368,22 @@ public class TrackerAdapterWorker {
  
     public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
         lock.lock();
-        if(getImpactPercentageForCommitFileListAndRequirement == globalChangeTime){
-            Collection<CommitFile> commitFiles = workerRepositoryReqCommitFile.get(commit.instanceRequirement);
-            for(CommitFile commitFile : commitFiles){
-                if(commitFile.newPath.getPath().equals(file.newPath.getPath()))
-                    lock.unlock();
-                    return commitFile.impact;
-               
+        try{
+            if(getImpactPercentageForCommitFileListAndRequirement == globalChangeTime){
+                Collection<CommitFile> commitFiles = workerRepositoryReqCommitFile.get(commit.instanceRequirement);
+                for(CommitFile commitFile : commitFiles){
+                    if(commitFile.newPath.getPath().equals(file.newPath.getPath()))                        
+                        return commitFile.impact;
+                   
+                }         
+                return (float)0.0;
             }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
             lock.unlock();
-            return (float)0.0;
         }
     
         return trackerAdapter.getImpactPercentageForCommitFileListAndRequirement(file, commit);
@@ -438,10 +463,17 @@ public class TrackerAdapterWorker {
      */
     public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
         lock.lock();
-        if(getCommitFilesForRequirement == globalChangeTime){
-            Collection<CommitFile> colCommitFile =  workerRepositoryReqCommitFile.get(requirement);
+        try{
+            if(getCommitFilesForRequirement == globalChangeTime){
+                Collection<CommitFile> colCommitFile =  workerRepositoryReqCommitFile.get(requirement);                
+                return colCommitFile;
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
             lock.unlock();
-            return colCommitFile;
         }
         
 
