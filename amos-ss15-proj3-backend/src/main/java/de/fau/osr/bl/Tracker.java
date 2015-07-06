@@ -29,7 +29,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.File;
@@ -112,12 +111,10 @@ public class Tracker {
                 );
 
         this.projectDirTraverser = VisibleFilesTraverser.Get(
-                repoFile.toPath(),
+                repoFile.getParentFile().toPath(),
                 "git",
                 ".class"
         );
-
-        getFilePaths();
     }
 
     /**
@@ -152,29 +149,22 @@ public class Tracker {
     }
 
     /**
-     * Returns existing project file paths for given requirement ID.
+     * @return Existing project file paths for given requirement
+     * @throws IOException
      */
-    public Collection<Path> getFilesByRequirement(String requirementID) throws IOException {
-        throw new NotImplementedException();
-
-        /*
-        long startTime = System.currentTimeMillis();
-
-        logger.info("Start call :: getCommitFilesForRequirementID():requirementID = " + requirementID + " Time:" + startTime);
-
-        List<Path> files = new ArrayList<>();
-        getAllReqCommitRelations().get(requirementID).forEach(
-                (String ci) -> {
-                    //TODO vcsClient.getFiles(commit)
-                    files.addAll(null);
-                }
-        );
-
-        logger.info("End call :: getCommitFilesForRequirementID() Time: " + (System.currentTimeMillis() - startTime));
-
-        return files;
-        */
+    public Collection<Path> getFilesByRequirement(String requirement) throws IOException {
+        return projectDirTraverser.traverse().stream()
+                .filter(path -> {
+                    try {
+                        return getRequirementIdsForFile(path.toString()).contains(requirement);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
     }
+
 
     /**
      * This method returns a list of <tt>CommitFile</tt>'s for the given requirement ID.
@@ -336,11 +326,10 @@ public class Tracker {
     }
 
     /**
-     * Returns existing project file paths, which are in VCS.
-     * @return
+     * @return Existing project file paths, which are in VCS.
      * @throws IOException
      */
-    public Collection<Path> getFilePaths() throws IOException {
+    public Collection<Path> getFiles() throws IOException {
         Collection<Path> filePaths = new ArrayList<>();
 
         for(Path each: projectDirTraverser.traverse())

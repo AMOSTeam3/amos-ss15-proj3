@@ -13,9 +13,7 @@ public interface I_Model {
 
     Collection<Commit> getCommitsFromRequirement(Requirement requirement);
 
-    Collection<PathDE> getFilePaths();
-
-    Collection<CommitFile> getAllFiles();
+    Collection<PathDE> getFiles();
 
     Collection<Requirement> getRequirementsByFile(PathDE file);
 
@@ -33,11 +31,7 @@ public interface I_Model {
 
     Collection<Requirement> getRequirementsFromCommit(Commit commit);
 
-    float getImpactForRequirementAndPath(Requirement requ, PathDE path);
-
-    @Deprecated
-    float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit);
-        
+    float getImpactForRequirementAndFile(Requirement requ, PathDE path);
 
     Collection<PathDE> getFilesByRequirement(Requirement requirement);
 

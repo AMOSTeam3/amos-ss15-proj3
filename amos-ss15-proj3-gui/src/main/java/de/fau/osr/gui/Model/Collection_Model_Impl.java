@@ -10,6 +10,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ public class Collection_Model_Impl implements I_Collection_Model {
     @Override
     public List<? extends DataElement> getFilePaths() {
         if(filePaths == null){
-            filePaths = model.getFilePaths();
+            filePaths = model.getFiles();
         }
 
         List<PathDE> commitsSorted = new ArrayList<>(filePaths);
@@ -220,9 +221,18 @@ public class Collection_Model_Impl implements I_Collection_Model {
     }
 
     @Override
-    public List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, List<PathDE> path) {
+    public List<DataElement> getImpactForRequirementAndFile(Collection<Requirement> requirements, List<PathDE> path) {
+        // TODO Should *path* really be a List<PathDE> instead just PathDE.
+        Function<Requirement, ImpactDE> impactMapper;
+        if (path.size() > 0)
+            impactMapper = (Requirement req) -> {
+                return new ImpactDE(model.getImpactForRequirementAndFile(req, path.get(0)));
+            };
+        else
+            impactMapper = req -> {return new ImpactDE((float) 0.);};
+
         return requirements.stream()
-                .map(req -> new ImpactDE(model.getImpactForRequirementAndPath(req, path.get(0))))
+                .map(impactMapper)
                 .collect(Collectors.toList());
     }
 

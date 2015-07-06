@@ -12,7 +12,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -65,5 +64,5 @@ public interface I_Collection_Model {
 
     boolean updateRequirement(String id, String title, String description);
     
-    List<? extends DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, List<PathDE> path);
+    List<? extends DataElement> getImpactForRequirementAndFile(Collection<Requirement> requirements, List<PathDE> path);
 }

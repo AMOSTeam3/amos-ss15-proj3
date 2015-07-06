@@ -313,7 +313,7 @@ public class GuiController {
             try {
                 List<? extends DataElement> paths =  i_Collection_Model.getFilesByRequirement(
                         (Collection) dataElements);
-                return i_Collection_Model.getImpactByRequirementAndPath((Collection) dataElements, (List) paths);
+                return i_Collection_Model.getImpactForRequirementAndFile((Collection) dataElements, (List) paths);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();

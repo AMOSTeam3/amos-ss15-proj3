@@ -16,11 +16,7 @@ import java.util.regex.Pattern;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
-import de.fau.osr.gui.Model.DataElements.AnnotatedLine;
-import de.fau.osr.gui.Model.DataElements.Commit;
-import de.fau.osr.gui.Model.DataElements.CommitFile;
-import de.fau.osr.gui.Model.DataElements.PathDE;
-import de.fau.osr.gui.Model.DataElements.Requirement;
+import de.fau.osr.gui.Model.DataElements.*;
 
 /**
  * @author Gayathery
@@ -41,7 +37,7 @@ public class TrackerAdapterWorker {
     private HashMap<Requirement,Collection<PathDE>> workerRepositoryReqCommitFile;
     public static Date globalChangeTime;
     private static long CommitCount;
-    public static Date getAllRequirements,getImpactPercentageForCommitFileListAndRequirement,getCommitsFromRequirement,getAllFiles,getRequirementsFromFile,getCommitFilesForRequirement;
+    public static Date getAllRequirements, getImpactPercentageForRequirementAndFile,getCommitsFromRequirement,getAllFiles,getRequirementsFromFile,getCommitFilesForRequirement;
     public Boolean isThreadingRequired;
     public TrackerAdapterWorker(TrackerAdapter trackerAdapter) throws IOException {
         this.trackerAdapter = trackerAdapter;
@@ -195,7 +191,7 @@ public class TrackerAdapterWorker {
         getAllFiles = globalChangeTime;
         getRequirementsFromFile = globalChangeTime;
         getCommitFilesForRequirement = globalChangeTime;
-        getImpactPercentageForCommitFileListAndRequirement = globalChangeTime;
+        getImpactPercentageForRequirementAndFile = globalChangeTime;
         
         isReadyForTakeOver = true;
         return true;
@@ -280,24 +276,6 @@ public class TrackerAdapterWorker {
     }
 
 
-
-    /**
-     * @return Collection<CommitFile>
-     * @author Gayathery
-     * This method masks the getAllFiles method of TrackerAdapter after successful data preparation     
-     */
-    public Collection<CommitFile> getAllFiles() {
-//        if(getAllFiles == globalChangeTime){
-//            Collection<CommitFile> commitFiles = new ArrayList<CommitFile>(); 
-//            workerRepositoryCommitCommitFile.forEach((k, v) -> commitFiles.addAll(v));
-//            return commitFiles;
-//        }
-        
-        return trackerAdapter.getAllFiles();
-    }
-
-
-    
     /**
      * @param file
      * @return
@@ -321,31 +299,37 @@ public class TrackerAdapterWorker {
         return trackerAdapter.getCommitsByFile(file);
     }
 
-    
+
     /**
-      *@return float - the impact value
-     * @param file
-     * @param commit
-     * @author Gayathery
-     * This method masks the getImpactPercentageForCommitFileListAndRequirement method of TrackerAdapter after successful data preparation
+     * This method masks TrackerAdapter::getImpactPercentageForRequirementAndFile
+     * after successful data preparation.
+     * @param file path.
+     * @param requ irement id.
+     * @return float - the impact value of requirement *requ* on *file*
      */
- 
-    public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
+    public float getImpactPercentageForRequirementAndFile(Requirement requ, PathDE file) {
 //        if(getImpactPercentageForCommitFileListAndRequirement == globalChangeTime){
 //            Collection<CommitFile> commitFiles = workerRepositoryReqCommitFile.get(commit.instanceRequirement);
 //            for(CommitFile commitFile : commitFiles){
 //                if(commitFile.newPath.getPath().equals(file.newPath.getPath()))
 //                    return commitFile.impact;
-//               
+//
 //            }
 //            return (float)0.0;
 //        }
-    
-        return trackerAdapter.getImpactPercentageForCommitFileListAndRequirement(file, commit);
+
+        /*
+            if(getImpactPercentageForRequirementAndFile == globalChangeTime)
+                return workerRepositoryReqCommitFile.get(requ).stream()
+                        .filter(file::equals)
+                        .map(f->(float)0.0)
+                        .collect(Collectors.toList());
+
+            return (float)0.0;
+        */
+        return trackerAdapter.getImpactForRequirementAndFile(requ, file);
     }
-    
-    
-    
+
     /**
      * @param commit
      * @return

@@ -22,8 +22,6 @@ import de.fau.osr.gui.util.ElementsConverter;
  * Created by Dmitry Gorelenkov on 14.06.2015.
  */
 public class TrackerAdapter implements I_Model {
-
-
     private final Tracker tracker;
     private TrackerAdapterWorker trackerAdapterWorker;
     private Pattern reqPatternString;
@@ -93,26 +91,15 @@ public class TrackerAdapter implements I_Model {
     }
 
     @Override
-    public Collection<PathDE> getFilePaths() {
+    public Collection<PathDE> getFiles() {
         try {
-            return ElementsConverter.convertFilePaths(tracker.getFilePaths());
+            return ElementsConverter.convertFilePaths(tracker.getFiles());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return new ArrayList<>();
     }
-
-
-    @Override
-    @Deprecated
-    public Collection<CommitFile> getAllFiles() {
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getAllFiles();
-        }
-        return ElementsConverter.convertCommitFiles(tracker.getAllCommitFiles());
-    }
-
 
     @Override
     public Collection<Requirement> getRequirementsByFile(PathDE file) {
@@ -140,26 +127,14 @@ public class TrackerAdapter implements I_Model {
     }
 
     @Override
-    public float getImpactForRequirementAndPath(Requirement requ, PathDE path) {
-//        if(trackerAdapterWorker.isReadyForTakeOver){
-//            return trackerAdapterWorker.getImpactPercentageForFileAndRequirement(file,commit);
-//        }
+    public float getImpactForRequirementAndFile(Requirement requ, PathDE path) {
+          if(trackerAdapterWorker.isReadyForTakeOver){
+              return trackerAdapterWorker.getImpactPercentageForRequirementAndFile(requ, path);
+          }
 
         return tracker.getImpactPercentageForFileAndRequirement(path.toString(), requ.getID());
     }
 
-    
-    @Override
-    @Deprecated
-    public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
-        if(trackerAdapterWorker.isReadyForTakeOver){
-            return trackerAdapterWorker.getImpactPercentageForCommitFileListAndRequirement(file,commit);
-        }
-    
-        return tracker.getImpactPercentageForFileAndRequirement(file.newPath.getPath(),commit.instanceRequirement.getID());
-    }
-    
-    
     @Override
     public Collection<PathDE> getFilesByCommit(Commit commit) {
         // TODO Commit.files should be changed to PathDE.
@@ -212,9 +187,9 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<PathDE> getFilesByRequirement(Requirement requirement) {
-//      if(trackerAdapterWorker.isReadyForTakeOver){
-//          return trackerAdapterWorker.getCommitFilesForRequirement(requirement);
-//      }
+        if(trackerAdapterWorker.isReadyForTakeOver){
+            return trackerAdapterWorker.getCommitFilesForRequirement(requirement);
+        }
 
         try {
             return ElementsConverter.convertFilePaths(tracker.getFilesByRequirement(requirement.getID()));
