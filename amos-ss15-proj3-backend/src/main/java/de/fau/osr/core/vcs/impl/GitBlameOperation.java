@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -167,14 +168,20 @@ public class GitBlameOperation {
 		ObjectId rootId = repo.resolve("HEAD");
 		RevWalk walker = new RevWalk(repo);
 		RevCommit rootCommit = walker.parseCommit(rootId);
-		byte[] content;
+		Function<ObjectId, byte[]> readFunction = id -> {
+			try {
+				return client.readBlob(id);
+			} catch (IOException | GitAPIException e) {
+				throw new RuntimeException(e);
+			}
+		};
+		FlatSource source;
 		try {
-			content = client.readBlob(client.fileAtRev(walker, path, rootCommit));
-		} catch (NullPointerException e1) {
+			ObjectId idAtHead = client.fileAtRev(walker, path, rootCommit);
+			source = FlatSource.flatten(readFunction, idAtHead);
+		} catch (Exception e) {
 			throw new FileNotFoundException(path);
 		}
-
-		FlatSource source = FlatSource.flatten(content);
 		@SuppressWarnings("unchecked")
 		List<Object>[] currentBlame = new List[source.size()];
 		BlameItem topBlame = new BlameItem(rootCommit, new TreeMap<>(), path);
@@ -194,7 +201,7 @@ public class GitBlameOperation {
 			walker.parseCommit(cur.accused);
 
 			ObjectId idAfter = client.fileAtRev(walker, cur.path, cur.accused);
-			FlatSource after = FlatSource.flatten(client.readBlob(idAfter));
+			FlatSource after = FlatSource.flatten(readFunction, idAfter);
 			
 			/*
 			 * pull in custom annotations from putBlame on all suspect lines
@@ -259,7 +266,7 @@ public class GitBlameOperation {
 					
 					byte[] byteBefore = client.readBlob(idBefore);
 					EditList diff;
-					FlatSource before = FlatSource.flatten(byteBefore);
+					FlatSource before = FlatSource.flatten(readFunction, idBefore);
 					diff = diffAlgorithm.diff(RawTextComparator.DEFAULT, before, after);
 
 					/*

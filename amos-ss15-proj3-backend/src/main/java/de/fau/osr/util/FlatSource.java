@@ -1,9 +1,18 @@
 package de.fau.osr.util;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import org.eclipse.jgit.diff.RawText;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.util.IntList;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 /**
  * FlatSource is a RawText that has been broken into a single line per word.
@@ -13,7 +22,7 @@ public class FlatSource extends RawText {
 	/**
 	 * Maps (zero based) line numbers in unbroken file to start bytes
 	 */
-	public IntList realLines;
+	final public IntList realLines;
 	
 	/**
      * Breaks a string at every word boundary to enable fine grained diffs
@@ -117,4 +126,68 @@ public class FlatSource extends RawText {
     	}
     	return sb.toString();
     }
+    
+    private static class ObjectKey {
+    	public ObjectKey(Function<ObjectId, byte[]> fun, ObjectId id) {
+			this.fun = fun;
+			this.id = id;
+		}
+		/* (non-Javadoc)
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			return result;
+		}
+		/* (non-Javadoc)
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ObjectKey other = (ObjectKey) obj;
+			if(fun != other.fun) return false;
+			if (id == null) {
+				if (other.id != null)
+					return false;
+			} else if (!id.equals(other.id))
+				return false;
+			return true;
+		}
+		final Function<ObjectId, byte[]> fun;
+    	final ObjectId id;
+    }
+    
+    static private LoadingCache<ObjectKey, FlatSource> flatCache = CacheBuilder.newBuilder()
+    		.maximumSize(10)
+    		.build(new CacheLoader<ObjectKey, FlatSource>() {
+				@Override
+				public FlatSource load(ObjectKey key) throws Exception {
+					return flatten(key.fun.apply(key.id));
+				}
+    		});
+    
+	/**
+	 * Either calls flatten(input.apply(idAfter)) or returns a cached FlatSource.
+	 * For the caching mechanism to be consistent, idAfter and the address of
+	 * input have to uniquely identify the contents of the file (trivial for git).
+	 * @param input
+	 * @param idAfter
+	 * @return
+	 */
+	public static FlatSource flatten(Function<ObjectId, byte[]> input, ObjectId idAfter) {
+		try {
+			return flatCache.get(new ObjectKey(input, idAfter));
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
