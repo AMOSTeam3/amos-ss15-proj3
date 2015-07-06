@@ -12,10 +12,12 @@ import org.junit.Test;
  *
  */
 public class GenericLockTest {
+    
+    GenericLock lock = new GenericLock();
 
     @Test
     public void testLock() {
-        GenericLock lock = new GenericLock();
+        
         class TestThread extends Thread {
 
             public void run() {
@@ -43,6 +45,29 @@ public class GenericLockTest {
             assertTrue(false);
         }
         assertTrue(true);
+        
+    }
+    
+    @Test
+    public void testDeadlockDuringException() {
+        
+        DeadlockDuringException();
+        lock.lock();
+        lock.unlock();
+        assertTrue(true);
+        
+    }
+    public void DeadlockDuringException(){
+        lock.lock();
+        try{
+            throw new Exception("Test Exception");
+        }
+        catch(Exception ex){
+            
+        }
+        finally{
+            lock.unlock();
+        }
         
     }
 
