@@ -63,9 +63,9 @@ public class Commit extends DataElement {
     public String id;
     public String message;
     public Requirement instanceRequirement;
-    public List<CommitFile> files;
+    public List<PathDE> files;
 
-    public Commit(String id, String message, List<CommitFile> files) {
+    public Commit(String id, String message, List<PathDE> files) {
         this.id = id;
         this.message = message;
         this.files = files;
@@ -81,7 +81,7 @@ public class Commit extends DataElement {
 
         if (commitFilesToCopy != null) {
             for (de.fau.osr.core.vcs.base.CommitFile commitFile : commitFilesToCopy) {
-                files.add(new CommitFile(commitFile));
+                files.add(new PathDE(commitFile.newPath.toPath()));
             }
         }
         this.instanceRequirement = null;
