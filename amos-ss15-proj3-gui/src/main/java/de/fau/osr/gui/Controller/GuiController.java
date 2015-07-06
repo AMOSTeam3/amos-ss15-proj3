@@ -89,39 +89,39 @@ public class GuiController {
 
             public void run() {
 
-                for (int i = 0; true; i++) {
-                    if(!popupManager.Authentication()){
-                        Status = RetryStatus.Exit;
-                        handleError();
-                    }
-
-                    File repoFile = null;
-                    try {
-                        repoFile = popupManager.Repo_OpeningDialog();
-                    } catch (IOException e1) {
-                        System.exit(0);
-                    }
-
-                    try {
-                        Pattern reqPatternString = Pattern.compile(popupManager
-                                .Pattern_OpeningDialog(AppProperties
-                                        .GetValue("RequirementPattern")));
-                        i_Collection_Model = reInitModel(null, null, repoFile,
-                                reqPatternString, false);
-                        break;
-                    } catch (PatternSyntaxException | IOException e) {
-                        if (i >= MAX_RETRIES) {
-                            Status = RetryStatus.Exit;
-                        }
-                        popupManager.showErrorDialog(e.getMessage());
-                        handleError();
-                    } catch (Exception e) {
-                        Status = RetryStatus.Exit;
-                        popupManager.showErrorDialog("Fatal Error:\n"
-                                + e.getMessage());
-                        handleError();
-                    }
-                }
+//                for (int i = 0; true; i++) {
+//                    if(!popupManager.Authentication()){
+//                        Status = RetryStatus.Exit;
+//                        handleError();
+//                    }
+//
+//                    File repoFile = null;
+//                    try {
+//                        repoFile = popupManager.Repo_OpeningDialog();
+//                    } catch (IOException e1) {
+//                        System.exit(0);
+//                    }
+//
+//                    try {
+//                        Pattern reqPatternString = Pattern.compile(popupManager
+//                                .Pattern_OpeningDialog(AppProperties
+//                                        .GetValue("RequirementPattern")));
+//                        i_Collection_Model = reInitModel(null, null, repoFile,
+//                                reqPatternString, false);
+//                        break;
+//                    } catch (PatternSyntaxException | IOException e) {
+//                        if (i >= MAX_RETRIES) {
+//                            Status = RetryStatus.Exit;
+//                        }
+//                        popupManager.showErrorDialog(e.getMessage());
+//                        handleError();
+//                    } catch (Exception e) {
+//                        Status = RetryStatus.Exit;
+//                        popupManager.showErrorDialog("Fatal Error:\n"
+//                                + e.getMessage());
+//                        handleError();
+//                    }
+//                }
 
                 elementHandler = new GuiViewElementHandler(GuiController.this);
                 cleaner = new Cleaner(elementHandler);
