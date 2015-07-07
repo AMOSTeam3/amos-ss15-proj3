@@ -21,6 +21,7 @@ import de.fau.osr.gui.Model.DataElements.Commit;
 import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.util.GenericLock;
+import de.fau.osr.gui.Model.DataElements.*;
 
 /**
  * @author Gayathery
@@ -35,14 +36,14 @@ public class TrackerAdapterWorker {
     Boolean isReadyForTakeOver;
     private Pattern reqPatternString;
     public Collection<Requirement> requirements;
-    private Collection<CommitFile> totalCommitFiles;
+    private Collection<PathDE> totalCommitFiles;
     private HashMap<Requirement,Collection<Commit>> workerRepositoryReqCommit;
-    private HashMap<Commit,Collection<CommitFile>> workerRepositoryCommitCommitFile;
-    private HashMap<Requirement,Collection<CommitFile>> workerRepositoryReqCommitFile;
+    private HashMap<Commit, Collection<PathDE>> workerRepositoryCommitCommitFile;
+    private HashMap<Requirement,Collection<PathDE>> workerRepositoryReqCommitFile;
     public GenericLock lock;
     public static Date globalChangeTime;
     private static long CommitCount;
-    public static Date getAllRequirements,getImpactPercentageForCommitFileListAndRequirement,getCommitsFromRequirement,getAllFiles,getRequirementsFromFile,getCommitFilesForRequirement;
+    public static Date getAllRequirements, getImpactPercentageForRequirementAndFile,getCommitsFromRequirement,getAllFiles,getRequirementsFromFile,getCommitFilesForRequirement;
     public Boolean isThreadingRequired;
     public TrackerAdapterWorker(TrackerAdapter trackerAdapter) throws IOException {
         this.trackerAdapter = trackerAdapter;
@@ -50,9 +51,9 @@ public class TrackerAdapterWorker {
         Calendar calc = Calendar.getInstance();
         globalChangeTime = calc.getTime();
         workerRepositoryReqCommit = new HashMap<Requirement, Collection<Commit>>();
-        workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<CommitFile>>();
-        workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<CommitFile>>();
-        totalCommitFiles = new ArrayList<CommitFile>();
+        workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<PathDE>>();
+        workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<PathDE>>();
+        totalCommitFiles = new ArrayList<PathDE>();
         isThreadingRequired = false;
         lock = new GenericLock();
         
@@ -71,17 +72,17 @@ public class TrackerAdapterWorker {
     
     class Collector{
         
-        public Collection<CommitFile> totalCommitFiles;
+        public Collection<PathDE> totalCommitFiles;
         public HashMap<Requirement,Collection<Commit>> workerRepositoryReqCommit;
-        public HashMap<Commit,Collection<CommitFile>> workerRepositoryCommitCommitFile;
-        public HashMap<Requirement,Collection<CommitFile>> workerRepositoryReqCommitFile;
+        public HashMap<Commit,Collection<PathDE>> workerRepositoryCommitCommitFile;
+        public HashMap<Requirement,Collection<PathDE>> workerRepositoryReqCommitFile;
         
         public Collector(){
             
-            totalCommitFiles = new ArrayList<CommitFile>();
+            totalCommitFiles = new ArrayList<PathDE>();
             workerRepositoryReqCommit = new HashMap<Requirement, Collection<Commit>>();
-            workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<CommitFile>>();
-            workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<CommitFile>>();
+            workerRepositoryCommitCommitFile = new HashMap<Commit, Collection<PathDE>>();
+            workerRepositoryReqCommitFile = new HashMap<Requirement, Collection<PathDE>>();
             
         }
     }
@@ -128,7 +129,7 @@ public class TrackerAdapterWorker {
                 collectWorker.workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
                 collectWorker.workerRepositoryReqCommit.put(requirement,commits);
                 for(Commit commit : commits){
-                    Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
+                    Collection<PathDE> commitFiles = getFilesFromCommit(commit);
                     collectWorker.workerRepositoryCommitCommitFile.put(commit,commitFiles);
                     collectWorker.totalCommitFiles.addAll(commitFiles);
                 
@@ -172,7 +173,7 @@ public class TrackerAdapterWorker {
                     workerRepositoryReqCommitFile.put(requirement, getCommitFilesForRequirement(requirement));
                     workerRepositoryReqCommit.put(requirement,commits);
                     for(Commit commit : commits){
-                        Collection<CommitFile> commitFiles = getFilesFromCommit(commit);
+                        Collection<PathDE> commitFiles = getFilesFromCommit(commit);
                         workerRepositoryCommitCommitFile.put(commit,commitFiles);
                         totalCommitFiles.addAll(commitFiles);
                         try {
@@ -198,7 +199,7 @@ public class TrackerAdapterWorker {
         getAllFiles = globalChangeTime;
         getRequirementsFromFile = globalChangeTime;
         getCommitFilesForRequirement = globalChangeTime;
-        getImpactPercentageForCommitFileListAndRequirement = globalChangeTime;
+        getImpactPercentageForRequirementAndFile = globalChangeTime;
         lock.unlock();
         
         trackerAdapter.lock.lock();
@@ -262,7 +263,7 @@ public class TrackerAdapterWorker {
     }
     /**     
      * @return Collection<Requirement>
-     * This method masks the getAllRequirements method of TrackerAdapter after successful data preparation
+     * This method masks the getRequirements method of TrackerAdapter after successful data preparation
      * @author Gayathery
      */
     public Collection<Requirement> getAllRequirements() {
@@ -313,11 +314,11 @@ public class TrackerAdapterWorker {
      * @author Gayathery
      * This method masks the getAllFiles method of TrackerAdapter after successful data preparation     
      */
-    public Collection<CommitFile> getAllFiles() {
+    public Collection<PathDE> getAllFiles() {
         lock.lock();
         try{
             if(getAllFiles == globalChangeTime){
-                Collection<CommitFile> commitFiles = new ArrayList<CommitFile>(); 
+                Collection<PathDE> commitFiles = new ArrayList<PathDE>(); 
                 workerRepositoryCommitCommitFile.forEach((k,v) -> commitFiles.addAll(v));               
                 return commitFiles;
             }
@@ -329,7 +330,7 @@ public class TrackerAdapterWorker {
             lock.unlock();
         }
         
-        return trackerAdapter.getAllFiles();
+        return trackerAdapter.getFiles();
     }
 
 
@@ -340,10 +341,10 @@ public class TrackerAdapterWorker {
      * @author Gayathery
      *  Will be masked in future if performance improvement is required
      */
-    public Collection<Requirement> getRequirementsFromFile(CommitFile file) {
+    public Collection<Requirement> getRequirementsFromFile(PathDE file) {
         
 
-        return trackerAdapter.getRequirementsFromFile(file);
+        return trackerAdapter.getRequirementsByFile(file);
     }
 
     
@@ -352,53 +353,51 @@ public class TrackerAdapterWorker {
      * @return
      * @author Gayathery
      */
-    public Collection<Commit> getCommitsFromFile(CommitFile file) {
+    public Collection<Commit> getCommitsFromFile(PathDE file) {
        
-        return trackerAdapter.getCommitsFromFile(file);
+        return trackerAdapter.getCommitsByFile(file);
     }
 
-    
+
     /**
-      *@return float - the impact value
-     * @param file
-     * @param commit
-     * @author Gayathery
-     * This method masks the getImpactPercentageForCommitFileListAndRequirement method of TrackerAdapter after successful data preparation
+     * This method masks TrackerAdapter::getImpactPercentageForRequirementAndFile
+     * after successful data preparation.
+     * @param file path.
+     * @param requ irement id.
+     * @return float - the impact value of requirement *requ* on *file*
      */
  
-    public float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit){
-        lock.lock();
-        try{
-            if(getImpactPercentageForCommitFileListAndRequirement == globalChangeTime){
-                Collection<CommitFile> commitFiles = workerRepositoryReqCommitFile.get(commit.instanceRequirement);
-                for(CommitFile commitFile : commitFiles){
-                    if(commitFile.newPath.getPath().equals(file.newPath.getPath()))                        
-                        return commitFile.impact;
-                   
-                }         
-                return (float)0.0;
-            }
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
-        finally{
-            lock.unlock();
-        }
+    public float getImpactPercentageForRequirementAndFile(Requirement requ, PathDE file){
+//        lock.lock();
+//        try{
+//            if(getImpactPercentageForRequirementAndFile == globalChangeTime){
+//                Collection<PathDE> paths = workerRepositoryReqCommitFile.get(commit.instanceRequirement);
+//                for(PathDE path : paths){
+//                    if(path.FilePath.equals(file.FilePath))                        
+//                        return path.impact;
+//                   
+//                }         
+//                return (float)0.0;
+//            }
+//        }
+//        catch(Exception ex){
+//            ex.printStackTrace();
+//        }
+//        finally{
+//            lock.unlock();
+//        }
     
-        return trackerAdapter.getImpactPercentageForCommitFileListAndRequirement(file, commit);
+        return getImpactPercentageForRequirementAndFile(requ, file);
     }
-    
-    
-    
+
     /**
      * @param commit
      * @return
      * @author Gayathery
      *  Will be masked in future if performance improvement is required
      */
-    public Collection<CommitFile> getFilesFromCommit(Commit commit) {
-        return trackerAdapter.getFilesFromCommit(commit);
+    public Collection<PathDE> getFilesFromCommit(Commit commit) {
+        return trackerAdapter.getFilesByCommit(commit);
     }
 
     
@@ -458,14 +457,14 @@ public class TrackerAdapterWorker {
     /**
      * @param requirement
      * @return Collection<CommitFile>
-     * This method masks the getCommitFilesForRequirement method of TrackerAdapter after successful data preparation
+     * This method masks the getFilesByRequirement method of TrackerAdapter after successful data preparation
      * @author Gayathery
      */
-    public Collection<CommitFile> getCommitFilesForRequirement(Requirement requirement) {
+    public Collection<PathDE> getCommitFilesForRequirement(Requirement requirement) {
         lock.lock();
         try{
             if(getCommitFilesForRequirement == globalChangeTime){
-                Collection<CommitFile> colCommitFile =  workerRepositoryReqCommitFile.get(requirement);                
+                Collection<PathDE> colCommitFile =  workerRepositoryReqCommitFile.get(requirement);                
                 return colCommitFile;
             }
         }
@@ -477,7 +476,7 @@ public class TrackerAdapterWorker {
         }
         
 
-        return trackerAdapter.getCommitFilesForRequirement(requirement);
+        return trackerAdapter.getFilesByRequirement(requirement);
     }
 
     
@@ -498,7 +497,7 @@ public class TrackerAdapterWorker {
      * @author Gayathery
      *  Will be masked in future if performance improvement is required
      */
-    public Collection<AnnotatedLine> getAnnotatedLines(CommitFile next) {
+    public Collection<AnnotatedLine> getAnnotatedLines(PathDE next) {
         return trackerAdapter.getAnnotatedLines(next);
     }
 

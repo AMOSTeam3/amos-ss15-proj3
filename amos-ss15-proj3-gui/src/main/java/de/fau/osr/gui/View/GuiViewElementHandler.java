@@ -26,7 +26,7 @@ public class GuiViewElementHandler extends JFrame {
     private MenuHandler Menu_Handler = new MenuHandler();
     private Requirement_ElementHandler Requirement_Handler = new Requirement_ElementHandler();
     private Commit_ElementHandler Commit_Handler = new Commit_ElementHandler();
-    private CommitFile_ElementHandler CommitFile_Handler = new CommitFile_ElementHandler();
+    private PathDE_ElementHandler PathDE_Handler = new PathDE_ElementHandler();
     private Impact_ElementHandler Impact_Handler = new Impact_ElementHandler();
     private Code_ElementHandler Code_Handler = new Code_ElementHandler(Impact_Handler.getScrollPane());
     
@@ -39,6 +39,7 @@ public class GuiViewElementHandler extends JFrame {
     private Linkage_ElementHandler Linkage_Handler = new Linkage_ElementHandler();
     private Configuration_ElementHandler configuration_ElementHandler = new Configuration_ElementHandler();
     
+    
     private JPanel mainNavigationPanel;
     private JPanel requirementModificationPanel;
     private JPanel LinkageManagmentPanel;
@@ -50,7 +51,6 @@ public class GuiViewElementHandler extends JFrame {
         this.guiController = guiController;
         
         initializeButtonActions();
-        initializeComboboxActions();
         
         setTitle("Spice Traceability");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -70,7 +70,6 @@ public class GuiViewElementHandler extends JFrame {
     
     public void doInitialization(){
         initializeButtonActions();
-        initializeComboboxActions();
         requirementPanelAction();
         requirementManagementAction();
     }
@@ -81,10 +80,6 @@ public class GuiViewElementHandler extends JFrame {
     
     public Commit_ElementHandler getCommit_ElementHandler() {
         return Commit_Handler;
-    }
-    
-    public CommitFile_ElementHandler getCommitFile_ElementHandler() {
-        return CommitFile_Handler;
     }
     
     public Impact_ElementHandler getImpact_ElementHandler() {
@@ -115,11 +110,15 @@ public class GuiViewElementHandler extends JFrame {
         return Commit_Handler_ManagementTab;
     }
     
+    public PathDE_ElementHandler getPathDE_ElementHandler() {
+        return PathDE_Handler;
+    }
+    
     public Collection<ElementHandler> getElementHandlers(){
         ArrayList<ElementHandler> elementHandlers = new ArrayList<ElementHandler>();
         elementHandlers.add(Requirement_Handler);
         elementHandlers.add(Commit_Handler);
-        elementHandlers.add(CommitFile_Handler);
+        elementHandlers.add(PathDE_Handler);
         elementHandlers.add(Impact_Handler);
         elementHandlers.add(Code_Handler);
         elementHandlers.add(Linkage_Handler);
@@ -181,7 +180,7 @@ public class GuiViewElementHandler extends JFrame {
         */
 
         ElementHandler[] elemHandlers = {
-                Requirement_Handler, Commit_Handler, CommitFile_Handler, Impact_Handler, Code_Handler,
+                Requirement_Handler, Commit_Handler, PathDE_Handler, Impact_Handler, Code_Handler,
         };
         MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         for ( ElementHandler eachElemHandler: elemHandlers)
@@ -298,7 +297,7 @@ public class GuiViewElementHandler extends JFrame {
     }
 
 	void initializeButtonActions() {
-        CommitFile_Handler.setButtonAction(()->guiController.filesFromDB());
+        PathDE_Handler.setButtonAction(()->guiController.filesFromDB());
 
         Requirement_Handler.setButtonAction(()->{
             guiController.requirementsFromDB();
@@ -344,14 +343,5 @@ public class GuiViewElementHandler extends JFrame {
         }
        
     }
-
-    void initializeComboboxActions() {
-
-        // Defining default selection.
-        CommitFile_Handler.setComboBoxIndex(0);
-        Runnable action = ()->guiController.setCommitFileSorting(CommitFile_Handler.getComboBoxValue());
-        action.run();
-        
-        CommitFile_Handler.setComboBoxAction(action);
-    }
+    
 }

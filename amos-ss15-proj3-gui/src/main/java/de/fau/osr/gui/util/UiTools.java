@@ -24,9 +24,9 @@ public class UiTools {
     public static void AddToTreeByPath(DefaultMutableTreeNode root, Path path, Object object) {
         //if only one part in the path, so its the filename, add the object directly
         if (path.getNameCount() == 1){
-            DefaultMutableTreeNode commitFileLeaf = new DefaultMutableTreeNode(object);
-            commitFileLeaf.setAllowsChildren(false); //make it leaf
-            root.add(commitFileLeaf);
+            DefaultMutableTreeNode pathDELeaf = new DefaultMutableTreeNode(object);
+            pathDELeaf.setAllowsChildren(false); //make it leaf
+            root.add(pathDELeaf);
             return;
         }
 

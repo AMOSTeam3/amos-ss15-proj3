@@ -21,7 +21,7 @@ public class Cleaner {
     }
 
     public void clearFiles() {
-        elementhandler.getCommitFile_ElementHandler().clear();
+        elementhandler.getPathDE_ElementHandler().clear();
     }
 
 

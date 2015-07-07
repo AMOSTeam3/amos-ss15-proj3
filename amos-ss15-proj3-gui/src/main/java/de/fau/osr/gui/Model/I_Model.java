@@ -13,15 +13,13 @@ public interface I_Model {
 
     Collection<Commit> getCommitsFromRequirement(Requirement requirement);
 
-    Collection<PathDE> getFilePaths();
+    Collection<PathDE> getFiles();
 
-    Collection<CommitFile> getAllFiles();
+    Collection<Requirement> getRequirementsByFile(PathDE file);
 
-    Collection<Requirement> getRequirementsFromFile(CommitFile file);
+    Collection<Commit> getCommitsByFile(PathDE file);
 
-    Collection<Commit> getCommitsFromFile(CommitFile file);
-
-    Collection<CommitFile> getFilesFromCommit(Commit commit);
+    Collection<PathDE> getFilesByCommit(Commit commit);
 
     Pattern getCurrentRequirementPattern();
 
@@ -33,18 +31,13 @@ public interface I_Model {
 
     Collection<Requirement> getRequirementsFromCommit(Commit commit);
 
-    float getImpactForRequirementAndPath(Requirement requ, PathDE path);
+    float getImpactForRequirementAndFile(Requirement requ, PathDE path);
 
-    @Deprecated
-    float getImpactPercentageForCommitFileListAndRequirement(CommitFile file, Commit commit);
-        
-
-    Collection<CommitFile> getCommitFilesForRequirement(
-            Requirement requirement);
+    Collection<PathDE> getFilesByRequirement(Requirement requirement);
 
     void addRequirementCommitRelation(Requirement requirement, Commit commit);
 
-    Collection<AnnotatedLine> getAnnotatedLines(CommitFile next);
+    Collection<AnnotatedLine> getAnnotatedLines(PathDE filePath);
 
     RequirementsTraceabilityMatrix generateRequirementsTraceability();
 

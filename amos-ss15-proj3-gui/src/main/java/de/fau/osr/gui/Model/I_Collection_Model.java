@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.Model.DataElements.Commit;
-import de.fau.osr.gui.Model.DataElements.CommitFile;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.Model.DataElements.PathDE;
@@ -13,7 +12,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -26,22 +24,19 @@ import java.util.regex.Pattern;
 
 public interface I_Collection_Model {
 
-    Collection<? extends DataElement> getAllRequirements(Predicate<Requirement> requirementIDFiltering) throws IOException;
+    Collection<? extends DataElement> getRequirements(Predicate<Requirement> requirementIDFiltering) throws IOException;
 
-    Collection<? extends DataElement> getCommitsFromRequirementID(Collection<Requirement> requirements) throws IOException;
+    Collection<? extends DataElement> getCommitsByRequirement(Collection<Requirement> requirements) throws IOException;
 
     List<? extends DataElement> getFilePaths();
 
-    @Deprecated
-    List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting);
+    Collection<? extends DataElement> getRequirementsByFile(Collection<PathDE> files) throws IOException;
 
-    Collection<? extends DataElement> getRequirementsFromFile(Collection<CommitFile> files) throws IOException;
+    Collection<? extends DataElement> getCommitsByFile(Collection<PathDE> files);
 
-    Collection<? extends DataElement> getCommitsFromFile(Collection<CommitFile> files);
+    List<? extends DataElement> getFilesByCommit(Collection<Commit> commits) throws FileNotFoundException;
 
-    Collection<? extends DataElement> getFilesFromCommit(Collection<Commit> commits, Comparator<CommitFile> sorting) throws FileNotFoundException;
-
-    String getChangeDataFromFileIndex(CommitFile file) throws FileNotFoundException;
+    String getChangeDataFromFileIndex(PathDE file) throws FileNotFoundException;
 
     Pattern getCurrentRequirementPattern();
 
@@ -51,17 +46,17 @@ public interface I_Collection_Model {
 
     Collection<? extends DataElement> getCommitsFromDB();
 
-    Collection<? extends DataElement> getRequirementsFromCommit(Collection<Commit> commits) throws IOException;
+    Collection<? extends DataElement> getRequirementsByCommit(Collection<Commit> commits) throws IOException;
 
-    Collection<? extends DataElement> commitsFromRequirementAndFile(Collection<Requirement> requirements, Collection<CommitFile> commitFile) throws IOException;
+    Collection<? extends DataElement> getCommitsByRequirementAndFile(Collection<Requirement> requirements, Collection<PathDE> pathDE) throws IOException;
 
-    Collection<? extends DataElement> getRequirementsFromFileAndCommit(Collection<Commit> commits, Collection<CommitFile> files) throws IOException;
+    Collection<? extends DataElement> getRequirementsByFileAndCommit(Collection<Commit> commits, Collection<PathDE> files) throws IOException;
 
-    Collection<? extends DataElement> getFilesFromRequirement(Collection<Requirement> requirements, Comparator<CommitFile> sorting) throws IOException;
+    List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements) throws IOException;
 
     void addRequirementCommitLinkage(Requirement requirement, Commit commit) throws FileNotFoundException;
 
-    Collection<? extends DataElement> AnnotatedLinesFromFile(Collection<CommitFile> files) throws FileNotFoundException, IOException, GitAPIException ;
+    Collection<? extends DataElement> getAnnotatedLinesByFile(Collection<PathDE> files) throws FileNotFoundException, IOException, GitAPIException ;
 
     RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;
 
@@ -69,5 +64,5 @@ public interface I_Collection_Model {
 
     boolean updateRequirement(String id, String title, String description);
     
-    List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, PathDE path);
+    List<? extends DataElement> getImpactForRequirementAndFile(Collection<Requirement> requirements, List<PathDE> path);
 }

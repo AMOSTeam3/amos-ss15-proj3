@@ -9,6 +9,7 @@ import java.util.Collection;
 
 public abstract class Visitor {
     Collection<Requirement> requirements = null;
+    ArrayList<PathDE> filePaths = null;
     
     public void setRequirements(Collection<DataElement> dataelements){
         requirements = new ArrayList<Requirement>();
@@ -38,15 +39,15 @@ public abstract class Visitor {
     }
 
     public Presenter toPresenter(ImpactDE impact) {
-        ArrayList<ImpactDE> impacts = new ArrayList<>();
-        impacts.add(impact);
-        // TODO@Flo please return corresponding Presenter class.
-        // return new Presenter_Impact(impacts);
-        return null;
+        if(filePaths != null){
+            return new Presenter_PathImpact(filePaths, impact);            
+        }else{
+            return new Presenter_ImpactDE(impact);            
+        }
     }
 
     public Presenter toPresenter(PathDE filePath) {
-        ArrayList<PathDE> filePaths = new ArrayList<>();
+        filePaths = new ArrayList<>();
         filePaths.add(filePath);
         return new Presenter_Path(filePaths);
     }
@@ -72,6 +73,12 @@ public abstract class Visitor {
         result.addAll(filePath.getPathDE());
         return result;
     }
+    
+    public Collection<? extends DataElement> toDataElement(Presenter_PathImpact filePath){
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.addAll(filePath.getPathDE());
+        return result;
+    }
 
     public Collection<? extends DataElement> toDataElement(Presenter_CommitFile commitFile){
         ArrayList<DataElement> result = new ArrayList<DataElement>();
@@ -89,6 +96,13 @@ public abstract class Visitor {
     public Collection<? extends DataElement> toDataElement(Presenter_Impact impact){
         ArrayList<DataElement> result = new ArrayList<DataElement>();
         result.add(impact.getLine());
+        return result;
+    }
+
+    public Collection<? extends DataElement> toDataElement(
+            Presenter_ImpactDE presenter_ImpactDE) {
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.add(presenter_ImpactDE.getImpact());
         return result;
     }
 }

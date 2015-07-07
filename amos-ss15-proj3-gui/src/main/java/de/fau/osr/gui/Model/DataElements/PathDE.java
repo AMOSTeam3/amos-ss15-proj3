@@ -46,4 +46,9 @@ public class PathDE extends DataElement {
     public int hashCode() {
         return this.FilePath.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return FilePath.toString();
+    }
 }

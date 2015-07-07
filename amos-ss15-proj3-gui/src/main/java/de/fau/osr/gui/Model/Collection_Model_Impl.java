@@ -2,31 +2,35 @@ package de.fau.osr.gui.Model;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.Model.DataElements.*;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Collection_Model_Impl implements I_Collection_Model {
     private Collection<Commit> commits = null;
     private Collection<Requirement> requirements = null;
-    private Collection<CommitFile> files = null;
     private Collection<PathDE> filePaths = null;
 
     private I_Model model;
+
+    private final Comparator<PathDE> SortFileByName = ((lhs,rhs) -> lhs.FilePath.compareTo(rhs.FilePath));
 
     public Collection_Model_Impl(I_Model model) {
         this.model = model;
     }
     
     @Override
-    public Collection<? extends DataElement> getAllRequirements(
+    public Collection<? extends DataElement> getRequirements(
             Predicate<Requirement> filtering) throws IOException{
         if(requirements == null){
             requirements = model.getAllRequirements();
@@ -37,9 +41,9 @@ public class Collection_Model_Impl implements I_Collection_Model {
     }
 
     @Override
-    public Collection<? extends DataElement> getCommitsFromRequirementID(
+    public Collection<? extends DataElement> getCommitsByRequirement(
             Collection<Requirement> requirements) throws IOException {
-        Collection<Commit> commits = new ArrayList<Commit>();
+        Collection<Commit> commits = new ArrayList<>();
         for(Requirement requirement: requirements){
             commits.addAll(model.getCommitsFromRequirement(requirement));
         }
@@ -50,47 +54,34 @@ public class Collection_Model_Impl implements I_Collection_Model {
     @Override
     public List<? extends DataElement> getFilePaths() {
         if(filePaths == null){
-            filePaths = model.getFilePaths();
+            filePaths = model.getFiles();
         }
 
         List<PathDE> commitsSorted = new ArrayList<>(filePaths);
-        commitsSorted.sort((lhs,rhs) -> lhs.FilePath.compareTo(rhs.FilePath));
+        commitsSorted.sort(SortFileByName);
 
         return commitsSorted;
     }
 
     @Override
-    public List<? extends DataElement> getAllFiles(Comparator<CommitFile> sorting) {
-        if(files == null){
-            files = model.getAllFiles();
-        }
+    public Collection<? extends DataElement> getRequirementsByFile(
+            Collection<PathDE> files) throws IOException {
         
-        List<CommitFile> commitsSorted = new ArrayList<CommitFile>(files); 
-                
-        Collections.sort(commitsSorted, sorting);
-        
-        return commitsSorted;
-    }
-
-    @Override
-    public Collection<? extends DataElement> getRequirementsFromFile(
-            Collection<CommitFile> files) throws IOException {
-        
-        Collection<Requirement> requirements = new ArrayList<Requirement>();
-        for(CommitFile file: files){
-            requirements.addAll(model.getRequirementsFromFile(file));
+        Collection<Requirement> requirements = new ArrayList<>();
+        for(PathDE file: files){
+            requirements.addAll(model.getRequirementsByFile(file));
         }
         
         return requirements;
     }
 
     @Override
-    public Collection<? extends DataElement> getCommitsFromFile(
-            Collection<CommitFile> files) {
+    public Collection<? extends DataElement> getCommitsByFile(
+            Collection<PathDE> files) {
         
-        Collection<Commit> commits = new ArrayList<Commit>();
-        for(CommitFile file: files){
-            commits.addAll(model.getCommitsFromFile(file));
+        Collection<Commit> commits = new ArrayList<>();
+        for(PathDE file: files){
+            commits.addAll(model.getCommitsByFile(file));
         }
         
         return commits;
@@ -98,29 +89,25 @@ public class Collection_Model_Impl implements I_Collection_Model {
 
     @Deprecated
     @Override
-    public Collection<? extends DataElement> getFilesFromCommit(
-            Collection<Commit> commits, Comparator<CommitFile> sorting)
+    public List<? extends DataElement> getFilesByCommit(
+            Collection<Commit> commits)
             throws FileNotFoundException {
-        
-        List<CommitFile> commitsSorted = new ArrayList<CommitFile>();
-        for(Commit commit: commits){
-            Collection<CommitFile> tempCommits = model.getFilesFromCommit(commit);
-            for(CommitFile commitFile: tempCommits){
-                commitFile.impact = model.getImpactPercentageForCommitFileListAndRequirement(commitFile,commit);
-             }
-            commitsSorted.addAll(tempCommits);
-        }
-        
-                
-        Collections.sort(commitsSorted, sorting);
-        
-        return commitsSorted;
+        List<PathDE> files = new ArrayList<>();
+        commits.forEach(ci -> {
+                    files.addAll(model.getFilesByCommit(ci));
+                }
+        );
+        return files.stream()
+                .distinct()
+                .sorted(SortFileByName)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public String getChangeDataFromFileIndex(CommitFile file)
+    public String getChangeDataFromFileIndex(PathDE file)
             throws FileNotFoundException {
         // TODO Auto-generated method stub
+        // TODO I think, we should delete this method from interfaces (its never used)
         return null;
     }
 
@@ -148,55 +135,50 @@ public class Collection_Model_Impl implements I_Collection_Model {
     }
 
     @Override
-    public Collection<? extends DataElement> getRequirementsFromCommit(
+    public Collection<? extends DataElement> getRequirementsByCommit(
             Collection<Commit> commits) throws IOException {
         
-        Collection<Requirement> requirements = new ArrayList<Requirement>();
+        Collection<Requirement> requirements = new ArrayList<>();
         for(Commit commit: commits){
             requirements.addAll(model.getRequirementsFromCommit(commit));
         }
-        
+        //TODO Should we explicitly make requirements distinct?
         return requirements;
     }
 
     @Override
-    public Collection<? extends DataElement> commitsFromRequirementAndFile(
+    public Collection<? extends DataElement> getCommitsByRequirementAndFile(
             Collection<Requirement> requirements,
-            Collection<CommitFile> files) throws IOException {
+            Collection<PathDE> files) throws IOException {
 
-        Collection<Commit> commits1 = (Collection<Commit>) this.getCommitsFromRequirementID(requirements);
-        Collection<Commit> commits2 = (Collection<Commit>) this.getCommitsFromFile(files);
-
-        commits1.removeAll(commits2);
-
+        Collection<? extends DataElement> commits1 = this.getCommitsByRequirement(requirements);
+        Collection<? extends DataElement> commits2 = this.getCommitsByFile(files);
+        
+        commits1.retainAll(commits2);
         return commits1;
     }
 
     @Override
-    public Collection<? extends DataElement> getRequirementsFromFileAndCommit(
-            Collection<Commit> commits, Collection<CommitFile> files)
+    public Collection<? extends DataElement> getRequirementsByFileAndCommit(
+            Collection<Commit> commits, Collection<PathDE> files)
             throws IOException {
 
-        Collection<? extends DataElement> requirements1 = this.getRequirementsFromCommit(commits);
-        
-        Collection<? extends DataElement> requirements2 = this.getRequirementsFromFile(files);
+        Collection<? extends DataElement> requirements1 = this.getRequirementsByCommit(commits);
+        Collection<? extends DataElement> requirements2 = this.getRequirementsByFile(files);
         
         requirements1.retainAll(requirements2);
         return requirements2;
     }
 
     @Override
-    public Collection<? extends DataElement> getFilesFromRequirement(
-            Collection<Requirement> requirements, Comparator<CommitFile> sorting)
+    public List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements)
             throws IOException {
-
-        List<CommitFile> files = new ArrayList<CommitFile>();
-        for(Requirement requirement: requirements){
-            files.addAll(model.getCommitFilesForRequirement(requirement));
-        }
-        
-        Collections.sort(files, sorting);
-        
+        List<PathDE> files = new ArrayList<>();
+        requirements.forEach(req -> {
+                    files.addAll(model.getFilesByRequirement(req));
+                }
+        );
+        Collections.sort(files, SortFileByName);
         return files;
     }
 
@@ -211,10 +193,8 @@ public class Collection_Model_Impl implements I_Collection_Model {
     }
 
     @Override
-    public Collection<? extends DataElement> AnnotatedLinesFromFile(
-            Collection<CommitFile> files) throws FileNotFoundException,
-            IOException, GitAPIException {
-        
+    public Collection<? extends DataElement> getAnnotatedLinesByFile(Collection<PathDE> files)
+            throws FileNotFoundException, IOException, GitAPIException {
         Collection<AnnotatedLine> lines = new ArrayList<AnnotatedLine>();
         lines.addAll(model.getAnnotatedLines(files.iterator().next()));
         
@@ -239,10 +219,20 @@ public class Collection_Model_Impl implements I_Collection_Model {
     }
 
     @Override
-    public List<DataElement> getImpactByRequirementAndPath(Collection<Requirement> requirements, PathDE path) {
-        return requirements.stream()
-                .map(req -> new ImpactDE(model.getImpactForRequirementAndPath(req, path)))
-                .collect(Collectors.toList());
+    public List<DataElement> getImpactForRequirementAndFile(Collection<Requirement> requirements, List<PathDE> paths) {
+        List<DataElement> impact = new ArrayList<DataElement>();
+        for(PathDE path: paths){
+            float MaxImpact = 0;
+            for(Requirement requirement: requirements){
+                float impactPerRequirement =  model.getImpactForRequirementAndFile(requirement, path);
+                if(impactPerRequirement > MaxImpact){
+                    MaxImpact = impactPerRequirement;
+                }
+            }
+            impact.add(new ImpactDE(MaxImpact));
+        }
+        
+        return impact;
     }
 
 }

@@ -61,7 +61,7 @@ public class Commit extends DataElement {
     public String id;
     public String message;
     public Requirement instanceRequirement;
-    public Supplier<Stream<CommitFile>> commitFiles;
+    public Supplier<Stream<PathDE>> commitFiles;
 
     public Commit(de.fau.osr.core.vcs.base.Commit commit) {
         this.id = commit.getId();
@@ -70,7 +70,7 @@ public class Commit extends DataElement {
         commitFiles = () -> {
         	Stream<de.fau.osr.core.vcs.base.CommitFile> originalStream = commit.commitFiles.get();
         	//convert the commitFiles from the backend
-        	return originalStream.map(commitFile -> new CommitFile(commitFile));
+        	return originalStream.map(commitFile -> new PathDE(commitFile.newPath.toPath()));
         };
     }
 
@@ -79,7 +79,7 @@ public class Commit extends DataElement {
         return visitor.toPresenter(this);
     }
 
-	public Collection<CommitFile> getFiles() {
+	public Collection<PathDE> getFiles() {
 		return commitFiles.get().collect(Collectors.toList());
 	}
 }
