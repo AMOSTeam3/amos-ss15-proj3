@@ -149,24 +149,6 @@ public class Tracker {
     }
 
     /**
-     * @return Existing project file paths for given requirement
-     * @throws IOException
-     */
-    public Collection<Path> getFilesByRequirement(String requirement) throws IOException {
-        return projectDirTraverser.traverse().stream()
-                .filter(path -> {
-                    try {
-                        return getRequirementIdsForFile(path.toString()).contains(requirement);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                })
-                .collect(Collectors.toList());
-    }
-
-
-    /**
      * This method returns a list of <tt>CommitFile</tt>'s for the given requirement ID.
      */
     @Deprecated
@@ -283,6 +265,7 @@ public class Tracker {
      * @return all commit objects, are related to this requirement id
      * @throws IOException
      */
+    @Deprecated
     public Set<Commit> getCommitsForRequirementID(String requirementID) throws IOException {
         Set<Commit> commits = new HashSet<>();
 
@@ -342,6 +325,41 @@ public class Tracker {
     }
 
     /**
+     * @return Existing project file paths for given requirement
+     * @throws IOException
+     */
+    public Collection<Path> getFilesByRequirement(String requirementId) throws IOException {
+        return projectDirTraverser.traverse().stream()
+                .filter(path -> {
+                    try {
+                        return getRequirementIdsForFile(path.toString()).contains(requirementId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @return Existing project file paths for given commit id
+     * @throws IOException
+     */
+    public Collection<Path> getFilesByCommit(String commitId) throws IOException {
+        return projectDirTraverser.traverse().stream()
+                .filter(path -> {
+                    try {
+                        return getCommitsByFile(path.toString()).contains(commitId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    /**
      * @return all existing ever committed file paths
      */
     public Collection<String> getAllFilesAsString(){
@@ -362,6 +380,14 @@ public class Tracker {
         return files;
     }
 
+    /**
+     * get commits that did something with the {@code filePath} file
+     * @param filePath file to search for
+     * @return collection of commit ids
+     */
+    public Collection<String> getCommitsByFile(String filePath) throws IOException {
+        return Sets.newHashSet(vcsClient.getCommitListForFileodification(filePath));
+    }
 
     /**
      * get commits that did something with the {@code filePath} file

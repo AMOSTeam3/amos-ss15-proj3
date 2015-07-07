@@ -28,7 +28,7 @@ public class ElementsConverter {
      * converts collection of vcs Paths to UI Paths
      * @return collection of UI CommitFiles
      */
-    public static Collection<PathDE> convertFilePaths(Collection<Path> filePaths) {
+    public static Collection<PathDE> convertFiles(Collection<Path> filePaths) {
         ArrayList<PathDE> convertedFilePaths = new ArrayList<>();
         convertedFilePaths.addAll(filePaths.stream().map(PathDE::new).collect(Collectors.toList()));
         return convertedFilePaths;

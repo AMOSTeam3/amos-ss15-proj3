@@ -93,7 +93,7 @@ public class TrackerAdapter implements I_Model {
     @Override
     public Collection<PathDE> getFiles() {
         try {
-            return ElementsConverter.convertFilePaths(tracker.getFiles());
+            return ElementsConverter.convertFiles(tracker.getFiles());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -137,12 +137,16 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<PathDE> getFilesByCommit(Commit commit) {
-        // TODO Commit.files should be changed to PathDE.
-        return commit.files;
+        try {
+            return ElementsConverter.convertFiles(tracker.getFilesByCommit(commit.id));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public Pattern getCurrentRequirementPattern() {
+    public Pattern getCurrentRequirementPattern(){
         return reqPatternString;
     }
 
@@ -192,7 +196,7 @@ public class TrackerAdapter implements I_Model {
         }
 
         try {
-            return ElementsConverter.convertFilePaths(tracker.getFilesByRequirement(requirement.getID()));
+            return ElementsConverter.convertFiles(tracker.getFilesByRequirement(requirement.getID()));
         } catch (IOException e) {
             e.printStackTrace();
         }

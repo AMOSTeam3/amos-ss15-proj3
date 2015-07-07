@@ -94,10 +94,19 @@ public class Collection_Model_Impl implements I_Collection_Model {
             throws FileNotFoundException {
         
         List<PathDE> files = new ArrayList<>();
+
+        for (Commit ci: commits) {
+            System.out.println(ci.id);
+            for (PathDE file: model.getFilesByCommit(ci)) {
+                System.out.println(file);
+            }
+        }
+
         commits.forEach(ci -> {
                     files.addAll(model.getFilesByCommit(ci));
                 }
         );
+
 
         return files.stream()
                 .distinct()
