@@ -2,9 +2,11 @@ package de.fau.osr.gui.Model;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+
 import de.fau.osr.bl.RequirementsTraceabilityMatrix;
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.gui.Model.DataElements.*;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.FileNotFoundException;
@@ -173,14 +175,19 @@ public class Collection_Model_Impl implements I_Collection_Model {
     @Override
     public List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements)
             throws IOException {
-
+        if(requirements == null || requirements.isEmpty()){
+            System.out.println("files");
+        }
         List<PathDE> files = new ArrayList<>();
         requirements.forEach(req -> {
                     files.addAll(model.getFilesByRequirement(req));
                 }
         );
         Collections.sort(files, SortFileByName);
-        
+
+        if(files == null || files.isEmpty()){
+            System.out.println("files");
+        }
         return files;
     }
 
@@ -221,19 +228,20 @@ public class Collection_Model_Impl implements I_Collection_Model {
     }
 
     @Override
-    public List<DataElement> getImpactForRequirementAndFile(Collection<Requirement> requirements, List<PathDE> path) {
-        // TODO Should *path* really be a List<PathDE> instead just PathDE.
-        Function<Requirement, ImpactDE> impactMapper;
-        if (path.size() > 0)
-            impactMapper = (Requirement req) -> {
-                return new ImpactDE(model.getImpactForRequirementAndFile(req, path.get(0)));
-            };
-        else
-            impactMapper = req -> {return new ImpactDE((float) 0.);};
-
-        return requirements.stream()
-                .map(impactMapper)
-                .collect(Collectors.toList());
+    public List<DataElement> getImpactForRequirementAndFile(Collection<Requirement> requirements, List<PathDE> paths) {
+        List<DataElement> impact = new ArrayList<DataElement>();
+        for(PathDE path: paths){
+            float MaxImpact = 0;
+            for(Requirement requirement: requirements){
+                float impactPerRequirement =  model.getImpactForRequirementAndFile(requirement, path);
+                if(impactPerRequirement > MaxImpact){
+                    MaxImpact = impactPerRequirement;
+                }
+            }
+            impact.add(new ImpactDE(MaxImpact));
+        }
+        
+        return impact;
     }
 
 }

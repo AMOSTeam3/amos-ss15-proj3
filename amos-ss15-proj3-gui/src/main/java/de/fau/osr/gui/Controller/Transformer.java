@@ -6,6 +6,7 @@ import de.fau.osr.gui.View.ElementHandler.ElementHandler;
 import de.fau.osr.gui.View.Presenter.Presenter;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class Transformer {
@@ -26,9 +27,30 @@ public class Transformer {
         return result;
     }
     
+    public static Presenter[] transformDataElementsToPresenters(List<? extends DataElement> dataElements1, List<? extends DataElement> dataElements2){
+        Presenter[] result = new Presenter[dataElements1.size()];
+        int i = 0;
+        for(DataElement dataElement1: dataElements1){
+            DataElement dataElement2 = dataElements2.get(i);
+            dataElement1.visit(visitor);
+            result[i] = dataElement2.visit(visitor);
+            i++;
+        }
+        
+        return result;
+    }
+    
     public static void process(ElementHandler elementHandler, Runnable buttonAction, Supplier<Collection<? extends DataElement>> fetching){
         Collection<? extends DataElement> dataElements = fetching.get();
         Presenter[] presenter = transformDataElementsToPresenters(dataElements);
+        elementHandler.setScrollPane_Content(presenter);
+        elementHandler.setOnClickAction(buttonAction);
+    }
+    
+    public static void process(ElementHandler elementHandler, Runnable buttonAction, Supplier<List<? extends DataElement>> fetching1, Supplier<List<? extends DataElement>> fetching2){
+        List<? extends DataElement> dataElements1 = fetching1.get();
+        List<? extends DataElement> dataElements2 = fetching2.get();
+        Presenter[] presenter = transformDataElementsToPresenters(dataElements1, dataElements2);
         elementHandler.setScrollPane_Content(presenter);
         elementHandler.setOnClickAction(buttonAction);
     }

@@ -43,7 +43,7 @@ public class Presenter_PathImpact extends Presenter{
 
     public String getText(){
         String pathDE = filePaths.get(0).FilePath.getFileName().toString();
-        return String.format("%s - %.1f", pathDE, impact);
+        return String.format("%s - %.1f", pathDE, impact.Impact);
     }
 
     public boolean isAvailable(){

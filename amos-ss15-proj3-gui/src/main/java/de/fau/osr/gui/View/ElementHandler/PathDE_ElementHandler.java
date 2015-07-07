@@ -123,6 +123,9 @@ public class PathDE_ElementHandler extends ElementHandler {
     
     
     public void setOnClickAction(Runnable action) {
+        if(tree == null){
+            return;
+        }
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent arg0) {

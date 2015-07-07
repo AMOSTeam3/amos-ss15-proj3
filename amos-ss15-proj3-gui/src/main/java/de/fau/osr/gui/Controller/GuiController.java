@@ -310,7 +310,20 @@ public class GuiController {
     void filesFromRequirement(){
         cleaner.clearCode();
 
-        Supplier<Collection<? extends DataElement>> fetching = () -> {
+        Supplier<List<? extends DataElement>> fetching1 = () -> {
+            Collection<DataElement> dataElements = elementHandler
+                    .getRequirement_ElementHandler().getSelection(
+                            new Visitor_Swing());
+            try {
+                return i_Collection_Model.getFilesByRequirement(
+                        (Collection) dataElements);
+            } catch (IOException e) {
+                popupManager.showErrorDialog("Internal Storage Error");
+                return new ArrayList<DataElement>();
+            }
+        };
+        
+        Supplier<List<? extends DataElement>> fetching2 = () -> {
             Collection<DataElement> dataElements = elementHandler
                     .getRequirement_ElementHandler().getSelection(
                             new Visitor_Swing());
@@ -332,7 +345,7 @@ public class GuiController {
             this.codeFromFile();
         };
 
-        Transformer.process(specificElementHandler, buttonAction, fetching);
+        Transformer.process(specificElementHandler, buttonAction, fetching1, fetching2);
     }
 
     /**
@@ -564,12 +577,26 @@ public class GuiController {
     void filesFromCommit() {
         cleaner.clearCode();
 
-        Supplier<Collection<? extends DataElement>> fetching = () -> {
+        Supplier<List<? extends DataElement>> fetching1 = () -> {
             Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
             try{
                 return i_Collection_Model.getFilesByCommit((Collection) commits);
             } catch (FileNotFoundException e) {
                 popupManager.showErrorDialog("Internal storing Error");
+                return new ArrayList<DataElement>();
+            }
+        };
+        
+        Supplier<List<? extends DataElement>> fetching2 = () -> {
+            Collection<DataElement> dataElements = elementHandler
+                    .getRequirement_ElementHandler().getSelection(
+                            new Visitor_Swing());
+            Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
+            try{
+                List<? extends DataElement> paths =  i_Collection_Model.getFilesByCommit((Collection) commits);
+                return i_Collection_Model.getImpactForRequirementAndFile((Collection) dataElements, (List) paths);
+            } catch (IOException e) {
+                popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
             }
         };
@@ -581,7 +608,7 @@ public class GuiController {
             codeFromFile();
         };
 
-        Transformer.process(specificElementHandler, buttonAction, fetching);
+        Transformer.process(specificElementHandler, buttonAction, fetching1, fetching2);
     }
 
     /**

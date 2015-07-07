@@ -10,7 +10,6 @@ import java.util.Collection;
 public abstract class Visitor {
     Collection<Requirement> requirements = null;
     ArrayList<PathDE> filePaths = null;
-
     
     public void setRequirements(Collection<DataElement> dataelements){
         requirements = new ArrayList<Requirement>();
@@ -40,8 +39,11 @@ public abstract class Visitor {
     }
 
     public Presenter toPresenter(ImpactDE impact) {
-        Presenter_PathImpact presenter = new Presenter_PathImpact(filePaths, impact);
-        return presenter;
+        if(filePaths != null){
+            return new Presenter_PathImpact(filePaths, impact);            
+        }else{
+            return new Presenter_ImpactDE(impact);            
+        }
     }
 
     public Presenter toPresenter(PathDE filePath) {
@@ -94,6 +96,13 @@ public abstract class Visitor {
     public Collection<? extends DataElement> toDataElement(Presenter_Impact impact){
         ArrayList<DataElement> result = new ArrayList<DataElement>();
         result.add(impact.getLine());
+        return result;
+    }
+
+    public Collection<? extends DataElement> toDataElement(
+            Presenter_ImpactDE presenter_ImpactDE) {
+        ArrayList<DataElement> result = new ArrayList<DataElement>();
+        result.add(presenter_ImpactDE.getImpact());
         return result;
     }
 }
