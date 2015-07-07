@@ -92,22 +92,11 @@ public class Collection_Model_Impl implements I_Collection_Model {
     public List<? extends DataElement> getFilesByCommit(
             Collection<Commit> commits)
             throws FileNotFoundException {
-        
         List<PathDE> files = new ArrayList<>();
-
-        for (Commit ci: commits) {
-            System.out.println(ci.id);
-            for (PathDE file: model.getFilesByCommit(ci)) {
-                System.out.println(file);
-            }
-        }
-
         commits.forEach(ci -> {
                     files.addAll(model.getFilesByCommit(ci));
                 }
         );
-
-
         return files.stream()
                 .distinct()
                 .sorted(SortFileByName)
@@ -184,19 +173,12 @@ public class Collection_Model_Impl implements I_Collection_Model {
     @Override
     public List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements)
             throws IOException {
-        if(requirements == null || requirements.isEmpty()){
-            System.out.println("files");
-        }
         List<PathDE> files = new ArrayList<>();
         requirements.forEach(req -> {
                     files.addAll(model.getFilesByRequirement(req));
                 }
         );
         Collections.sort(files, SortFileByName);
-
-        if(files == null || files.isEmpty()){
-            System.out.println("files");
-        }
         return files;
     }
 
