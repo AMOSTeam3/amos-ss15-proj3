@@ -65,6 +65,8 @@ public class Linkage_ElementHandler extends ElementHandler {
 
     @Override
     public void setButtonAction(Runnable action) {
+		for(ActionListener a : button.getActionListeners())
+			button.removeActionListener(a);
         button.addActionListener(e -> action.run());
     }
     
