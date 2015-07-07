@@ -16,7 +16,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Components.PathDEsJTree;
+import de.fau.osr.gui.Components.PathDEsJTreeSelectionModel;
 import de.fau.osr.gui.Controller.Visitor;
+import de.fau.osr.gui.Controller.Visitor_Swing;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.Model.DataElements.PathDE;
 import de.fau.osr.gui.Model.DataElements.ImpactDE;
@@ -52,6 +54,7 @@ public class PathDE_ElementHandler extends ElementHandler {
             return;
         }
         tree  = new PathDEsJTree(elements);
+        
       //expand all nodes
         for (int i = 0; i < tree.getRowCount(); i++) {
             tree.expandRow(i);
@@ -129,7 +132,9 @@ public class PathDE_ElementHandler extends ElementHandler {
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent arg0) {
-                action.run();
+                if(!getSelection(new Visitor_Swing()).isEmpty()){
+                    action.run();
+                }
             }
         });
     };
@@ -137,6 +142,9 @@ public class PathDE_ElementHandler extends ElementHandler {
     @Override
     public Collection<DataElement> getSelection(Visitor visitor){
         DefaultMutableTreeNode element = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+        if(element == null){
+            return new ArrayList<>();
+        }
         Presenter presenter = (Presenter) element.getUserObject();
         ArrayList<DataElement> dataElements = new ArrayList<DataElement>();
         dataElements.addAll(presenter.visit(visitor));

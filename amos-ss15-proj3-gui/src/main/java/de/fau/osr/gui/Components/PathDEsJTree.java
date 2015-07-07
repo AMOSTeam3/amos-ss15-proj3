@@ -6,7 +6,9 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+
 import de.fau.osr.gui.View.Presenter.Presenter_Path;
 import de.fau.osr.gui.View.Presenter.Presenter_PathImpact;
 import de.fau.osr.gui.View.Presenter.Presenter;
@@ -19,6 +21,7 @@ public class PathDEsJTree extends JTree {
 
     public PathDEsJTree(Presenter[] filesFromRequirement) {
         super(PathDEsToTree(filesFromRequirement));
+        this.setSelectionModel(new PathDEsJTreeSelectionModel());
         this.getSelectionModel().setSelectionMode
         (TreeSelectionModel.SINGLE_TREE_SELECTION);
     }
