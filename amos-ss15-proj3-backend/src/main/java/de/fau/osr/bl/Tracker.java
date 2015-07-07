@@ -7,6 +7,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
+
 import de.fau.osr.core.Requirement;
 import de.fau.osr.core.db.CSVFileDataSource;
 import de.fau.osr.core.db.CompositeDataSource;
@@ -25,12 +26,14 @@ import de.fau.osr.util.AppProperties;
 import de.fau.osr.util.NaturalOrderComparator;
 import de.fau.osr.util.VisibleFilesTraverser;
 import de.fau.osr.util.parser.CommitMessageParser;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.OperationNotSupportedException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -200,9 +203,10 @@ public class Tracker {
 
     
     public float getImpactPercentageForFileAndRequirement(String file, String requirementID){
+        String correctFilePath = file.toString().replaceAll("\\\\", "/");
         List<AnnotatedLine> currentBlame;
         try {
-            currentBlame = this.getBlame(file);
+            currentBlame = this.getBlame(correctFilePath);
         } catch (GitAPIException | IOException e) {
             return -1;
         }
@@ -227,10 +231,11 @@ public class Tracker {
      * This method returns all the requirements for the given File.
      */
     public Set<String> getRequirementIdsForFile(String filePath) throws IOException {
-
+        String correctFilePath = filePath.toString().replaceAll("\\\\", "/");
+        
         Set<String> requirementList = new HashSet<>();
 
-        Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
+        Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(correctFilePath);
         SetMultimap<String, String> relations = getAllCommitReqRelations();
 
         while(commitIdListIterator.hasNext()){
@@ -315,11 +320,13 @@ public class Tracker {
     public Collection<Path> getFiles() throws IOException {
         Collection<Path> filePaths = new ArrayList<>();
 
-        for(Path each: projectDirTraverser.traverse())
+        for(Path each: projectDirTraverser.traverse()){
             // fname is a known file in VCS (if it returs ReqIds for that filepath)
             // TODO Maybe we could cache (file->reqIds)
-            if (this.getRequirementIdsForFile(each.toString()).size()>0)
+            if (this.getRequirementIdsForFile(each.toString()).size()>0){
                 filePaths.add(each);
+            }
+        }
 
         return filePaths;
     }
@@ -386,7 +393,8 @@ public class Tracker {
      * @return collection of commit ids
      */
     public Collection<String> getCommitsByFile(String filePath) throws IOException {
-        return Sets.newHashSet(vcsClient.getCommitListForFileodification(filePath));
+        String correctFilePath = filePath.replaceAll("\\\\", "/");
+        return Sets.newHashSet(vcsClient.getCommitListForFileodification(correctFilePath));
     }
 
     /**
@@ -395,7 +403,8 @@ public class Tracker {
      * @return collection of commit objects
      */
     public Collection<Commit> getCommitsForFile(String filePath) throws IOException {
-        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitListForFileodification(filePath));
+        String correctFilePath = filePath.replaceAll("\\\\", "/");
+        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitListForFileodification(correctFilePath));
         return getCommitsByIds(ids);
     }
 
@@ -413,8 +422,9 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
+        String correctFilePath = path.replaceAll("\\\\", "/");
         try {
-            return blameCache.get(path);
+            return blameCache.get(correctFilePath);
         } catch (ExecutionException e) {
             throw new IOException(e.getMessage());
         }
@@ -471,7 +481,8 @@ public class Tracker {
      * @throws Exception
      */
     public List<Collection<String>> getRequirementsLineLinkageForFile(String filePath) throws IOException, GitAPIException {
-    	Collection<AnnotatedLine> lines = this.getBlame(filePath);
+        String correctFilePath = filePath.replaceAll("\\\\", "/");
+    	Collection<AnnotatedLine> lines = this.getBlame(correctFilePath);
     	List<Collection<String>> reqIdsByLines = new ArrayList<>();
 
         //preload all reqs to ID -> Req IdentityHashMap
@@ -566,7 +577,8 @@ public class Tracker {
      * @deprecated use getCommitsForFile instead
      */
     public Collection<Commit> getCommitsFromFile(String filePath) throws IOException {
-        return getCommitsForFile(filePath);
+        String correctFilePath = filePath.replaceAll("\\\\", "/");
+        return getCommitsForFile(correctFilePath);
     }
 
     /**
@@ -616,7 +628,8 @@ public class Tracker {
      * @deprecated use getRequirementIdsForFile()
      */
     public Set<String> getAllRequirementsForFile(String filePath) throws IOException {
-        return getRequirementIdsForFile(filePath);
+        String correctFilePath = filePath.replaceAll("\\\\", "/");
+        return getRequirementIdsForFile(correctFilePath);
     }
 
     /**
