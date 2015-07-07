@@ -71,8 +71,8 @@ public class VisibleFilesTraverser extends DirectoryWalker<Path> {
         return true;
     }
 
-    protected void handleFile(File file, int depth, Collection results) {
-        String filename = file.getName();
+    protected void handleFile(File file, int depth, Collection results) throws IOException {
+        String filename = file.getCanonicalPath();
         for (String eachIgnore: ignoreList)
             if (filename.contains(eachIgnore))
                 return;
