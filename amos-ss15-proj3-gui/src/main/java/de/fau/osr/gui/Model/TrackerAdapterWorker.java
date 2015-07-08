@@ -481,17 +481,6 @@ public class TrackerAdapterWorker {
 
     
     /**
-     * @param requirement
-     * @param commit
-     * @author Gayathery
-     *  Will be masked in future if performance improvement is required
-     */
-    public void addRequirementCommitRelation(Requirement requirement, Commit commit) {
-         trackerAdapter.addRequirementCommitRelation(requirement, commit);
-    }
-
-    
-    /**
      * @param next
      * @return
      * @author Gayathery

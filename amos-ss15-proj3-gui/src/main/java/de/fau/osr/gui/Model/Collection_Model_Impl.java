@@ -184,12 +184,8 @@ public class Collection_Model_Impl implements I_Collection_Model {
 
     @Override
     public void addRequirementCommitLinkage(Requirement requirement,
-            Commit commit) throws FileNotFoundException {
-        try {
-            model.addRequirementCommitRelation(requirement, commit);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+            Commit commit) throws Exception {
+        model.addRequirementCommitRelation(requirement, commit);
     }
 
     @Override

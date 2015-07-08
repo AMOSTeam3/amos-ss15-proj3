@@ -15,7 +15,7 @@ public class Requirement {
 
     @Id
     @Column(name="id", nullable = false)
-    private String id;  
+    private String id;
 
     @Column(name="title")
     private String title;

@@ -35,7 +35,7 @@ public interface I_Model {
 
     Collection<PathDE> getFilesByRequirement(Requirement requirement);
 
-    void addRequirementCommitRelation(Requirement requirement, Commit commit);
+    void addRequirementCommitRelation(Requirement requirement, Commit commit) throws Exception;
 
     Collection<AnnotatedLine> getAnnotatedLines(PathDE filePath);
 

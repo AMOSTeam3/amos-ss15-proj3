@@ -276,12 +276,8 @@ public class TrackerAdapter implements I_Model {
     }
 
     @Override
-    public void addRequirementCommitRelation(Requirement requirement, Commit commit) {
-        try {
-            tracker.addRequirementCommitRelation(requirement.getID(), commit.id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void addRequirementCommitRelation(Requirement requirement, Commit commit) throws Exception {
+        tracker.addRequirementCommitRelation(requirement.getID(), commit.id);
     }
 
     @Override

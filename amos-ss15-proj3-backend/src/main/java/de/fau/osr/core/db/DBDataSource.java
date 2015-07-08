@@ -36,7 +36,6 @@ public class DBDataSource extends DataSource {
         reqDao = new RequirementDaoImplementation(sf);
         commitDao = new CommitDaoImplementation(sf);
     }
-
     @Override
     protected SetMultimap<String, String> doGetAllReqCommitRelations() throws IOException {
         List<Requirement> reqs = reqDao.getAllRequirements();
@@ -52,11 +51,24 @@ public class DBDataSource extends DataSource {
 
     @Override
     protected void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+        //create req if not exists
         Requirement req = reqDao.getRequirementById(reqId);
+        if (req == null) {
+            doSaveOrUpdateRequirement(reqId, "", "");
+        }
+
+        Commit commitToAdd = commitDao.getCommitById(commitId);
         //create commit if not exist
-        Commit commitToAdd = new Commit();
-        commitToAdd.setId(commitId);
-        commitDao.persist(DBOperation.ADD, commitToAdd);
+        if (commitToAdd == null) {
+            commitToAdd = new Commit();
+            commitToAdd.setId(commitId);
+            commitDao.persist(DBOperation.ADD, commitToAdd);
+        }
+
+        //check if already linked
+        else if (req.getCommits().contains(commitToAdd)) {
+            throw new IOException("Linkage already exists");
+        }
 
         //add to req
         req.getCommits().add(commitToAdd);
@@ -87,12 +99,12 @@ public class DBDataSource extends DataSource {
 
     @Override
     protected void doSaveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
-        de.fau.osr.core.db.domain.Requirement req = reqDao.getRequirementById(id);
+        Requirement req = reqDao.getRequirementById(id);
         DBOperation oper = DBOperation.UPDATE;
 
         //create if not exists now
         if (req == null) {
-            req = new de.fau.osr.core.db.domain.Requirement();
+            req = new Requirement();
             req.setId(id);
             oper = DBOperation.ADD;
         }

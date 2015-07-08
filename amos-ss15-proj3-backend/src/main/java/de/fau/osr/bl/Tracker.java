@@ -394,7 +394,7 @@ public class Tracker {
      * add Linkage between Requirement and Commit
      * @param commitID and requirementId to be linked
      */
-    public void addRequirementCommitRelation(String requirementID, String commitID) throws Exception {
+    public void addRequirementCommitRelation(String requirementID, String commitID) throws IOException, OperationNotSupportedException {
         dataSource.addReqCommitRelation(requirementID, commitID);
     }
 

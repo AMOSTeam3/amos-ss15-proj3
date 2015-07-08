@@ -855,8 +855,8 @@ public class GuiController {
         try {
             i_Collection_Model.addRequirementCommitLinkage(requirement, commit);
             popupManager.showInformationDialog("Successfully Added!");
-        } catch (FileNotFoundException e) {
-            popupManager.showErrorDialog("Internal storing Error");
+        } catch (Exception e) {
+            popupManager.showErrorDialog(e.getMessage());
             return;
         } finally {
             cleaner.clearAll();

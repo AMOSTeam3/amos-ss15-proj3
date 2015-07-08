@@ -54,7 +54,7 @@ public interface I_Collection_Model {
 
     List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements) throws IOException;
 
-    void addRequirementCommitLinkage(Requirement requirement, Commit commit) throws FileNotFoundException;
+    void addRequirementCommitLinkage(Requirement requirement, Commit commit) throws Exception;
 
     Collection<? extends DataElement> getAnnotatedLinesByFile(Collection<PathDE> files) throws FileNotFoundException, IOException, GitAPIException ;
 
