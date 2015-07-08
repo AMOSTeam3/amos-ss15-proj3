@@ -51,17 +51,6 @@ public abstract class VcsClient {
         }
         return client;
     }
-    /**
-     * Blame lines in the argument file on requirements.
-     * This is potentially slow, so it should possibly be called asynchronously.
-     *
-     * @author Tobias
-     * @return The annotated lines of the input file in the original order.
-     * @throws IOException
-     * @throws GitAPIException
-     */
-    public abstract List<AnnotatedLine> blame(String path,
-            DataSource dataSource) throws IOException, GitAPIException;
     
     /**
      * Get the root path of the working copy of this vcs repository.

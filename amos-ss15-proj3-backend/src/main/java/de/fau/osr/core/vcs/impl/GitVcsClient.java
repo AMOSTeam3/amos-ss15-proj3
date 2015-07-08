@@ -272,38 +272,6 @@ public class GitVcsClient extends VcsClient{
         }
         return commit.getFullMessage();
     }
-
-
-    /* (non-Javadoc)
-     * @see de.fau.osr.core.vcs.interfaces.VcsClient#blame(java.lang.String, de.fau.osr.util.parser.CommitMessageParser)
-     */
-    @Override
-    public List<AnnotatedLine> blame(String path, DataSource dataSource) throws IOException, GitAPIException {
-        BlameCommand blameCommand = new BlameCommand(git.getRepository());
-        blameCommand.setFollowFileRenames(true);
-        ObjectId commitID = git.getRepository().resolve("HEAD");
-        blameCommand.setStartCommit(commitID);
-        String unixFormatedFilePath = path.replaceAll(Matcher.quoteReplacement("\\"), "/");
-        blameCommand.setFilePath(unixFormatedFilePath);
-        BlameResult blameResult = blameCommand.call();
-        ArrayList<AnnotatedLine> res = new ArrayList<>();
-        if(blameResult == null) throw new FileNotFoundException(unixFormatedFilePath);
-        blameResult.computeAll();
-        RawText text = blameResult.getResultContents();
-        int textSize = text.size();
-        for(int i=0; i<textSize; ++i) {
-            //String commitId = blameResult.getSourceCommit(res.size()).getName();
-            //TODO add abstract linkage source here
-            List<String> annotation;
-            RevCommit commit = blameResult.getSourceCommit(i);
-            if(commit != null)
-                annotation = Lists.newArrayList(dataSource.getReqRelationByCommit(commit.getName()));
-            else
-                annotation = Collections.emptyList();
-            res.add(new AnnotatedLine(annotation, text.getString(i)));
-        }
-        return res;
-    }
     
     /**
      * @param walker
