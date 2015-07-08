@@ -44,7 +44,9 @@ public class Requirement_Detail_ElementHandler extends ElementHandler{
         description.setText(single_presenter.getRequirement().getDescription());
     }
 
-    public void addListenerOnSaveClick(ActionListener listener) {
+    public void setListenerOnSaveClick(ActionListener listener) {
+        for(ActionListener a : btnSave.getActionListeners())
+            btnSave.removeActionListener(a);
         btnSave.addActionListener(listener);
     }
 

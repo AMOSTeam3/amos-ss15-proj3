@@ -204,7 +204,7 @@ public class GuiController {
 
         Transformer.process(tabAndReqsList_elementHandler, buttonAction, fetching);
 
-        detail_handler.addListenerOnSaveClick(e1 -> {
+        detail_handler.setListenerOnSaveClick(e1 -> {
                     Collection<DataElement> selectedReqs = tabAndReqsList_elementHandler.getSelection(new Visitor_Swing());
                     if (selectedReqs.size() < 1) {
                         popupManager.showErrorDialog("select a requirement");
@@ -691,7 +691,7 @@ public class GuiController {
 
     void CommitToLinkage() {
         DataElement commit = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing()).iterator().next();
-        elementHandler.getLinkage_ElementHandler().setCommit((Presenter_Commit)commit.visit(new Visitor_Swing()));
+        elementHandler.getLinkage_ElementHandler().setCommit((Presenter_Commit) commit.visit(new Visitor_Swing()));
     }
 
     /**
