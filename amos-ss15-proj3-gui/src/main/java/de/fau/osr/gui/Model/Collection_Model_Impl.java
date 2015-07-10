@@ -48,16 +48,16 @@ public class Collection_Model_Impl implements I_Collection_Model {
     public Collection_Model_Impl(I_Model model) {
         this.model = model;
     }
-    
+
     @Override
     public Collection<? extends DataElement> getRequirements(
             Predicate<Requirement> filtering) throws IOException{
         if(requirements == null){
             requirements = model.getAllRequirements();
         }
-        
+
         Collection<Requirement> filteredRequirements = Collections2.filter(requirements, filtering);
-        return filteredRequirements; 
+        return filteredRequirements;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Collection_Model_Impl implements I_Collection_Model {
         for(Requirement requirement: requirements){
             commits.addAll(model.getCommitsFromRequirement(requirement));
         }
-        
+
         return commits;
     }
 
@@ -86,28 +86,27 @@ public class Collection_Model_Impl implements I_Collection_Model {
     @Override
     public Collection<? extends DataElement> getRequirementsByFile(
             Collection<PathDE> files) throws IOException {
-        
+
         Collection<Requirement> requirements = new ArrayList<>();
         for(PathDE file: files){
             requirements.addAll(model.getRequirementsByFile(file));
         }
-        
+
         return requirements;
     }
 
     @Override
     public Collection<? extends DataElement> getCommitsByFile(
             Collection<PathDE> files) {
-        
+
         Collection<Commit> commits = new ArrayList<>();
         for(PathDE file: files){
             commits.addAll(model.getCommitsByFile(file));
         }
-        
+
         return commits;
     }
 
-    @Deprecated
     @Override
     public List<? extends DataElement> getFilesByCommit(
             Collection<Commit> commits)
@@ -150,14 +149,14 @@ public class Collection_Model_Impl implements I_Collection_Model {
         if(commits == null){
             commits = model.getAllCommits();
         }
-        
+
         return commits;
     }
 
     @Override
     public Collection<? extends DataElement> getRequirementsByCommit(
             Collection<Commit> commits) throws IOException {
-        
+
         Collection<Requirement> requirements = new ArrayList<>();
         for(Commit commit: commits){
             requirements.addAll(model.getRequirementsFromCommit(commit));
@@ -173,7 +172,7 @@ public class Collection_Model_Impl implements I_Collection_Model {
 
         Collection<? extends DataElement> commits1 = this.getCommitsByRequirement(requirements);
         Collection<? extends DataElement> commits2 = this.getCommitsByFile(files);
-        
+
         commits1.retainAll(commits2);
         return commits1;
     }
@@ -185,10 +184,22 @@ public class Collection_Model_Impl implements I_Collection_Model {
 
         Collection<? extends DataElement> requirements1 = this.getRequirementsByCommit(commits);
         Collection<? extends DataElement> requirements2 = this.getRequirementsByFile(files);
-        
+
         requirements1.retainAll(requirements2);
-        return requirements2;
+        return requirements1;
     }
+
+    @Override
+    public List<? extends DataElement> getFilesByCommitAndRequirement(
+            Collection<Commit> commits,
+            Collection<Requirement> requirements) throws IOException {
+        List<? extends DataElement> files1 = this.getFilesByCommit(commits);
+        List<? extends DataElement> files2 = this.getFilesByRequirement(requirements);
+
+        files1.retainAll(files2);
+        return files1;
+    }
+
 
     @Override
     public List<? extends DataElement> getFilesByRequirement(Collection<Requirement> requirements)

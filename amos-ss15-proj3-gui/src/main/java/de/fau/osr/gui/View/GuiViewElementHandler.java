@@ -399,7 +399,7 @@ public class GuiViewElementHandler extends JFrame {
             guiController.requirementsFromDB();
         });
 
-        Commit_Handler.setButtonAction(()->guiController.commitsFromDB());
+//        Commit_Handler.setButtonAction(()->guiController.commitsFromDB());
 
         Linkage_Handler.setButtonAction(()->guiController.requirementsAndCommitsFromDB());
 

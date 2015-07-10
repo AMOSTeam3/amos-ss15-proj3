@@ -56,6 +56,8 @@ public interface I_Collection_Model {
 
     List<? extends DataElement> getFilesByCommit(Collection<Commit> commits) throws FileNotFoundException;
 
+    List<? extends DataElement> getFilesByCommitAndRequirement(Collection<Commit> commits, Collection<Requirement> requirements) throws IOException;
+
     String getChangeDataFromFileIndex(PathDE file) throws FileNotFoundException;
 
     Pattern getCurrentRequirementPattern();

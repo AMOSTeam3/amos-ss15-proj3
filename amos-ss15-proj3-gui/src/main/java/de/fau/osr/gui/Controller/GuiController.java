@@ -328,7 +328,7 @@ public class GuiController {
                 .getCommit_ElementHandler();
 
         Runnable buttonAction = () -> {
-            filesFromCommit();
+            filesByCommitAndRequirement();
         };
 
         Transformer.process(specificElementHandler, buttonAction, fetching);
@@ -583,6 +583,7 @@ public class GuiController {
     /**
      * Navigation: ->Commits Clear: All Setting: Commits Using: getCommits
      */
+    @Deprecated
     public void commitsFromDB() {
         cleaner.clearAll();
         
@@ -605,6 +606,7 @@ public class GuiController {
      * Navigation: ->Commit->Files Clear: Code/ImpactPercentage Setting: Files
      * Using: getFilesByCommit
      */
+    @Deprecated
     void filesFromCommit() {
         cleaner.clearCode();
 
@@ -626,6 +628,50 @@ public class GuiController {
             try{
                 List<? extends DataElement> paths =  i_Collection_Model.getFilesByCommit((Collection) commits);
                 return i_Collection_Model.getImpactForRequirementAndFile((Collection) dataElements, (List) paths);
+            } catch (IOException e) {
+                popupManager.showErrorDialog("Internal Storage Error");
+                return new ArrayList<DataElement>();
+            }
+        };
+
+        ElementHandler specificElementHandler = elementHandler
+                .getPathDE_ElementHandler();
+
+        Runnable buttonAction = () -> {
+            codeFromFile();
+        };
+
+        Transformer.process(specificElementHandler, buttonAction, fetching1, fetching2);
+    }
+
+    /**
+     * Navigation: Req->Commit-> Clear: Code/ImpactPercentage Setting: Files
+     * Using: getFilesByCommit
+     */
+    void filesByCommitAndRequirement() {
+        cleaner.clearCode();
+
+        Supplier<List<? extends DataElement>> fetching1 = () -> {
+            Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
+            Collection<DataElement> reqs = elementHandler.getRequirement_ElementHandler().getSelection(new Visitor_Swing());
+            try{
+                return i_Collection_Model.getFilesByCommitAndRequirement((Collection) commits, (Collection) reqs);
+            } catch (FileNotFoundException e) {
+                popupManager.showErrorDialog("Internal storing Error");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new ArrayList<DataElement>();
+        };
+
+        Supplier<List<? extends DataElement>> fetching2 = () -> {
+            Collection<DataElement> reqs = elementHandler
+                    .getRequirement_ElementHandler().getSelection(
+                            new Visitor_Swing());
+            Collection<DataElement> commits = elementHandler.getCommit_ElementHandler().getSelection(new Visitor_Swing());
+            try{
+                List<? extends DataElement> paths = i_Collection_Model.getFilesByCommitAndRequirement((Collection) commits, (Collection) reqs);
+                return i_Collection_Model.getImpactForRequirementAndFile((Collection) reqs, (List) paths);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
