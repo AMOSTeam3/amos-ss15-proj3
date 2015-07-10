@@ -50,6 +50,29 @@ public class FileUtil {
     }
     
     /**
+     * This method cleans the config file when the user rejects storing of data during login
+     * @return a Boolean value "True" - Config file was cleaned properly. "False" Some problem occured while cleaning the file
+     */
+    public Boolean cleanConfigFile(){
+        
+        String userHomePath = System.getProperty("user.home");
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(new File(userHomePath,AppProperties.GetValue("DefaultConfigFilePath"))), "utf-8"))) {         
+         writer.close();
+         return true;
+      } catch (UnsupportedEncodingException e1) {
+        e1.printStackTrace();
+        return false;
+        } catch (FileNotFoundException e1) {
+        e1.printStackTrace();
+        return false;
+        } catch (IOException e1) {        
+        e1.printStackTrace();
+        return false;
+        }
+    }
+    
+    /**
      * @return list of string which contains the configuration information
      * This method reads the configuration information from the  config file
      */

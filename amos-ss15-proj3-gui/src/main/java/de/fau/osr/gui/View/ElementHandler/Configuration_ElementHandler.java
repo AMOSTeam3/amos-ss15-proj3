@@ -244,7 +244,9 @@ public class Configuration_ElementHandler extends JPanel {
                         popupManager.showErrorDialog("Could not write to config file");
                     }
                 }
-
+                else if (retVal == 1){
+                    fileUtil.cleanConfigFile();
+                }
                     
                     
                 jpane.setEnabledAt(1, true);                
