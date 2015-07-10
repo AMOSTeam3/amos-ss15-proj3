@@ -1,0 +1,24 @@
+To build and install the project from source, the following prerequisites have
+to be met:
+ - JDK 8 (or compatible)
+ - Maven 3
+ - internet access
+
+To build the whole project execute (in the project root folder):
+$ mvn package
+
+To run the application or the plugin, the following is needed:
+ - Java 8 compatible JRE (for the eclipse plugin, eclipse needs to run with
+   this JRE)
+ - internet access
+ - database credentials for the amos-ss15-proj3 database at osr-amos.cs.fau.de
+
+After a successful build, the standalone jar can be found at
+amos-ss15-proj3-gui/target/amos-ss15-proj3-gui-1.0-SNAPSHOT-jar-with-dependencies.jar
+and the eclipse update site can be found at
+amos-ss15-proj3-eclipse-updatesite/target/amos-ss15-proj3-eclipse-updatesite-1.0.0.zip
+
+To install the plugin in eclipse, click "Help" in eclipse, then
+"Install New Software...". At the upper right click "Add", then "Archive" and
+navigate to the updatesite zip file. You should now be able to select the
+"SPICE Traceability Eclipse IDE Integration" feature under Uncategorized.
