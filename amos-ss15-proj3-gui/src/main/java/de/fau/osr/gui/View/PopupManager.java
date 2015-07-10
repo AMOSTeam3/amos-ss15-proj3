@@ -51,6 +51,16 @@ public class PopupManager {
         Object[] options = { "Change Repository", "Change Requirement Pattern"};
         return JOptionPane.showOptionDialog(null, "Choose to Configure", "SpiceTraceability Configuration", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     }
+    
+    /**
+     * Method to open a option dialog to get acceptance from user for saving configuration details
+     * @return integer containing the option selected (yes-0, no-1)
+     */
+    public int Configuration_Persist_OptionDialog(){
+        Object[] options = { "Change Repository", "Change Requirement Pattern"};
+        int retVal =  JOptionPane.showOptionDialog(null, "Do you want the application to remember the configuration details for the next sessions?", "Remember Configuration", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        return retVal;
+    }
 
     /**
      * Showing an Dialog to the User. Marked as Error dialog.

@@ -235,12 +235,18 @@ public class Configuration_ElementHandler extends JPanel {
             configData.add(dbUsername);
             configData.add(dbPassword);
             
-            if(guiController.configureApplication(configuration)){        
+            if(guiController.configureApplication(configuration)){   
+                PopupManager popupManager = new PopupManager();
+                int retVal = popupManager.Configuration_Persist_OptionDialog();
                 FileUtil fileUtil = new FileUtil();
-                if(!fileUtil.writeConfigFile(configData)){
-                   /* PopupManager popupManager = new PopupManager();
-                    popupManager.showErrorDialog("Could not write to config file");*/
+                if(retVal == 0){                    
+                    if(!fileUtil.writeConfigFile(configData)){                    
+                        popupManager.showErrorDialog("Could not write to config file");
+                    }
                 }
+
+                    
+                    
                 jpane.setEnabledAt(1, true);                
                 jpane.setEnabledAt(2,true);
                 jpane.setEnabledAt(3, true);
