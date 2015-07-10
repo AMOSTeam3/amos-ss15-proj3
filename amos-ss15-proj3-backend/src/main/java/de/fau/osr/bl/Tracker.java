@@ -172,6 +172,36 @@ public class Tracker {
     }
 
     /**
+     * @return requiremets by given file paths.
+     * @throws IOException
+     */
+    public Collection<Requirement> getRequirementsByFile(String file) throws IOException {
+        Collection<Requirement> reqs = new ArrayList<>();
+        try {
+            reqs = getBlame(file).stream()
+                    // fetching every requirement ids of each line
+                    .map( annotatedLine -> annotatedLine.getRequirements())
+                    .flatMap(reqIds -> reqIds.stream())
+                    .distinct()
+                    .sorted((reqId1, reqId2) -> new NaturalOrderComparator().compare(reqId1, reqId2))
+                    .map(reqId -> {
+                        try {
+                            return getRequirementById(reqId);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        // this should never happen.
+                        return new Requirement("", "", "", null, -1);
+                    })
+                    .collect(Collectors.toList());
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+
+        return reqs;
+    }
+
+    /**
      * This method returns a list of <tt>CommitFile</tt>'s for the given requirement ID.
      */
     @Deprecated
@@ -229,6 +259,7 @@ public class Tracker {
     /**
      * This method returns all the requirements for the given File.
      */
+    @Deprecated
     public Set<String> getRequirementIdsForFile(String filePath) throws IOException {
         Set<String> requirementList = new HashSet<>();
 
@@ -315,6 +346,7 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Path> getFiles() throws IOException {
+        System.out.println(">>> getFiles");
         if (cachedFiles == null) {
             // Store all project-related and version-controlled files in *cachedFiles*
             cachedFiles = projectDirTraverser.traverse().stream()

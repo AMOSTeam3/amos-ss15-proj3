@@ -87,10 +87,10 @@ public class Collection_Model_Impl implements I_Collection_Model {
     public Collection<? extends DataElement> getRequirementsByFile(
             Collection<PathDE> files) throws IOException {
 
-        Collection<Requirement> requirements = new ArrayList<>();
-        for(PathDE file: files){
-            requirements.addAll(model.getRequirementsByFile(file));
-        }
+        Collection<Requirement> requirements = files.stream()
+                .map(file -> model.getRequirementsByFile(file))
+                .flatMap(reqs -> reqs.stream())
+                .collect(Collectors.toList());
 
         return requirements;
     }

@@ -355,13 +355,14 @@ public class GuiController {
         };
         
         Supplier<List<? extends DataElement>> fetching2 = () -> {
-            Collection<DataElement> dataElements = elementHandler
+            Collection<DataElement> reqs = elementHandler
                     .getRequirement_ElementHandler().getSelection(
                             new Visitor_Swing());
             try {
+                // !!! getFilesByRequirement is called 2nd time :-(
                 List<? extends DataElement> paths =  i_Collection_Model.getFilesByRequirement(
-                        (Collection) dataElements);
-                return i_Collection_Model.getImpactForRequirementAndFile((Collection) dataElements, (List) paths);
+                        (Collection) reqs);
+                return i_Collection_Model.getImpactForRequirementAndFile((Collection) reqs, (List) paths);
             } catch (IOException e) {
                 popupManager.showErrorDialog("Internal Storage Error");
                 return new ArrayList<DataElement>();
