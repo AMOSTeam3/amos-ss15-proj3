@@ -54,7 +54,7 @@ public class PluginManagementAction implements IWorkbenchWindowActionDelegate {
         if (!RegistrySettings.isPluginEnabled
                 && action.getText().equals("Enable ReqTracker")) {
             RegistrySettings.isPluginEnabled = true;
-            action.setText("Disable SPICE");
+            action.setText("Disable ReqTracker");
             
             RegistrySettings.configure();
             
