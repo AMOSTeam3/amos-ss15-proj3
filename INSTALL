@@ -21,4 +21,4 @@ amos-ss15-proj3-eclipse-updatesite/target/amos-ss15-proj3-eclipse-updatesite-1.0
 To install the plugin in eclipse, click "Help" in eclipse, then
 "Install New Software...". At the upper right click "Add", then "Archive" and
 navigate to the updatesite zip file. You should now be able to select the
-"SPICE Traceability Eclipse IDE Integration" feature under Uncategorized.
+"ReqTracker Eclipse IDE Integration" feature under Uncategorized.

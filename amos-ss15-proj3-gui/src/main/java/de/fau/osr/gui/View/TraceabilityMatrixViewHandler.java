@@ -67,7 +67,7 @@ public class TraceabilityMatrixViewHandler extends JFrame {
      * @throws IOException
      */
     public TraceabilityMatrixViewHandler() throws IOException {
-        setTitle("SpiceTraceability-Requirement Traceability Matrix");
+        setTitle("ReqTracker-Requirement Traceability Matrix");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 1157, 679);
         contentPane = new JPanel();

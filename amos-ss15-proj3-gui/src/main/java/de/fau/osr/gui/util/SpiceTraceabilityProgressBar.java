@@ -45,7 +45,7 @@ public class SpiceTraceabilityProgressBar extends JFrame implements ProgressBarI
     public SpiceTraceabilityProgressBar() {
         setType(Type.UTILITY);
         setResizable(false);
-        setTitle("Spice Traceability : Progress");
+        setTitle("ReqTracker : Progress");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 442, 160);
         contentPane = new JPanel();

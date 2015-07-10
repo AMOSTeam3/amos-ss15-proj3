@@ -21,7 +21,7 @@
 -->
 <feature
       id="amos-ss15-proj3-eclipse-feature"
-      label="SPICE Traceability Eclipse IDE Integration"
+      label="ReqTracker Eclipse IDE Integration"
       version="1.0.0"
       provider-name="AMOS SS15 PROJ3">
 

@@ -24,7 +24,7 @@
 
     <extension
           id="org.amos.requirement"
-          name="SPICE Traceability"
+          name="ReqTracker"
           point="org.eclipse.core.resources.markers">         
           <super type="org.eclipse.core.resources.textmarker"></super> 
           <attribute name="owner" />
@@ -42,17 +42,17 @@
             visible="true"
             id="SpiceTraceabilityConfiguration.actionSet">
          <menu
-               label="Spice &amp;Traceability"
+               label="ReqTracker"
                id="spiceMenu">
             <separator
                   name="spiceGroup">
             </separator>
          </menu>
          <action
-               label="Enable SPICE"
+               label="Enable ReqTracker"
                icon="icons/stopstart.gif"
                class="osr.core.ui.action.PluginManagementAction"
-               tooltip="Enable SPICE plugin features"
+               tooltip="Enable ReqTracker plugin features"
                menubarPath="spiceMenu/spiceGroup"
                toolbarPath="spiceGroup"
                id="1_osr.core.ui.action.PluginManagementAction">
@@ -87,7 +87,7 @@
         highlightPreferenceKey="highlight.background"
         highlightPreferenceValue="true"
         includeOnPreferencePage="true"
-        label="SPICE Marker"
+        label="ReqTracker Marker"
         icon="icons/marker.gif"
         overviewRulerPreferenceValue="true"
         overviewRulerPreferenceKey="clruler"

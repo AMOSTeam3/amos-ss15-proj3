@@ -66,7 +66,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
      * Create the frame.
      */
     public TraceabilityMatrixByImpactViewHandler() {
-        final String title = "Spice Traceability - Traceability Matrix by Impact";
+        final String title = "ReqTracker - Traceability Matrix by Impact";
         setTitle(title);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 999, 686);

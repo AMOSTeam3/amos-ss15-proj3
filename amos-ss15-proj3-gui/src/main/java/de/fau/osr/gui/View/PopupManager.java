@@ -69,7 +69,7 @@ public class PopupManager {
      */
     public int Configure_OptionDialog(){
         Object[] options = { "Change Repository", "Change Requirement Pattern"};
-        return JOptionPane.showOptionDialog(null, "Choose to Configure", "SpiceTraceability Configuration", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        return JOptionPane.showOptionDialog(null, "Choose to Configure", "ReqTracker Configuration", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     }
     
     /**
@@ -104,8 +104,8 @@ public class PopupManager {
      * @return true if success
      */
     public boolean Authentication(){
-        final JFrame frame = new JFrame("SPICE Traceability Database Authentication : Login");
-        LoginDialog loginDlg = new LoginDialog(frame,"SPICE Traceability Database Authentication : Login");
+        final JFrame frame = new JFrame("ReqTracker Database Authentication : Login");
+        LoginDialog loginDlg = new LoginDialog(frame,"ReqTracker Database Authentication : Login");
         loginDlg.setVisible(true);
         if(loginDlg.isSucceeded()){
             return true;

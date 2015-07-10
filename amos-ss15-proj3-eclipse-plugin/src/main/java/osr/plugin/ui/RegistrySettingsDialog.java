@@ -62,7 +62,7 @@ public class RegistrySettingsDialog extends TitleAreaDialog  {
     @Override
     public void create() {
       super.create();
-      setTitle("SPICE Configuration");
+      setTitle("ReqTracker Configuration");
       setMessage("Configuration", IMessageProvider.INFORMATION);
       
     }

@@ -21,6 +21,6 @@
 -->
 <site>
    <feature id="amos-ss15-proj3-eclipse-feature">
-      <category name="SPICE Traceability"/>
+      <category name="ReqTracker"/>
    </feature>
 </site>

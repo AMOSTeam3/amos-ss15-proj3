@@ -92,7 +92,7 @@ public class UiTools {
      */
     public static File chooseFile(String filename) {
         JFileChooser fileChooser = new JFileChooser();
-          fileChooser.setDialogTitle("Spice Traceability -Save As");
+          fileChooser.setDialogTitle("ReqTracker -Save As");
           fileChooser.setSelectedFile(new File(filename));
 
           int userSelection = fileChooser.showSaveDialog(null);
