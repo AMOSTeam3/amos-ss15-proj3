@@ -51,7 +51,7 @@ public class ConfigurationAction implements IWorkbenchWindowActionDelegate {
         if (RegistrySettings.isPluginEnabled)
             RegistrySettings.configure();
         else
-            UIUtility.message("SPICE Information",
+            UIUtility.message("ReqTracker Information",
                     "Enable Plugin to have this feature");
 
     }

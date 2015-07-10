@@ -52,7 +52,7 @@ public class PluginManagementAction implements IWorkbenchWindowActionDelegate {
     @Override
     public void run(IAction action) {
         if (!RegistrySettings.isPluginEnabled
-                && action.getText().equals("Enable SPICE")) {
+                && action.getText().equals("Enable ReqTracker")) {
             RegistrySettings.isPluginEnabled = true;
             action.setText("Disable SPICE");
             
@@ -63,7 +63,7 @@ public class PluginManagementAction implements IWorkbenchWindowActionDelegate {
             
         } else {
             RegistrySettings.isPluginEnabled = false;
-            action.setText("Enable SPICE");
+            action.setText("Enable ReqTracker");
             PluginSPICETrackerAdaptor.resetInstance();
            
         }
