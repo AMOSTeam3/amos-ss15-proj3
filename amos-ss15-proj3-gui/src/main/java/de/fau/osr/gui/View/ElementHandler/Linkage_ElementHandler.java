@@ -42,6 +42,7 @@ public class Linkage_ElementHandler extends ElementHandler {
     private JTextField Commit_textField = new JTextField();
     private Presenter_Requirement requirement = null;
     private Presenter_Commit commit = null;
+    private Boolean isDataLayerChanged = false;
     
     public Linkage_ElementHandler(){
         for(JTextField textField : new JTextField[]{this.RequirementID_textField, this.Commit_textField}) {
@@ -50,6 +51,14 @@ public class Linkage_ElementHandler extends ElementHandler {
         }
         button = new JButton("Add Linkage");
         button.setPreferredSize(new Dimension(20, 5));
+    }
+    
+    public Boolean isDataLayerChanged(){
+        return isDataLayerChanged;
+    }
+    
+    public void setDataLayerChanged(Boolean isChanged){
+        isDataLayerChanged = isChanged;
     }
 
     @Override

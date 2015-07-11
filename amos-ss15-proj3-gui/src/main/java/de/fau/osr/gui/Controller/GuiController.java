@@ -702,6 +702,7 @@ public class GuiController {
         Transformer.process(specificElementHandler, buttonAction, fetching);
 
         elementHandler.getLinkage_ElementHandler().switchButtonAction();
+        elementHandler.getLinkage_ElementHandler().setDataLayerChanged(true);
     }
 
     void RequirementToLinkage() {

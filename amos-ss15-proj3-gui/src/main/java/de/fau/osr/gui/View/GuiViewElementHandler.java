@@ -58,7 +58,7 @@ public class GuiViewElementHandler extends JFrame {
     private Commit_ElementHandler Commit_Handler_ManagementTab = new Commit_ElementHandler();
     private Linkage_ElementHandler Linkage_Handler = new Linkage_ElementHandler();
     private Configuration_ElementHandler configuration_ElementHandler = new Configuration_ElementHandler();
-    
+    private int currentTab = 0, previousTab = 0;
     
     private JPanel mainNavigationPanel;
     private JPanel requirementModificationPanel;
@@ -304,13 +304,15 @@ public class GuiViewElementHandler extends JFrame {
     public void setOnClickAction(){
         tabpane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                System.out.println("Tab: " + tabpane.getSelectedIndex());
-                
-                /*if(tabpane.getSelectedIndex() == 0){
-                    tabpane.setEnabledAt(1, false);
-                    tabpane.setEnabledAt(2, false);
-                    tabpane.setEnabledAt(3, false);
-                }*/
+                previousTab = currentTab;
+                currentTab = tabpane.getSelectedIndex();
+                if(tabpane.getTitleAt(currentTab).equals("Navigation") &&
+                        tabpane.getTitleAt(previousTab).equals("Linkage Management")){
+                    if(Linkage_Handler.isDataLayerChanged()){
+                        guiController.refresh();
+                        Linkage_Handler.setDataLayerChanged(false);
+                    }
+                }
                 
             }
         });
