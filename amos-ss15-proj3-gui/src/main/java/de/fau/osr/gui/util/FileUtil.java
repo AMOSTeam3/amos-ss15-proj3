@@ -84,7 +84,7 @@ public class FileUtil {
         e1.printStackTrace();
         return false;
         } catch (FileNotFoundException e1) {
-        e1.printStackTrace();
+        //e1.printStackTrace();
         return false;
         } catch (IOException e1) {        
         e1.printStackTrace();
@@ -109,7 +109,7 @@ public class FileUtil {
            return configList;
     } catch (Exception e) {
         
-        e.printStackTrace();
+       // e.printStackTrace();
         return new ArrayList<String>();
     }
        
