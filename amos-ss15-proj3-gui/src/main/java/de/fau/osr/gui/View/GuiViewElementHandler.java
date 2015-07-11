@@ -379,7 +379,7 @@ public class GuiViewElementHandler extends JFrame {
         
         for(Requirement_ElementHandler column :
         	new Requirement_ElementHandler[] {Requirement_Handler, Requirement_HandlerRequirementTab, Requirement_Handler_ManagementTab}) {
-        	 column.setRefreshAction(new AbstractAction("refresh linkage") {
+        	 column.setRefreshAction(new AbstractAction("Refresh Linkage") {
      			@Override
      			public void actionPerformed(ActionEvent arg0) {
      				guiController.refresh();
