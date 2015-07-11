@@ -40,12 +40,12 @@ public class PopupManager {
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setFileHidingEnabled(false);
 
-        int returnValue = chooser.showDialog(null,"Auswahl des Repository");
+        int returnValue = chooser.showDialog(null,"Select Repository");
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             return chooser.getSelectedFile();
         }else {
-            throw new IOException("Fehler bei er Repository Auswahl");
+            throw new IOException("Error in Repository Selection");
         }
     }
 
@@ -55,9 +55,9 @@ public class PopupManager {
      * @return String containing the directly the user input. Not yet checked whether it's a proper pattern
      */
     public String Pattern_OpeningDialog(String currentPattern) {
-        String msg = "Gebe \"Requirement-Pattern\" als RegExp ein.\n" +
-                "Mehrere \"Requirement-Pattern\" müssen gemäß der RegExp-Syntax\n" +
-                "mit | (Pipe) getrennt eingegeben werden.";
+        String msg = "Give \"Requirement-Pattern\" as RegExp.\n" +
+                "More \"Requirement-Pattern\" must be according to RegExp-Syntax\n" +
+                "with | (Pipe) indicated separately.";
         return JOptionPane.showInputDialog(msg, currentPattern);
     }
 

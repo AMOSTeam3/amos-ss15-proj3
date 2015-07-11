@@ -58,7 +58,7 @@ public class RequirementMarker {
 				List<Collection<String>> lines = trackerAdaptor.getRequirementLineLinkForFile(UIUtility.getGitFilepath());
 				for(int i = 0 ; i < lines.size(); i++){
 					for(String req : lines.get(i))
-						addResourceMarker(file, req, i-1, true);
+						addResourceMarker(file, req, i+1, true);
 				}
 			}
 		} catch (Exception e) {

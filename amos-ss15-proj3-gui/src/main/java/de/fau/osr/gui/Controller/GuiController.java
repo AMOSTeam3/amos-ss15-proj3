@@ -26,7 +26,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -50,15 +49,20 @@ import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.gui.Authentication.Login;
-import de.fau.osr.gui.Model.Collection_Model_Impl;
 import de.fau.osr.gui.Components.PathDEsJTree;
+import de.fau.osr.gui.Model.Collection_Model_Impl;
 import de.fau.osr.gui.Model.I_Collection_Model;
 import de.fau.osr.gui.Model.TrackerAdapter;
-import de.fau.osr.gui.Model.DataElements.*;
+import de.fau.osr.gui.Model.DataElements.Commit;
+import de.fau.osr.gui.Model.DataElements.Configuration;
+import de.fau.osr.gui.Model.DataElements.DataElement;
+import de.fau.osr.gui.Model.DataElements.PathDE;
+import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.View.Cleaner;
 import de.fau.osr.gui.View.GuiViewElementHandler;
 import de.fau.osr.gui.View.PopupManager;
 import de.fau.osr.gui.View.TracabilityMatrix_View;
+import de.fau.osr.gui.View.TraceabilityMatrixByImpactViewHandlerPanel;
 import de.fau.osr.gui.View.ElementHandler.ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Linkage_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
@@ -702,6 +706,7 @@ public class GuiController {
         Transformer.process(specificElementHandler, buttonAction, fetching);
 
         elementHandler.getLinkage_ElementHandler().switchButtonAction();
+        elementHandler.getLinkage_ElementHandler().setDataLayerChanged(true);
     }
 
     void RequirementToLinkage() {
@@ -899,6 +904,26 @@ public class GuiController {
             tracability_view.showTraceabilityMatrixByImpactProgressBar(tr);
             tr.Process();
             tracability_view.showTraceabilityMatrixByImpact(tr);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    /**This method enables showing of traceability matrix in the tabbed view
+     * @param traceabilityMatrixByImpactViewHandlerPanel
+     */
+    public void showTraceabilityMatrixByImpactInTabbedView(TraceabilityMatrixByImpactViewHandlerPanel traceabilityMatrixByImpactViewHandlerPanel) {
+        try {
+            RequirementsTraceabilityMatrixByImpact tr = i_Collection_Model.getRequirementsTraceabilityByImpact();
+            tracability_view.showTraceabilityMatrixByImpactProgressBar(tr);
+            traceabilityMatrixByImpactViewHandlerPanel.setInternalGenerationEnable(false);
+            traceabilityMatrixByImpactViewHandlerPanel.setExportEnable(false);
+            //traceabilityMatrixByImpactViewHandlerPanel.eraseTable();
+            tr.Process();
+            tracability_view.showTraceabilityMatrixByImpactInTabbedView(tr, traceabilityMatrixByImpactViewHandlerPanel);
+            traceabilityMatrixByImpactViewHandlerPanel.setInternalGenerationEnable(true);
+            traceabilityMatrixByImpactViewHandlerPanel.setExportEnable(true);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

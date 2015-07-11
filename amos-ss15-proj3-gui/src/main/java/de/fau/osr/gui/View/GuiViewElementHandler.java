@@ -20,22 +20,37 @@
  */
 package de.fau.osr.gui.View;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
-import de.fau.osr.gui.Controller.GuiController;
-import de.fau.osr.gui.View.ElementHandler.*;
-import de.fau.osr.gui.util.filtering.FilterByExactString;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.WindowConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import de.fau.osr.gui.Components.MultiSplitPane;
+import de.fau.osr.gui.Controller.GuiController;
+import de.fau.osr.gui.View.ElementHandler.Code_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Commit_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Configuration_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Impact_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Linkage_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.MenuHandler;
+import de.fau.osr.gui.View.ElementHandler.PathDE_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_ElementHandler;
+import de.fau.osr.gui.util.filtering.FilterByExactString;
 
 public class GuiViewElementHandler extends JFrame {
     
@@ -58,12 +73,14 @@ public class GuiViewElementHandler extends JFrame {
     private Commit_ElementHandler Commit_Handler_ManagementTab = new Commit_ElementHandler();
     private Linkage_ElementHandler Linkage_Handler = new Linkage_ElementHandler();
     private Configuration_ElementHandler configuration_ElementHandler = new Configuration_ElementHandler();
-    
+    private TraceabilityMatrixByImpactViewHandlerPanel traceabilityMatrixByImpactViewHandlerPanel = new TraceabilityMatrixByImpactViewHandlerPanel();
+    private int currentTab = 0, previousTab = 0;
     
     private JPanel mainNavigationPanel;
     private JPanel requirementModificationPanel;
     private JPanel LinkageManagmentPanel;
     private JPanel homePanel;
+    private JPanel traceabilityMatrixPanel;
     
     private JTabbedPane tabpane;
 
@@ -77,12 +94,14 @@ public class GuiViewElementHandler extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setBackground(Color.WHITE);
         setJMenuBar(Menu_Handler.getMenuBar());
-        
+        setIcon();
         createTabs();
         positionMainPanelElements();
         positionRequirementPanelElements();
         positionRequirementManagementPanelElements();
+        positionTraceabilityMatrixPanelElements();
         positionHomePanelElements();
+        
         
         pack();
         setVisible(true);
@@ -144,8 +163,15 @@ public class GuiViewElementHandler extends JFrame {
         elementHandlers.add(Linkage_Handler);
         return elementHandlers;
     }
-    
+    private void setIcon(){
+        java.util.List<Image> icons = new ArrayList<Image>();
+        icons.add(new ImageIcon(GuiViewElementHandler.class.getResource("/icons/ReqTrackerLogo.png")).getImage());
+        icons.add(new ImageIcon(GuiViewElementHandler.class.getResource("/icons/ReqTrackerLogoFull.png")).getImage());
+        setIconImages(icons);
+               
+    }
     private void createTabs(){
+       
         mainNavigationPanel = new JPanel();
         mainNavigationPanel.setLayout(new BorderLayout());
         requirementModificationPanel = new JPanel();
@@ -154,6 +180,8 @@ public class GuiViewElementHandler extends JFrame {
         LinkageManagmentPanel.setLayout(new BorderLayout());
         homePanel = new JPanel();
         homePanel.setLayout(new BorderLayout());
+        traceabilityMatrixPanel = new JPanel();
+        traceabilityMatrixPanel.setLayout(new BorderLayout());
         
         tabpane = new JTabbedPane
         (JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -162,6 +190,7 @@ public class GuiViewElementHandler extends JFrame {
         tabpane.addTab("Navigation", mainNavigationPanel);
         tabpane.addTab("Requirements", requirementModificationPanel);
         tabpane.addTab("Linkage Management", LinkageManagmentPanel);
+        tabpane.addTab("Traceability Matrix", traceabilityMatrixPanel);
         this.add(tabpane);
     }
 
@@ -297,25 +326,40 @@ public class GuiViewElementHandler extends JFrame {
         tabpane.setEnabledAt(1, false);
         tabpane.setEnabledAt(2, false);
         tabpane.setEnabledAt(3, false);
+        tabpane.setEnabledAt(4, false);
         setOnClickAction();
         homePanel.add(pane, BorderLayout.CENTER);
+    }
+    
+    private void positionTraceabilityMatrixPanelElements() {
+        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        //TraceabilityMatrix_ElementHandler.setController(guiController,tabpane);
+        traceabilityMatrixByImpactViewHandlerPanel.setInternalGenerationVisibility(true);
+        traceabilityMatrixByImpactViewHandlerPanel.setExportEnable(false);       
+        pane.addComponent(traceabilityMatrixByImpactViewHandlerPanel);
+ 
+        traceabilityMatrixPanel.add(pane, BorderLayout.CENTER);
     }
     
     public void setOnClickAction(){
         tabpane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                System.out.println("Tab: " + tabpane.getSelectedIndex());
+                previousTab = currentTab;
+                currentTab = tabpane.getSelectedIndex();
+                if(tabpane.getTitleAt(currentTab).equals("Navigation") &&
+                        tabpane.getTitleAt(previousTab).equals("Linkage Management")){
+                    if(Linkage_Handler.isDataLayerChanged()){
+                        guiController.refresh();
+                        Linkage_Handler.setDataLayerChanged(false);
+                    }
+                }
                 
-                /*if(tabpane.getSelectedIndex() == 0){
-                    tabpane.setEnabledAt(1, false);
-                    tabpane.setEnabledAt(2, false);
-                    tabpane.setEnabledAt(3, false);
-                }*/
                 
             }
         });
     }
-
+    
+   
 	void initializeButtonActions() {
         PathDE_Handler.setButtonAction(()->guiController.filesFromDB());
 
@@ -334,6 +378,15 @@ public class GuiViewElementHandler extends JFrame {
                 e.printStackTrace();
             }
 
+            
+        });
+        
+        traceabilityMatrixByImpactViewHandlerPanel.setImpactAction(() -> {
+          
+                guiController.showTraceabilityMatrixByImpactInTabbedView(traceabilityMatrixByImpactViewHandlerPanel);
+                PopupManager popUpManager = new PopupManager();
+                popUpManager.showInformationDialog("Traceability matrix Generation is complete");
+            
         });
 
         Menu_Handler.setImpactAction(() -> {
@@ -354,7 +407,7 @@ public class GuiViewElementHandler extends JFrame {
         
         for(Requirement_ElementHandler column :
         	new Requirement_ElementHandler[] {Requirement_Handler, Requirement_HandlerRequirementTab, Requirement_Handler_ManagementTab}) {
-        	 column.setRefreshAction(new AbstractAction("refresh linkage") {
+        	 column.setRefreshAction(new AbstractAction("Refresh Linkage") {
      			@Override
      			public void actionPerformed(ActionEvent arg0) {
      				guiController.refresh();
