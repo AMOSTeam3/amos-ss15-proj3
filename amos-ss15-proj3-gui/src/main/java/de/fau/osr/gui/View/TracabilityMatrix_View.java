@@ -59,12 +59,20 @@ public class TracabilityMatrix_View {
     public void showTraceabilityMatrixByImpact(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
 
             TraceabilityMatrixByImpactViewHandler trMatrixByImpact = new TraceabilityMatrixByImpactViewHandler();
-            trMatrixByImpact.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrixByImpact);
-            trMatrixByImpact.initTable();
+            trMatrixByImpact.contentPane.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrixByImpact);
+            trMatrixByImpact.contentPane.initTable();
             trMatrixByImpact.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             trMatrixByImpact.setVisible(true);
 
     }
+    
+    public void showTraceabilityMatrixByImpactInTabbedView(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact,TraceabilityMatrixByImpactViewHandlerPanel traceabilityMatrixByImpactViewHandlerPanel){
+       
+        traceabilityMatrixByImpactViewHandlerPanel.setRequirementsTraceabilityMatrix(requirementsTraceabilityMatrixByImpact);
+        traceabilityMatrixByImpactViewHandlerPanel.initTable();
+
+}
+    
     /**
      * method to show progress bar for the processing of traceability matrix by impact values
      * @param tr 

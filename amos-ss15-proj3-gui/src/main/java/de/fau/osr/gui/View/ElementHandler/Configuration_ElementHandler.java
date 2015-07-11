@@ -272,6 +272,7 @@ public class Configuration_ElementHandler extends JPanel {
                 jpane.setEnabledAt(1, true);                
                 jpane.setEnabledAt(2,true);
                 jpane.setEnabledAt(3, true);
+                jpane.setEnabledAt(4, true);
                 jpane.setSelectedIndex(1);
                 
             }

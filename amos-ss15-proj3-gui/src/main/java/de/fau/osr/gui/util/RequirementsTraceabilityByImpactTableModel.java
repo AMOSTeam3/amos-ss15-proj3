@@ -70,7 +70,8 @@ public class RequirementsTraceabilityByImpactTableModel extends DefaultTableMode
                 float impactPercentage =  impactValue.getImpactPercentage();                
                 if(impactPercentage < 0)
                     impactPercentage = (float)0.0;
-                return impactPercentage;
+                
+                return (float)((int)(impactPercentage * 100))/100.0;
             }
             else
                 return 0.0;
