@@ -66,8 +66,12 @@ public class RequirementsTraceabilityByImpactTableModel extends DefaultTableMode
 
         if(requirementsTraceabilityMatrixByImpact != null){
             RequirementFileImpactValue impactValue = requirementsTraceabilityMatrixByImpact.getImpactValue(new RequirementFilePair( requirementsTraceabilityMatrixByImpact.getRequirements().get(columnIndex),requirementsTraceabilityMatrixByImpact.getFiles().get(rowIndex)));
-            if(impactValue != null)
-                return impactValue.getImpactPercentage();
+            if(impactValue != null){
+                float impactPercentage =  impactValue.getImpactPercentage();                
+                if(impactPercentage < 0)
+                    impactPercentage = (float)0.0;
+                return impactPercentage;
+            }
             else
                 return 0.0;
         }
