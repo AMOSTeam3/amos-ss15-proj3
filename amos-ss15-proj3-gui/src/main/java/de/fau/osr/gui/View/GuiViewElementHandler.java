@@ -20,22 +20,38 @@
  */
 package de.fau.osr.gui.View;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
-import de.fau.osr.gui.Controller.GuiController;
-import de.fau.osr.gui.View.ElementHandler.*;
-import de.fau.osr.gui.util.filtering.FilterByExactString;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.WindowConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import de.fau.osr.gui.Components.MultiSplitPane;
+import de.fau.osr.gui.Controller.GuiController;
+import de.fau.osr.gui.View.ElementHandler.Code_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Commit_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Configuration_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Impact_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Linkage_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.MenuHandler;
+import de.fau.osr.gui.View.ElementHandler.PathDE_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_Detail_ElementHandler;
+import de.fau.osr.gui.View.ElementHandler.Requirement_ElementHandler;
+import de.fau.osr.gui.util.filtering.FilterByExactString;
 
 public class GuiViewElementHandler extends JFrame {
     
@@ -77,7 +93,7 @@ public class GuiViewElementHandler extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setBackground(Color.WHITE);
         setJMenuBar(Menu_Handler.getMenuBar());
-        
+        setIcon();
         createTabs();
         positionMainPanelElements();
         positionRequirementPanelElements();
@@ -144,8 +160,15 @@ public class GuiViewElementHandler extends JFrame {
         elementHandlers.add(Linkage_Handler);
         return elementHandlers;
     }
-    
+    private void setIcon(){
+        java.util.List<Image> icons = new ArrayList<Image>();
+        icons.add(new ImageIcon(GuiViewElementHandler.class.getResource("/icons/ReqTrackerLogo.png")).getImage());
+        icons.add(new ImageIcon(GuiViewElementHandler.class.getResource("/icons/ReqTrackerLogoFull.png")).getImage());
+        setIconImages(icons);
+               
+    }
     private void createTabs(){
+       
         mainNavigationPanel = new JPanel();
         mainNavigationPanel.setLayout(new BorderLayout());
         requirementModificationPanel = new JPanel();

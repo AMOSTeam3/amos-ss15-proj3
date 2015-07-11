@@ -30,6 +30,7 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,6 +45,7 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
     private JTable table;
     private JScrollPane scrollPane;
     private RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact;
+    private JLabel iconLabel;
 
     /**
      * Launch the application.
@@ -102,45 +104,56 @@ public class TraceabilityMatrixByImpactViewHandler extends JFrame {
                 UiTools.dialogStatusMessage(result, filename);
             }
         });
+        
+        iconLabel = new JLabel("");
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
         gl_contentPane.setHorizontalGroup(
             gl_contentPane.createParallelGroup(Alignment.LEADING)
                 .addGroup(gl_contentPane.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblFiles)
-                        .addPreferredGap(ComponentPlacement.RELATED)
-                        .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                        .addComponent(btnToCsv)
-                                        .addGap(18)
-                                        .addComponent(btnToPdf)
-                                        .addGap(158)
-                                        .addComponent(lblRequirements)
-                                        .addGap(260))
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                        .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
-                                        .addGap(33))))
+                    .addContainerGap()
+                    .addComponent(lblFiles)
+                    .addPreferredGap(ComponentPlacement.RELATED)
+                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+                        .addGroup(gl_contentPane.createSequentialGroup()
+                            .addComponent(btnToCsv)
+                            .addGap(18)
+                            .addComponent(btnToPdf)
+                            .addGap(158)
+                            .addComponent(lblRequirements)
+                            .addGap(381)
+                            .addComponent(iconLabel)
+                            .addContainerGap())
+                        .addGroup(gl_contentPane.createSequentialGroup()
+                            .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
+                            .addGap(33))))
         );
         gl_contentPane.setVerticalGroup(
             gl_contentPane.createParallelGroup(Alignment.LEADING)
                 .addGroup(gl_contentPane.createSequentialGroup()
-                        .addGap(20)
-                        .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                        .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                                                .addComponent(btnToCsv, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnToPdf, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(lblRequirements))
-                                        .addGap(18)
-                                        .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                        .addGap(183)
-                                        .addComponent(lblFiles)))
-                        .addGap(5))
+                    .addGap(20)
+                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+                        .addGroup(gl_contentPane.createSequentialGroup()
+                            .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+                                .addComponent(btnToCsv, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnToPdf, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblRequirements)
+                                .addComponent(iconLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+                            .addGap(18)
+                            .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
+                        .addGroup(gl_contentPane.createSequentialGroup()
+                            .addGap(183)
+                            .addComponent(lblFiles)))
+                    .addGap(5))
         );
         contentPane.setLayout(gl_contentPane);
+        setIcon();
     }
 
+    private void setIcon(){
+        ImageIcon img = new ImageIcon(GuiViewElementHandler.class.getResource("/icons/ReqTrackerLogo.png"));
+        setIconImage(img.getImage());
+        //iconLabel.setIcon(img);
+    }
     public void setRequirementsTraceabilityMatrix(RequirementsTraceabilityMatrixByImpact requirementsTraceabilityMatrixByImpact){
         this.requirementsTraceabilityMatrixByImpact = requirementsTraceabilityMatrixByImpact;
     }
