@@ -34,7 +34,6 @@
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div id="navrow2" class="tabs2">
@@ -72,7 +71,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6ff38d1fdebf992aa8c6834ab6c087b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c8ac94a5ffb7ac81ec7889a4a770c7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classde_1_1fau_1_1osr_1_1bl_1_1_requirement_file_pair.html#a9c8ac94a5ffb7ac81ec7889a4a770c7d">hashCode</a> ()</td></tr>
 <tr class="separator:a9c8ac94a5ffb7ac81ec7889a4a770c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7bc919f6c30bc79a58037e74e7f8ff7a"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classde_1_1fau_1_1osr_1_1bl_1_1_requirement_file_pair.html#a7bc919f6c30bc79a58037e74e7f8ff7a">equals</a> (Object <a class="el" href="_req_tracker_application-_navigation_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>)</td></tr>
+<tr class="memitem:a7bc919f6c30bc79a58037e74e7f8ff7a"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classde_1_1fau_1_1osr_1_1bl_1_1_requirement_file_pair.html#a7bc919f6c30bc79a58037e74e7f8ff7a">equals</a> (Object obj)</td></tr>
 <tr class="separator:a7bc919f6c30bc79a58037e74e7f8ff7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -131,13 +130,13 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                      {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">this</span> == <a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">this</span> == obj)</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a> == null)</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">if</span> (obj == null)</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">if</span> (getClass() != <a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>.getClass())</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">if</span> (getClass() != obj.getClass())</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_requirement_file_pair.html#a7bc4208bd5a6ae7bb24b4ef2d2665300">RequirementFilePair</a> other = (<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_requirement_file_pair.html#a7bc4208bd5a6ae7bb24b4ef2d2665300">RequirementFilePair</a>) <a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_requirement_file_pair.html#a7bc4208bd5a6ae7bb24b4ef2d2665300">RequirementFilePair</a> other = (<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_requirement_file_pair.html#a7bc4208bd5a6ae7bb24b4ef2d2665300">RequirementFilePair</a>) obj;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">if</span> (fileName == null) {</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">if</span> (other.fileName != null)</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>

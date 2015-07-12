@@ -1268,12 +1268,6 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1filtering_1_1_filter_by_exact_string.html#a3c2d8ff4c5f9c49873531a5fc717c97d"><param name="Name" value="FilterByExactString"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_controller_1_1_gui_controller.html#a4bee5f9dc628242a122e923b801c039e"><param name="Name" value="finalize"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1util_1_1_flat_source.html#aad8846a063c0e4678746274dc2f4fa9f"><param name="Name" value="flatten"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Local" value="_linkage_8js.html#ae4005834cbbcde3f7a4dfa0c0c7771f0"><param name="Name" value="for"></OBJECT>
-  <UL>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_linkage_8js.html#ae4005834cbbcde3f7a4dfa0c0c7771f0"><param name="Name" value="Linkage.js"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_login_8js.html#ae4005834cbbcde3f7a4dfa0c0c7771f0"><param name="Name" value="Login.js"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_req_tracker_application-_navigation_8js.html#ae4005834cbbcde3f7a4dfa0c0c7771f0"><param name="Name" value="ReqTrackerApplication-Navigation.js"></OBJECT>
-  </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1util_1_1matrix_1_1_matrix_tools.html#ac8a1541f9726199bed2473704b46cba9"><param name="Name" value="generateFileName"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2d031cbd00b835bde1c5f6df268b0744"><param name="Name" value="generateRequirementsTraceability"></OBJECT>
   <UL>
@@ -1800,11 +1794,6 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_authentication_1_1_login_dialog.html#a42c7ccce9bbecef44c20666d480dcb6b"><param name="Name" value="isSucceeded"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_worker.html#a505bf2f82d0fa98944b627fb12468c64"><param name="Name" value="isThreadingRequired"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_c_s_v_file_data_source.html#a4fff488f04955c120bd170d56e02bec1"><param name="Name" value="LINE_END"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Local" value="_linkage_8js.html"><param name="Name" value="Linkage.js"></OBJECT>
-  <UL>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_linkage_8js.html#ae4005834cbbcde3f7a4dfa0c0c7771f0"><param name="Name" value="for"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d"><param name="Name" value="obj"></OBJECT>
-  </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_linkage___element_handler.html#ae85916fa948c02077c6b11f5299b8c1a"><param name="Name" value="Linkage_ElementHandler"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_worker.html#aa1a4f71e7796df77468da38baa4a33fd"><param name="Name" value="listen"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classosr_1_1core_1_1_registry_settings.html#af6816429e0f85a21ce9781ab93662823"><param name="Name" value="listner"></OBJECT>
@@ -1814,11 +1803,6 @@
     <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87"><param name="Name" value="de::fau::osr::gui::Model::TrackerAdapter"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_worker.html#adf5fa519917185b77a84a94a578d1916"><param name="Name" value="de::fau::osr::gui::Model::TrackerAdapterWorker"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a"><param name="Name" value="de::fau::osr::gui::util::GenericLock"></OBJECT>
-  </UL>
-  <LI><OBJECT type="text/sitemap"><param name="Local" value="_login_8js.html"><param name="Name" value="Login.js"></OBJECT>
-  <UL>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_login_8js.html#ae4005834cbbcde3f7a4dfa0c0c7771f0"><param name="Name" value="for"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_login_8js.html#a0cf19f82ec7d5b8a220277790b543a0d"><param name="Name" value="obj"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_authentication_1_1_login_dialog.html#a7776430f8230ad1a888b60328a80dabe"><param name="Name" value="LoginDialog"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1app_1_1_commit_file_listing_app.html#a9f768c7611ebfe25eae4e92b7bf8309c"><param name="Name" value="main"></OBJECT>
@@ -1847,12 +1831,6 @@
   <UL>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit_file.html#a9f276448cf7cc7894d373d8081386666"><param name="Name" value="de::fau::osr::core::vcs::base::CommitFile"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_file.html#ae70b565e87d159d171d6fb4c6f1345e3"><param name="Name" value="de::fau::osr::gui::Model::DataElements::CommitFile"></OBJECT>
-  </UL>
-  <LI><OBJECT type="text/sitemap"><param name="Local" value="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d"><param name="Name" value="obj"></OBJECT>
-  <UL>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d"><param name="Name" value="Linkage.js"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_login_8js.html#a0cf19f82ec7d5b8a220277790b543a0d"><param name="Name" value="Login.js"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_req_tracker_application-_navigation_8js.html#a0cf19f82ec7d5b8a220277790b543a0d"><param name="Name" value="ReqTrackerApplication-Navigation.js"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classosr_1_1plugin_1_1ui_1_1_registry_settings_dialog.html#a62c0b72d733a83944bd8436be9f289de"><param name="Name" value="okPressed"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit_file.html#a18dfe0ea1118855ba38abe39175d4f50"><param name="Name" value="oldPath"></OBJECT>
@@ -2035,11 +2013,6 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_popup_manager.html#ad16a3f1716727cd37555c8b24e718413"><param name="Name" value="Repo_OpeningDialog"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a974f6ae1cd0f90540caa0fa78b94a91d"><param name="Name" value="repositoryURI"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classosr_1_1core_1_1_registry_settings.html#a463fb525ce3ef8d213dda0e2eec1eccd"><param name="Name" value="repoURL"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Local" value="_req_tracker_application-_navigation_8js.html"><param name="Name" value="ReqTrackerApplication-Navigation.js"></OBJECT>
-  <UL>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_req_tracker_application-_navigation_8js.html#ae4005834cbbcde3f7a4dfa0c0c7771f0"><param name="Name" value="for"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Local" value="_req_tracker_application-_navigation_8js.html#a0cf19f82ec7d5b8a220277790b543a0d"><param name="Name" value="obj"></OBJECT>
-  </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html#aa285a160a7110747f64aaa728547b216"><param name="Name" value="Requirement"></OBJECT>
   <UL>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html#aa285a160a7110747f64aaa728547b216"><param name="Name" value="de::fau::osr::core::Requirement"></OBJECT>

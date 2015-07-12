@@ -34,7 +34,6 @@
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div id="navrow2" class="tabs2">
@@ -211,7 +210,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            Stream res = Stream.empty();</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordflow">try</span> {</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                Repository repo = git.getRepository();</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                ObjectId <a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a> = repo.resolve(commitID);</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                ObjectId obj = repo.resolve(commitID);</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                RevWalk revWalk = <span class="keyword">new</span> RevWalk(repo);</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                RevCommit commit = revWalk.parseCommit(obj);</div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                RevCommit[] parents = commit.getParents();</div>
@@ -344,7 +343,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        RevCommit commit = null;</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="keywordflow">try</span> {</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            Repository repo = git.getRepository();</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            ObjectId <a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a> = repo.resolve(commitID);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            ObjectId obj = repo.resolve(commitID);</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            commit = (<span class="keyword">new</span> RevWalk(repo)).parseCommit(obj);</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        } <span class="keywordflow">catch</span> (IOException e1) {</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;</div>

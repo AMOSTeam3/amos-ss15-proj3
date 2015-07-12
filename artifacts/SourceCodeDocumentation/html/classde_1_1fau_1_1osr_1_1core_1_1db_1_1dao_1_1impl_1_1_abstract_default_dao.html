@@ -34,7 +34,6 @@
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div id="navrow2" class="tabs2">
@@ -82,7 +81,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a2687741101b0f5d7cd67c1a1bd69cd05"><td class="memItemLeft" align="right" valign="top">Class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1impl_1_1_abstract_default_dao.html#a2687741101b0f5d7cd67c1a1bd69cd05">getEntityType</a> ()</td></tr>
 <tr class="memdesc:a2687741101b0f5d7cd67c1a1bd69cd05"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a href="http://stackoverflow.com/questions/3437897/how-to-get-class-instance-of-generics-type-t">http://stackoverflow.com/questions/3437897/how-to-get-class-instance-of-generics-type-t</a>  <a href="#a2687741101b0f5d7cd67c1a1bd69cd05">More...</a><br /></td></tr>
 <tr class="separator:a2687741101b0f5d7cd67c1a1bd69cd05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac88d3d957f2c55eb8c5cea3bcc83815e"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1impl_1_1_abstract_default_dao.html#ac88d3d957f2c55eb8c5cea3bcc83815e">persist</a> (<a class="el" href="enumde_1_1fau_1_1osr_1_1core_1_1db_1_1_d_b_operation.html">DBOperation</a> dbOperation, EntityClass <a class="el" href="_req_tracker_application-_navigation_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>)</td></tr>
+<tr class="memitem:ac88d3d957f2c55eb8c5cea3bcc83815e"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1impl_1_1_abstract_default_dao.html#ac88d3d957f2c55eb8c5cea3bcc83815e">persist</a> (<a class="el" href="enumde_1_1fau_1_1osr_1_1core_1_1db_1_1_d_b_operation.html">DBOperation</a> dbOperation, EntityClass obj)</td></tr>
 <tr class="memdesc:ac88d3d957f2c55eb8c5cea3bcc83815e"><td class="mdescLeft">&#160;</td><td class="mdescRight">apply persistence operation <code>dbOperation</code> to <code>obj</code>  <a href="#ac88d3d957f2c55eb8c5cea3bcc83815e">More...</a><br /></td></tr>
 <tr class="separator:ac88d3d957f2c55eb8c5cea3bcc83815e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3727ce0ce3bd94570eb4e0e178e4ca13"><td class="memItemLeft" align="right" valign="top">List&lt; EntityClass &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1impl_1_1_abstract_default_dao.html#a3727ce0ce3bd94570eb4e0e178e4ca13">getAllObjects</a> ()</td></tr>
@@ -319,13 +318,13 @@ Protected Member Functions</h2></td></tr>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                t = session.beginTransaction();</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                <span class="keywordflow">switch</span> (dbOperation) {</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    <span class="keywordflow">case</span> ADD:</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                        session.persist(<a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                        session.persist(obj);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                        <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                    <span class="keywordflow">case</span> UPDATE:</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                        session.update(<a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                        session.update(obj);</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                        <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                    <span class="keywordflow">case</span> DELETE:</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                        session.delete(<a class="code" href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a>);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                        session.delete(obj);</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                        <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                }</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
