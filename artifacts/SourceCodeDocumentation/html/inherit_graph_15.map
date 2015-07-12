@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classde_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1impl_1_1_abstract_default_dao.html" title="de.fau.osr.core.db.dao.impl.\lAbstractDefaultDao\&lt; Requirement \&gt;" alt="" coords="15,5,246,47"/>
+<area shape="rect" id="node2" href="$classde_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1impl_1_1_requirement_dao_implementation.html" title="Implementation for Requirement Data Access methods. " alt="" coords="304,35,511,76"/>
+<area shape="rect" id="node3" href="$interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html" title="Data Access for Requirement. " alt="" coords="5,71,256,98"/>
+</map>

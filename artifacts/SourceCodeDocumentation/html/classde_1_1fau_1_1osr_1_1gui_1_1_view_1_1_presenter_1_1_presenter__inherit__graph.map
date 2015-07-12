@@ -1,0 +1,10 @@
+<map id="de.fau.osr.gui.View.Presenter.Presenter" name="de.fau.osr.gui.View.Presenter.Presenter">
+<area shape="rect" id="node2" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___annotated_line.html" title="de.fau.osr.gui.View.Presenter.\lPresenter_AnnotatedLine" alt="" coords="249,5,445,47"/>
+<area shape="rect" id="node3" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___commit.html" title="de.fau.osr.gui.View.Presenter.\lPresenter_Commit" alt="" coords="249,71,445,112"/>
+<area shape="rect" id="node4" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___commit_file.html" title="de.fau.osr.gui.View.Presenter.\lPresenter_CommitFile" alt="" coords="249,136,445,177"/>
+<area shape="rect" id="node5" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___impact.html" title="de.fau.osr.gui.View.Presenter.\lPresenter_Impact" alt="" coords="249,201,445,243"/>
+<area shape="rect" id="node6" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___impact_d_e.html" title="de.fau.osr.gui.View.Presenter.\lPresenter_ImpactDE" alt="" coords="249,267,445,308"/>
+<area shape="rect" id="node7" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___path.html" title="Presenter for DataElement PathDE. " alt="" coords="249,332,445,373"/>
+<area shape="rect" id="node8" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___path_impact.html" title="Presenter for DataElement PathDE. " alt="" coords="249,397,445,439"/>
+<area shape="rect" id="node9" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_presenter_1_1_presenter___requirement.html" title="de.fau.osr.gui.View.Presenter.\lPresenter_Requirement" alt="" coords="249,463,445,504"/>
+</map>

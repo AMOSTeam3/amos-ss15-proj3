@@ -1,0 +1,9 @@
+<map id="de.fau.osr.gui.Application" name="de.fau.osr.gui.Application">
+<area shape="rect" id="node2" href="$classde_1_1fau_1_1osr_1_1gui_1_1_controller_1_1_gui_controller.html" title="Using a MVC&#45;Pattern for the GUI. " alt="" coords="537,233,700,275"/>
+<area shape="rect" id="node3" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_tracability_matrix___view.html" title="de.fau.osr.gui.View.Tracability\lMatrix_View" alt="" coords="139,5,333,47"/>
+<area shape="rect" id="node4" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_popup_manager.html" title="de.fau.osr.gui.View.Popup\lManager" alt="" coords="149,71,323,112"/>
+<area shape="rect" id="node6" href="$classde_1_1fau_1_1osr_1_1gui_1_1_components_1_1_path_d_es_j_tree.html" title="JTree with ability to be built by array of commit files Created by Dmitry Gorelenkov on 27..." alt="" coords="145,201,327,243"/>
+<area shape="rect" id="node9" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_cleaner.html" title="de.fau.osr.gui.View.Cleaner" alt="" coords="146,338,326,365"/>
+<area shape="rect" id="node10" href="$interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___collection___model.html" title="Adapter Pattern used. " alt="" coords="163,389,309,431"/>
+<area shape="rect" id="node11" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_gui_view_element_handler.html" title="de.fau.osr.gui.View.GuiView\lElementHandler" alt="" coords="144,455,328,496"/>
+</map>

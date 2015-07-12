@@ -1,0 +1,10 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.ElementHandler" alt="" coords="5,201,189,243"/>
+<area shape="rect" id="node2" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_code___element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.Code_ElementHandler" alt="" coords="259,5,458,47"/>
+<area shape="rect" id="node3" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_commit___element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.Commit_ElementHandler" alt="" coords="251,71,466,112"/>
+<area shape="rect" id="node4" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_impact___element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.Impact_ElementHandler" alt="" coords="255,136,463,177"/>
+<area shape="rect" id="node5" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_linkage___element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.Linkage_ElementHandler" alt="" coords="251,201,466,243"/>
+<area shape="rect" id="node6" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_path_d_e___element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.PathDE_ElementHandler" alt="" coords="251,267,466,308"/>
+<area shape="rect" id="node7" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_requirement___detail___element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.Requirement_Detail\l_ElementHandler" alt="" coords="267,333,451,389"/>
+<area shape="rect" id="node8" href="$classde_1_1fau_1_1osr_1_1gui_1_1_view_1_1_element_handler_1_1_requirement___element_handler.html" title="de.fau.osr.gui.View.Element\lHandler.Requirement_ElementHandler" alt="" coords="237,413,480,455"/>
+</map>

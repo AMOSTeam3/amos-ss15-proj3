@@ -1,0 +1,4 @@
+<map id="de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel" name="de.fau.osr.gui.util.RequirementsTraceabilityByImpactTableModel">
+<area shape="rect" id="node3" href="$classde_1_1fau_1_1osr_1_1bl_1_1_requirements_traceability_matrix_by_impact.html" title="This class represents a traceability matrix for requirements based on impact. " alt="" coords="431,69,609,110"/>
+<area shape="rect" id="node6" href="$classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html" title="This class is an interpreter for data from Vcs and Database. " alt="" coords="47,141,187,168"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html" title="Abstract DataSource to use persistent information Created by Dmitry Gorelenkov on 03..." alt="" coords="5,111,204,138"/>
+<area shape="rect" id="node2" href="$classde_1_1fau_1_1osr_1_1core_1_1db_1_1_composite_data_source.html" title="This DataSource uses multiple DataSource&#39;s Created by Dmitry Gorelenkov on 13.05.2015. " alt="" coords="252,5,444,47"/>
+<area shape="rect" id="node3" href="$classde_1_1fau_1_1osr_1_1core_1_1db_1_1_c_s_v_file_data_source.html" title="This DataSource is based on CSV file Created by Dmitry Gorelenkov on 03.05.2015. " alt="" coords="259,71,437,112"/>
+<area shape="rect" id="node4" href="$classde_1_1fau_1_1osr_1_1core_1_1db_1_1_d_b_data_source.html" title="DataSource implementation, that gets data from Database Created by Dmitry Gorelenkov on 01..." alt="" coords="261,136,435,177"/>
+<area shape="rect" id="node5" href="$classde_1_1fau_1_1osr_1_1core_1_1db_1_1_v_c_s_data_source.html" title="DataSource object for VCS Created by Dmitry Gorelenkov on 14.05.2015. " alt="" coords="256,201,440,243"/>
+</map>
