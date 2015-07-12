@@ -37,11 +37,11 @@ public class MenuHandler {
         menuBar.add(menu_Tools);
         
         menu_Tools.add(menuItem_Configure);
-        menu_Tools.add(submenu_TraceabilityMatrix);        
-        menu_Tools.add(menuItem_Impact);
+        //menu_Tools.add(submenu_TraceabilityMatrix);        
+        //menu_Tools.add(menuItem_Impact);
         //menu_Tools.add(menuItem_ByOtherData);
         
-        submenu_TraceabilityMatrix.add(menuItem_Impact);
+        //submenu_TraceabilityMatrix.add(menuItem_Impact);
         //submenu_TraceabilityMatrix.add(menuItem_ByOtherData);
     }
 
