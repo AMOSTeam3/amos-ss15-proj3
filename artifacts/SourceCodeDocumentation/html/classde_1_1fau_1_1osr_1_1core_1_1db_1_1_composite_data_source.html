@@ -217,8 +217,6 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_composite_data_source.html#a0e1027f69e54c32b2f53df9abe9ca532">addSource</a>(mainSource);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_composite_data_source.html#a00fd2583d5fa9d68e7f4b2b1931504cb">addSources</a>(otherSources);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_composite_data_source_html_a00fd2583d5fa9d68e7f4b2b1931504cb"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_composite_data_source.html#a00fd2583d5fa9d68e7f4b2b1931504cb">de.fau.osr.core.db.CompositeDataSource.addSources</a></div><div class="ttdeci">void addSources(DataSource...manySources)</div><div class="ttdef"><b>Definition:</b> CompositeDataSource.java:59</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_composite_data_source_html_a0e1027f69e54c32b2f53df9abe9ca532"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_composite_data_source.html#a0e1027f69e54c32b2f53df9abe9ca532">de.fau.osr.core.db.CompositeDataSource.addSource</a></div><div class="ttdeci">void addSource(DataSource ds)</div><div class="ttdef"><b>Definition:</b> CompositeDataSource.java:55</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -293,9 +291,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                                                                                                            {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a96f527814760e90d7ab1422eb0a0ec95">addReqCommitRelation</a>(reqId, commitId);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a96f527814760e90d7ab1422eb0a0ec95" title="adds new relation to data source ">addReqCommitRelation</a>(reqId, commitId);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a96f527814760e90d7ab1422eb0a0ec95"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a96f527814760e90d7ab1422eb0a0ec95">de.fau.osr.core.db.DataSource.addReqCommitRelation</a></div><div class="ttdeci">void addReqCommitRelation(String reqId, String commitId)</div><div class="ttdoc">adds new relation to data source </div><div class="ttdef"><b>Definition:</b> DataSource.java:68</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -394,9 +391,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                                                                                                                               {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#ab0cd164a2b19758864cd992db1209aab">removeReqCommitRelation</a>(reqId, commitId);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#ab0cd164a2b19758864cd992db1209aab" title="removes relation from data source ">removeReqCommitRelation</a>(reqId, commitId);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_ab0cd164a2b19758864cd992db1209aab"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#ab0cd164a2b19758864cd992db1209aab">de.fau.osr.core.db.DataSource.removeReqCommitRelation</a></div><div class="ttdeci">void removeReqCommitRelation(String reqId, String commitId)</div><div class="ttdoc">removes relation from data source </div><div class="ttdef"><b>Definition:</b> DataSource.java:80</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -439,15 +435,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                                                                                                                                             {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="comment">//use main data source for update</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a4f19396357c0ab4f737939712b8bc8ed">saveOrUpdateRequirement</a>(<span class="keywordtype">id</span>, title, description);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a4f19396357c0ab4f737939712b8bc8ed" title="saves (creates) or updates requirement object in data source clears cache and calls doSaveOrUpdateReq...">saveOrUpdateRequirement</a>(<span class="keywordtype">id</span>, title, description);</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a4f19396357c0ab4f737939712b8bc8ed"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a4f19396357c0ab4f737939712b8bc8ed">de.fau.osr.core.db.DataSource.saveOrUpdateRequirement</a></div><div class="ttdeci">void saveOrUpdateRequirement(String id, String title, String description)</div><div class="ttdoc">saves (creates) or updates requirement object in data source clears cache and calls doSaveOrUpdateReq...</div><div class="ttdef"><b>Definition:</b> DataSource.java:182</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>D:/Gayathery_AMOS/amos-ss15-proj3/amos-ss15-proj3-backend/src/main/java/de/fau/osr/core/db/<a class="el" href="">CompositeDataSource.java</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

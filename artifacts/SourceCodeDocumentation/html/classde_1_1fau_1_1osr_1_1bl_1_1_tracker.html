@@ -278,9 +278,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <div class="fragment"><div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                                                                                                                                       {</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a96f527814760e90d7ab1422eb0a0ec95">addReqCommitRelation</a>(requirementID, commitID);</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a96f527814760e90d7ab1422eb0a0ec95" title="adds new relation to data source ">addReqCommitRelation</a>(requirementID, commitID);</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a96f527814760e90d7ab1422eb0a0ec95"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a96f527814760e90d7ab1422eb0a0ec95">de.fau.osr.core.db.DataSource.addReqCommitRelation</a></div><div class="ttdeci">void addReqCommitRelation(String reqId, String commitId)</div><div class="ttdoc">adds new relation to data source </div><div class="ttdef"><b>Definition:</b> DataSource.java:68</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -323,7 +322,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        <span class="keywordflow">return</span> null;</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;</div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a2e69a27a10c867f632699459a03c1249"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2e69a27a10c867f632699459a03c1249">de.fau.osr.bl.Tracker.getAllFilesAsString</a></div><div class="ttdeci">Collection&lt; String &gt; getAllFilesAsString()</div><div class="ttdef"><b>Definition:</b> Tracker.java:374</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -371,8 +369,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        </div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordflow">return</span> files;</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a8448a6d33823e951eedbc2ebbdcf3adb"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8448a6d33823e951eedbc2ebbdcf3adb">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitList</a></div><div class="ttdeci">abstract Iterator&lt; String &gt; getCommitList()</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_ae5d9911e29429886d71386899d5e65db"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitFiles</a></div><div class="ttdeci">abstract Supplier&lt; Stream&lt; CommitFile &gt; &gt; getCommitFiles(String commitID)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -399,10 +395,9 @@ Public Member Functions</h2></td></tr>
 </dl>
 <div class="fragment"><div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                                                                                     {</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        SetMultimap&lt;String, String&gt; result = HashMultimap.create();</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        Multimaps.invertFrom(<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10">getAllReqCommitRelations</a>(), result);</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        Multimaps.invertFrom(<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10" title="relation ReqId - CommitId of VCS + Database ">getAllReqCommitRelations</a>(), result);</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_af4fed9bd7c9ce1a507a66b911948ae10"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10">de.fau.osr.bl.Tracker.getAllReqCommitRelations</a></div><div class="ttdeci">SetMultimap&lt; String, String &gt; getAllReqCommitRelations()</div><div class="ttdoc">relation ReqId - CommitId of VCS + Database </div><div class="ttdef"><b>Definition:</b> Tracker.java:256</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -436,8 +431,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        files.removeAll(deletedFiles);</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        <span class="keywordflow">return</span> files;</div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a8448a6d33823e951eedbc2ebbdcf3adb"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8448a6d33823e951eedbc2ebbdcf3adb">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitList</a></div><div class="ttdeci">abstract Iterator&lt; String &gt; getCommitList()</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_ae5d9911e29429886d71386899d5e65db"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitFiles</a></div><div class="ttdeci">abstract Supplier&lt; Stream&lt; CommitFile &gt; &gt; getCommitFiles(String commitID)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -463,9 +456,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <div class="fragment"><div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                                                                                     {</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a461335596b9057ddd42f8b95a4b56667">getAllReqCommitRelations</a>();</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a461335596b9057ddd42f8b95a4b56667" title="try to get cached version of set of all relations, creates cached version, if it was was not created ...">getAllReqCommitRelations</a>();</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a461335596b9057ddd42f8b95a4b56667"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a461335596b9057ddd42f8b95a4b56667">de.fau.osr.core.db.DataSource.getAllReqCommitRelations</a></div><div class="ttdeci">SetMultimap&lt; String, String &gt; getAllReqCommitRelations()</div><div class="ttdoc">try to get cached version of set of all relations, creates cached version, if it was was not created ...</div><div class="ttdef"><b>Definition:</b> DataSource.java:152</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -516,7 +508,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        List&lt;CommitFile&gt; commitFilesList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        Set&lt;String&gt; commits = <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10">getAllReqCommitRelations</a>().get(requirementID);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        Set&lt;String&gt; commits = <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10" title="relation ReqId - CommitId of VCS + Database ">getAllReqCommitRelations</a>().get(requirementID);</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordflow">for</span> (String commit : commits){</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">getCommitFiles</a>(commit).get().forEachOrdered(commitFilesList::add);</div>
@@ -532,9 +524,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_af4fed9bd7c9ce1a507a66b911948ae10"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10">de.fau.osr.bl.Tracker.getAllReqCommitRelations</a></div><div class="ttdeci">SetMultimap&lt; String, String &gt; getAllReqCommitRelations()</div><div class="ttdoc">relation ReqId - CommitId of VCS + Database </div><div class="ttdef"><b>Definition:</b> Tracker.java:256</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_ae5d9911e29429886d71386899d5e65db"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitFiles</a></div><div class="ttdeci">abstract Supplier&lt; Stream&lt; CommitFile &gt; &gt; getCommitFiles(String commitID)</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_af5b5688d4b7d7f437f6962cf4492cdbc"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af5b5688d4b7d7f437f6962cf4492cdbc">de.fau.osr.bl.Tracker.getImpactPercentageForFileAndRequirement</a></div><div class="ttdeci">float getImpactPercentageForFileAndRequirement(String file, String requirementID)</div><div class="ttdef"><b>Definition:</b> Tracker.java:205</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -553,10 +542,8 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>collection of all commit objects </dd></dl>
 <div class="fragment"><div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                                                              {</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        HashSet&lt;String&gt; ids = Sets.newHashSet(vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8448a6d33823e951eedbc2ebbdcf3adb">getCommitList</a>());</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8482c6a850a88c533efde058c1fc04e4">getCommitsByIds</a>(ids);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8482c6a850a88c533efde058c1fc04e4" title="creates/gets commit objects, by given ids. ">getCommitsByIds</a>(ids);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a8448a6d33823e951eedbc2ebbdcf3adb"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8448a6d33823e951eedbc2ebbdcf3adb">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitList</a></div><div class="ttdeci">abstract Iterator&lt; String &gt; getCommitList()</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a8482c6a850a88c533efde058c1fc04e4"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8482c6a850a88c533efde058c1fc04e4">de.fau.osr.bl.Tracker.getCommitsByIds</a></div><div class="ttdeci">Set&lt; Commit &gt; getCommitsByIds(Collection&lt; String &gt; commitIds)</div><div class="ttdoc">creates/gets commit objects, by given ids. </div><div class="ttdef"><b>Definition:</b> Tracker.java:552</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -587,7 +574,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        String correctFilePath = filePath.replaceAll(<span class="stringliteral">&quot;\\\\&quot;</span>, <span class="stringliteral">&quot;/&quot;</span>);</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        <span class="keywordflow">return</span> Sets.newHashSet(vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8f71f3617770b4f41632df50f2d50e4d">getCommitListForFileodification</a>(correctFilePath));</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a8f71f3617770b4f41632df50f2d50e4d"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8f71f3617770b4f41632df50f2d50e4d">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitListForFileodification</a></div><div class="ttdeci">abstract Iterator&lt; String &gt; getCommitListForFileodification(String filePath)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -615,16 +601,13 @@ Public Member Functions</h2></td></tr>
 </dl>
 <div class="fragment"><div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;                                                                                        {</div>
 <div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        Set&lt;Commit&gt; commits = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        SetMultimap&lt;String, String&gt; relations = <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4">getAllCommitReqRelations</a>();</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        SetMultimap&lt;String, String&gt; relations = <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4" title="relation CommitId - ReqId of VCS + Database ">getAllCommitReqRelations</a>();</div>
 <div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;        <span class="keywordflow">for</span> (String <span class="keywordtype">id</span> : commitIds) {</div>
 <div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;            commits.add(<span class="keyword">new</span> Commit(<span class="keywordtype">id</span>, vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a29a8a253dbad581251eab7da7d9e056c">getCommitMessage</a>(<span class="keywordtype">id</span>), relations.get(<span class="keywordtype">id</span>), vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">getCommitFiles</a>(<span class="keywordtype">id</span>)));</div>
 <div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        }</div>
 <div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;</div>
 <div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        <span class="keywordflow">return</span> commits;</div>
 <div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a29a8a253dbad581251eab7da7d9e056c"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a29a8a253dbad581251eab7da7d9e056c">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitMessage</a></div><div class="ttdeci">abstract String getCommitMessage(String commitID)</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_ae5d9911e29429886d71386899d5e65db"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitFiles</a></div><div class="ttdeci">abstract Supplier&lt; Stream&lt; CommitFile &gt; &gt; getCommitFiles(String commitID)</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_add42838e15eb5418e45f531a9c0400e4"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4">de.fau.osr.bl.Tracker.getAllCommitReqRelations</a></div><div class="ttdeci">SetMultimap&lt; String, String &gt; getAllCommitReqRelations()</div><div class="ttdoc">relation CommitId - ReqId of VCS + Database </div><div class="ttdef"><b>Definition:</b> Tracker.java:265</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -654,10 +637,8 @@ Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                                                                                    {</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        String correctFilePath = filePath.replaceAll(<span class="stringliteral">&quot;\\\\&quot;</span>, <span class="stringliteral">&quot;/&quot;</span>);</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        HashSet&lt;String&gt; ids = Sets.newHashSet(vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8f71f3617770b4f41632df50f2d50e4d">getCommitListForFileodification</a>(correctFilePath));</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8482c6a850a88c533efde058c1fc04e4">getCommitsByIds</a>(ids);</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8482c6a850a88c533efde058c1fc04e4" title="creates/gets commit objects, by given ids. ">getCommitsByIds</a>(ids);</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a8482c6a850a88c533efde058c1fc04e4"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8482c6a850a88c533efde058c1fc04e4">de.fau.osr.bl.Tracker.getCommitsByIds</a></div><div class="ttdeci">Set&lt; Commit &gt; getCommitsByIds(Collection&lt; String &gt; commitIds)</div><div class="ttdoc">creates/gets commit objects, by given ids. </div><div class="ttdef"><b>Definition:</b> Tracker.java:552</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a8f71f3617770b4f41632df50f2d50e4d"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8f71f3617770b4f41632df50f2d50e4d">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitListForFileodification</a></div><div class="ttdeci">abstract Iterator&lt; String &gt; getCommitListForFileodification(String filePath)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -684,19 +665,15 @@ Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                                                                                           {</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        Set&lt;Commit&gt; commits = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">for</span>(String commitID: <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10">getAllReqCommitRelations</a>().get(requirementID)){</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">for</span>(String commitID: <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10" title="relation ReqId - CommitId of VCS + Database ">getAllReqCommitRelations</a>().get(requirementID)){</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            commits.add(<span class="keyword">new</span> Commit(commitID,</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                    vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a29a8a253dbad581251eab7da7d9e056c">getCommitMessage</a>(commitID),</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                    dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a5209bd20923c5541dca138e7419718e7">getCommitRelationByReq</a>(commitID),</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                    dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a5209bd20923c5541dca138e7419718e7" title="get commit ids by requirement id ">getCommitRelationByReq</a>(commitID),</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                    vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">getCommitFiles</a>(commitID)));</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        }</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keywordflow">return</span> commits;</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a29a8a253dbad581251eab7da7d9e056c"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a29a8a253dbad581251eab7da7d9e056c">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitMessage</a></div><div class="ttdeci">abstract String getCommitMessage(String commitID)</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_af4fed9bd7c9ce1a507a66b911948ae10"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af4fed9bd7c9ce1a507a66b911948ae10">de.fau.osr.bl.Tracker.getAllReqCommitRelations</a></div><div class="ttdeci">SetMultimap&lt; String, String &gt; getAllReqCommitRelations()</div><div class="ttdoc">relation ReqId - CommitId of VCS + Database </div><div class="ttdef"><b>Definition:</b> Tracker.java:256</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a5209bd20923c5541dca138e7419718e7"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a5209bd20923c5541dca138e7419718e7">de.fau.osr.core.db.DataSource.getCommitRelationByReq</a></div><div class="ttdeci">Set&lt; String &gt; getCommitRelationByReq(String reqId)</div><div class="ttdoc">get commit ids by requirement id </div><div class="ttdef"><b>Definition:</b> DataSource.java:91</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_ae5d9911e29429886d71386899d5e65db"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ae5d9911e29429886d71386899d5e65db">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitFiles</a></div><div class="ttdeci">abstract Supplier&lt; Stream&lt; CommitFile &gt; &gt; getCommitFiles(String commitID)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -740,18 +717,16 @@ Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                                                          {</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        Collection&lt;Path&gt; filePaths = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">for</span>(Path each: projectDirTraverser.<a class="code" href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596">traverse</a>()){</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">for</span>(Path each: projectDirTraverser.<a class="code" href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596" title="Returns paths of all filtered files. ">traverse</a>()){</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="comment">// fname is a known file in VCS (if it returs ReqIds for that filepath)</span></div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="comment">// TODO Maybe we could cache (file-&gt;reqIds)</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">if</span> (this.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">getRequirementIdsForFile</a>(each.toString()).size()&gt;0){</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">if</span> (this.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6" title="This method returns all the requirements for the given File. ">getRequirementIdsForFile</a>(each.toString()).size()&gt;0){</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                filePaths.add(each);</div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            }</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        }</div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> filePaths;</div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser_html_aae3032883d836e6c13a3d413acdfa596"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596">de.fau.osr.util.VisibleFilesTraverser.traverse</a></div><div class="ttdeci">Collection&lt; Path &gt; traverse()</div><div class="ttdoc">Returns paths of all filtered files. </div><div class="ttdef"><b>Definition:</b> VisibleFilesTraverser.java:79</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a9a0427da45115ad42c6dde8576bb67b6"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">de.fau.osr.bl.Tracker.getRequirementIdsForFile</a></div><div class="ttdeci">Set&lt; String &gt; getRequirementIdsForFile(String filePath)</div><div class="ttdoc">This method returns all the requirements for the given File. </div><div class="ttdef"><b>Definition:</b> Tracker.java:235</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -776,10 +751,10 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <div class="fragment"><div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                                                                                 {</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">return</span> projectDirTraverser.<a class="code" href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596">traverse</a>().stream()</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">return</span> projectDirTraverser.<a class="code" href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596" title="Returns paths of all filtered files. ">traverse</a>().stream()</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                .filter(path -&gt; {</div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a4f3be4c79736d05ef00284d7d5fe702c">getCommitsByFile</a>(path.toString()).contains(commitId);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a4f3be4c79736d05ef00284d7d5fe702c" title="get commits that did something with the ">getCommitsByFile</a>(path.toString()).contains(commitId);</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                    } <span class="keywordflow">catch</span> (IOException e) {</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                        e.printStackTrace();</div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                    }</div>
@@ -787,8 +762,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                })</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                .collect(Collectors.toList());</div>
 <div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser_html_aae3032883d836e6c13a3d413acdfa596"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596">de.fau.osr.util.VisibleFilesTraverser.traverse</a></div><div class="ttdeci">Collection&lt; Path &gt; traverse()</div><div class="ttdoc">Returns paths of all filtered files. </div><div class="ttdef"><b>Definition:</b> VisibleFilesTraverser.java:79</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a4f3be4c79736d05ef00284d7d5fe702c"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a4f3be4c79736d05ef00284d7d5fe702c">de.fau.osr.bl.Tracker.getCommitsByFile</a></div><div class="ttdeci">Collection&lt; String &gt; getCommitsByFile(String filePath)</div><div class="ttdoc">get commits that did something with the </div><div class="ttdef"><b>Definition:</b> Tracker.java:397</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -813,10 +786,10 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <div class="fragment"><div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                                                                                           {</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keywordflow">return</span> projectDirTraverser.<a class="code" href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596">traverse</a>().stream()</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keywordflow">return</span> projectDirTraverser.<a class="code" href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596" title="Returns paths of all filtered files. ">traverse</a>().stream()</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                .filter(path -&gt; {</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">getRequirementIdsForFile</a>(path.toString()).contains(requirementId);</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6" title="This method returns all the requirements for the given File. ">getRequirementIdsForFile</a>(path.toString()).contains(requirementId);</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                    } <span class="keywordflow">catch</span> (IOException e) {</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                        e.printStackTrace();</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                    }</div>
@@ -824,8 +797,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                })</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                .collect(Collectors.toList());</div>
 <div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser_html_aae3032883d836e6c13a3d413acdfa596"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1util_1_1_visible_files_traverser.html#aae3032883d836e6c13a3d413acdfa596">de.fau.osr.util.VisibleFilesTraverser.traverse</a></div><div class="ttdeci">Collection&lt; Path &gt; traverse()</div><div class="ttdoc">Returns paths of all filtered files. </div><div class="ttdef"><b>Definition:</b> VisibleFilesTraverser.java:79</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a9a0427da45115ad42c6dde8576bb67b6"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">de.fau.osr.bl.Tracker.getRequirementIdsForFile</a></div><div class="ttdeci">Set&lt; String &gt; getRequirementIdsForFile(String filePath)</div><div class="ttdoc">This method returns all the requirements for the given File. </div><div class="ttdef"><b>Definition:</b> Tracker.java:235</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -878,7 +849,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordflow">return</span> impact;</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aec79014310692b072b185df3b27cbe5b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aec79014310692b072b185df3b27cbe5b">de.fau.osr.bl.Tracker.getBlame</a></div><div class="ttdeci">List&lt; AnnotatedLine &gt; getBlame(String path)</div><div class="ttdef"><b>Definition:</b> Tracker.java:426</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -898,7 +868,6 @@ Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;                                     {</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <span class="keywordflow">return</span> vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ad152b56564ab2463806c8a7ec6f0633f">getRepositoryName</a>();</div>
 <div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_ad152b56564ab2463806c8a7ec6f0633f"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#ad152b56564ab2463806c8a7ec6f0633f">de.fau.osr.core.vcs.interfaces.VcsClient.getRepositoryName</a></div><div class="ttdeci">abstract String getRepositoryName()</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -932,7 +901,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;</div>
 <div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        <span class="keywordflow">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="stringliteral">&quot;Requirement with id &quot;</span> + <span class="keywordtype">id</span> + <span class="stringliteral">&quot; not found&quot;</span>);</div>
 <div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aad30e3ddb960a6a0bd17b7b924735363"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aad30e3ddb960a6a0bd17b7b924735363">de.fau.osr.bl.Tracker.getRequirements</a></div><div class="ttdeci">Collection&lt; Requirement &gt; getRequirements()</div><div class="ttdef"><b>Definition:</b> Tracker.java:164</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -951,7 +919,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>list of all requirement ids </dd></dl>
 <div class="fragment"><div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                                                                     {</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        Set&lt;Requirement&gt; allReqs = dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a2fc183af8ba7cb47f4d0f751554fc3ef">getAllRequirements</a>();</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        Set&lt;Requirement&gt; allReqs = dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a2fc183af8ba7cb47f4d0f751554fc3ef" title="try to get cached version of all requirements, creates cached version, if it was was not created befo...">getAllRequirements</a>();</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        HashSet&lt;String&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="keywordflow">for</span> (Requirement req : allReqs) {</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            result.add(req.getId());</div>
@@ -959,7 +927,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a2fc183af8ba7cb47f4d0f751554fc3ef"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a2fc183af8ba7cb47f4d0f751554fc3ef">de.fau.osr.core.db.DataSource.getAllRequirements</a></div><div class="ttdeci">Set&lt; Requirement &gt; getAllRequirements()</div><div class="ttdoc">try to get cached version of all requirements, creates cached version, if it was was not created befo...</div><div class="ttdef"><b>Definition:</b> DataSource.java:165</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -984,7 +951,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        Set&lt;String&gt; requirementList = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        Iterator&lt;String&gt; commitIdListIterator = vcsClient.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8f71f3617770b4f41632df50f2d50e4d">getCommitListForFileodification</a>(correctFilePath);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        SetMultimap&lt;String, String&gt; relations = <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4">getAllCommitReqRelations</a>();</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        SetMultimap&lt;String, String&gt; relations = <a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4" title="relation CommitId - ReqId of VCS + Database ">getAllCommitReqRelations</a>();</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">while</span>(commitIdListIterator.hasNext()){</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            requirementList.addAll(relations.get(commitIdListIterator.next()));</div>
@@ -993,8 +960,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordflow">return</span> requirementList;</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_add42838e15eb5418e45f531a9c0400e4"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4">de.fau.osr.bl.Tracker.getAllCommitReqRelations</a></div><div class="ttdeci">SetMultimap&lt; String, String &gt; getAllCommitReqRelations()</div><div class="ttdoc">relation CommitId - ReqId of VCS + Database </div><div class="ttdef"><b>Definition:</b> Tracker.java:265</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client_html_a8f71f3617770b4f41632df50f2d50e4d"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1interfaces_1_1_vcs_client.html#a8f71f3617770b4f41632df50f2d50e4d">de.fau.osr.core.vcs.interfaces.VcsClient.getCommitListForFileodification</a></div><div class="ttdeci">abstract Iterator&lt; String &gt; getCommitListForFileodification(String filePath)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1018,7 +983,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <div class="fragment"><div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                                                                        {</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        ArrayList&lt;Requirement&gt; reqs = <span class="keyword">new</span> ArrayList&lt;&gt;(dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a2fc183af8ba7cb47f4d0f751554fc3ef">getAllRequirements</a>());</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        ArrayList&lt;Requirement&gt; reqs = <span class="keyword">new</span> ArrayList&lt;&gt;(dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a2fc183af8ba7cb47f4d0f751554fc3ef" title="try to get cached version of all requirements, creates cached version, if it was was not created befo...">getAllRequirements</a>());</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        NaturalOrderComparator comparator = <span class="keyword">new</span> NaturalOrderComparator();</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
@@ -1026,7 +991,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">return</span> reqs;</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a2fc183af8ba7cb47f4d0f751554fc3ef"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a2fc183af8ba7cb47f4d0f751554fc3ef">de.fau.osr.core.db.DataSource.getAllRequirements</a></div><div class="ttdeci">Set&lt; Requirement &gt; getAllRequirements()</div><div class="ttdoc">try to get cached version of all requirements, creates cached version, if it was was not created befo...</div><div class="ttdef"><b>Definition:</b> DataSource.java:165</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1067,7 +1031,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;                .filter(req -&gt; finalReqs.contains(req.getId()))</div>
 <div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;                .collect(Collectors.toList());</div>
 <div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aad30e3ddb960a6a0bd17b7b924735363"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aad30e3ddb960a6a0bd17b7b924735363">de.fau.osr.bl.Tracker.getRequirements</a></div><div class="ttdeci">Collection&lt; Requirement &gt; getRequirements()</div><div class="ttdef"><b>Definition:</b> Tracker.java:164</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1126,8 +1089,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;</div>
 <div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        <span class="keywordflow">return</span> reqIdsByLines;</div>
 <div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aec79014310692b072b185df3b27cbe5b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aec79014310692b072b185df3b27cbe5b">de.fau.osr.bl.Tracker.getBlame</a></div><div class="ttdeci">List&lt; AnnotatedLine &gt; getBlame(String path)</div><div class="ttdef"><b>Definition:</b> Tracker.java:426</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aad30e3ddb960a6a0bd17b7b924735363"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aad30e3ddb960a6a0bd17b7b924735363">de.fau.osr.bl.Tracker.getRequirements</a></div><div class="ttdeci">Collection&lt; Requirement &gt; getRequirements()</div><div class="ttdef"><b>Definition:</b> Tracker.java:164</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1147,10 +1108,9 @@ Public Member Functions</h2></td></tr>
 <p>purges all caches for repository. </p>
 <p>useful to call if repository is updated by new commit </p>
 <div class="fragment"><div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                                 {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a6e962f871ae62cc8104c864c4ea00e94">clearCache</a>(); <span class="comment">//this will purge probably more than just VCS datasource</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a6e962f871ae62cc8104c864c4ea00e94" title="clears the cached data ">clearCache</a>(); <span class="comment">//this will purge probably more than just VCS datasource</span></div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        blameCache.cleanUp();</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a6e962f871ae62cc8104c864c4ea00e94"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a6e962f871ae62cc8104c864c4ea00e94">de.fau.osr.core.db.DataSource.clearCache</a></div><div class="ttdeci">void clearCache()</div><div class="ttdoc">clears the cached data </div><div class="ttdef"><b>Definition:</b> DataSource.java:57</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1194,15 +1154,11 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <div class="fragment"><div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;                                                                                                                                        {</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a4f19396357c0ab4f737939712b8bc8ed">saveOrUpdateRequirement</a>(<span class="keywordtype">id</span>, title, description);</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        dataSource.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a4f19396357c0ab4f737939712b8bc8ed" title="saves (creates) or updates requirement object in data source clears cache and calls doSaveOrUpdateReq...">saveOrUpdateRequirement</a>(<span class="keywordtype">id</span>, title, description);</div>
 <div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source_html_a4f19396357c0ab4f737939712b8bc8ed"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_data_source.html#a4f19396357c0ab4f737939712b8bc8ed">de.fau.osr.core.db.DataSource.saveOrUpdateRequirement</a></div><div class="ttdeci">void saveOrUpdateRequirement(String id, String title, String description)</div><div class="ttdoc">saves (creates) or updates requirement object in data source clears cache and calls doSaveOrUpdateReq...</div><div class="ttdef"><b>Definition:</b> DataSource.java:182</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>D:/Gayathery_AMOS/amos-ss15-proj3/amos-ss15-proj3-backend/src/main/java/de/fau/osr/bl/<a class="el" href="">Tracker.java</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

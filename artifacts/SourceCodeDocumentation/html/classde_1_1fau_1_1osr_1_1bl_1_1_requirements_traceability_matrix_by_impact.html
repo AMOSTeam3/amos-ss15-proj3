@@ -178,7 +178,6 @@ Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                                      {</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">return</span>  tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aa9b4bed7f9cc79e02f60774faf78e829">getRepositoryName</a>();</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aa9b4bed7f9cc79e02f60774faf78e829"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aa9b4bed7f9cc79e02f60774faf78e829">de.fau.osr.bl.Tracker.getRepositoryName</a></div><div class="ttdeci">String getRepositoryName()</div><div class="ttdef"><b>Definition:</b> Tracker.java:475</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -229,7 +228,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="keywordflow">if</span>(nextProcessProgress != processProgress &amp;&amp; progressBar != null) {</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    progressBar.<a class="code" href="interfacede_1_1fau_1_1osr_1_1util_1_1_progress_bar_interface.html#a5310e89bf0da2a492db70e919f578700">setProgressBarValue</a>(nextProcessProgress);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                Collection&lt;CommitFile&gt; requirementCommitFiles = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8e5251ba7c46f54f88894ed66230cd90">getCommitFilesForRequirementID</a>(requirement);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                Collection&lt;CommitFile&gt; requirementCommitFiles = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8e5251ba7c46f54f88894ed66230cd90" title="This method returns a list of CommitFile&#39;s for the given requirement ID. ">getCommitFilesForRequirementID</a>(requirement);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordflow">for</span>(CommitFile requirementCommitFile : requirementCommitFiles){</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    <span class="comment">/*RequirementFilePair reqFilePair = new RequirementFilePair(requirement,requirementCommitFile.newPath.getPath());</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">                    if(requirementTraceabilityByImpactMatrix.containsKey(reqFilePair)){</span></div>
@@ -245,10 +244,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        }</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1util_1_1_progress_bar_interface_html_a5310e89bf0da2a492db70e919f578700"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1util_1_1_progress_bar_interface.html#a5310e89bf0da2a492db70e919f578700">de.fau.osr.util.ProgressBarInterface.setProgressBarValue</a></div><div class="ttdeci">void setProgressBarValue(int percentage)</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a9a95294263b19bf89fea62794becb7de"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a95294263b19bf89fea62794becb7de">de.fau.osr.bl.Tracker.getRequirementIds</a></div><div class="ttdeci">Collection&lt; String &gt; getRequirementIds()</div><div class="ttdef"><b>Definition:</b> Tracker.java:292</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a8e5251ba7c46f54f88894ed66230cd90"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a8e5251ba7c46f54f88894ed66230cd90">de.fau.osr.bl.Tracker.getCommitFilesForRequirementID</a></div><div class="ttdeci">List&lt; CommitFile &gt; getCommitFilesForRequirementID(String requirementID)</div><div class="ttdoc">This method returns a list of CommitFile&#39;s for the given requirement ID. </div><div class="ttdef"><b>Definition:</b> Tracker.java:178</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a2e69a27a10c867f632699459a03c1249"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2e69a27a10c867f632699459a03c1249">de.fau.osr.bl.Tracker.getAllFilesAsString</a></div><div class="ttdeci">Collection&lt; String &gt; getAllFilesAsString()</div><div class="ttdef"><b>Definition:</b> Tracker.java:374</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -274,7 +269,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                System.out.println(requirement);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                <span class="keywordflow">for</span>(String file : files){</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                    String unixFormatedFilePath = file.replaceAll(Matcher.quoteReplacement(<span class="stringliteral">&quot;\\&quot;</span>), <span class="stringliteral">&quot;/&quot;</span>);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                    <span class="keywordflow">if</span>(!tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">getRequirementIdsForFile</a>(unixFormatedFilePath).contains(requirement)){</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                    <span class="keywordflow">if</span>(!tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6" title="This method returns all the requirements for the given File. ">getRequirementIdsForFile</a>(unixFormatedFilePath).contains(requirement)){</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                        <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                    }</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    requirementTraceabilityByImpactMatrix.put(<span class="keyword">new</span> RequirementFilePair(requirement,file), <span class="keyword">new</span> RequirementFileImpactValue(tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af5b5688d4b7d7f437f6962cf4492cdbc">getImpactPercentageForFileAndRequirement</a>(unixFormatedFilePath, requirement)));</div>
@@ -287,10 +282,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a9a95294263b19bf89fea62794becb7de"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a95294263b19bf89fea62794becb7de">de.fau.osr.bl.Tracker.getRequirementIds</a></div><div class="ttdeci">Collection&lt; String &gt; getRequirementIds()</div><div class="ttdef"><b>Definition:</b> Tracker.java:292</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a2e69a27a10c867f632699459a03c1249"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2e69a27a10c867f632699459a03c1249">de.fau.osr.bl.Tracker.getAllFilesAsString</a></div><div class="ttdeci">Collection&lt; String &gt; getAllFilesAsString()</div><div class="ttdef"><b>Definition:</b> Tracker.java:374</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a9a0427da45115ad42c6dde8576bb67b6"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">de.fau.osr.bl.Tracker.getRequirementIdsForFile</a></div><div class="ttdeci">Set&lt; String &gt; getRequirementIdsForFile(String filePath)</div><div class="ttdoc">This method returns all the requirements for the given File. </div><div class="ttdef"><b>Definition:</b> Tracker.java:235</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_af5b5688d4b7d7f437f6962cf4492cdbc"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af5b5688d4b7d7f437f6962cf4492cdbc">de.fau.osr.bl.Tracker.getImpactPercentageForFileAndRequirement</a></div><div class="ttdeci">float getImpactPercentageForFileAndRequirement(String file, String requirementID)</div><div class="ttdef"><b>Definition:</b> Tracker.java:205</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -319,9 +310,6 @@ Public Member Functions</h2></td></tr>
 </div><!-- fragment -->
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>D:/Gayathery_AMOS/amos-ss15-proj3/amos-ss15-proj3-backend/src/main/java/de/fau/osr/bl/<a class="el" href="">RequirementsTraceabilityMatrixByImpact.java</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

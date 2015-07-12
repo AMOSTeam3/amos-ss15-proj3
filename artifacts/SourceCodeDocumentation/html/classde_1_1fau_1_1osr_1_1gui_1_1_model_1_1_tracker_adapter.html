@@ -174,7 +174,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            trackerAdapterWorkerThread.start();</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        }</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_html_a87de4c0a0d0def86d1848a9998e21f87"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">de.fau.osr.gui.Model.TrackerAdapter.lock</a></div><div class="ttdeci">GenericLock lock</div><div class="ttdef"><b>Definition:</b> TrackerAdapter.java:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -205,11 +204,8 @@ Public Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#aea55de6d8a6d29374b228ab9d1c768f9">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                                                                                                      {</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a02526110b757f3f71081b4f2df5cd990">addRequirementCommitRelation</a>(requirement.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">getID</a>(), commit.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a860db95282540f585f3b978b7b30072f">id</a>);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a02526110b757f3f71081b4f2df5cd990" title="add Linkage between Requirement and Commit ">addRequirementCommitRelation</a>(requirement.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">getID</a>(), commit.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a860db95282540f585f3b978b7b30072f">id</a>);</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a02526110b757f3f71081b4f2df5cd990"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a02526110b757f3f71081b4f2df5cd990">de.fau.osr.bl.Tracker.addRequirementCommitRelation</a></div><div class="ttdeci">void addRequirementCommitRelation(String requirementID, String commitID)</div><div class="ttdoc">add Linkage between Requirement and Commit </div><div class="ttdef"><b>Definition:</b> Tracker.java:417</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement_html_a10e1f6507336601a22647212a42ce880"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">de.fau.osr.gui.Model.DataElements.Requirement.getID</a></div><div class="ttdeci">String getID()</div><div class="ttdef"><b>Definition:</b> Requirement.java:43</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_a860db95282540f585f3b978b7b30072f"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a860db95282540f585f3b978b7b30072f">de.fau.osr.gui.Model.DataElements.Commit.id</a></div><div class="ttdeci">String id</div><div class="ttdef"><b>Definition:</b> Commit.java:81</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -229,14 +225,13 @@ Public Attributes</h2></td></tr>
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#a860c93eb33fcbe85de55a0779180d5b0">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                                                                             {</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keywordflow">return</span> tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2d031cbd00b835bde1c5f6df268b0744">generateRequirementsTraceability</a>();</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keywordflow">return</span> tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2d031cbd00b835bde1c5f6df268b0744" title="Method which performs the complete processing of Requirement Traceability. ">generateRequirementsTraceability</a>();</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        } <span class="keywordflow">catch</span> (IOException e) {</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            e.printStackTrace();</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        }</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keywordflow">return</span> null;</div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a2d031cbd00b835bde1c5f6df268b0744"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2d031cbd00b835bde1c5f6df268b0744">de.fau.osr.bl.Tracker.generateRequirementsTraceability</a></div><div class="ttdeci">RequirementsTraceabilityMatrix generateRequirementsTraceability()</div><div class="ttdoc">Method which performs the complete processing of Requirement Traceability. </div><div class="ttdef"><b>Definition:</b> Tracker.java:438</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -255,9 +250,8 @@ Public Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#aa1bdc12df18b0141223f9adb34646590">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                                                                                             {</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keywordflow">return</span> tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a126e92d4e4508032ab71d6360946eafc">generateRequirementsTraceabilityByImpact</a>();</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keywordflow">return</span> tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a126e92d4e4508032ab71d6360946eafc" title="Method which performs the complete processing of Requirement Traceability by Impact. ">generateRequirementsTraceabilityByImpact</a>();</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a126e92d4e4508032ab71d6360946eafc"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a126e92d4e4508032ab71d6360946eafc">de.fau.osr.bl.Tracker.generateRequirementsTraceabilityByImpact</a></div><div class="ttdeci">RequirementsTraceabilityMatrixByImpact generateRequirementsTraceabilityByImpact()</div><div class="ttdoc">Method which performs the complete processing of Requirement Traceability by Impact. </div><div class="ttdef"><b>Definition:</b> Tracker.java:467</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -284,7 +278,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aec920ad7e985003a3793fb76e5e9e3f1"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aec920ad7e985003a3793fb76e5e9e3f1">de.fau.osr.bl.Tracker.getCommits</a></div><div class="ttdeci">Collection&lt; Commit &gt; getCommits()</div><div class="ttdef"><b>Definition:</b> Tracker.java:155</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -303,7 +296,7 @@ Public Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#a6f1e6fff3c263186d9f9927e31f1c27e">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                                                        {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a">lock</a>();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a" title="locks the thread and waits until it is notified by a call to come out of wait ">lock</a>();</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">try</span>{</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordflow">if</span>(trackerAdapterWorker.isReadyForTakeOver){</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                Collection&lt;Requirement&gt; collectionOfRequirements = trackerAdapterWorker.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_worker.html#a1bd7860d80c626b746bd32f6be7a1446">getAllRequirements</a>();                </div>
@@ -314,7 +307,7 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            ex.printStackTrace();</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">finally</span>{</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155">unlock</a>();    </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155" title="unlock the locked thread ">unlock</a>();    </div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        </div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            </div>
@@ -328,11 +321,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">return</span> reqsUI;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_worker_html_a1bd7860d80c626b746bd32f6be7a1446"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_worker.html#a1bd7860d80c626b746bd32f6be7a1446">de.fau.osr.gui.Model.TrackerAdapterWorker.getAllRequirements</a></div><div class="ttdeci">static Date getAllRequirements</div><div class="ttdef"><b>Definition:</b> TrackerAdapterWorker.java:66</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock_html_ad0bebe23faa1d7988aa6baa8744b262a"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a">de.fau.osr.gui.util.GenericLock.lock</a></div><div class="ttdeci">synchronized void lock()</div><div class="ttdoc">locks the thread and waits until it is notified by a call to come out of wait </div><div class="ttdef"><b>Definition:</b> GenericLock.java:35</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock_html_aba29fc7ec2008b1daf3f0ebbfd6dd155"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155">de.fau.osr.gui.util.GenericLock.unlock</a></div><div class="ttdeci">synchronized void unlock()</div><div class="ttdoc">unlock the locked thread </div><div class="ttdef"><b>Definition:</b> GenericLock.java:51</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aad30e3ddb960a6a0bd17b7b924735363"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aad30e3ddb960a6a0bd17b7b924735363">de.fau.osr.bl.Tracker.getRequirements</a></div><div class="ttdeci">Collection&lt; Requirement &gt; getRequirements()</div><div class="ttdef"><b>Definition:</b> Tracker.java:164</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_html_a87de4c0a0d0def86d1848a9998e21f87"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">de.fau.osr.gui.Model.TrackerAdapter.lock</a></div><div class="ttdeci">GenericLock lock</div><div class="ttdef"><b>Definition:</b> TrackerAdapter.java:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -361,8 +349,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;</div>
 <div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aec79014310692b072b185df3b27cbe5b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aec79014310692b072b185df3b27cbe5b">de.fau.osr.bl.Tracker.getBlame</a></div><div class="ttdeci">List&lt; AnnotatedLine &gt; getBlame(String path)</div><div class="ttdef"><b>Definition:</b> Tracker.java:426</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e_html_a5d7cd8ebd6b62b51e02644fc210f3c8b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">de.fau.osr.gui.Model.DataElements.PathDE.toString</a></div><div class="ttdeci">String toString()</div><div class="ttdef"><b>Definition:</b> PathDE.java:71</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -383,15 +369,13 @@ Public Attributes</h2></td></tr>
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#a1f4165d09349c838351d62dc87cac36c">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                                                            {</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">return</span> ElementsConverter.convertCommits(<span class="keyword">new</span> HashSet&lt;&gt;(tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#ae7f58f927681f8ebc3c9aa66bbf2501e">getCommitsForFile</a>(file.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">toString</a>())));</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">return</span> ElementsConverter.convertCommits(<span class="keyword">new</span> HashSet&lt;&gt;(tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#ae7f58f927681f8ebc3c9aa66bbf2501e" title="get commits that did something with the ">getCommitsForFile</a>(file.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">toString</a>())));</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        } <span class="keywordflow">catch</span> (IOException e) {</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            e.printStackTrace();</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        }</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_ae7f58f927681f8ebc3c9aa66bbf2501e"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#ae7f58f927681f8ebc3c9aa66bbf2501e">de.fau.osr.bl.Tracker.getCommitsForFile</a></div><div class="ttdeci">Collection&lt; Commit &gt; getCommitsForFile(String filePath)</div><div class="ttdoc">get commits that did something with the </div><div class="ttdef"><b>Definition:</b> Tracker.java:407</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e_html_a5d7cd8ebd6b62b51e02644fc210f3c8b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">de.fau.osr.gui.Model.DataElements.PathDE.toString</a></div><div class="ttdeci">String toString()</div><div class="ttdef"><b>Definition:</b> PathDE.java:71</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -411,7 +395,7 @@ Public Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#a1e21ef406e0eec7d53201926abb46c63">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                                                                                 {</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a">lock</a>();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a" title="locks the thread and waits until it is notified by a call to come out of wait ">lock</a>();</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">try</span>{</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <span class="keywordflow">if</span>(trackerAdapterWorker.isReadyForTakeOver){</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                Collection&lt;Commit&gt; collectionOfCommit =  trackerAdapterWorker.getCommitsFromRequirement(requirement);</div>
@@ -422,10 +406,10 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            ex.printStackTrace();</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        }</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">finally</span>{</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155">unlock</a>();    </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155" title="unlock the locked thread ">unlock</a>();    </div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">Requirement</a> req;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        Set&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs.html">vcs</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base.html">base</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit.html">Commit</a>&gt; commitsForReq;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html" title="Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. ">Requirement</a> req;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        Set&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs.html">vcs</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base.html">base</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit.html" title="This Class is a Container within the test framework for all information related to one commit...">Commit</a>&gt; commitsForReq;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">try</span> {</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            req = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#ad5fc481d234df6cdce2f63861f5192ac">getRequirementById</a>(requirement.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">getID</a>());</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            commitsForReq = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a5a98441aaa11992a5d03197d659c6438">getCommitsForRequirementID</a>(req.getId());</div>
@@ -434,27 +418,12 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        }</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        Collection&lt;Commit&gt; commitList = ElementsConverter.convertCommits(commitsForReq);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordflow">for</span>(<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html">Commit</a> commit : commitList)</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordflow">for</span>(<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html" title="This Class is a Container for all information related to one commit. ">Commit</a> commit : commitList)</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        {</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            commit.instanceRequirement = requirement;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        }</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> commitList;</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    }</div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs.html">de.fau.osr.core.vcs</a></div><div class="ttdef"><b>Definition:</b> AnnotatedLine.java:21</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a5a98441aaa11992a5d03197d659c6438"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a5a98441aaa11992a5d03197d659c6438">de.fau.osr.bl.Tracker.getCommitsForRequirementID</a></div><div class="ttdeci">Set&lt; Commit &gt; getCommitsForRequirementID(String requirementID)</div><div class="ttdef"><b>Definition:</b> Tracker.java:276</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit.html">de.fau.osr.core.vcs.base.Commit</a></div><div class="ttdoc">This Class is a Container within the test framework for all information related to one commit...</div><div class="ttdef"><b>Definition:</b> Commit.java:32</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_ad5fc481d234df6cdce2f63861f5192ac"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#ad5fc481d234df6cdce2f63861f5192ac">de.fau.osr.bl.Tracker.getRequirementById</a></div><div class="ttdeci">Requirement getRequirementById(String id)</div><div class="ttdef"><b>Definition:</b> Tracker.java:520</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement_html_a10e1f6507336601a22647212a42ce880"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">de.fau.osr.gui.Model.DataElements.Requirement.getID</a></div><div class="ttdeci">String getID()</div><div class="ttdef"><b>Definition:</b> Requirement.java:43</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1_requirement_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">de.fau.osr.core.Requirement</a></div><div class="ttdoc">Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. </div><div class="ttdef"><b>Definition:</b> Requirement.java:30</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock_html_ad0bebe23faa1d7988aa6baa8744b262a"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a">de.fau.osr.gui.util.GenericLock.lock</a></div><div class="ttdeci">synchronized void lock()</div><div class="ttdoc">locks the thread and waits until it is notified by a call to come out of wait </div><div class="ttdef"><b>Definition:</b> GenericLock.java:35</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html">de.fau.osr.gui.Model.DataElements.Commit</a></div><div class="ttdoc">This Class is a Container for all information related to one commit. </div><div class="ttdef"><b>Definition:</b> Commit.java:37</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock_html_aba29fc7ec2008b1daf3f0ebbfd6dd155"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155">de.fau.osr.gui.util.GenericLock.unlock</a></div><div class="ttdeci">synchronized void unlock()</div><div class="ttdoc">unlock the locked thread </div><div class="ttdef"><b>Definition:</b> GenericLock.java:51</div></div>
-<div class="ttc" id="namespacede_1_1fau_html"><div class="ttname"><a href="namespacede_1_1fau.html">de.fau</a></div></div>
-<div class="ttc" id="namespacede_html"><div class="ttname"><a href="namespacede.html">de</a></div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_html_a87de4c0a0d0def86d1848a9998e21f87"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">de.fau.osr.gui.Model.TrackerAdapter.lock</a></div><div class="ttdeci">GenericLock lock</div><div class="ttdef"><b>Definition:</b> TrackerAdapter.java:49</div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base.html">de.fau.osr.core.vcs.base</a></div><div class="ttdef"><b>Definition:</b> Commit.java:21</div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr.html">de.fau.osr</a></div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core.html">de.fau.osr.core</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -475,7 +444,6 @@ Public Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                                             {</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordflow">return</span> tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a33db5e7d2b16535be911b7771d8c1377">getCurrentRepositoryPath</a>();</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a33db5e7d2b16535be911b7771d8c1377"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a33db5e7d2b16535be911b7771d8c1377">de.fau.osr.bl.Tracker.getCurrentRepositoryPath</a></div><div class="ttdeci">String getCurrentRepositoryPath()</div><div class="ttdef"><b>Definition:</b> Tracker.java:422</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -522,7 +490,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a2b3aa923c4ca744143cef472980c4397"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a2b3aa923c4ca744143cef472980c4397">de.fau.osr.bl.Tracker.getFiles</a></div><div class="ttdeci">Collection&lt; Path &gt; getFiles()</div><div class="ttdef"><b>Definition:</b> Tracker.java:322</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -549,8 +516,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        }</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a01dcc6c4a1ddbf8c398db4b7d007de7b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a01dcc6c4a1ddbf8c398db4b7d007de7b">de.fau.osr.bl.Tracker.getFilesByCommit</a></div><div class="ttdeci">Collection&lt; Path &gt; getFilesByCommit(String commitId)</div><div class="ttdef"><b>Definition:</b> Tracker.java:357</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_a860db95282540f585f3b978b7b30072f"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a860db95282540f585f3b978b7b30072f">de.fau.osr.gui.Model.DataElements.Commit.id</a></div><div class="ttdeci">String id</div><div class="ttdef"><b>Definition:</b> Commit.java:81</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -570,7 +535,7 @@ Public Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#ae935272ddddf83d7a30c8a1b2e171074">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                                                                             {</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a">lock</a>();</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a" title="locks the thread and waits until it is notified by a call to come out of wait ">lock</a>();</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordflow">try</span>{</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            <span class="keywordflow">if</span>(trackerAdapterWorker.isReadyForTakeOver){</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                Collection&lt;PathDE&gt; collectionOfCommitFiles =  trackerAdapterWorker.getCommitFilesForRequirement(requirement);</div>
@@ -582,7 +547,7 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            ex.printStackTrace();</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        }</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keywordflow">finally</span>{</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155">unlock</a>();    </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">lock</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155" title="unlock the locked thread ">unlock</a>();    </div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordflow">try</span> {</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            <span class="keywordflow">return</span> ElementsConverter.convertFiles(tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a19c1ecf29942c5b3fbeb7002b094a381">getFilesByRequirement</a>(requirement.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">getID</a>()));</div>
@@ -592,11 +557,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a19c1ecf29942c5b3fbeb7002b094a381"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a19c1ecf29942c5b3fbeb7002b094a381">de.fau.osr.bl.Tracker.getFilesByRequirement</a></div><div class="ttdeci">Collection&lt; Path &gt; getFilesByRequirement(String requirementId)</div><div class="ttdef"><b>Definition:</b> Tracker.java:340</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement_html_a10e1f6507336601a22647212a42ce880"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">de.fau.osr.gui.Model.DataElements.Requirement.getID</a></div><div class="ttdeci">String getID()</div><div class="ttdef"><b>Definition:</b> Requirement.java:43</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock_html_ad0bebe23faa1d7988aa6baa8744b262a"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#ad0bebe23faa1d7988aa6baa8744b262a">de.fau.osr.gui.util.GenericLock.lock</a></div><div class="ttdeci">synchronized void lock()</div><div class="ttdoc">locks the thread and waits until it is notified by a call to come out of wait </div><div class="ttdef"><b>Definition:</b> GenericLock.java:35</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock_html_aba29fc7ec2008b1daf3f0ebbfd6dd155"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1util_1_1_generic_lock.html#aba29fc7ec2008b1daf3f0ebbfd6dd155">de.fau.osr.gui.util.GenericLock.unlock</a></div><div class="ttdeci">synchronized void unlock()</div><div class="ttdoc">unlock the locked thread </div><div class="ttdef"><b>Definition:</b> GenericLock.java:51</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter_html_a87de4c0a0d0def86d1848a9998e21f87"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_tracker_adapter.html#a87de4c0a0d0def86d1848a9998e21f87">de.fau.osr.gui.Model.TrackerAdapter.lock</a></div><div class="ttdeci">GenericLock lock</div><div class="ttdef"><b>Definition:</b> TrackerAdapter.java:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -632,9 +592,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordflow">return</span> tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af5b5688d4b7d7f437f6962cf4492cdbc">getImpactPercentageForFileAndRequirement</a>(path.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">toString</a>(), requ.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">getID</a>());</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement_html_a10e1f6507336601a22647212a42ce880"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_requirement.html#a10e1f6507336601a22647212a42ce880">de.fau.osr.gui.Model.DataElements.Requirement.getID</a></div><div class="ttdeci">String getID()</div><div class="ttdef"><b>Definition:</b> Requirement.java:43</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_af5b5688d4b7d7f437f6962cf4492cdbc"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#af5b5688d4b7d7f437f6962cf4492cdbc">de.fau.osr.bl.Tracker.getImpactPercentageForFileAndRequirement</a></div><div class="ttdeci">float getImpactPercentageForFileAndRequirement(String file, String requirementID)</div><div class="ttdef"><b>Definition:</b> Tracker.java:205</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e_html_a5d7cd8ebd6b62b51e02644fc210f3c8b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">de.fau.osr.gui.Model.DataElements.PathDE.toString</a></div><div class="ttdeci">String toString()</div><div class="ttdef"><b>Definition:</b> PathDE.java:71</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -655,24 +612,16 @@ Public Attributes</h2></td></tr>
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#a8fba6335dfdb3467bb8c7c31b2ab6e18">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                                                                      {</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        Set&lt;String&gt; reqIds = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        Collection&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">Requirement</a>&gt; reqs = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        Collection&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html" title="Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. ">Requirement</a>&gt; reqs = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            reqIds = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">getRequirementIdsForFile</a>(file.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">toString</a>());</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            reqs = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add29fb76648d5613f0f83754a0da8d06">getRequirementsByIds</a>(reqIds);</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            reqIds = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6" title="This method returns all the requirements for the given File. ">getRequirementIdsForFile</a>(file.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">toString</a>());</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            reqs = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add29fb76648d5613f0f83754a0da8d06" title="create collection of known Requirement objects, by given set of requirement IDs ">getRequirementsByIds</a>(reqIds);</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        } <span class="keywordflow">catch</span> (IOException e) {</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            e.printStackTrace();</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        }</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordflow">return</span> ElementsConverter.convertRequirements(reqs);</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1_requirement_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">de.fau.osr.core.Requirement</a></div><div class="ttdoc">Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. </div><div class="ttdef"><b>Definition:</b> Requirement.java:30</div></div>
-<div class="ttc" id="namespacede_1_1fau_html"><div class="ttname"><a href="namespacede_1_1fau.html">de.fau</a></div></div>
-<div class="ttc" id="namespacede_html"><div class="ttname"><a href="namespacede.html">de</a></div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr.html">de.fau.osr</a></div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_a9a0427da45115ad42c6dde8576bb67b6"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#a9a0427da45115ad42c6dde8576bb67b6">de.fau.osr.bl.Tracker.getRequirementIdsForFile</a></div><div class="ttdeci">Set&lt; String &gt; getRequirementIdsForFile(String filePath)</div><div class="ttdoc">This method returns all the requirements for the given File. </div><div class="ttdef"><b>Definition:</b> Tracker.java:235</div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core.html">de.fau.osr.core</a></div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_add29fb76648d5613f0f83754a0da8d06"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add29fb76648d5613f0f83754a0da8d06">de.fau.osr.bl.Tracker.getRequirementsByIds</a></div><div class="ttdeci">Collection&lt; Requirement &gt; getRequirementsByIds(Set&lt; String &gt; reqIds)</div><div class="ttdoc">create collection of known Requirement objects, by given set of requirement IDs </div><div class="ttdef"><b>Definition:</b> Tracker.java:537</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e_html_a5d7cd8ebd6b62b51e02644fc210f3c8b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_path_d_e.html#a5d7cd8ebd6b62b51e02644fc210f3c8b">de.fau.osr.gui.Model.DataElements.PathDE.toString</a></div><div class="ttdeci">String toString()</div><div class="ttdef"><b>Definition:</b> PathDE.java:71</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -693,12 +642,12 @@ Public Attributes</h2></td></tr>
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#aa944cb300994214adeb7825f83082985">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                                                                            {</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        Set&lt;String&gt; reqs;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        Collection&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">Requirement</a>&gt; reqObjects = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        Collection&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html" title="Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. ">Requirement</a>&gt; reqObjects = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            reqs = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4">getAllCommitReqRelations</a>().get(commit.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a860db95282540f585f3b978b7b30072f">id</a>);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            reqs = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4" title="relation CommitId - ReqId of VCS + Database ">getAllCommitReqRelations</a>().get(commit.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a860db95282540f585f3b978b7b30072f">id</a>);</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;            reqObjects = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add29fb76648d5613f0f83754a0da8d06">getRequirementsByIds</a>(reqs);</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;            reqObjects = tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add29fb76648d5613f0f83754a0da8d06" title="create collection of known Requirement objects, by given set of requirement IDs ">getRequirementsByIds</a>(reqs);</div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        } <span class="keywordflow">catch</span> (IOException e) {</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            e.printStackTrace();</div>
@@ -707,14 +656,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="keywordflow">return</span> ElementsConverter.convertRequirements(reqObjects);</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1_requirement_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">de.fau.osr.core.Requirement</a></div><div class="ttdoc">Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. </div><div class="ttdef"><b>Definition:</b> Requirement.java:30</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_add42838e15eb5418e45f531a9c0400e4"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add42838e15eb5418e45f531a9c0400e4">de.fau.osr.bl.Tracker.getAllCommitReqRelations</a></div><div class="ttdeci">SetMultimap&lt; String, String &gt; getAllCommitReqRelations()</div><div class="ttdoc">relation CommitId - ReqId of VCS + Database </div><div class="ttdef"><b>Definition:</b> Tracker.java:265</div></div>
-<div class="ttc" id="namespacede_1_1fau_html"><div class="ttname"><a href="namespacede_1_1fau.html">de.fau</a></div></div>
-<div class="ttc" id="namespacede_html"><div class="ttname"><a href="namespacede.html">de</a></div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr.html">de.fau.osr</a></div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core.html">de.fau.osr.core</a></div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_a860db95282540f585f3b978b7b30072f"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a860db95282540f585f3b978b7b30072f">de.fau.osr.gui.Model.DataElements.Commit.id</a></div><div class="ttdeci">String id</div><div class="ttdef"><b>Definition:</b> Commit.java:81</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_add29fb76648d5613f0f83754a0da8d06"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#add29fb76648d5613f0f83754a0da8d06">de.fau.osr.bl.Tracker.getRequirementsByIds</a></div><div class="ttdeci">Collection&lt; Requirement &gt; getRequirementsByIds(Set&lt; String &gt; reqIds)</div><div class="ttdoc">create collection of known Requirement objects, by given set of requirement IDs </div><div class="ttdef"><b>Definition:</b> Tracker.java:537</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -772,7 +713,7 @@ Public Attributes</h2></td></tr>
 <p>Implements <a class="el" href="interfacede_1_1fau_1_1osr_1_1gui_1_1_model_1_1_i___model.html#ad4255f27a292790b79b42564fb966fc9">de.fau.osr.gui.Model.I_Model</a>.</p>
 <div class="fragment"><div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                                                                                  {</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aac4975239026d757b041444df3672bb0">saveOrUpdateRequirement</a>(<span class="keywordtype">id</span>, title, description);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            tracker.<a class="code" href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aac4975239026d757b041444df3672bb0" title="creates or updates requirement in database ">saveOrUpdateRequirement</a>(<span class="keywordtype">id</span>, title, description);</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        } <span class="keywordflow">catch</span> (IOException e) {</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            e.printStackTrace();</div>
@@ -782,7 +723,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1bl_1_1_tracker_html_aac4975239026d757b041444df3672bb0"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1bl_1_1_tracker.html#aac4975239026d757b041444df3672bb0">de.fau.osr.bl.Tracker.saveOrUpdateRequirement</a></div><div class="ttdeci">void saveOrUpdateRequirement(String id, String title, String description)</div><div class="ttdoc">creates or updates requirement in database </div><div class="ttdef"><b>Definition:</b> Tracker.java:568</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -799,9 +739,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>D:/Gayathery_AMOS/amos-ss15-proj3/amos-ss15-proj3-gui/src/main/java/de/fau/osr/gui/Model/<a class="el" href="">TrackerAdapter.java</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -277,11 +277,6 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">throw</span> <span class="keyword">new</span> IOException(<span class="stringliteral">&quot;Can not add requirement - commit relation&quot;</span>);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        }</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_aef59760556266e5d9a72d6b8aeaeb4e7"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#aef59760556266e5d9a72d6b8aeaeb4e7">de.fau.osr.core.db.dao.RequirementDao.getRequirementById</a></div><div class="ttdeci">Requirement getRequirementById(String id)</div></div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_aef870a57c6a8aa5346be8baf0e588ef6"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#aef870a57c6a8aa5346be8baf0e588ef6">de.fau.osr.core.db.dao.RequirementDao.persist</a></div><div class="ttdeci">boolean persist(DBOperation dbOperation, Requirement requirement)</div></div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_commit_dao_html_a4c0ef8a95d17b123f0b26f653be1e8e3"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_commit_dao.html#a4c0ef8a95d17b123f0b26f653be1e8e3">de.fau.osr.core.db.dao.CommitDao.getCommitById</a></div><div class="ttdeci">Commit getCommitById(String id)</div></div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_commit_dao_html_aeb4b28f410fa53a30c67c88ff9c80176"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_commit_dao.html#aeb4b28f410fa53a30c67c88ff9c80176">de.fau.osr.core.db.dao.CommitDao.persist</a></div><div class="ttdeci">boolean persist(DBOperation dbOperation, Commit requirement)</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_d_b_data_source_html_acb0192408edf46d98a250ba9f306ceb6"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_d_b_data_source.html#acb0192408edf46d98a250ba9f306ceb6">de.fau.osr.core.db.DBDataSource.doSaveOrUpdateRequirement</a></div><div class="ttdeci">void doSaveOrUpdateRequirement(String id, String title, String description)</div><div class="ttdef"><b>Definition:</b> DBDataSource.java:121</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -316,7 +311,6 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    }</div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_a7a615963b65ca6f92ee054626b82f016"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#a7a615963b65ca6f92ee054626b82f016">de.fau.osr.core.db.dao.RequirementDao.getAllRequirements</a></div><div class="ttdeci">List&lt; Requirement &gt; getAllRequirements()</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -342,32 +336,23 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                                                                                         {</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        List&lt;Requirement&gt; dbReqs = reqDao.<a class="code" href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#a7a615963b65ca6f92ee054626b82f016">getAllRequirements</a>();</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        Set&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">Requirement</a>&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        Set&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html" title="Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. ">Requirement</a>&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordflow">for</span> (Requirement r : dbReqs) {</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <span class="comment">//convert commits to IDs only</span></div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            Set&lt;String&gt; commits = <span class="keyword">new</span> HashSet&lt;&gt;();</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1db.html">db</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1db_1_1domain.html">domain</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1domain_1_1_commit.html">Commit</a> commit : r.getCommits()) {</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1db.html">db</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1db_1_1domain.html">domain</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1domain_1_1_commit.html" title="commit entity Created by Dmitry Gorelenkov on 01.06.2015. ">Commit</a> commit : r.getCommits()) {</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                commits.add(commit.getId());</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            }</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            <span class="comment">//create Core-Req by DB-Req</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            result.add(<span class="keyword">new</span> <a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">Requirement</a>(</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            result.add(<span class="keyword">new</span> <a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html" title="Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. ">Requirement</a>(</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                    r.getId(), r.getDescription(), r.getTitle(), commits, r.getStoryPoint())</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            );</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        }</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    }</div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_1_1db_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core_1_1db.html">de.fau.osr.core.db</a></div><div class="ttdef"><b>Definition:</b> CompositeDataSource.java:21</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1_requirement_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1_requirement.html">de.fau.osr.core.Requirement</a></div><div class="ttdoc">Data Object, to keep requirement information Created by Dmitry Gorelenkov on 22.06.2015. </div><div class="ttdef"><b>Definition:</b> Requirement.java:30</div></div>
-<div class="ttc" id="namespacede_1_1fau_html"><div class="ttname"><a href="namespacede_1_1fau.html">de.fau</a></div></div>
-<div class="ttc" id="namespacede_html"><div class="ttname"><a href="namespacede.html">de</a></div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_1_1db_1_1domain_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core_1_1db_1_1domain.html">de.fau.osr.core.db.domain</a></div><div class="ttdef"><b>Definition:</b> Commit.java:21</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1domain_1_1_commit_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1domain_1_1_commit.html">de.fau.osr.core.db.domain.Commit</a></div><div class="ttdoc">commit entity Created by Dmitry Gorelenkov on 01.06.2015. </div><div class="ttdef"><b>Definition:</b> Commit.java:37</div></div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_a7a615963b65ca6f92ee054626b82f016"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#a7a615963b65ca6f92ee054626b82f016">de.fau.osr.core.db.dao.RequirementDao.getAllRequirements</a></div><div class="ttdeci">List&lt; Requirement &gt; getAllRequirements()</div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr.html">de.fau.osr</a></div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core.html">de.fau.osr.core</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -418,9 +403,6 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordflow">throw</span> <span class="keyword">new</span> IOException(<span class="stringliteral">&quot;Can not remove requirement - commit relation&quot;</span>);</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        }</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    }</div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_aef59760556266e5d9a72d6b8aeaeb4e7"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#aef59760556266e5d9a72d6b8aeaeb4e7">de.fau.osr.core.db.dao.RequirementDao.getRequirementById</a></div><div class="ttdeci">Requirement getRequirementById(String id)</div></div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_aef870a57c6a8aa5346be8baf0e588ef6"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#aef870a57c6a8aa5346be8baf0e588ef6">de.fau.osr.core.db.dao.RequirementDao.persist</a></div><div class="ttdeci">boolean persist(DBOperation dbOperation, Requirement requirement)</div></div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_commit_dao_html_a4c0ef8a95d17b123f0b26f653be1e8e3"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_commit_dao.html#a4c0ef8a95d17b123f0b26f653be1e8e3">de.fau.osr.core.db.dao.CommitDao.getCommitById</a></div><div class="ttdeci">Commit getCommitById(String id)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -480,14 +462,9 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <span class="keywordflow">throw</span> <span class="keyword">new</span> IOException(<span class="stringliteral">&quot;Cannot save requirement id: &quot;</span> + <span class="keywordtype">id</span>);</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        }</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    }</div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_aef59760556266e5d9a72d6b8aeaeb4e7"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#aef59760556266e5d9a72d6b8aeaeb4e7">de.fau.osr.core.db.dao.RequirementDao.getRequirementById</a></div><div class="ttdeci">Requirement getRequirementById(String id)</div></div>
-<div class="ttc" id="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao_html_aef870a57c6a8aa5346be8baf0e588ef6"><div class="ttname"><a href="interfacede_1_1fau_1_1osr_1_1core_1_1db_1_1dao_1_1_requirement_dao.html#aef870a57c6a8aa5346be8baf0e588ef6">de.fau.osr.core.db.dao.RequirementDao.persist</a></div><div class="ttdeci">boolean persist(DBOperation dbOperation, Requirement requirement)</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>D:/Gayathery_AMOS/amos-ss15-proj3/amos-ss15-proj3-backend/src/main/java/de/fau/osr/core/db/<a class="el" href="">DBDataSource.java</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

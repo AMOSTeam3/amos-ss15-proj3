@@ -142,13 +142,12 @@ Static Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                                   {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        Configuration configuration = <span class="keyword">new</span> Configuration().configure();</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="comment">//add persistent classes</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">for</span>(Class&lt;?&gt; clazz : <a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a2a0089536ed03fe1e4b0a2e456903eb3">getPersistentClasses</a>())</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">for</span>(Class&lt;?&gt; clazz : <a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a2a0089536ed03fe1e4b0a2e456903eb3" title="generates persistent classes set, for now hardcoded. ">getPersistentClasses</a>())</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            configuration.addAnnotatedClass(clazz);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        }</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> configuration;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util_html_a2a0089536ed03fe1e4b0a2e456903eb3"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a2a0089536ed03fe1e4b0a2e456903eb3">de.fau.osr.core.db.HibernateUtil.getPersistentClasses</a></div><div class="ttdeci">static Set&lt; Class&lt;?&gt; &gt; getPersistentClasses()</div><div class="ttdoc">generates persistent classes set, for now hardcoded. </div><div class="ttdef"><b>Definition:</b> HibernateUtil.java:116</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -214,7 +213,6 @@ Static Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                                       {</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a2b5f2bc8115c42dd74c8a0dfe4414b2b">getSessionFactory</a>().openSession();</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util_html_a2b5f2bc8115c42dd74c8a0dfe4414b2b"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a2b5f2bc8115c42dd74c8a0dfe4414b2b">de.fau.osr.core.db.HibernateUtil.getSessionFactory</a></div><div class="ttdeci">static SessionFactory getSessionFactory()</div><div class="ttdef"><b>Definition:</b> HibernateUtil.java:66</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -245,7 +243,7 @@ Static Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            logger.debug(<span class="stringliteral">&quot;Static call : getsession factory() start::&quot;</span>);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="comment">//generate configuration</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            org.hibernate.cfg.Configuration configuration = <a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a5daca22d42c9295c8847e9edb368e10d">getConfiguration</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            org.hibernate.cfg.Configuration configuration = <a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a5daca22d42c9295c8847e9edb368e10d" title="generates configuration from hibernate.cfg.xml and adds all persistent classes to it ...">getConfiguration</a>();</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            configuration.setProperty(<span class="stringliteral">&quot;hibernate.connection.username&quot;</span>,HibernateUtil.dbUserName);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            configuration.setProperty(<span class="stringliteral">&quot;hibernate.connection.password&quot;</span>,HibernateUtil.dbPassword);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
@@ -258,7 +256,6 @@ Static Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> sessionFactory;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;   }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util_html_a5daca22d42c9295c8847e9edb368e10d"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1db_1_1_hibernate_util.html#a5daca22d42c9295c8847e9edb368e10d">de.fau.osr.core.db.HibernateUtil.getConfiguration</a></div><div class="ttdeci">static Configuration getConfiguration()</div><div class="ttdoc">generates configuration from hibernate.cfg.xml and adds all persistent classes to it ...</div><div class="ttdef"><b>Definition:</b> HibernateUtil.java:53</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -345,9 +342,6 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- fragment -->
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>D:/Gayathery_AMOS/amos-ss15-proj3/amos-ss15-proj3-backend/src/main/java/de/fau/osr/core/db/<a class="el" href="">HibernateUtil.java</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

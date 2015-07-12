@@ -129,21 +129,11 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        this.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#afd6905107c902dfca1bbfce64393941e">message</a> = commit.getMessage();</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        this.<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#ae2d9914b4739451a2fed45b7f4ebac98">instanceRequirement</a> = null;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a6b54673e845dd7eaefaf84932e9b4d1d">commitFiles</a> = () -&gt; {</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            Stream&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs.html">vcs</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base.html">base</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit_file.html">CommitFile</a>&gt; originalStream = commit.commitFiles.get();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            Stream&lt;<a class="code" href="namespacede.html">de</a>.<a class="code" href="namespacede_1_1fau.html">fau</a>.<a class="code" href="namespacede_1_1fau_1_1osr.html">osr</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core.html">core</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs.html">vcs</a>.<a class="code" href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base.html">base</a>.<a class="code" href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit_file.html" title="This entity class holds the properties of a committed file. ">CommitFile</a>&gt; originalStream = commit.commitFiles.get();</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="comment">//convert the commitFiles from the backend</span></div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">return</span> originalStream.map(commitFile -&gt; <span class="keyword">new</span> PathDE(commitFile.newPath.toPath()));</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        };</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    }</div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs.html">de.fau.osr.core.vcs</a></div><div class="ttdef"><b>Definition:</b> AnnotatedLine.java:21</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_afd6905107c902dfca1bbfce64393941e"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#afd6905107c902dfca1bbfce64393941e">de.fau.osr.gui.Model.DataElements.Commit.message</a></div><div class="ttdeci">String message</div><div class="ttdef"><b>Definition:</b> Commit.java:82</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_ae2d9914b4739451a2fed45b7f4ebac98"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#ae2d9914b4739451a2fed45b7f4ebac98">de.fau.osr.gui.Model.DataElements.Commit.instanceRequirement</a></div><div class="ttdeci">Requirement instanceRequirement</div><div class="ttdef"><b>Definition:</b> Commit.java:83</div></div>
-<div class="ttc" id="namespacede_1_1fau_html"><div class="ttname"><a href="namespacede_1_1fau.html">de.fau</a></div></div>
-<div class="ttc" id="namespacede_html"><div class="ttname"><a href="namespacede.html">de</a></div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core_1_1vcs_1_1base.html">de.fau.osr.core.vcs.base</a></div><div class="ttdef"><b>Definition:</b> Commit.java:21</div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr.html">de.fau.osr</a></div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_a6b54673e845dd7eaefaf84932e9b4d1d"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a6b54673e845dd7eaefaf84932e9b4d1d">de.fau.osr.gui.Model.DataElements.Commit.commitFiles</a></div><div class="ttdeci">Supplier&lt; Stream&lt; PathDE &gt; &gt; commitFiles</div><div class="ttdef"><b>Definition:</b> Commit.java:84</div></div>
-<div class="ttc" id="namespacede_1_1fau_1_1osr_1_1core_html"><div class="ttname"><a href="namespacede_1_1fau_1_1osr_1_1core.html">de.fau.osr.core</a></div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit_file_html"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1core_1_1vcs_1_1base_1_1_commit_file.html">de.fau.osr.core.vcs.base.CommitFile</a></div><div class="ttdoc">This entity class holds the properties of a committed file. </div><div class="ttdef"><b>Definition:</b> CommitFile.java:32</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -188,10 +178,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_afd6905107c902dfca1bbfce64393941e"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#afd6905107c902dfca1bbfce64393941e">de.fau.osr.gui.Model.DataElements.Commit.message</a></div><div class="ttdeci">String message</div><div class="ttdef"><b>Definition:</b> Commit.java:82</div></div>
-<div class="ttc" id="_linkage_8js_html_a0cf19f82ec7d5b8a220277790b543a0d"><div class="ttname"><a href="_linkage_8js.html#a0cf19f82ec7d5b8a220277790b543a0d">obj</a></div><div class="ttdeci">obj</div><div class="ttdef"><b>Definition:</b> Linkage.js:1</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_a91ac1783eebf152bf47906099ef9719e"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a91ac1783eebf152bf47906099ef9719e">de.fau.osr.gui.Model.DataElements.Commit.equals</a></div><div class="ttdeci">boolean equals(Object obj)</div><div class="ttdef"><b>Definition:</b> Commit.java:53</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_aedd56bdc652cdc0fa6dda7eab3b383cc"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#aedd56bdc652cdc0fa6dda7eab3b383cc">de.fau.osr.gui.Model.DataElements.Commit.Commit</a></div><div class="ttdeci">Commit(de.fau.osr.core.vcs.base.Commit commit)</div><div class="ttdef"><b>Definition:</b> Commit.java:86</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -210,7 +196,6 @@ Public Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                                         {</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a6b54673e845dd7eaefaf84932e9b4d1d">commitFiles</a>.get().collect(Collectors.toList());</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_a6b54673e845dd7eaefaf84932e9b4d1d"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a6b54673e845dd7eaefaf84932e9b4d1d">de.fau.osr.gui.Model.DataElements.Commit.commitFiles</a></div><div class="ttdeci">Supplier&lt; Stream&lt; PathDE &gt; &gt; commitFiles</div><div class="ttdef"><b>Definition:</b> Commit.java:84</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -237,9 +222,6 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        result = prime * result + ((<a class="code" href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#afd6905107c902dfca1bbfce64393941e">message</a> == null) ? 0 : message.hashCode());</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_afd6905107c902dfca1bbfce64393941e"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#afd6905107c902dfca1bbfce64393941e">de.fau.osr.gui.Model.DataElements.Commit.message</a></div><div class="ttdeci">String message</div><div class="ttdef"><b>Definition:</b> Commit.java:82</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_a7ed23a9f55c8bf2203d57fb05a1e7621"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#a7ed23a9f55c8bf2203d57fb05a1e7621">de.fau.osr.gui.Model.DataElements.Commit.hashCode</a></div><div class="ttdeci">int hashCode()</div><div class="ttdef"><b>Definition:</b> Commit.java:40</div></div>
-<div class="ttc" id="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit_html_ae2d9914b4739451a2fed45b7f4ebac98"><div class="ttname"><a href="classde_1_1fau_1_1osr_1_1gui_1_1_model_1_1_data_elements_1_1_commit.html#ae2d9914b4739451a2fed45b7f4ebac98">de.fau.osr.gui.Model.DataElements.Commit.instanceRequirement</a></div><div class="ttdeci">Requirement instanceRequirement</div><div class="ttdef"><b>Definition:</b> Commit.java:83</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -311,9 +293,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>D:/Gayathery_AMOS/amos-ss15-proj3/amos-ss15-proj3-gui/src/main/java/de/fau/osr/gui/Model/DataElements/<a class="el" href="">Commit.java</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
