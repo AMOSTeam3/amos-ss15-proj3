@@ -21,6 +21,7 @@
 package de.fau.osr.core.db.domain;
 
 import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +34,37 @@ import java.util.Set;
 @Table(name="requirement")
 public class Requirement {
 
-    @Id
+    /* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Requirement other = (Requirement) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@Id
     @Column(name="id", nullable = false)
     private String id;
 
@@ -89,28 +120,6 @@ public class Requirement {
         this.storyPoint = storyPoint;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Requirement)) return false;
-
-        Requirement that = (Requirement) o;
-
-        if (storyPoint != that.storyPoint) return false;
-        if (!id.equals(that.id)) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        return !(description != null ? !description.equals(that.description) : that.description != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + storyPoint;
-        return result;
-    }
 
 
 }
