@@ -46,7 +46,11 @@ public interface RequirementDao {
     List<Requirement> getAllRequirements();
 
     /**
-     * @see AbstractDefaultDao#getObjectById(Serializable)
+     * Looks up a Requirement in the database and if it does not exist already,
+     * a row with the key id and all other fields null is inserted. 
+     * @param id the unique key of this requirement
+     * @return if already present in the database, the requirement corresponding
+     * to id, otherwise a freshly created requirement
      */
     Requirement getRequirementById(String id);
 

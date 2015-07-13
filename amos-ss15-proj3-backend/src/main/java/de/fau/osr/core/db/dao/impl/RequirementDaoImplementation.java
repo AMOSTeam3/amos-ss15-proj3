@@ -71,8 +71,18 @@ public class RequirementDaoImplementation extends AbstractDefaultDao<Requirement
 
     @Override
     public Requirement getRequirementById(String id) {
-        return getObjectById(id);
+        Requirement res;
+        do {
+        	//lookup in the database
+        	res = super.getObjectById(id);
+        	if(res != null) break;
+        	//not there, create a new one
+        	res = new Requirement();
+        	res.setId(id);
+        	//try to persist it (could fail if racing with somebody else)
+        	if(!persist(DBOperation.ADD, res)) res = null;
+        } while (res == null);
+        return res;
     }
-
 
 }
