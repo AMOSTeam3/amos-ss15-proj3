@@ -18,6 +18,10 @@ Things to note if you intend to work with this code base:
    the content of the requirements table (which is needed for requirement titles
    and descriptions).
 
+ - The current logic for querying sources of linkage is both quite slow and
+   complex, refactoring that part of the code base will require a large effort
+   (essentially a rewrite) but is needed for extensibility.
+
 ======================
 Important open issues:
 ======================
