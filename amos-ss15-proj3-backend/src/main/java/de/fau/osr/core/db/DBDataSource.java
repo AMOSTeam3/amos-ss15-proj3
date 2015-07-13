@@ -71,11 +71,7 @@ public class DBDataSource extends DataSource {
 
     @Override
     protected void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
-        //create req if not exists
         Requirement req = reqDao.getRequirementById(reqId);
-        if (req == null) {
-            doSaveOrUpdateRequirement(reqId, "", "");
-        }
 
         Commit commitToAdd = commitDao.getCommitById(commitId);
         //create commit if not exist
