@@ -42,8 +42,8 @@ import java.util.Set;
  */
 public class DBDataSource extends DataSource {
 
-    private CommitDao commitDao;
-    private final RequirementDao reqDao;
+    protected final CommitDao commitDao;
+    protected final RequirementDao reqDao;
 
     /**
      * used <tt>HibernateUtil.getSessionFactory()</tt> to get default database session factory
