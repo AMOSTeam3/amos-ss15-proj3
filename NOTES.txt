@@ -39,8 +39,3 @@ Important open issues:
    boundaries and will in case of ambiguities sometimes choose a diff with more
    changed lines than strictly necessary
    (see https://github.com/uv48uson/amos-ss15-proj3/issues/112).
-
- - Inserting linkage for requirements that are not yet in the database fails
-   when executed the first time, but inserts the requirement into the database,
-   so it only works on the second try
-   (see https://github.com/uv48uson/amos-ss15-proj3/issues/128).
