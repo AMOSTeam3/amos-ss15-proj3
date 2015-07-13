@@ -176,9 +176,10 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Requirement> getRequirementsByFile(String file) throws IOException {
+        String filename = file.replaceAll("\\\\", "/");
         Collection<Requirement> reqs = new ArrayList<>();
         try {
-            reqs = getBlame(file).stream()
+            reqs = getBlame(filename).stream()
                     // fetching every requirement ids of each line
                     .map( annotatedLine -> annotatedLine.getRequirements())
                     .flatMap(reqIds -> reqIds.stream())
@@ -231,9 +232,10 @@ public class Tracker {
 
     
     public float getImpactPercentageForFileAndRequirement(String file, String requirementID){
+        String filename = file.replaceAll("\\\\", "/");
         List<AnnotatedLine> currentBlame;
         try {
-            currentBlame = this.getBlame(file);
+            currentBlame = this.getBlame(filename);
         } catch (GitAPIException | IOException e) {
             return -1;
         }
@@ -261,9 +263,10 @@ public class Tracker {
      */
     @Deprecated
     public Set<String> getRequirementIdsForFile(String filePath) throws IOException {
+        String filename = filePath.replaceAll("\\\\", "/");
         Set<String> requirementList = new HashSet<>();
 
-        Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filePath);
+        Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filename);
         SetMultimap<String, String> relations = getAllCommitReqRelations();
 
         while(commitIdListIterator.hasNext()){
@@ -346,7 +349,6 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Path> getFiles() throws IOException {
-        System.out.println(">>> getFiles");
         if (cachedFiles == null) {
             // Store all project-related and version-controlled files in *cachedFiles*
             cachedFiles = projectDirTraverser.traverse().stream()
@@ -380,6 +382,9 @@ public class Tracker {
                     return false;
                 })
                 .collect(Collectors.toList());
+       for(Path path: rvalue){
+           System.out.println(path.toString());
+       }
         return rvalue;
     }
 
@@ -428,7 +433,8 @@ public class Tracker {
      * @return collection of commit ids
      */
     public Collection<String> getCommitsByFile(String filePath) throws IOException {
-        return Sets.newHashSet(vcsClient.getCommitListForFileodification(filePath));
+        String filename = filePath.replaceAll("\\\\", "/");
+        return Sets.newHashSet(vcsClient.getCommitListForFileodification(filename));
     }
 
     /**
@@ -455,8 +461,9 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
+        String filename = path.replaceAll("\\\\", "/");
         try {
-            return blameCache.get(path);
+            return blameCache.get(filename);
         } catch (ExecutionException e) {
             throw new IOException(e.getMessage());
         }
@@ -513,7 +520,8 @@ public class Tracker {
      * @throws Exception
      */
     public List<Collection<String>> getRequirementsLineLinkageForFile(String filePath) throws IOException, GitAPIException {
-    	Collection<AnnotatedLine> lines = this.getBlame(filePath);
+        String filename = filePath.replaceAll("\\\\", "/");
+    	Collection<AnnotatedLine> lines = this.getBlame(filename);
     	List<Collection<String>> reqIdsByLines = new ArrayList<>();
 
         //preload all reqs to ID -> Req IdentityHashMap
