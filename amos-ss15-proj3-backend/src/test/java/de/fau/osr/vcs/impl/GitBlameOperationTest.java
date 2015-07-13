@@ -63,11 +63,13 @@ public class GitBlameOperationTest {
     	AnnotatedWords w = new GitBlameOperation(git, "TestFile3", putBlame).wordBlame();
     	ObjectId commit1 = ObjectId.fromString("bc87c2039d1e14d5fa0131d77780eaa3b2cc627c"),
     			 commit2 = ObjectId.fromString("44ede09bf7dc2180f0ae7d614ae9fbccf549deaa"),
-    			 commit3 = ObjectId.fromString("d97ad6e826b473098b4396aa09c638487305c572");
+    			 commit3 = ObjectId.fromString("d97ad6e826b473098b4396aa09c638487305c572"),
+    			 commit4 = ObjectId.fromString("1c593122de47d31defa0648090a5cdfec1a5e43a");
     	assertArrayEquals(new List[] {
     		Lists.newArrayList(1,commit1),
     		Lists.newArrayList(1,commit2),
     		Lists.newArrayList(1,commit2),
+    		Lists.newArrayList(commit4),
     		Lists.newArrayList(1,commit2),
     		Lists.newArrayList(1,commit2),
     		Lists.newArrayList(1,commit2),
@@ -82,7 +84,8 @@ public class GitBlameOperationTest {
 				return ImmutableSetMultimap.of(
 						"a", commit1.name(),
 						"42", commit2.name(),
-						"ßäµ", commit3.name()
+						"ßäµ", commit3.name(),
+						"foobar", commit4.name()
 				);
 			}
 
@@ -103,6 +106,7 @@ public class GitBlameOperationTest {
     	List<AnnotatedLine> lines = AnnotatedLine.wordsToLine(w, testDataSource);
     	assertEquals(Lists.newArrayList(
     			new AnnotatedLine(Lists.newArrayList("a", "42"), "1 3"),
+    			new AnnotatedLine(Collections.emptyList(), ""),
     			new AnnotatedLine(Lists.newArrayList("ßäµ", "42"), "Test 2 100"))
     	, lines);
     }

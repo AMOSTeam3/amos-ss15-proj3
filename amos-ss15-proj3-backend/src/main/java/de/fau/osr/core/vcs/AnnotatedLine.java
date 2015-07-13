@@ -106,7 +106,14 @@ public class AnnotatedLine {
     		}
     		if(i + 1 == words.source.size() ||
     				words.source.getLineByWord(i) != words.source.getLineByWord(i+1)) {
-    			AnnotatedLine line = new AnnotatedLine(new ArrayList<>(requirements), words.source.getLine(curLine));
+    			/*
+    			 * empty lines are not taken into account for impact calculation,
+    			 * so it would be inconsistent for them to have annotations
+    			 */
+    			String string = words.source.getLine(curLine);
+    			if(string.matches("\\s*")) requirements.clear();
+    			
+    			AnnotatedLine line = new AnnotatedLine(new ArrayList<>(requirements), string);
     			++curLine;
 	    		res.add(line);
 	    		if(i + 1 != words.source.size())
