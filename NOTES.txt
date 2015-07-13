@@ -18,11 +18,15 @@ Things to note if you intend to work with this code base:
    the content of the requirements table (which is needed for requirement titles
    and descriptions).
 
+ - The current logic for querying sources of linkage is both quite slow and
+   complex, refactoring that part of the code base will require a large effort
+   (essentially a rewrite) but is needed for extensibility.
+
 ======================
 Important open issues:
 ======================
 
- - If large amounts of data were stored in the database, performance would
+ - If large amounts of data were to be stored in the database, performance would
    suffer, because currently the code uses one Hibernate session per query
    (see https://github.com/uv48uson/amos-ss15-proj3/issues/87).
 
@@ -35,8 +39,3 @@ Important open issues:
    boundaries and will in case of ambiguities sometimes choose a diff with more
    changed lines than strictly necessary
    (see https://github.com/uv48uson/amos-ss15-proj3/issues/112).
-
- - Inserting linkage for requirements that are not yet in the database fails
-   when executed the first time, but inserts the requirement into the database,
-   so it only works on the second try
-   (see https://github.com/uv48uson/amos-ss15-proj3/issues/128).
