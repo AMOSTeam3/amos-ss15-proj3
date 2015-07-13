@@ -148,17 +148,17 @@ public class RequirementDaoImplementationTest {
     }
 
     @Test
-    public void getRequirementByIdTest_DbIsEmpty_shouldReturnNull() throws Exception {
+    public void getRequirementByIdTest_DbIsEmpty_shouldNotReturnNull() throws Exception {
         //given
         Requirement tempRequirement = genRandomReq();
         //when
         Requirement fromDb = dao.getRequirementById(tempRequirement.getId());
         //then
-        assertNull(fromDb);
+        assertNotNull(fromDb);
     }
 
     @Test
-    public void getRequirementByIdTest_getNotExistsIdFromFilledDb_shouldReturnNull() throws Exception {
+    public void getRequirementByIdTest_getNotExistsIdFromFilledDb_shouldNotReturnNull() throws Exception {
         //given
         for (int i = 0; i < 1000; i++) {
             dao.persist(DBOperation.ADD, genRandomReq());
@@ -166,6 +166,6 @@ public class RequirementDaoImplementationTest {
         //when
         Requirement fromDb = dao.getRequirementById("this id should not exists in db");
         //then
-        assertNull("queried non existing id, returned some not null object", fromDb);
+        assertNotNull("queried non existing id, returned some not null object", fromDb);
     }
 }
