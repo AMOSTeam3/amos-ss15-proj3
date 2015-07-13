@@ -26,7 +26,7 @@ Things to note if you intend to work with this code base:
 Important open issues:
 ======================
 
- - If large amounts of data were stored in the database, performance would
+ - If large amounts of data were to be stored in the database, performance would
    suffer, because currently the code uses one Hibernate session per query
    (see https://github.com/uv48uson/amos-ss15-proj3/issues/87).
 
