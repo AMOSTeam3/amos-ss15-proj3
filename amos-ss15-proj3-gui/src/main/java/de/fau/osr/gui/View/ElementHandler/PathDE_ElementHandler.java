@@ -25,6 +25,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,7 +35,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Components.PathDEsJTree;
 import de.fau.osr.gui.Components.PathDEsJTreeSelectionModel;
 import de.fau.osr.gui.Controller.Visitor;
@@ -59,10 +59,12 @@ public class PathDE_ElementHandler extends ElementHandler {
 
     @Override
     public Component toComponent() {
-        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
-                .addComponent(button)
-                .addComponent(Files_label)
-                .addComponent(scrollPane);
+    	JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(button);
+        panel.add(Files_label);
+        panel.add(scrollPane);
+        return panel;
     }
 
 

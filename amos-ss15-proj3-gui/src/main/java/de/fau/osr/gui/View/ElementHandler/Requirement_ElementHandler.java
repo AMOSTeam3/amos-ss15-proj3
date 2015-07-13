@@ -20,7 +20,6 @@
  */
 package de.fau.osr.gui.View.ElementHandler;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Model.DataElements.Requirement;
 import de.fau.osr.gui.View.Presenter.Presenter_Requirement;
 
@@ -49,12 +48,14 @@ public class Requirement_ElementHandler extends ElementHandler {
 
     @Override
     public Component toComponent() {
-        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
-        		.addComponent(refreshButton)
-                .addComponent(button)
-                .addComponent(RequirementID_label)
-                .addComponent(RequirementSearch_textField)
-                .addComponent(scrollPane);
+    	JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(refreshButton);
+        panel.add(button);
+        panel.add(RequirementID_label);
+        panel.add(RequirementSearch_textField);
+        panel.add(scrollPane);
+        return panel;
     }
     
     public void setRefreshAction(Action a) {
@@ -106,5 +107,10 @@ public class Requirement_ElementHandler extends ElementHandler {
             }
         });
     }
+    
+    @Override
+    public double getWeight() {
+		return 2.0/3.0;
+	}
     
 }

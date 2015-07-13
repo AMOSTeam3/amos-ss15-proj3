@@ -23,10 +23,7 @@ package de.fau.osr.bl;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 import de.fau.osr.core.Requirement;
 import de.fau.osr.core.db.CSVFileDataSource;
@@ -81,6 +78,8 @@ public class Tracker {
     private CommitDaoImplementation commitDao;
 
     private LoadingCache<String, List<AnnotatedLine>> blameCache;
+    // *cachedFiles* serves as a simple cache.
+    private List<Path> cachedFiles;
 
     public Tracker(VcsClient vcsClient) throws IOException {
         this(vcsClient, null, null);
@@ -125,19 +124,19 @@ public class Tracker {
         blameCache = CacheBuilder.newBuilder()
                 .maximumSize(10000)
                 .build(
-                    new CacheLoader<String, List<AnnotatedLine>>() {
-                        public List<AnnotatedLine> load(String path) throws GitAPIException, IOException {
-                            GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
-                            return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
+                        new CacheLoader<String, List<AnnotatedLine>>() {
+                            public List<AnnotatedLine> load(String path) throws GitAPIException, IOException {
+                                GitBlameOperation op = new GitBlameOperation(vcsClient, path, (s, i) -> null);
+                                return AnnotatedLine.wordsToLine(op.wordBlame(), dataSource);
+                            }
                         }
-                    }
                 );
 
-        this.projectDirTraverser = VisibleFilesTraverser.Get(
-                repoFile.getParentFile().toPath(),
-                "git",
-                ".class"
-        );
+        projectDirTraverser = VisibleFilesTraverser.Get(
+                    repoFile.getParentFile().toPath(),
+                    "git",
+                    ".class"
+            );
     }
 
     /**
@@ -147,6 +146,7 @@ public class Tracker {
     public void purgeRepoCache() {
         dataSource.clearCache(); //this will purge probably more than just VCS datasource
         blameCache.cleanUp();
+        cachedFiles = new ArrayList<>();
     }
 
     /**
@@ -167,6 +167,37 @@ public class Tracker {
         NaturalOrderComparator comparator = new NaturalOrderComparator();
 
         Collections.sort(reqs, (o1, o2) -> comparator.compare(o1.getId(), o2.getId()));
+
+        return reqs;
+    }
+
+    /**
+     * @return requiremets by given file paths.
+     * @throws IOException
+     */
+    public Collection<Requirement> getRequirementsByFile(String file) throws IOException {
+        String filename = file.replaceAll("\\\\", "/");
+        Collection<Requirement> reqs = new ArrayList<>();
+        try {
+            reqs = getBlame(filename).stream()
+                    // fetching every requirement ids of each line
+                    .map( annotatedLine -> annotatedLine.getRequirements())
+                    .flatMap(reqIds -> reqIds.stream())
+                    .distinct()
+                    .sorted((reqId1, reqId2) -> new NaturalOrderComparator().compare(reqId1, reqId2))
+                    .map(reqId -> {
+                        try {
+                            return getRequirementById(reqId);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        // this should never happen.
+                        return new Requirement("", "", "", null, -1);
+                    })
+                    .collect(Collectors.toList());
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
 
         return reqs;
     }
@@ -196,17 +227,15 @@ public class Tracker {
         logger.info("End call :: getCommitFilesForRequirementID() Time: " + (System.currentTimeMillis() - startTime));
 
         return commitFilesList;
-
-
     }
 
 
     
     public float getImpactPercentageForFileAndRequirement(String file, String requirementID){
-        String correctFilePath = file.toString().replaceAll("\\\\", "/");
+        String filename = file.replaceAll("\\\\", "/");
         List<AnnotatedLine> currentBlame;
         try {
-            currentBlame = this.getBlame(correctFilePath);
+            currentBlame = this.getBlame(filename);
         } catch (GitAPIException | IOException e) {
             return -1;
         }
@@ -232,12 +261,12 @@ public class Tracker {
     /**
      * This method returns all the requirements for the given File.
      */
+    @Deprecated
     public Set<String> getRequirementIdsForFile(String filePath) throws IOException {
-        String correctFilePath = filePath.toString().replaceAll("\\\\", "/");
-        
+        String filename = filePath.replaceAll("\\\\", "/");
         Set<String> requirementList = new HashSet<>();
 
-        Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(correctFilePath);
+        Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filename);
         SetMultimap<String, String> relations = getAllCommitReqRelations();
 
         while(commitIdListIterator.hasNext()){
@@ -320,42 +349,50 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Path> getFiles() throws IOException {
-        Collection<Path> filePaths = new ArrayList<>();
-
-        for(Path each: projectDirTraverser.traverse()){
-            // fname is a known file in VCS (if it returs ReqIds for that filepath)
-            // TODO Maybe we could cache (file->reqIds)
-            if (this.getRequirementIdsForFile(each.toString()).size()>0){
-                filePaths.add(each);
-            }
+        if (cachedFiles == null) {
+            // Store all project-related and version-controlled files in *cachedFiles*
+            cachedFiles = projectDirTraverser.traverse().stream()
+                    // if file is versioned *vcsClient::getCommitListForFileodification*
+                    // returns a iterator with size>0
+                    .filter(
+                            file -> Iterators.size(vcsClient.getCommitListForFileodification(file.toString())) > 0)
+                    .collect(Collectors.toList());
         }
 
-        return filePaths;
+        return new ArrayList<>(this.cachedFiles);
     }
 
     /**
      * @return Existing project file paths for given requirement
-     * @throws IOException
      */
     public Collection<Path> getFilesByRequirement(String requirementId) throws IOException {
-        return projectDirTraverser.traverse().stream()
-                .filter(path -> {
+        Collection<Path> rvalue = getFiles().stream()
+                .filter(file -> {
                     try {
-                        return getRequirementIdsForFile(path.toString()).contains(requirementId);
-                    } catch (IOException e) {
+                        // Returns true, if first occurring "impact" of *requirementId* is found at any line.
+                        return getBlame(file.toString()).stream()
+                                .filter(annotatedLine -> annotatedLine.getRequirements().contains(requirementId))
+                                .findFirst()
+                                .isPresent();
+                    } catch (GitAPIException e) {
                         e.printStackTrace();
+                    } catch (IOException e) {
+                        // IOExceptions: *getBlame* could not retrieve any requirement ids for versioned file
                     }
                     return false;
                 })
                 .collect(Collectors.toList());
+       for(Path path: rvalue){
+           System.out.println(path.toString());
+       }
+        return rvalue;
     }
 
     /**
      * @return Existing project file paths for given commit id
-     * @throws IOException
      */
     public Collection<Path> getFilesByCommit(String commitId) throws IOException {
-        return projectDirTraverser.traverse().stream()
+       Collection<Path> rvalue = getFiles().stream()
                 .filter(path -> {
                     try {
                         return getCommitsByFile(path.toString()).contains(commitId);
@@ -365,6 +402,7 @@ public class Tracker {
                     return false;
                 })
                 .collect(Collectors.toList());
+        return rvalue;
     }
 
 
@@ -395,8 +433,8 @@ public class Tracker {
      * @return collection of commit ids
      */
     public Collection<String> getCommitsByFile(String filePath) throws IOException {
-        String correctFilePath = filePath.replaceAll("\\\\", "/");
-        return Sets.newHashSet(vcsClient.getCommitListForFileodification(correctFilePath));
+        String filename = filePath.replaceAll("\\\\", "/");
+        return Sets.newHashSet(vcsClient.getCommitListForFileodification(filename));
     }
 
     /**
@@ -405,8 +443,7 @@ public class Tracker {
      * @return collection of commit objects
      */
     public Collection<Commit> getCommitsForFile(String filePath) throws IOException {
-        String correctFilePath = filePath.replaceAll("\\\\", "/");
-        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitListForFileodification(correctFilePath));
+        HashSet<String> ids = Sets.newHashSet(vcsClient.getCommitListForFileodification(filePath));
         return getCommitsByIds(ids);
     }
 
@@ -424,9 +461,9 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-        String correctFilePath = path.replaceAll("\\\\", "/");
+        String filename = path.replaceAll("\\\\", "/");
         try {
-            return blameCache.get(correctFilePath);
+            return blameCache.get(filename);
         } catch (ExecutionException e) {
             throw new IOException(e.getMessage());
         }
@@ -483,8 +520,8 @@ public class Tracker {
      * @throws Exception
      */
     public List<Collection<String>> getRequirementsLineLinkageForFile(String filePath) throws IOException, GitAPIException {
-        String correctFilePath = filePath.replaceAll("\\\\", "/");
-    	Collection<AnnotatedLine> lines = this.getBlame(correctFilePath);
+        String filename = filePath.replaceAll("\\\\", "/");
+    	Collection<AnnotatedLine> lines = this.getBlame(filename);
     	List<Collection<String>> reqIdsByLines = new ArrayList<>();
 
         //preload all reqs to ID -> Req IdentityHashMap

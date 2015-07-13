@@ -26,10 +26,12 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 
 
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -92,7 +94,8 @@ public class VisibleFilesTraverser extends DirectoryWalker<Path> {
     }
 
     protected void handleFile(File file, int depth, Collection results) throws IOException {
-        String filename = file.getCanonicalPath();
+        // Using unix-style file paths.
+        String filename = file.toString().replaceAll("\\\\", "/");
         for (String eachIgnore: ignoreList)
             if (filename.contains(eachIgnore))
                 return;

@@ -165,16 +165,13 @@ public class TrackerAdapter implements I_Model {
 
     @Override
     public Collection<Requirement> getRequirementsByFile(PathDE file) {
-        Set<String> reqIds = new HashSet<>();
-        Collection<de.fau.osr.core.Requirement> reqs = new ArrayList<>();
         try {
-            reqIds = tracker.getRequirementIdsForFile(file.toString());
-            reqs = tracker.getRequirementsByIds(reqIds);
+            return ElementsConverter.convertRequirements(tracker.getRequirementsByFile(file.toString()));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return ElementsConverter.convertRequirements(reqs);
+        return new ArrayList<>();
     }
 
     @Override

@@ -209,17 +209,18 @@ public class GitVcsClient extends VcsClient{
      * @author Gayathery
      */
     public Iterator<String> getCommitListForFileodification(String path){
+        String filename = path.replaceAll("\\\\", "/");
         PlotCommitList<PlotLane> plotCommitList = new PlotCommitList<PlotLane>();
         PlotWalk revWalk = new PlotWalk(repo);
         ArrayList<String> commitIDList = new ArrayList<String>();
         try {
-
             ObjectId rootId = repo.resolve("HEAD");
             if (rootId != null) {
                 RevCommit root = revWalk.parseCommit(rootId);
                 revWalk.markStart(root);
                 revWalk.setTreeFilter(
-                        AndTreeFilter.create(PathFilter.create(path), TreeFilter.ANY_DIFF));
+                        // VERY IMPORTANT: This works only with unix-style file paths. NO "\" allowed.
+                        AndTreeFilter.create(PathFilter.create(filename), TreeFilter.ANY_DIFF));
                 plotCommitList.source(revWalk);
                 plotCommitList.fillTo(Integer.MAX_VALUE);
 
