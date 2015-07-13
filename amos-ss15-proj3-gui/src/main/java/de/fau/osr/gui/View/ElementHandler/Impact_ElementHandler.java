@@ -20,12 +20,12 @@
  */
 package de.fau.osr.gui.View.ElementHandler;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.View.Presenter.Presenter;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+
 import java.awt.*;
 
 public class Impact_ElementHandler extends ElementHandler {
@@ -41,9 +41,11 @@ public class Impact_ElementHandler extends ElementHandler {
 
     @Override
     public Component toComponent() {
-        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
-            .addComponent(Requirements2Lines_label)
-            .addComponent(scrollPane);
+    	JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(Requirements2Lines_label);
+        panel.add(scrollPane);
+        return panel;
     }
 
     @Override
@@ -51,4 +53,9 @@ public class Impact_ElementHandler extends ElementHandler {
         super.setScrollPane_Content(presenter);
         list.setFixedCellHeight(12);
     }
+    
+    @Override
+    public double getWeight() {
+		return 1.0/3.0;
+	}
 }

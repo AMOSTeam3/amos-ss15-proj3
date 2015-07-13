@@ -22,14 +22,18 @@ package de.fau.osr.gui.View;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -38,7 +42,12 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
+import org.jdesktop.swingx.JXMultiSplitPane;
+import org.jdesktop.swingx.MultiSplitLayout;
+import org.jdesktop.swingx.MultiSplitLayout.Split;
+import org.jdesktop.swingx.MultiSplitLayout.Leaf;
+import org.jdesktop.swingx.MultiSplitLayout.Divider;
+
 import de.fau.osr.gui.Controller.GuiController;
 import de.fau.osr.gui.View.ElementHandler.Code_ElementHandler;
 import de.fau.osr.gui.View.ElementHandler.Commit_ElementHandler;
@@ -193,6 +202,44 @@ public class GuiViewElementHandler extends JFrame {
         tabpane.addTab("Traceability Matrix", traceabilityMatrixPanel);
         this.add(tabpane);
     }
+    
+    /**
+     * This method creates a pane split into resizeable columns, containing its
+     * arguments. The original column widths are weighted according to the
+     * getWeight functions of each element handler.
+     * @param elemHandlers
+     * @return a freshly created split pane containing the elements
+     */
+    private JXMultiSplitPane createMultiColums(ElementHandler... elemHandlers) {
+    	/*
+    	 * allocate one column for each real column and each divider
+    	 * -> elemHandlers.length columns
+    	 * -> elemHandlers.length - 1 dividers
+    	 */
+    	MultiSplitLayout.Node[] columns = new MultiSplitLayout.Node[elemHandlers.length*2 - 1];
+    	/*
+    	 * The sum of the weights in a MultiSplitLayout has to be <= 1.0,
+    	 * divide each arbitrary weight by the sum of all weights to get there.
+    	 */
+    	double totalWeight = 0;
+    	for(ElementHandler elemHandler : elemHandlers)
+    		totalWeight += elemHandler.getWeight();
+        for(int i=0; i<elemHandlers.length; ++i) {
+        	MultiSplitLayout.Leaf leaf = new MultiSplitLayout.Leaf(Integer.toString(i));
+        	columns[2*i] = leaf;
+        	leaf.setWeight(elemHandlers[i].getWeight() / totalWeight);
+        }
+        for(int i=0; i<columns.length; ++i)
+        	if(columns[i] == null)
+        		columns[i] = new MultiSplitLayout.Divider();
+        MultiSplitLayout.Node layoutRoot = new MultiSplitLayout.RowSplit(columns);
+        MultiSplitLayout layout = new MultiSplitLayout(layoutRoot);
+        layout.setLayoutByWeight(true);
+        JXMultiSplitPane pane = new JXMultiSplitPane(layout);
+        for(int i=0; i<elemHandlers.length; ++i)
+        	pane.add(Integer.toString(i), elemHandlers[i].toComponent());
+        return pane;
+    }
 
     private void positionMainPanelElements() {
         
@@ -231,9 +278,7 @@ public class GuiViewElementHandler extends JFrame {
         ElementHandler[] elemHandlers = {
                 Requirement_Handler, Commit_Handler, PathDE_Handler, Impact_Handler, Code_Handler,
         };
-        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        for ( ElementHandler eachElemHandler: elemHandlers)
-            pane.addComponent(eachElemHandler.toComponent());
+        JXMultiSplitPane pane = createMultiColums(elemHandlers);
 
         //setLayout(new BorderLayout());
         mainNavigationPanel.add(pane, BorderLayout.CENTER);
@@ -281,12 +326,9 @@ public class GuiViewElementHandler extends JFrame {
     }
     
     private void positionRequirementPanelElements() {
-        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        
-        Requirement_HandlerRequirementTab = new Requirement_ElementHandler();
+    	Requirement_HandlerRequirementTab = new Requirement_ElementHandler();
         Requirement_Detail_Handler = new Requirement_Detail_ElementHandler();
-        pane.addComponent(Requirement_HandlerRequirementTab.toComponent());
-        pane.addComponent(Requirement_Detail_Handler.toComponent());
+        JXMultiSplitPane pane = createMultiColums(Requirement_HandlerRequirementTab, Requirement_Detail_Handler);
        
         requirementModificationPanel.add(pane, BorderLayout.CENTER);
     }
@@ -300,11 +342,7 @@ public class GuiViewElementHandler extends JFrame {
     }
     
     private void positionRequirementManagementPanelElements() {
-        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        
-        pane.addComponent(Requirement_Handler_ManagementTab.toComponent());
-        pane.addComponent(Commit_Handler_ManagementTab.toComponent());
-        pane.addComponent(Linkage_Handler.toComponent());
+    	JXMultiSplitPane pane = createMultiColums(Requirement_Handler_ManagementTab, Commit_Handler_ManagementTab, Linkage_Handler);
    
         LinkageManagmentPanel.add(pane, BorderLayout.CENTER);
     }
@@ -320,25 +358,19 @@ public class GuiViewElementHandler extends JFrame {
     }
    
     private void positionHomePanelElements() {
-        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        configuration_ElementHandler.setController(guiController,tabpane);
-        pane.addComponent(configuration_ElementHandler);
+    	configuration_ElementHandler.setController(guiController,tabpane);
         tabpane.setEnabledAt(1, false);
         tabpane.setEnabledAt(2, false);
         tabpane.setEnabledAt(3, false);
         tabpane.setEnabledAt(4, false);
         setOnClickAction();
-        homePanel.add(pane, BorderLayout.CENTER);
+        homePanel.add(configuration_ElementHandler, BorderLayout.CENTER);
     }
     
     private void positionTraceabilityMatrixPanelElements() {
-        MultiSplitPane pane = new MultiSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        //TraceabilityMatrix_ElementHandler.setController(guiController,tabpane);
-        traceabilityMatrixByImpactViewHandlerPanel.setInternalGenerationVisibility(true);
-        traceabilityMatrixByImpactViewHandlerPanel.setExportEnable(false);       
-        pane.addComponent(traceabilityMatrixByImpactViewHandlerPanel);
- 
-        traceabilityMatrixPanel.add(pane, BorderLayout.CENTER);
+    	traceabilityMatrixByImpactViewHandlerPanel.setInternalGenerationVisibility(true);
+    	traceabilityMatrixByImpactViewHandlerPanel.setExportEnable(false);
+    	traceabilityMatrixPanel.add(traceabilityMatrixByImpactViewHandlerPanel, BorderLayout.CENTER);
     }
     
     public void setOnClickAction(){

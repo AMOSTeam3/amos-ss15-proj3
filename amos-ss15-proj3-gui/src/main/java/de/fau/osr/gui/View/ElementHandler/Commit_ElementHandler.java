@@ -20,11 +20,10 @@
  */
 package de.fau.osr.gui.View.ElementHandler;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
-
 import javax.swing.*;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+
 import java.awt.*;
 
 public class Commit_ElementHandler extends ElementHandler {
@@ -38,10 +37,11 @@ public class Commit_ElementHandler extends ElementHandler {
 
     @Override
     public Component toComponent() {
-        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
-//                .addComponent(button)
-                .addComponent(Commit_label)
-                .addComponent(scrollPane);
+    	JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(Commit_label);
+        panel.add(scrollPane);
+        return panel;
     }
 
     public void clear(){

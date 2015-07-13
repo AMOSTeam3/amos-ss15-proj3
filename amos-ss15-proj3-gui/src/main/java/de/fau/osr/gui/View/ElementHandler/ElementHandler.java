@@ -20,7 +20,6 @@
  */
 package de.fau.osr.gui.View.ElementHandler;
 
-import de.fau.osr.gui.Components.MultiSplitPane;
 import de.fau.osr.gui.Controller.Visitor;
 import de.fau.osr.gui.Model.DataElements.DataElement;
 import de.fau.osr.gui.View.Presenter.Presenter;
@@ -29,11 +28,14 @@ import de.fau.osr.gui.View.Renderer.List_Renderer;
 import javax.swing.*;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -102,8 +104,19 @@ public abstract class ElementHandler {
      * @return  a vertically alignmend MultiSplitPane with elements "button" and "scrollpane"
      */
     public Component toComponent() {
-        return new MultiSplitPane(JSplitPane.VERTICAL_SPLIT, false)
-                .addComponent(button)
-                .addComponent(scrollPane);
+    	JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(button);
+        panel.add(scrollPane);
+        return panel;
     }
+
+	/**
+	 * @return an arbitrary weight of how big this element should be displayed.
+	 * The default is 1.0, the value has to be constant across multiple calls
+	 * on the same object.
+	 */
+	public double getWeight() {
+		return 1;
+	}
 }
