@@ -27,12 +27,14 @@ import org.apache.commons.io.filefilter.HiddenFileFilter;
 
 
 
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * Returns all files paths of a given directory
@@ -95,7 +97,7 @@ public class VisibleFilesTraverser extends DirectoryWalker<Path> {
 
     protected void handleFile(File file, int depth, Collection results) throws IOException {
         // Using unix-style file paths.
-        String filename = file.toString().replaceAll("\\\\", "/");
+        String filename = file.toString().replaceAll(Matcher.quoteReplacement("\\"), "/");
         for (String eachIgnore: ignoreList)
             if (filename.contains(eachIgnore))
                 return;

@@ -58,6 +58,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -176,7 +177,7 @@ public class Tracker {
      * @throws IOException
      */
     public Collection<Requirement> getRequirementsByFile(String file) throws IOException {
-        String filename = file.replaceAll("\\\\", "/");
+        String filename = file.replaceAll(Matcher.quoteReplacement("\\"), "/");
         Collection<Requirement> reqs = new ArrayList<>();
         try {
             reqs = getBlame(filename).stream()
@@ -232,7 +233,7 @@ public class Tracker {
 
     
     public float getImpactPercentageForFileAndRequirement(String file, String requirementID){
-        String filename = file.replaceAll("\\\\", "/");
+        String filename = file.replaceAll(Matcher.quoteReplacement("\\"), "/");
         List<AnnotatedLine> currentBlame;
         try {
             currentBlame = this.getBlame(filename);
@@ -263,7 +264,7 @@ public class Tracker {
      */
     @Deprecated
     public Set<String> getRequirementIdsForFile(String filePath) throws IOException {
-        String filename = filePath.replaceAll("\\\\", "/");
+        String filename = filePath.replaceAll(Matcher.quoteReplacement("\\"), "/");
         Set<String> requirementList = new HashSet<>();
 
         Iterator<String> commitIdListIterator = vcsClient.getCommitListForFileodification(filename);
@@ -461,7 +462,7 @@ public class Tracker {
     }
 
     public List<AnnotatedLine> getBlame(String path) throws IOException, GitAPIException {
-        String filename = path.replaceAll("\\\\", "/");
+        String filename = path.replaceAll(Matcher.quoteReplacement("\\"), "/");
         try {
             return blameCache.get(filename);
         } catch (ExecutionException e) {
@@ -520,7 +521,7 @@ public class Tracker {
      * @throws Exception
      */
     public List<Collection<String>> getRequirementsLineLinkageForFile(String filePath) throws IOException, GitAPIException {
-        String filename = filePath.replaceAll("\\\\", "/");
+        String filename = filePath.replaceAll(Matcher.quoteReplacement("\\"), "/");
     	Collection<AnnotatedLine> lines = this.getBlame(filename);
     	List<Collection<String>> reqIdsByLines = new ArrayList<>();
 

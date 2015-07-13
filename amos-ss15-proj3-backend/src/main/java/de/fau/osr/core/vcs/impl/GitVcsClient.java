@@ -209,7 +209,7 @@ public class GitVcsClient extends VcsClient{
      * @author Gayathery
      */
     public Iterator<String> getCommitListForFileodification(String path){
-        String filename = path.replaceAll("\\\\", "/");
+        String filename = path.replaceAll(Matcher.quoteReplacement("\\"), "/");
         PlotCommitList<PlotLane> plotCommitList = new PlotCommitList<PlotLane>();
         PlotWalk revWalk = new PlotWalk(repo);
         ArrayList<String> commitIDList = new ArrayList<String>();

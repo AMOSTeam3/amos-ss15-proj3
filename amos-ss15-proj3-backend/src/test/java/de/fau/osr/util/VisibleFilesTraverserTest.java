@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
 
 /**
  * author: Taleh Didover
@@ -106,7 +107,7 @@ public class VisibleFilesTraverserTest extends TestCase {
         );
         List<String> got = new ArrayList<>();
         filetraverser.traverse().forEach((Path file) -> {
-            got.add(file.toString().replaceAll("\\\\", "/"));
+            got.add(file.toString().replaceAll(Matcher.quoteReplacement("\\"), "/"));
         });
         List<String> expected = expectedTestRepoFileContent;
 
@@ -124,7 +125,7 @@ public class VisibleFilesTraverserTest extends TestCase {
         );
         List<String> got = new ArrayList<>();
         filetraverser.traverse().forEach((Path file) -> {
-            got.add(file.toString().replaceAll("\\\\", "/"));
+            got.add(file.toString().replaceAll(Matcher.quoteReplacement("\\"), "/"));
         });
         List<String> expected = new ArrayList();
 
