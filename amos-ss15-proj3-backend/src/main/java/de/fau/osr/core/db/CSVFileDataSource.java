@@ -63,15 +63,14 @@ public class CSVFileDataSource extends DataSource {
 
 
     @Override
-    public void doAddReqCommitRelation(String reqId, String commitId) throws IOException {
+    public void addReqCommitRelation(String reqId, String commitId) throws IOException {
         try(CSVWriter writer = getWriter()){
             writer.writeNext(new String[]{reqId, commitId});
-            clearCache();
         }
     }
 
     @Override
-    public void doRemoveReqCommitRelation(String reqId, String commit) throws IOException {
+    public void removeReqCommitRelation(String reqId, String commit) throws IOException {
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -86,7 +85,7 @@ public class CSVFileDataSource extends DataSource {
     }
 
     @Override
-    public HashMultimap<String, String> doGetAllReqCommitRelations() throws IOException {
+    public HashMultimap<String, String> getAllReqCommitRelations() throws IOException {
         HashMultimap<String, String> relations = HashMultimap.create();
 
         try (CSVReader reader = getReader()) {

@@ -31,8 +31,18 @@ import java.awt.event.ActionListener;
 
 public class Linkage_ElementHandler extends ElementHandler {
 
+    private final JButton btnRemoveLinkage;
+
     public void setOnClickAddLinkage(ActionListener action) {
+        for(ActionListener a : button.getActionListeners())
+            button.removeActionListener(a);
         button.addActionListener(action);
+    }
+
+    public void setBtnRemoveLinkageAction(Runnable action) {
+        for(ActionListener a : btnRemoveLinkage.getActionListeners())
+            btnRemoveLinkage.removeActionListener(a);
+        btnRemoveLinkage.addActionListener(e -> action.run());
     }
 
     public enum ButtonState{Deactivate, Activate}
@@ -51,6 +61,8 @@ public class Linkage_ElementHandler extends ElementHandler {
         }
         button = new JButton("Add Linkage");
         button.setPreferredSize(new Dimension(20, 5));
+        btnRemoveLinkage = new JButton("Remove Linkage");
+        btnRemoveLinkage.setPreferredSize(new Dimension(20, 5));
     }
     
     public Boolean isDataLayerChanged(){
@@ -66,7 +78,7 @@ public class Linkage_ElementHandler extends ElementHandler {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         
-        panel.add(Box.createRigidArea(new Dimension(0,50)));
+        panel.add(Box.createRigidArea(new Dimension(0, 50)));
         
         RequirementID_textField.setAlignmentX(Component.LEFT_ALIGNMENT);
         RequirementID_textField.setMaximumSize(new Dimension(500, 25));
@@ -88,17 +100,16 @@ public class Linkage_ElementHandler extends ElementHandler {
         
         button.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(button);
-        
+        panel.add(btnRemoveLinkage);
+
         return panel;
     }
 
     @Override
     public void setButtonAction(Runnable action) {
-		for(ActionListener a : button.getActionListeners())
-			button.removeActionListener(a);
-        button.addActionListener(e -> action.run());
+		setOnClickAddLinkage(e->action.run());
     }
-    
+
     public void clear(){
         RequirementID_textField.setText("");
         Commit_textField.setText("");

@@ -298,6 +298,11 @@ public class TrackerAdapter implements I_Model {
     }
 
     @Override
+    public void removeRequirementCommitLinkage(Requirement requirement, Commit commit) throws Exception {
+        tracker.removeRequirementCommitRelation(requirement.getID(), commit.id);
+    }
+
+    @Override
     public Collection<AnnotatedLine> getAnnotatedLines(PathDE file) {
         try {
             return ElementsConverter.convertAnnotatedLines(tracker.getBlame(file.toString()));

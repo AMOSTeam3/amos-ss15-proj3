@@ -78,6 +78,8 @@ public interface I_Collection_Model {
 
     void addRequirementCommitLinkage(Requirement requirement, Commit commit) throws Exception;
 
+    void removeRequirementCommitLinkage(Requirement requirement, Commit commit) throws Exception;
+
     Collection<? extends DataElement> getAnnotatedLinesByFile(Collection<PathDE> files) throws FileNotFoundException, IOException, GitAPIException ;
 
     RequirementsTraceabilityMatrix getRequirementsTraceability() throws IOException;

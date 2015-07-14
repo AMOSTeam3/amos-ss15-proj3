@@ -21,7 +21,6 @@
 package de.fau.osr.core.db.domain;
 
 import javax.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,37 +33,7 @@ import java.util.Set;
 @Table(name="requirement")
 public class Requirement {
 
-    /* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Requirement other = (Requirement) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	@Id
+    @Id
     @Column(name="id", nullable = false)
     private String id;
 
@@ -83,6 +52,16 @@ public class Requirement {
             joinColumns={@JoinColumn(name="req_id")},
             inverseJoinColumns={@JoinColumn(name="commit_id")})
     private Set<Commit> commits = new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinTable(name="requirements_commits_filtered",
+            joinColumns={@JoinColumn(name="req_id")},
+            inverseJoinColumns={@JoinColumn(name="commit_id")})
+    private Set<Commit> filteredCommits = new HashSet<>();
+
+    public Set<Commit> getFilteredCommits() { return filteredCommits; }
+
+    public void setFilteredCommits(Set<Commit> filteredCommits) { this.filteredCommits = filteredCommits; }
 
     public Set<Commit> getCommits() {return commits;}
     public void setCommits(Set<Commit> commits) {this.commits = commits;}
@@ -120,6 +99,19 @@ public class Requirement {
         this.storyPoint = storyPoint;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Requirement that = (Requirement) o;
 
+        return id.equals(that.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

@@ -33,6 +33,7 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JList;
 
+import de.fau.osr.core.db.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import com.google.common.base.Predicate;
@@ -40,12 +41,6 @@ import com.google.common.collect.Iterables;
 
 import de.fau.osr.bl.RequirementsTraceabilityMatrixByImpact;
 import de.fau.osr.bl.Tracker;
-import de.fau.osr.core.db.CSVFileDataSource;
-import de.fau.osr.core.db.CompositeDataSource;
-import de.fau.osr.core.db.DBDataSource;
-import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.db.HibernateUtil;
-import de.fau.osr.core.db.VCSDataSource;
 import de.fau.osr.core.vcs.impl.GitVcsClient;
 import de.fau.osr.core.vcs.interfaces.VcsClient;
 import de.fau.osr.gui.Authentication.Login;
@@ -301,6 +296,10 @@ public class GuiController {
 
         linkageHandler.setOnClickAddLinkage(e ->
                         addLinkage(linkageHandler.getRequirement(), linkageHandler.getCommit())
+        );
+
+        linkageHandler.setBtnRemoveLinkageAction(
+                () -> removeLinkage(linkageHandler.getRequirement(), linkageHandler.getCommit())
         );
     }
 
@@ -911,7 +910,8 @@ public class GuiController {
             VCSDataSource vcsDs = new VCSDataSource(vcs,
                     new CommitMessageParser(reqPattern));
             DBDataSource dbDs = new DBDataSource();
-            ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
+            ds = new CachingDataSourceProxy(new FilteringCompositeDataSource(
+                    new CachingDataSourceProxy(dbDs), new CachingDataSourceProxy(csvDs), new CachingDataSourceProxy(vcsDs)));
         }
         Collection_Model_Impl model;
         if(isIndexEnabled)
@@ -927,6 +927,18 @@ public class GuiController {
         try {
             i_Collection_Model.addRequirementCommitLinkage(requirement, commit);
             popupManager.showInformationDialog("Successfully Added!");
+        } catch (Exception e) {
+            popupManager.showErrorDialog(e.getMessage());
+            return;
+        } finally {
+            cleaner.clearAll();
+        }
+    }
+
+    public void removeLinkage(Requirement requirement, Commit commit) {
+        try {
+            i_Collection_Model.removeRequirementCommitLinkage(requirement, commit);
+            popupManager.showInformationDialog("Successfully removed!");
         } catch (Exception e) {
             popupManager.showErrorDialog(e.getMessage());
             return;

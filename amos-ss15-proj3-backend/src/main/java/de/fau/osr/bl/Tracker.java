@@ -26,10 +26,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.*;
 
 import de.fau.osr.core.Requirement;
-import de.fau.osr.core.db.CSVFileDataSource;
-import de.fau.osr.core.db.CompositeDataSource;
-import de.fau.osr.core.db.DataSource;
-import de.fau.osr.core.db.VCSDataSource;
+import de.fau.osr.core.db.*;
 import de.fau.osr.core.db.dao.RequirementDao;
 import de.fau.osr.core.db.dao.impl.CommitDaoImplementation;
 import de.fau.osr.core.db.dao.impl.RequirementDaoImplementation;
@@ -117,7 +114,8 @@ public class Tracker {
             CommitMessageParser parser = new CommitMessageParser(Pattern.compile(AppProperties.GetValue("RequirementPattern")));
             VCSDataSource vcsDs = new VCSDataSource(vcsClient, parser);
 
-            ds = new CompositeDataSource(csvDs, vcsDs);
+            ds = new CachingDataSourceProxy(new FilteringCompositeDataSource(
+                    new CachingDataSourceProxy(csvDs), new CachingDataSourceProxy(vcsDs)));
         }
 
         this.dataSource = ds;
@@ -145,7 +143,11 @@ public class Tracker {
      * useful to call if repository is updated by new commit
      */
     public void purgeRepoCache() {
-        dataSource.clearCache(); //this will purge probably more than just VCS datasource
+        if (dataSource instanceof CachingDataSourceProxy) {
+            //this will purge probably more than just VCS datasource
+            ((CachingDataSourceProxy)dataSource).clearCache();
+        }
+
         blameCache.cleanUp();
         cachedFiles = new ArrayList<>();
     }
@@ -454,6 +456,15 @@ public class Tracker {
      */
     public void addRequirementCommitRelation(String requirementID, String commitID) throws IOException, OperationNotSupportedException {
         dataSource.addReqCommitRelation(requirementID, commitID);
+    }
+
+    /**
+     * removes Linkage between Requirement and Commit
+     *
+     * @param commitID and requirementId to be linked
+     */
+    public void removeRequirementCommitRelation(String requirementID, String commitID) throws IOException, OperationNotSupportedException {
+        dataSource.removeReqCommitRelation(requirementID, commitID);
     }
 
 

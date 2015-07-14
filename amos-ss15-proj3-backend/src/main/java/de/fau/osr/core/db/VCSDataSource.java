@@ -51,17 +51,17 @@ public class VCSDataSource extends DataSource {
     }
 
     @Override
-    public void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void addReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         throw new OperationNotSupportedException();
     }
 
     @Override
-    public void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void removeReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         throw new OperationNotSupportedException();
     }
 
     @Override
-    public HashMultimap<String, String> doGetAllReqCommitRelations() throws IOException {
+    public HashMultimap<String, String> getAllReqCommitRelations() throws IOException {
         HashMultimap<String, String> allRelations = HashMultimap.create();
         ArrayList<String> commitIds = Lists.newArrayList(vcsClient.getCommitList());
         String message;

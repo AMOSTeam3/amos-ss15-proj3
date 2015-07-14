@@ -79,7 +79,7 @@ public class GitBlameOperationTest {
     	DataSource testDataSource = new DataSource() {
 
 			@Override
-			protected SetMultimap<String, String> doGetAllReqCommitRelations()
+			public SetMultimap<String, String> getAllReqCommitRelations()
 					throws IOException {
 				return ImmutableSetMultimap.of(
 						"a", commit1.name(),
@@ -90,14 +90,14 @@ public class GitBlameOperationTest {
 			}
 
 			@Override
-			protected void doAddReqCommitRelation(String reqId, String commitId)
+			public void addReqCommitRelation(String reqId, String commitId)
 					throws IOException, OperationNotSupportedException {
 				fail("add relation may not be called for lookup");
 			}
 
 			@Override
-			protected void doRemoveReqCommitRelation(String reqId,
-					String commitId) throws IOException,
+			public void removeReqCommitRelation(String reqId,
+												String commitId) throws IOException,
 					OperationNotSupportedException {
 				fail("remove relation may not be called for lookup");
 			}

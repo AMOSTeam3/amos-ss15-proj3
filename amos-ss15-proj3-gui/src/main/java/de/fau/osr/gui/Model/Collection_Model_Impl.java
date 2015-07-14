@@ -220,6 +220,13 @@ public class Collection_Model_Impl implements I_Collection_Model {
     }
 
     @Override
+    public void removeRequirementCommitLinkage(Requirement requirement,
+            Commit commit) throws Exception {
+        model.removeRequirementCommitLinkage(requirement, commit);
+    }
+
+
+    @Override
     public Collection<? extends DataElement> getAnnotatedLinesByFile(Collection<PathDE> files)
             throws FileNotFoundException, IOException, GitAPIException {
         Collection<AnnotatedLine> lines = new ArrayList<AnnotatedLine>();

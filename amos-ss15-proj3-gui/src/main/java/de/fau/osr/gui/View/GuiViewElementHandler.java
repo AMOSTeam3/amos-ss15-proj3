@@ -401,7 +401,7 @@ public class GuiViewElementHandler extends JFrame {
 
 //        Commit_Handler.setButtonAction(()->guiController.commitsFromDB());
 
-        Linkage_Handler.setButtonAction(()->guiController.requirementsAndCommitsFromDB());
+        //Linkage_Handler.setButtonAction(()->guiController.requirementsAndCommitsFromDB());
 
         Menu_Handler.setConfigureAction(() -> {
             try {

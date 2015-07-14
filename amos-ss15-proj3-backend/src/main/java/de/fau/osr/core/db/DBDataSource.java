@@ -34,6 +34,7 @@ import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -57,7 +58,7 @@ public class DBDataSource extends DataSource {
         commitDao = new CommitDaoImplementation(sf);
     }
     @Override
-    protected SetMultimap<String, String> doGetAllReqCommitRelations() throws IOException {
+    public SetMultimap<String, String> getAllReqCommitRelations() throws IOException {
         List<Requirement> reqs = reqDao.getAllRequirements();
         SetMultimap<String, String> result = HashMultimap.create();
         for (Requirement req : reqs){
@@ -70,7 +71,7 @@ public class DBDataSource extends DataSource {
     }
 
     @Override
-    protected void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void addReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         Requirement req = reqDao.getRequirementById(reqId);
 
         Commit commitToAdd = commitDao.getCommitById(commitId);
@@ -96,7 +97,7 @@ public class DBDataSource extends DataSource {
     }
 
     @Override
-    protected void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void removeReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         Requirement req = reqDao.getRequirementById(reqId);
         if (req == null) {
             return;
@@ -114,7 +115,7 @@ public class DBDataSource extends DataSource {
     }
 
     @Override
-    protected void doSaveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+    public void saveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
         Requirement req = reqDao.getRequirementById(id);
         DBOperation oper = DBOperation.UPDATE;
 
@@ -135,7 +136,7 @@ public class DBDataSource extends DataSource {
     }
 
     @Override
-    protected Set<de.fau.osr.core.Requirement> doGetAllRequirements() throws IOException {
+    public Set<de.fau.osr.core.Requirement> getAllRequirements() throws IOException {
         List<Requirement> dbReqs = reqDao.getAllRequirements();
         Set<de.fau.osr.core.Requirement> result = new HashSet<>();
 
@@ -153,5 +154,56 @@ public class DBDataSource extends DataSource {
         }
 
         return result;
+    }
+
+
+    @Override
+    public SetMultimap<String, String> getReqCommitFilters() {
+        SetMultimap<String, String> result = HashMultimap.create();
+
+        List<Requirement> reqs = this.reqDao.getAllRequirements();
+
+        for (Requirement req : reqs) {
+            Set<Commit> commits = req.getFilteredCommits();
+            for (Commit commit : commits) {
+                result.put(req.getId(), commit.getId());
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public void addFilter(String reqId, String commitId) throws OperationNotSupportedException {
+        Requirement req = this.reqDao.getRequirementById(reqId);
+
+        Commit commitToAdd = commitDao.getCommitById(commitId);
+        //create commit if not exist
+        if (commitToAdd == null) {
+            commitToAdd = new Commit();
+            commitToAdd.setId(commitId);
+            commitDao.persist(DBOperation.ADD, commitToAdd);
+        }
+
+        req.getFilteredCommits().add(commitToAdd);
+
+        reqDao.persist(DBOperation.UPDATE, req);
+    }
+
+    @Override
+    public void removeFilter(String reqId, String commitId) throws OperationNotSupportedException {
+        Requirement req = this.reqDao.getRequirementById(reqId);
+
+        Set<Commit> filteredCommits = req.getFilteredCommits();
+
+        Optional<Commit> foundOpt = filteredCommits.stream().filter(
+                c -> c.getId().equals(commitId)
+        ).findFirst();
+
+        //if filter exists, remove it
+        if (foundOpt.isPresent() && filteredCommits.contains(foundOpt.get())) {
+            filteredCommits.remove(foundOpt.get());
+            reqDao.persist(DBOperation.UPDATE, req);
+        }
     }
 }

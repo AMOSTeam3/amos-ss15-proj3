@@ -43,6 +43,9 @@ public class Commit {
     @ManyToMany(mappedBy="commits", fetch = FetchType.EAGER)
     private Set<Requirement> reqs = new HashSet<>();
 
+    @ManyToMany(mappedBy="filteredCommits", fetch = FetchType.EAGER)
+    private Set<Requirement> filteredReqs = new HashSet<>();
+
     @Column(name="message", nullable = true)
     private String message;
 
@@ -66,6 +69,8 @@ public class Commit {
         this.commitFiles = commitFiles;
     }
 
+    public Set<Requirement> getFilteredReqs() { return filteredReqs; }
+    public void setFilteredReqs(Set<Requirement> filteredReqs) { this.filteredReqs = filteredReqs; }
 
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}

@@ -36,9 +36,15 @@ import java.util.Set;
  * Created by Dmitry Gorelenkov on 13.05.2015.
  */
 public class CompositeDataSource extends DataSource {
+    /**
+     * main data source
+     */
+    protected DataSource dataSource;
 
-    private DataSource dataSource;
-    private ArrayList<DataSource> dataSources;
+    /**
+     * all data sources
+     */
+    protected ArrayList<DataSource> dataSources;
 
     /**
      * <tt>DataSource</tt>, that uses many <tt>DataSource</tt>'s for query data, but only one for update
@@ -62,23 +68,23 @@ public class CompositeDataSource extends DataSource {
 
 
     @Override
-    protected void doAddReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void addReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         dataSource.addReqCommitRelation(reqId, commitId);
     }
 
     @Override
-    protected void doRemoveReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
+    public void removeReqCommitRelation(String reqId, String commitId) throws IOException, OperationNotSupportedException {
         dataSource.removeReqCommitRelation(reqId, commitId);
     }
 
     @Override
-    protected void doSaveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
+    public void saveOrUpdateRequirement(String id, String title, String description) throws IOException, OperationNotSupportedException {
         //use main data source for update
         dataSource.saveOrUpdateRequirement(id, title, description);
     }
 
     @Override
-    protected Set<Requirement> doGetAllRequirements() throws IOException {
+    public Set<Requirement> getAllRequirements() throws IOException {
 
         Set<Requirement> result = new HashSet<>();
         for (DataSource ds : dataSources) {
@@ -89,12 +95,31 @@ public class CompositeDataSource extends DataSource {
     }
 
     @Override
-    protected SetMultimap<String, String> doGetAllReqCommitRelations() throws IOException {
+    public SetMultimap<String, String> getAllReqCommitRelations() throws IOException {
         SetMultimap<String, String> result = HashMultimap.create();
         for (DataSource ds : dataSources){
             result.putAll(ds.getAllReqCommitRelations());
         }
 
         return result;
+    }
+
+    @Override
+    public SetMultimap<String, String> getReqCommitFilters() {
+        SetMultimap<String, String> result = HashMultimap.create();
+        for (DataSource ds : dataSources){
+            result.putAll(ds.getReqCommitFilters());
+        }
+        return result;
+    }
+
+    @Override
+    public void addFilter(String reqId, String commitId) throws OperationNotSupportedException {
+        dataSource.addFilter(reqId, commitId);
+    }
+
+    @Override
+    public void removeFilter(String reqId, String commitId) throws OperationNotSupportedException {
+        dataSource.removeFilter(reqId, commitId);
     }
 }

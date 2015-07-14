@@ -53,7 +53,10 @@ public class PluginSPICETrackerAdaptor {
             CSVFileDataSource csvDs = new CSVFileDataSource(new File(repoFile.getParentFile(), "dataSource.csv"));
             VCSDataSource vcsDs = new VCSDataSource(vcs, new CommitMessageParser(pattern));
             DBDataSource dbDs = new DBDataSource();
-            DataSource ds = new CompositeDataSource(dbDs, csvDs, vcsDs);
+            DataSource ds = new CachingDataSourceProxy(new FilteringCompositeDataSource(
+                    new CachingDataSourceProxy(dbDs),
+                    new CachingDataSourceProxy(csvDs),
+                    new CachingDataSourceProxy(vcsDs)));
             
             tracker = new Tracker(vcs, ds, repoFile);
         }catch(Exception e){

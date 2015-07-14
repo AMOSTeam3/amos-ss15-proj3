@@ -57,6 +57,8 @@ public interface I_Model {
 
     void addRequirementCommitRelation(Requirement requirement, Commit commit) throws Exception;
 
+    void removeRequirementCommitLinkage(Requirement requirement, Commit commit) throws Exception;
+
     Collection<AnnotatedLine> getAnnotatedLines(PathDE filePath);
 
     RequirementsTraceabilityMatrix generateRequirementsTraceability();
